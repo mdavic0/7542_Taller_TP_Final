@@ -1,7 +1,6 @@
 // "Copyright [2023] <mdavic0>"  [©legal/copyright]
 
 #include <iostream>
-#include "src/server_Server.h"
 
 int main(int argc, char *argv[]) { try {
     int ret = 1;
@@ -10,10 +9,8 @@ int main(int argc, char *argv[]) { try {
                   << argv[0] << " <puerto/servicename>" << std::endl;
         return ret;
     }
-    const char *servicename = argv[1];
-
-    Server srv(servicename);
-    srv.run();
+    //Server srv(argv[1]);
+    //srv.run();
 
     ret = 0;
     return ret;

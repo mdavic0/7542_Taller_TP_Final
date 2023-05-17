@@ -40,13 +40,14 @@ enable_testing()
 
 
 # EJECUTABLES
-add_executable(server "Server/main.cpp")
-target_link_libraries(server server_classes common_classes)
+#add_executable(server "Server/main.cpp")
+#target_link_libraries(server server_classes common_classes)
 
-add_executable(client "Client/main.cpp")
-target_link_libraries(client client_classes common_classes)
+#add_executable(client "Client/main.cpp")
+#target_link_libraries(client client_classes common_classes)
 
-add_executable(testprotocol client_classes common_classes server_classes)
+add_executable(testprotocol "Testing/testprotocol.cpp" )
+target_link_libraries(testprotocol server_classes client_classes common_classes)
 
 target_link_libraries(
   testprotocol

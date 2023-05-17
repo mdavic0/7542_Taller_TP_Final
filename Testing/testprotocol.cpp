@@ -17,7 +17,7 @@ TEST(ClientToServer, SendCreate) {
   MockSocket skt;
   ClientProtocol client(skt);
   ServerProtocol server(skt);
-  EventDTO event(Event::event_create, "", 0);
+  EventDTO event(Event::event_create, MoveTo::move_not, "", 0);
   client.sendEvent(event);
   EXPECT_EQ(Event::event_create, server.getEvent().getEvent());
 }
@@ -26,7 +26,7 @@ TEST(ClientToServer, SendJoin) {
   MockSocket skt;
   ClientProtocol client(skt);
   ServerProtocol server(skt);
-  EventDTO event(Event::event_join, "", 11);
+  EventDTO event(Event::event_join, MoveTo::move_not, "", 11);
   client.sendEvent(event);
   EXPECT_EQ(Event::event_join, server.getEvent().getEvent());
 }
@@ -35,7 +35,7 @@ TEST(ClientToServer, SendJoinCorrectCode) {
   MockSocket skt;
   ClientProtocol client(skt);
   ServerProtocol server(skt);
-  EventDTO event(Event::event_join, "", 11);
+  EventDTO event(Event::event_join, MoveTo::move_not, "", 11);
   client.sendEvent(event);
   EXPECT_EQ(11, server.getEvent().getN());
 }

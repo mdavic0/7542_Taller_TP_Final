@@ -1,7 +1,6 @@
 // "Copyright [2023] <mdavic0>"  [©legal/copyright]
 
 #include <iostream>
-#include "client_Client.h"
 
 int main(int argc, char *argv[]) { try {
     int ret = 1;
@@ -12,11 +11,8 @@ int main(int argc, char *argv[]) { try {
         return ret;
     }
 
-    const char *hostname = argv[1];
-    const char *port = argv[2];
-
-    Client client(hostname, port);
-    client.run();
+    //Client client(argv[1], argv[2]);
+    //client.run();
 
     ret = 0;
     return ret;
