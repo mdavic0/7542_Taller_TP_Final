@@ -2,23 +2,24 @@
 #include <arpa/inet.h>
 #include <vector>
 #include <utility>
+#include "common_liberror.h"
 
-ServerProtocol::ServerProtocol(MockSocket& skt) : peer(skt) { }
+ServerProtocol::ServerProtocol(Socket&& skt) : peer(std::move(skt)) { }
 
-EventDTO ServerProtocol::getCreate() {
-    return std::move(EventDTO(Event::event_create, MoveTo::move_not, recvString(), 0));
+CommandDTO ServerProtocol::getCreate() {
+    return std::move(CommandDTO(Command::command_create, recvString(), 0));
 }
 
-EventDTO ServerProtocol::getJoin() {
+CommandDTO ServerProtocol::getJoin() {
     uint32_t code;
     recvAll(&code, 4);
     code = ntohl(code);
 
-    return std::move(EventDTO(Event::event_join, MoveTo::move_not, "", code));
+    return std::move(CommandDTO(Command::command_join, "", code));
 }
 
-EventDTO ServerProtocol::getBroadcast() {
-    return std::move(EventDTO(Event::event_broadcast, MoveTo::move_not, recvString(), 0));
+CommandDTO ServerProtocol::getBroadcast() {
+    return std::move(CommandDTO(Command::command_broadcast, recvString(), 0));
 }
 
 void ServerProtocol::responseCreate(uint32_t code) {
@@ -31,8 +32,8 @@ void ServerProtocol::responseJoin(uint8_t ok) {
 }
 
 void ServerProtocol::responseBroadcast(const std::string& str) {
-    uint8_t event = 0x04;
-    sendAll(&event, 1);
+    uint8_t command = 0x04;
+    sendAll(&command, 1);
     sendString(str);
 }
 
@@ -41,7 +42,7 @@ void ServerProtocol::sendAll(const void *data, unsigned int sz) {
     int sokcet_ret = peer.sendall(data, sz, &was_closed);
 
     if (was_closed && sokcet_ret == 0) {
-        //throw LibError(errno, "Socket is closed and no byte was sent");
+        throw LibError(errno, "Socket is closed and no byte was sent");
     }
 }
 
@@ -50,7 +51,7 @@ void ServerProtocol::recvAll(void *data, unsigned int sz) {
     bool sokcet_ret = peer.recvall(data, sz, &was_closed);
 
     if (was_closed && sokcet_ret == 0) {
-        //throw LibError(errno, "Socket is closed in rev when receive a new byte is neccesary");
+        throw LibError(errno, "Socket is closed in rev when receive a new byte is neccesary");
     }
 }
 
@@ -72,7 +73,7 @@ std::string ServerProtocol::recvString() {
     return std::string(response.data());
 }
 
-EventDTO ServerProtocol::getEvent() {
+CommandDTO ServerProtocol::getCommandDTO() {
     bool was_closed = false;
 
     int8_t buf[1];
@@ -80,7 +81,7 @@ EventDTO ServerProtocol::getEvent() {
 
     // Se cierra el socket y no se lee ningun byte
     if (was_closed && sokcet_ret == 0) {
-        return std::move(EventDTO(Event::event_leave, MoveTo::move_not, "", 0));
+        return std::move(CommandDTO(Command::command_leave, "", 0));
     }
 
     if (*buf == 0x01) {
@@ -91,22 +92,22 @@ EventDTO ServerProtocol::getEvent() {
         return std::move(getBroadcast());
     }
 
-    return std::move(EventDTO(Event::event_invalid, MoveTo::move_not, "", 0));
+    return std::move(CommandDTO(Command::command_invalid, "", 0));
 }
 
-void ServerProtocol::sendSnapshot(const Snapshot &snapshot) {
-    Event event = snapshot.getEvent();
+void ServerProtocol::sendResponse(const ResponseDTO &response) {
+    Command command = response.getCommand();
 
-    if (event == Event::event_create) {
-        responseCreate(snapshot.getCode());
-    } else if (event == Event::event_join) {
-        responseJoin(snapshot.getOk());
-    } else if (event == Event::event_broadcast) {
-        responseBroadcast(snapshot.getStr());
+    if (command == Command::command_create) {
+        responseCreate(response.getCode());
+    } else if (command == Command::command_join) {
+        responseJoin(response.getOk());
+    } else if (command == Command::command_broadcast) {
+        responseBroadcast(response.getStr());
     }
 }
 
 void ServerProtocol::stop() {
-    //peer.shutdown(2);
-    //peer.close();
+    peer.shutdown(2);
+    peer.close();
 }

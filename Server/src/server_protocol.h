@@ -4,8 +4,8 @@
 #include <string>
 #include <sstream>
 #include "common_socket.h"
-#include "common_eventdto.h"
-#include "common_snapshot.h"
+#include "common_responsedto.h"
+#include "common_commanddto.h"
 
 /*
  * TDA ServerProtocol.
@@ -13,25 +13,25 @@
  */
 class ServerProtocol {
     private:
-        MockSocket& peer;
+        Socket peer;
 
         /*
-         * Ante un comando create, rearma el EventDTO
+         * Ante un comando create, rearma el CommandDTO
          * que representa dicho comando.
          */
-        EventDTO getCreate();
+        CommandDTO getCreate();
 
         /*
-         * Ante un comando join, rearma el EventDTO
+         * Ante un comando join, rearma el CommandDTO
          * que representa dicho comando.
          */
-        EventDTO getJoin();
+        CommandDTO getJoin();
 
         /*
-         * Ante un comando broadcast, rearma el EventDTO
+         * Ante un comando broadcast, rearma el CommandDTO
          * que representa dicho comando.
          */
-        EventDTO getBroadcast();
+        CommandDTO getBroadcast();
 
         /*
          * Envía la respuesta de un
@@ -83,12 +83,12 @@ class ServerProtocol {
          * debe comunicarse con el cliente.
          */
         explicit ServerProtocol(
-                MockSocket& skt);
+                Socket&& skt);
 
-        EventDTO getEvent();
+        CommandDTO getCommandDTO();
 
-        void sendSnapshot(
-            const Snapshot &snapshot);
+        void sendResponse(
+            const ResponseDTO &response);
 
         void stop();
 

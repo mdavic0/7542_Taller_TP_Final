@@ -1,41 +1,41 @@
-#include "common_snapshot.h"
+#include "common_responsedto.h"
 #include <string>
 #include <iostream>
 #include <sstream>
 
-Snapshot::Snapshot(Event event, uint32_t code, uint8_t ok,  const std::string& str) :
-    event(event), code(code), ok(ok), str(str) {}
+ResponseDTO::ResponseDTO(Command command, uint32_t code, uint8_t ok,  const std::string& str) :
+    command(command), code(code), ok(ok), str(str) {}
 
-Event Snapshot::getEvent() const {
-    return event;
+Command ResponseDTO::getCommand() const {
+    return command;
 }
 
-uint32_t Snapshot::getCode() const {
+uint32_t ResponseDTO::getCode() const {
     return code;
 }
 
-uint8_t Snapshot::getOk() const {
+uint8_t ResponseDTO::getOk() const {
     return ok;
 }
 
-std::string Snapshot::getStr() const {
+std::string ResponseDTO::getStr() const {
     return str;
 }
 
-void Snapshot::print(const bool& showBroadcast) const {
+void ResponseDTO::print(const bool& showBroadcast) const {
     std::ostringstream print;
 
-    if (event == Event::event_create) {
+    if (command == Command::command_create) {
         print << "Created match: " << code << "\n";
-    } else if (event == Event::event_join) {
+    } else if (command == Command::command_join) {
         if (ok == 0x00) {
             print << "Joined to match: " << code << "\n";
         } else if (ok == 0x01) {
             print << "Match does not exist: " << code << "\n";
         }
-    } else if (event == Event::event_broadcast && showBroadcast) {
+    } else if (command == Command::command_broadcast && showBroadcast) {
         print << "Broadcasted: " << str << "\n";
-    } else if (event == Event::event_invalid) {
+    } else if (command == Command::command_read) {
         std::istringstream auxss(str);
         for (uint32_t i = 0; i < code; i++) {     // code is used as n, same type
             std::string auxstr;
@@ -50,28 +50,28 @@ void Snapshot::print(const bool& showBroadcast) const {
     return;
 }
 
-Snapshot::Snapshot(Snapshot&& other) {
-    this->event = other.event;
+ResponseDTO::ResponseDTO(ResponseDTO&& other) {
+    this->command = other.command;
     this->code = other.code;
     this->ok = other.ok;
     this->str = other.str;
 
-    other.event = Event::event_invalid;
+    other.command = Command::command_invalid;
     other.code = 0;
     other.ok = 0;
     other.str = "";
 }
 
-Snapshot& Snapshot::operator=(Snapshot&& other) {
+ResponseDTO& ResponseDTO::operator=(ResponseDTO&& other) {
     if (this == &other)
         return *this;
 
-    this->event = other.event;
+    this->command = other.command;
     this->code = other.code;
     this->ok = other.ok;
     this->str = other.str;
 
-    other.event = Event::event_invalid;
+    other.command = Command::command_invalid;
     other.code = 0;
     other.ok = 0;
     other.str = "";

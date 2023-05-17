@@ -4,41 +4,41 @@
 #include <string>
 #include <sstream>
 #include "common_socket.h"
-#include "common_eventdto.h"
-#include "common_snapshot.h"
+#include "common_responsedto.h"
+#include "common_commanddto.h"
 /*
  * TDA ClientProtocol
  * Se comunica con el servidor a través de su socket.
  */
 class ClientProtocol{
     private:
-        MockSocket& skt;
+        Socket skt;
 
         /*
          * Método privado para indicar al servidor que se quiere
          * crear una partida. Encapsula la respuesta del servior
          * en un objeto ResponseDTO.
          */
-        Snapshot create(const std::string& scenario);
+        ResponseDTO create(const std::string& scenario);
 
         /*
          * Método privado para indicar al servidor que se quiere
          * unir a una partida. Encapsula la respuesta del servior
          * en un objeto ResponseDTO.
          */
-        Snapshot join(const uint32_t& code);
+        ResponseDTO join(const uint32_t& code);
 
         /*
          * Método privado para leer del servidor n mensajes.
          * Encapsula la respuesta del servior en un objeto ResponseDTO.
          */
-        Snapshot readMsg(const uint32_t& n);
+        ResponseDTO readMsg(const uint32_t& n);
 
         /*
          * Método privado para enviar al servidor un mensajes.
          * Encapsula la respuesta del servior en un objeto ResponseDTO.
          */
-        Snapshot sendMsg(const std::string& str);
+        ResponseDTO sendMsg(const std::string& str);
 
         /*
          * Método privado para enviar los bytes correspondientes
@@ -72,13 +72,14 @@ class ClientProtocol{
         * (`ClientProtocol::ClientProtocol(const char*, const char*)`)
         * */
         explicit ClientProtocol(
-            MockSocket& skt);
+            const std::string& hostname,
+            const std::string& servname);
 
         /*
          * Método generico para indicar al servidor que se ingresó
          * un comando:
          */
-        Snapshot sendEvent(const EventDTO& eventdto);
+        ResponseDTO sendCommand(const CommandDTO& commanddto);
 
         /*
         * No queremos permitir que alguien haga copias
