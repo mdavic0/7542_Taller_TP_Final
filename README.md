@@ -1,1 +1,8 @@
-# 7542_Taller_TP_Final
+#### tests
+
+
+> mkdir build  
+> cd build  
+> cmake ..  
+> make  
+> ctest
