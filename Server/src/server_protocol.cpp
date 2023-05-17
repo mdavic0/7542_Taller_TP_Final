@@ -6,7 +6,7 @@
 ServerProtocol::ServerProtocol(MockSocket& skt) : peer(skt) { }
 
 EventDTO ServerProtocol::getCreate() {
-    return std::move(EventDTO(Event::event_create, recvString(), 0));
+    return std::move(EventDTO(Event::event_create, MoveTo::move_not, recvString(), 0));
 }
 
 EventDTO ServerProtocol::getJoin() {
@@ -14,11 +14,11 @@ EventDTO ServerProtocol::getJoin() {
     recvAll(&code, 4);
     code = ntohl(code);
 
-    return std::move(EventDTO(Event::event_join, "", code));
+    return std::move(EventDTO(Event::event_join, MoveTo::move_not, "", code));
 }
 
 EventDTO ServerProtocol::getBroadcast() {
-    return std::move(EventDTO(Event::event_broadcast, recvString(), 0));
+    return std::move(EventDTO(Event::event_broadcast, MoveTo::move_not, recvString(), 0));
 }
 
 void ServerProtocol::responseCreate(uint32_t code) {
@@ -80,7 +80,7 @@ EventDTO ServerProtocol::getEvent() {
 
     // Se cierra el socket y no se lee ningun byte
     if (was_closed && sokcet_ret == 0) {
-        return std::move(EventDTO(Event::event_leave, "", 0));
+        return std::move(EventDTO(Event::event_leave, MoveTo::move_not, "", 0));
     }
 
     if (*buf == 0x01) {
@@ -91,7 +91,7 @@ EventDTO ServerProtocol::getEvent() {
         return std::move(getBroadcast());
     }
 
-    return std::move(EventDTO(Event::event_invalid, "", 0));
+    return std::move(EventDTO(Event::event_invalid, MoveTo::move_not, "", 0));
 }
 
 void ServerProtocol::sendSnapshot(const Snapshot &snapshot) {
