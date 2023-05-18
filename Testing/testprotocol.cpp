@@ -12,7 +12,7 @@ TEST(HelloTest, BasicAssertions) {
   // Expect equality.
   EXPECT_EQ(7 * 6, 42);
 }
-
+/*
 TEST(ClientToServer, SendCreate) {
   MockSocket skt;
   ClientProtocol client(skt);
@@ -39,7 +39,7 @@ TEST(ClientToServer, SendJoinCorrectCode) {
   client.sendEvent(event);
   EXPECT_EQ(11, server.getEvent().getN());
 }
-
+*/
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();

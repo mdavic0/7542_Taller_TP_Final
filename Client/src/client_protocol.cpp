@@ -1,113 +1,78 @@
-// #include "client_protocol.h"
-// #include <arpa/inet.h>
-// #include <vector>
-// #include <utility>
-// #include <iostream>
+#include "client_protocol.h"
+#include <arpa/inet.h>
+#include <vector>
+#include <utility>
+#include <iostream>
 
-// ClientProtocol::ClientProtocol(MockSocket& skt) :
-//     skt(skt) {}
+ClientProtocol::ClientProtocol(Socket&& skt) :
+    Protocol(std::move(skt)) {}
 
-// Snapshot ClientProtocol::create(const std::string& scenario) {
-//     uint8_t command = 0x01;
-//     sendAll(&command, 1);
-//     sendString(scenario);
+void ClientProtocol::sendCreate(const std::string& scenario) {
+    uint8_t command = 0x01;
+    sendAll(&command, 1);
+    sendString(scenario);
+}
 
-//     uint32_t code;
-//     recvAll(&code, 4);
+void ClientProtocol::sendJoin(const uint32_t& code) {
+    uint8_t command = 0x02;
+    sendAll(&command, 1);
 
-//     code = htonl(code);
+    uint32_t codeAux = htonl(code);
+    sendAll(&codeAux, 4);
+}
 
-//     return std::move(Snapshot(Event::event_create, code, 0, ""));
-// }
+void ClientProtocol::sendMove () {
+    uint8_t command = 0x03;
+    sendAll(&command, 1);
 
-// Snapshot ClientProtocol::join(const uint32_t& code) {
-//     uint8_t command = 0x02;
-//     sendAll(&command, 1);
+}
 
-//     uint32_t codeAux = htonl(code);
-//     sendAll(&codeAux, 4);
+Snapshot ClientProtocol::getCreate () {
+    uint32_t code;
+    recvAll(&code, 4);
 
-//     uint8_t res;
-//     recvAll(&res, sizeof(res));
+    code = htonl(code);
 
-//     return std::move(Snapshot(Event::event_join, ntohl(codeAux), res, ""));
-// }
+    return std::move(Snapshot(Event::event_create, code, 0));
 
-// Snapshot ClientProtocol::readMsg(const uint32_t& n) {
-//     uint8_t command;
-//     std::ostringstream msgs;
-//     uint32_t counter = 0;
+}
 
-//     do {
-//         recvAll(&command, 1);
-//         if (counter < n-1) {
-//             msgs << recvString() << " ";
-//         } else {
-//             msgs << recvString();
-//         }
-//         counter++;
-//     } while (counter < n);
+Snapshot ClientProtocol::getJoin () {
+    uint8_t res;
+    recvAll(&res, sizeof(res));
 
-//     std::string str(msgs.str());
+    return std::move(Snapshot(Event::event_join, 0, res));
 
-//     return std::move(Snapshot(Event::event_read, n, 0, str));
-// }
+}
 
-// Snapshot ClientProtocol::sendMsg(const std::string& str) {
-//     uint8_t command = 0x03;
-//     sendAll(&command, 1);
-//     sendString(str);
-//     return std::move(Snapshot(Event::event_read, 0, 0, ""));
-// }
+Snapshot ClientProtocol::getMove () {
+    return std::move(Snapshot(Event::event_move, 0, 0));
+}
 
-// void ClientProtocol::sendAll(const void *data, unsigned int sz) {
-//     bool was_closed = false;
-//     int sokcet_ret = skt.sendall(data, sz, &was_closed);
+void ClientProtocol::sendEvent(const EventDTO& eventdto) {
+    Event event = eventdto.getEvent();
 
-//     if (was_closed && sokcet_ret == 0) {
-//         throw LibError(errno, "Socket is closed and no byte was sent");
-//     }
-// }
+    if (event == Event::event_create) {
+        sendCreate(eventdto.getStr());
+    } else if (event == Event::event_join) {
+        sendJoin(eventdto.getN());
+    } else if (event == Event::event_move) {
+        sendMove();
+    }
+    
+}
 
+Snapshot ClientProtocol::getSnapshot() {
+    uint8_t event;
+    recvAll(&event, 1);
 
-// void ClientProtocol::recvAll(void *data, unsigned int sz) {
-//     bool was_closed = false;
-//     bool sokcet_ret = skt.recvall(data, sz, &was_closed);
+    if (event == 0x01) {
+        return std::move(getCreate());
+    } else if (event == 0x02) {
+        return std::move(getJoin());
+    } else if (event == 0x03) {
+        return std::move(getMove());
+    }
 
-//     if (was_closed && sokcet_ret == 0) {
-//          throw LibError(errno, "Socket is closed in rev when receive a new byte is neccesary");
-//     }
-// }
-
-// void ClientProtocol::sendString(const std::string& str) {
-//     uint16_t len = htons(str.size());
-//     sendAll(&len, 2);
-//     sendAll(str.c_str(), str.size());
-//     return;
-// }
-
-// std::string ClientProtocol::recvString() {
-//     uint16_t len;
-//     recvAll(&len, 2);
-//     len = ntohs(len);
-
-//     std::vector<char> response(len+1);
-//     recvAll(response.data(), response.size()-1);
-//     response[len] = '\0';
-//     return std::string(response.data());
-// }
-
-// Snapshot ClientProtocol::sendEvent(const EventDTO& eventdto) {
-//     Event event = eventdto.getEvent();
-
-//     if (event == Event::event_create) {
-//         return std::move(create(eventdto.getStr()));
-//     } else if (event == Event::event_join) {
-//         return std::move(join(eventdto.getN()));
-//     } else if (event == Event::event_broadcast) {
-//         return std::move(sendMsg(eventdto.getStr()));
-//     } else if (event == Event::event_read) {
-//         return std::move(readMsg(eventdto.getN()));
-//     }
-//     return std::move(Snapshot(Event::event_invalid, 0, 0, ""));
-// }
+    return std::move(Snapshot(Event::event_invalid, 0, 0));
+}
