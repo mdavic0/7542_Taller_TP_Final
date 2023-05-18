@@ -3,94 +3,35 @@
 
 #include <string>
 #include <sstream>
-#include "common_socket.h"
-#include "common_responsedto.h"
-#include "common_commanddto.h"
+#include "common_protocol.h"
+#include "common_eventdto.h"
+#include "common_snapshot.h"
 
 /*
  * TDA ServerProtocol.
  * Se comunica con el cliente a través de su socket.
  */
-class ServerProtocol {
+class ServerProtocol : Protocol {
     private:
-        Socket peer;
-
-        /*
-         * Ante un comando create, rearma el CommandDTO
-         * que representa dicho comando.
-         */
-        CommandDTO getCreate();
-
-        /*
-         * Ante un comando join, rearma el CommandDTO
-         * que representa dicho comando.
-         */
-        CommandDTO getJoin();
-
-        /*
-         * Ante un comando broadcast, rearma el CommandDTO
-         * que representa dicho comando.
-         */
-        CommandDTO getBroadcast();
-
-        /*
-         * Envía la respuesta de un
-         * comando create
-         */
-        void responseCreate(uint32_t code);
-
-        /*
-         * Envía la respuesta de un
-         * comando join
-         */
-        void responseJoin(uint8_t ok);
-
-        /*
-         * Envía la respuesta de un
-         * comando broadcast
-         */
-        void responseBroadcast(const std::string& str);
-
-        /*
-         * Método privado para enviar los bytes correspondientes
-         * por medio del socket.
-         */
-        void sendAll(
-         const void *data,
-         unsigned int sz);
-
-        /*
-         * Método privado para recibir los bytes correspondientes
-         * por medio del socket.
-         */
-        void recvAll(
-          void *data,
-          unsigned int sz);
-
-        /*
-         * Método privado para enviar strings al servidor.
-         */
-        void sendString(const std::string& str);
-
-        /*
-         * Método privado para recibir strings
-         */
-        std::string recvString();
+    
+        EventDTO getCreate();
+        EventDTO getJoin();
+        EventDTO getMove();
+        void sendCreate(uint32_t code);
+        void sendJoin(uint8_t ok);
+        void sendMove();
 
     public:
         /*
-         * Constructor de ServerProtocol recibe el socket con el que
-         * debe comunicarse con el cliente.
-         */
+        * Constructor que llama al constructor del padre
+        * */
         explicit ServerProtocol(
                 Socket&& skt);
 
-        CommandDTO getCommandDTO();
+        EventDTO getEvent();
 
-        void sendResponse(
-            const ResponseDTO &response);
-
-        void stop();
+        void sendSnapshot(
+            const Snapshot &snapshot);
 
         /*
          * No queremos permitir que alguien haga copias
