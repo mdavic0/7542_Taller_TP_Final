@@ -3,9 +3,10 @@
 
 #include <stdint.h>
 #include <string>
+#include "common_socket.h"
 #include "client_protocol.h"
-#include "common_commanddto.h"
-#include "common_responsedto.h"
+#include "common_eventdto.h"
+#include "common_snapshot.h"
 #include "common_queue.h"
 /*
  * TDA Client
@@ -14,8 +15,8 @@
 class Client {
     private:
         ClientProtocol protocol;
-        //Queue<Command> sdl_events;
-        //Queue<Command> snapshot;
+        //Queue<EventDTO> sdl_events;
+        //Queue<Snapshot> snapshot;
 
     public:
         /*

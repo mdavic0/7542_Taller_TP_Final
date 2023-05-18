@@ -6,7 +6,7 @@
 
 Parser::Parser() {}
 
-CommandDTO Parser::getNextCommand() {
+EventDTO Parser::getNextCommand() {
     std::string line;
     std::getline(std::cin, line);
 
@@ -17,22 +17,22 @@ CommandDTO Parser::getNextCommand() {
     if (command == "create") {
         std::string scenario;
         iss >> scenario;
-        return std::move(CommandDTO(Command::command_create, scenario, 0));
+        return EventDTO(Event::event_create, MoveTo::move_not, scenario, 0);
     } else if (command == "join") {
         uint32_t code;
         iss >> code;
-        return std::move(CommandDTO(Command::command_join, "", code));
+        return EventDTO(Event::event_join, MoveTo::move_not,"", code);
     } else if (command == "broadcast") {
         std::string msg;
         iss >> msg;
-        return std::move(CommandDTO(Command::command_broadcast, msg, 0));
+        return EventDTO(Event::event_broadcast, MoveTo::move_not,msg, 0);
     } else if (command == "read") {
         uint32_t n;
         iss >> n;
-        return std::move(CommandDTO(Command::command_read, "", n));
+        return EventDTO(Event::event_read, MoveTo::move_not,"", n);
     } else if (command == "leave") {
-        return std::move(CommandDTO(Command::command_leave, "", 0));
+        return EventDTO(Event::event_leave, MoveTo::move_not,"", 0);
     } else {
-        return std::move(CommandDTO(Command::command_invalid, "", 0));
+        return EventDTO(Event::event_invalid, MoveTo::move_not,"", 0);
     }
 }

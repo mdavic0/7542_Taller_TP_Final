@@ -8,16 +8,18 @@ class Snapshot {
         Event event;
         uint32_t code;
         uint8_t ok;
-
+        std::string str;
     public:
         explicit Snapshot(
-            Event event, uint32_t code, uint8_t ok);
+            Event event, uint32_t code, uint8_t ok, const std::string& str);
 
         Event getEvent() const;
 
         uint32_t getCode() const;
 
         uint8_t getOk() const;
+
+        void print(const bool& showBroadcast) const;
 
         /*
          * No queremos permitir que alguien haga copias

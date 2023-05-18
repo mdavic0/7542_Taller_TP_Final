@@ -14,7 +14,7 @@
 class ClientWriter : public Thread {
     private:
         ServerProtocol *protocol;
-        Queue<ResponseDTO*> *q;
+        Queue<Snapshot*> *q;
         std::atomic<bool> talking;
         std::atomic<bool> alive;
 
@@ -26,7 +26,7 @@ class ClientWriter : public Thread {
          * las respuestas que debe enviar.
          */
         explicit ClientWriter(
-                ServerProtocol *protocol, Queue<ResponseDTO*> *q);
+                ServerProtocol *protocol, Queue<Snapshot*> *q);
 
         /*
          * Método que devuelve true cuando el hilo termino de ejecutarse.

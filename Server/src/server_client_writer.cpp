@@ -1,15 +1,15 @@
 #include "server_client_writer.h"
 #include "common_liberror.h"
 
-ClientWriter::ClientWriter(ServerProtocol *protocol, Queue<ResponseDTO*> *q) :
+ClientWriter::ClientWriter(ServerProtocol *protocol, Queue<Snapshot*> *q) :
     protocol(protocol), q(q), talking(true), alive(true) {}
 
 void ClientWriter::run() {
     while (talking) {
         try {
-            ResponseDTO* response = q->pop();
+            Snapshot* response = q->pop();
             response->print(false);
-            protocol->sendResponse(*response);
+            protocol->sendSnapshot(*response);
             delete response;
         } catch (const ClosedQueue&) {
              break;

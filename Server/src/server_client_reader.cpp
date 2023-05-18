@@ -9,27 +9,27 @@ ClientReader::ClientReader(Socket&& skt, GamesController& controller) :
 }
 
 void ClientReader::run() {
-    CommandDTO commanddto(Command::command_invalid, "", 0);
+    EventDTO eventDto(Event::event_invalid, MoveTo::move_not, "", 0);
 
-    while ((commanddto = protocol.getCommandDTO()).getCommand() != Command::command_invalid
+    while ((eventDto = protocol.getEvent()).getEvent() != Event::event_invalid
         && talking) {
         try {
-            Command command = commanddto.getCommand();
+            Event event = eventDto.getEvent();
 
-            if (command == Command::command_create) {
-                game = controller.create(commanddto, &q);
-                ResponseDTO *response = new ResponseDTO(command, game, 0,  "");
+            if (event == Event::event_create) {
+                game = controller.create(eventDto, &q);
+                Snapshot *response = new Snapshot(event, game, 0, "");
                 q.push(response);
-            } else if (command == Command::command_join) {
-                uint32_t code = commanddto.getN();
-                uint8_t ok = controller.join(commanddto, &q);
+            } else if (event == Event::event_join) {
+                uint32_t code = eventDto.getN();
+                uint8_t ok = controller.join(eventDto, &q);
                 if (ok == 0x00) {
                     game = code;
                 }
-                ResponseDTO *response = new ResponseDTO(command, code, ok,  "");
+                Snapshot *response = new Snapshot(event, game, 0, "");
                 q.push(response);
-            } else if (command == Command::command_broadcast) {
-                controller.broadcast(game, commanddto);
+            } else if (event == Event::event_broadcast) {
+                controller.broadcast(game, eventDto);
             }
         } catch (const LibError& err) {
             // socket closed

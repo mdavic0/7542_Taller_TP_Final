@@ -2,6 +2,8 @@
 #define SERVER_GAMES_CONTROLLER_H_
 
 #include "server_game.h"
+#include "common_eventdto.h"
+#include "common_snapshot.h"
 #include <mutex>
 #include <map>
 
@@ -28,21 +30,21 @@ class GamesController {
      * - proteger el contador para que otro hilo no cree la misma sala.
      * - mantener el lock hasta que se haya modificado la lista de salas.
      */
-    uint32_t create(const CommandDTO& commanddto, Queue<ResponseDTO*> *q);
+    uint32_t create(const EventDTO& eventdto, Queue<Snapshot*> *q);
 
     /*
      * Este método sera el encargado de unir un cliente a un sala.
      * Para hacerlo debera proteger el el map de salas para que no sea
      * modificado mientras se lo esta 'iterando'.
      */
-    uint8_t join(const CommandDTO& commanddto, Queue<ResponseDTO*> *q);
+    uint8_t join(const EventDTO& eventdto, Queue<Snapshot*> *q);
 
     /*
      * Este método sera el encargado de informar de un broadcast a una sala.
      * Para hacerlo debera proteger el el map de salas para que no sea
      * modificado mientras se lo esta 'iterando'.
      */
-    void broadcast(uint32_t game, const CommandDTO& commanddto);
+    void broadcast(uint32_t game, const EventDTO& eventdto);
 
     ~GamesController();
 };

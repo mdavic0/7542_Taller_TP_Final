@@ -15,7 +15,7 @@
 class ClientReader : public Thread {
     private:
         ServerProtocol protocol;
-        Queue<ResponseDTO*> q;
+        Queue<Snapshot*> q;
         ClientWriter writer;
         GamesController& controller;
         uint32_t game;

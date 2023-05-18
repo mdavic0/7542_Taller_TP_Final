@@ -3,18 +3,19 @@
 #include "common_liberror.h"
 
 Client::Client(const std::string& hostname, const std::string& servname) :
-    protocol(hostname, servname) {}
+    protocol(Socket(hostname.c_str(), servname.c_str())) {}
 
 void Client::run() {
     Parser parser;
-    CommandDTO command(Command::command_invalid, "", 0);
-    while ((command = parser.getNextCommand()).getCommand() != Command::command_invalid
-        && command.getCommand() != Command::command_leave) {
-        ResponseDTO response = protocol.sendCommand(command);
+    EventDTO eventDto(Event::event_invalid, MoveTo::move_not,"", 0);
+    while ((eventDto = parser.getNextCommand()).getEvent() != Event::event_invalid
+        && eventDto.getEvent() != Event::event_leave) {
+        protocol.sendEvent(eventDto);
+        Snapshot response(eventDto.getEvent(), 0,0, eventDto.getStr());
         response.print(true);
     }
 
-    if (command.getCommand() == Command::command_invalid) {
+    if (eventDto.getEvent() == Event::event_invalid) {
         throw LibError(-1 , "input of invalid command");
     }
 }

@@ -1,7 +1,7 @@
 #ifndef CLIENT_PARSER_H_
 #define CLIENT_PARSER_H_
 
-#include "common_commanddto.h"
+#include "common_eventdto.h"
 
 /*
  * TDA Parser
@@ -14,7 +14,7 @@ class Parser {
         /*
          * Método utilizado para obtener el siguinete comando.
          */
-        CommandDTO getNextCommand();
+        EventDTO getNextCommand();
 };
 
 #endif  // CLIENT_PARSER_H_
