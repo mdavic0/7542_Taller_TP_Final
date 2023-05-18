@@ -1,7 +1,8 @@
 #ifndef LAUNCHER_H_
 #define LAUNCHER_H_
 
-#include <QtWidgets>
+#include <QMainWindow>
+#include <QGridLayout>
 #include <QPushButton>
 
 class Launcher : public QWidget {

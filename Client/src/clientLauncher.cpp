@@ -1,4 +1,5 @@
 #include "clientLauncher.h"
+#include <QApplication>
 
 Launcher::Launcher(QWidget* parent) : QWidget(parent),
     conectServer("Conectar", this), buttonExit("Salir", this),
