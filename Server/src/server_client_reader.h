@@ -1,7 +1,7 @@
 #ifndef SERVER_CLIENT_READER_H_
 #define SERVER_CLIENT_READER_H_
 
-#include "server_thread.h"
+#include "common_thread.h"
 #include "server_protocol.h"
 #include "server_games_controller.h"
 #include "server_client_writer.h"

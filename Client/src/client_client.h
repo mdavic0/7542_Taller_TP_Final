@@ -6,7 +6,7 @@
 #include "client_protocol.h"
 #include "common_commanddto.h"
 #include "common_responsedto.h"
-
+#include "common_queue.h"
 /*
  * TDA Client
  * Representa una conexión al servidor.
@@ -14,6 +14,8 @@
 class Client {
     private:
         ClientProtocol protocol;
+        //Queue<Command> sdl_events;
+        //Queue<Command> snapshot;
 
     public:
         /*

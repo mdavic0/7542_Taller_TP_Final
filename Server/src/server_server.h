@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <atomic>
-#include "server_thread.h"
+#include "common_thread.h"
 #include "server_client_reader.h"
 #include "common_socket.h"
 

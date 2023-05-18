@@ -6,7 +6,7 @@
 #include <string>
 #include "common_commanddto.h"
 #include "common_responsedto.h"
-#include "server_queue.h"
+#include "common_queue.h"
 
 /*
  * TDA Game
