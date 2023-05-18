@@ -1,0 +1,100 @@
+
+class Protocol {
+- skt : Socket
++ sendAll(const void *data, unsigned int sz) : void
++ recvAll( void *data, unsigned int sz) : void
++ sendString(const std::string& str) : void
++ recvString() : std::string
++ stop () : void
+}
+
+note top of Protocol
+metodos publicos solo por herencia
+para que puedan ser usados en las clases hijas
+to do: pensar mejora
+end note
+
+class ClientProtocol{
+- sendCreate(const std::string& scenario) : void
+- sendJoin(const uint32_t& code) : void
+- sendMove() : void
+- getCreate() : Snapshot
+- getJoin() : Snapshot
+- getMove() : Snapshot
++ getSnapshot() : Snapshot
++ sendEvent(const EventDTO& eventdto) : void
+}
+
+note left of ClientProtocol
+hilo sender usa el método sendEvent
+sin importar el tipo de evento.
+hilo reciver usa metodo getSnapshot.
+"sanpshot.getEvent()" para saber si es la 
+respuesta de un create o join.
+end note
+
+class ServerProtocol {
+- getCreate() : EventDTO
+- getJoin() : EventDTO
+- getMove() : EventDTO
+- responseCreate(uint32_t code) : void
+- responseJoin(uint8_t ok) : void
+- respondeMove() : void
++ getEvent() : EventDTO
++ sendSnapshot(const Snapshot &snapshot) : void
+}
+
+Protocol <|-- ServerProtocol
+Protocol <|-- ClientProtocol
+
+class EventDTO {
+- str : std::string
+- n : uint32_t
++ getEvent() : Event
++ getMoveTo() :  MoveTo
++ getStr() : std::string
++ getN() : uint32_t
+}
+
+
+class Snapshot {
+- code : uint32_t
+- ok : uint8_t
++ getEvent() : Event
++ getCode() : uint32_t
++ getOk() : uint8_t
+}
+
+note right of Snapshot
+agregar todo los datos necesarios 
+por el cliente
+end note
+
+enum Event {
+- event_invalid
+- event_create
+- event_join
+- event_move
+- event_leave
+}
+
+hide Event methods
+
+enum MoveTo {
+- move_not
+- move_right
+- move_left
+- move_up
+- move_down
+- move_up_right
+- move_up_left
+- move_down_right
+- move_down_left
+}
+
+hide MoveTo methods
+
+EventDTO --> Event
+EventDTO --> MoveTo
+
+Event <-- Snapshot
