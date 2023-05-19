@@ -1,6 +1,10 @@
 #include "client_initview.h"
 #include <QApplication>
 #include <QVBoxLayout>
+#include <QFontDatabase>
+#include <QFont>
+#include <QFile>
+#include <QDebug>
 
 InitView::InitView(QWidget* parent) : QWidget(parent),
     buttonExit("Salir", this), conectServer("Iniciar", this),
@@ -13,6 +17,9 @@ void InitView::initWidget() {
     this->setObjectName("Init");
     this->setWindowTitle("Left 2 Dead");
     this->setFixedSize(800, 600);
+    QFile file(QString("assets/css/init.qss"));
+    file.open(QFile::ReadOnly);
+    this->setStyleSheet(file.readAll());
 }
 
 void InitView::createScene() {

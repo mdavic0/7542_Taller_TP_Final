@@ -13,9 +13,23 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ggdb -DDEBUG -fno-inline ")
 # threads
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 
+# Qt UI
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
+
+find_package(Qt5 COMPONENTS REQUIRED Core)
+find_package(Qt5 COMPONENTS REQUIRED Widgets)
+
+# ASSETS
+add_custom_target(assets_target ALL
+  COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_SOURCE_DIR}/assets
+    ${CMAKE_BINARY_DIR}/assets
+  COMMENT "Copiando assets"
+)
+
+set(ASSETS_DIR ${CMAKE_BINARY_DIR}/assets)
 
 # COMMON
 include_directories(${PROJECT_SOURCE_DIR}/Common)

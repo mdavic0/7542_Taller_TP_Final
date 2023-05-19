@@ -1,8 +1,10 @@
 #include "client_launcher.h"
-#include <QApplication>
-#include <QDebug>
 #include "client_protocol.h"
 #include "common_socket.h"
+#include <QApplication>
+#include <QFontDatabase>
+#include <QStringList>
+#include <QDebug>
 
 Launcher::Launcher(QWidget* parent): QWidget(parent),
     initView(), connectView(), menuView(), createView(),
@@ -26,6 +28,8 @@ Launcher::Launcher(QWidget* parent): QWidget(parent),
     connect(&menuView, &MenuView::backClicked, this,
             &Launcher::goToMain);
     // Crear partida
+    connect(&createView, &CreateView::createClicked, this,
+            &Launcher::sendCreateMatch);
     connect(&createView, &CreateView::backClicked, this,
             &Launcher::goToMenu);
 
@@ -39,6 +43,17 @@ void Launcher::initWidget() {
     this->setObjectName("MainWidget");
     this->setWindowTitle("Left 2 Dead");
     this->setFixedSize(800, 600);
+    this->initFont();
+}
+
+void Launcher::initFont() {
+    QFontDatabase fontdata;
+    int fontId = fontdata.addApplicationFont("assets/font/Futurot.ttf");
+    if (fontId != -1) {
+        QStringList fontFamilies = fontdata.applicationFontFamilies(fontId);
+        if (!fontFamilies.empty())
+            qApp->setFont(fontFamilies.at(0));
+    }
 }
 
 void Launcher::goToMain() {
@@ -66,6 +81,9 @@ void Launcher::createProtocol(const QString& ip, const QString& port) {
     // } catch (std::exception &exc){
     //     Q_EMIT errorConnection();
     // }
+}
+
+void Launcher::sendCreateMatch() {
 }
 
 Launcher::~Launcher() {

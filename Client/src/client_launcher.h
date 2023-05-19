@@ -20,6 +20,7 @@ class Launcher : public QWidget {
         CreateView createView;
         std::optional<ClientProtocol> clientProtocol;
         void initWidget();
+        void initFont();
     public:
         explicit Launcher(QWidget* parent = 0);
         virtual ~Launcher();
@@ -31,6 +32,7 @@ class Launcher : public QWidget {
         void goToMenu();
         void goToCreate();
         void createProtocol(const QString& ip, const QString& port);
+        void sendCreateMatch();
 
 };
 
