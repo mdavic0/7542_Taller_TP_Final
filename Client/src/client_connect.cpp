@@ -2,6 +2,7 @@
 #include <QHBoxLayout>
 #include <QDialogButtonBox>
 #include <QMessageBox>
+#include <QFile>
 
 ConnectView ::ConnectView (QWidget* parent) : QWidget(parent),
     ipLabel("IP", this), lineIp(this), portLabel("Puerto"), linePort(this),
@@ -16,26 +17,27 @@ ConnectView ::ConnectView (QWidget* parent) : QWidget(parent),
     portLabel.setBuddy(&linePort);
 
     QHBoxLayout *layoutIp = new QHBoxLayout;
-    layoutIp->setSpacing(15);
+    layoutIp->setSpacing(77);
     layoutIp->addWidget(&ipLabel);
     layoutIp->addWidget(&lineIp);
 
     QHBoxLayout *layoutPort = new QHBoxLayout;
-    layoutPort->setSpacing(5);
+    layoutPort->setSpacing(15);
     layoutPort->addWidget(&portLabel);
     layoutPort->addWidget(&linePort);
 
     QHBoxLayout *layoutButton = new QHBoxLayout;
+    layoutButton->setSpacing(10);
     connectButton.setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     backButton.setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     layoutButton->addWidget(&connectButton, QDialogButtonBox::ActionRole);
     layoutButton->addWidget(&backButton, QDialogButtonBox::ActionRole);
-
-    mainLayout.setAlignment(Qt::AlignCenter);
+    mainLayout.setMargin(40);
+    mainLayout.setAlignment(Qt::AlignBottom | Qt::AlignLeft);
     mainLayout.setSpacing(15);
-    mainLayout.addLayout(layoutIp, 0, 0, Qt::AlignCenter | Qt::AlignHCenter);
-    mainLayout.addLayout(layoutPort, 1, 0, Qt::AlignCenter);
-    mainLayout.addLayout(layoutButton, 2, 0, Qt::AlignCenter);
+    mainLayout.addLayout(layoutIp, 0, 0, Qt::AlignLeft );
+    mainLayout.addLayout(layoutPort, 1, 0, Qt::AlignLeft);
+    mainLayout.addLayout(layoutButton, 2, 0,  Qt::AlignLeft);
 
     connect(&connectButton, &QPushButton::clicked, this, 
             &ConnectView::connectToServer);
@@ -65,6 +67,24 @@ void ConnectView::initWidget() {
     this->setObjectName("Connect");
     this->setWindowTitle("Left 2 Dead");
     this->setFixedSize(800, 600);
+    this->initStylesheet();
+    this->initBackground();
+}
+
+void ConnectView::initStylesheet() {
+    QFile file(QString("assets/css/init.qss"));
+    file.open(QFile::ReadOnly);
+    QString styleSheet = QLatin1String(file.readAll());
+    this->setStyleSheet(styleSheet);
+}
+
+void ConnectView::initBackground() {
+    this->setAutoFillBackground(true);
+    QPixmap pixmap("assets/images/init.jpg");
+    QPalette palette;
+    palette.setBrush(this->backgroundRole(),
+        QBrush(pixmap.scaled(this->size())));
+    this->setPalette(palette);
 }
 
 ConnectView::~ConnectView() {

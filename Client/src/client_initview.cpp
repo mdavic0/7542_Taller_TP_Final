@@ -4,6 +4,8 @@
 #include <QFontDatabase>
 #include <QFont>
 #include <QFile>
+#include <QPixmap>
+#include <QPalette>
 #include <QDebug>
 
 InitView::InitView(QWidget* parent) : QWidget(parent),
@@ -14,24 +16,40 @@ InitView::InitView(QWidget* parent) : QWidget(parent),
 }
 
 void InitView::initWidget() {
-    this->setObjectName("Init");
-    this->setWindowTitle("Left 2 Dead");
     this->setFixedSize(800, 600);
+    this->setWindowTitle("Left 2 Dead");
+    this->setObjectName("InitWidget");
+    this->initStylesheet();
+    this->initBackground();
+}
+
+void InitView::initStylesheet() {
     QFile file(QString("assets/css/init.qss"));
     file.open(QFile::ReadOnly);
-    this->setStyleSheet(file.readAll());
+    QString styleSheet = QLatin1String(file.readAll());
+    this->setStyleSheet(styleSheet);
+}
+
+void InitView::initBackground() {
+    this->setAutoFillBackground(true);
+    QPixmap pixmap("assets/images/init.jpg");
+    QPalette palette;
+    palette.setBrush(this->backgroundRole(),
+        QBrush(pixmap.scaled(this->size())));
+    this->setPalette(palette);
 }
 
 void InitView::createScene() {
     QVBoxLayout *buttonBox = new QVBoxLayout;
-    buttonBox->setAlignment(Qt::AlignRight);
+    buttonBox->setMargin(50);
+    buttonBox->setAlignment(Qt::AlignCenter);
     buttonBox->addWidget(&conectServer);
     buttonBox->addWidget(&buttonExit);
 
-    connect(&conectServer, &QPushButton::clicked, this, 
+    connect(&conectServer, &QPushButton::clicked, this,
             &InitView::onConnectClicked);
     connect(&buttonExit, &QPushButton::clicked, this, QApplication::quit);
-    mainLayout.addLayout(buttonBox, 0, 0, Qt::AlignCenter);
+    mainLayout.addLayout(buttonBox, 0, 0, Qt::AlignBottom | Qt::AlignLeft);
     this->setLayout(&mainLayout);
 }
 

@@ -13,6 +13,8 @@ class MenuView : public QWidget {
         QPushButton backButton;
         QGridLayout mainLayout;
         void initWidget();
+        void initStylesheet();
+        void initBackground();
     public:
         explicit MenuView(QWidget* parent = 0);
         virtual ~MenuView();

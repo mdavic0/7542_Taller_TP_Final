@@ -1,11 +1,17 @@
 QWidget {
     font: 15pt;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 QPushButton {
     color: white;
-    background-color: #2D572C;
-    border: 3px solid rgb(78, 32, 32);
+    background-color: transparent;
+    border: none;
     min-width: 12em;
     min-height: 2em;
+}
+
+QLabel {
+    color: white;
 }

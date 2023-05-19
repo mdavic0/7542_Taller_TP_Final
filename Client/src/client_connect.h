@@ -19,6 +19,8 @@ class ConnectView : public QWidget  {
         QPushButton connectButton;
         QPushButton backButton;
         void initWidget();
+        void initStylesheet();
+        void initBackground();
     public:
         explicit ConnectView(QWidget* parent = 0);
         virtual ~ConnectView();

@@ -4,6 +4,7 @@
 #include <QApplication>
 #include <QFontDatabase>
 #include <QStringList>
+#include <QFile>
 #include <QDebug>
 
 Launcher::Launcher(QWidget* parent): QWidget(parent),
@@ -34,6 +35,8 @@ Launcher::Launcher(QWidget* parent): QWidget(parent),
             &Launcher::goToMenu);
 
     QLayout *layout = new QVBoxLayout;
+    layout->setMargin(0);
+    layout->setSpacing(0);
     layout->addWidget(&mainWidget);
     mainWidget.setCurrentIndex(0);
     this->setLayout(layout);

@@ -12,6 +12,8 @@ class InitView : public QWidget {
         QPushButton conectServer;
         QGridLayout mainLayout;
         void initWidget();
+        void initStylesheet();
+        void initBackground();
         void createScene();
     public:
         explicit InitView(QWidget* parent = 0);
