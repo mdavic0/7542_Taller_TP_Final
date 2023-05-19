@@ -13,13 +13,17 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ggdb -DDEBUG -fno-inline ")
 # threads
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
+
 # COMMON
 include_directories(${PROJECT_SOURCE_DIR}/Common)
 add_subdirectory("Common")
 
 # SERVER
-# include_directories(${PROJECT_SOURCE_DIR}/Server/src)
-# add_subdirectory("Server/src")
+include_directories(${PROJECT_SOURCE_DIR}/Server/src)
+add_subdirectory("Server/src")
 
 # CLIENT
 include_directories(${PROJECT_SOURCE_DIR}/Client/src)
@@ -37,10 +41,9 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 
-
-# EJECUTABLES
-#add_executable(server "Server/main.cpp")
-#target_link_libraries(server server_classes common_classes)
+#EJECUTABLES
+add_executable(server "Server/main.cpp")
+target_link_libraries(server server_classes common_classes)
 
 add_executable(client "Client/main.cpp")
 target_link_libraries(client client_classes common_classes)
