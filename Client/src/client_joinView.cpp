@@ -131,7 +131,7 @@ void JoinView::initStylesheet() {
 
 void JoinView::initBackground() {
     this->setAutoFillBackground(true);
-    QPixmap pixmap("assets/images/match.jpg");
+    QPixmap pixmap("assets/images/launcher/match.jpg");
     QPalette palette;
     palette.setBrush(this->backgroundRole(),
         QBrush(pixmap.scaled(this->size())));

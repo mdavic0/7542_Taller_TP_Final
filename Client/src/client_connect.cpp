@@ -80,7 +80,7 @@ void ConnectView::initStylesheet() {
 
 void ConnectView::initBackground() {
     this->setAutoFillBackground(true);
-    QPixmap pixmap("assets/images/init.jpg");
+    QPixmap pixmap("assets/images/launcher/init.jpg");
     QPalette palette;
     palette.setBrush(this->backgroundRole(),
         QBrush(pixmap.scaled(this->size())));

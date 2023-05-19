@@ -17,7 +17,7 @@ QLabel {
 }
 
 QMessageBox {
-    background-image: url(assets/images/message.jpg);
+    background-image: url(assets/images/launcher/message.jpg);
 }
 
 QGroupBox {
@@ -37,18 +37,19 @@ QCheckBox::unchecked {
 }
 
 QCheckBox#IDF::indicator {
-    width: 81px;
-    height: 68px
+    width: 54px;
+    height: 70px
 }
 
 QCheckBox#IDF::indicator:unchecked {
-    background-image: url(assets/images/p90.png);
+    background-image: url(assets/images/launcher/idf.png);
     background-repeat: no-repeat;
 }
 
 QCheckBox#IDF::indicator:checked {
-    height: 63px;
-    background-image: url(assets/images/p90.png);
+    height: 66px;
+    background-image: url(assets/images/launcher/idf.png);
+    background-repeat: no-repeat;
     border: 2px solid red;
     color: red;
 }
@@ -58,18 +59,19 @@ QCheckBox#IDF::checked {
 }
 
 QCheckBox#P90::indicator {
-    width: 81px;
-    height: 68px
+    width: 55px;
+    height: 69px
 }
 
 QCheckBox#P90::indicator:unchecked {
-    background-image: url(assets/images/p90.png);
+    background-image: url(assets/images/launcher/p90.png);
     background-repeat: no-repeat;
 }
 
 QCheckBox#P90::indicator:checked {
-    height: 63px;
-    background-image: url(assets/images/p90.png);
+    height: 65px;
+    background-image: url(assets/images/launcher/p90.png);
+    background-repeat: no-repeat;
     border: 2px solid red;
     color: red;
 }
@@ -79,7 +81,7 @@ QCheckBox#P90::checked {
 }
 
 QCheckBox#Scout::indicator {
-    width: 81px;
+    width: 56px;
     height: 68px
 }
 
@@ -92,13 +94,14 @@ QGroupBox#Profile QLabel {
 }
 
 QCheckBox#Scout::indicator:unchecked {
-    background-image: url(assets/images/p90.png);
+    background-image: url(assets/images/launcher/scout.png);
     background-repeat: no-repeat;
 }
 
 QCheckBox#Scout::indicator:checked {
     height: 63px;
-    background-image: url(assets/images/p90.png);
+    background-image: url(assets/images/launcher/scout.png);
+    background-repeat: no-repeat;
     border: 2px solid red;
     color: red;
 }

@@ -32,7 +32,7 @@ void InitView::initStylesheet() {
 
 void InitView::initBackground() {
     this->setAutoFillBackground(true);
-    QPixmap pixmap("assets/images/init.jpg");
+    QPixmap pixmap("assets/images/launcher/init.jpg");
     QPalette palette;
     palette.setBrush(this->backgroundRole(),
         QBrush(pixmap.scaled(this->size())));

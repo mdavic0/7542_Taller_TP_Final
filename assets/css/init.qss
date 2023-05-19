@@ -17,5 +17,5 @@ QLabel {
 }
 
 QMessageBox {
-    background-image: url(assets/images/message.jpg);
+    background-image: url(assets/images/launcher/message.jpg);
 }
