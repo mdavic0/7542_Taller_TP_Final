@@ -5,7 +5,7 @@
 #include <vector>
 #include <atomic>
 #include "common_thread.h"
-#include "server_client_reader.h"
+#include "EventReceiver.h"
 #include "common_socket.h"
 
 /*
@@ -14,7 +14,7 @@
 class Server : public Thread {
     private:
         Socket skt;
-        std::vector<ClientReader*> readers;
+        std::vector<EventReceiver*> readers;
         GamesController controller;
         std::atomic<bool> talking;
         std::atomic<bool> alive;

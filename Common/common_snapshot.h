@@ -5,30 +5,28 @@
 #include <string>
 
 class Snapshot {
-        Event event;
-        uint32_t code;
-        uint8_t ok;
-        std::string str;
-    public:
-        explicit Snapshot(
-            Event event, uint32_t code, uint8_t ok, const std::string& str);
+    Event event;
+    uint32_t code;
+    uint8_t ok;
 
-        Event getEvent() const;
+public:
+    explicit Snapshot(
+            Event event, uint32_t code, uint8_t ok);
 
-        uint32_t getCode() const;
+    Event getEvent() const;
 
-        uint8_t getOk() const;
+    uint32_t getCode() const;
 
-        void print(const bool& showBroadcast) const;
+    uint8_t getOk() const;
 
-        /*
-         * No queremos permitir que alguien haga copias
-         */
-         Snapshot(const Snapshot&) = delete;
-         Snapshot& operator=(const Snapshot&) = delete;
+    /*
+     * No queremos permitir que alguien haga copias
+     */
+    Snapshot(const Snapshot&) = delete;
+    Snapshot& operator=(const Snapshot&) = delete;
 
-         Snapshot(Snapshot&&);
-         Snapshot& operator=(Snapshot&&);
+    Snapshot(Snapshot&&);
+    Snapshot& operator=(Snapshot&&);
 };
 
 #endif  // COMMON_SNAPSHOT_H_

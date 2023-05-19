@@ -8,6 +8,9 @@
 #include "common_eventdto.h"
 #include "common_snapshot.h"
 #include "common_queue.h"
+#include "EventSender.h"
+#include "SnapshotReceiver.h"
+
 /*
  * TDA Client
  * Representa una conexión al servidor.
@@ -15,8 +18,8 @@
 class Client {
     private:
         ClientProtocol protocol;
-        //Queue<EventDTO> sdl_events;
-        //Queue<Snapshot> snapshot;
+        Queue<EventDTO*> sdl_events;
+        Queue<Snapshot*> snapshot_queue;
 
     public:
         /*
@@ -26,12 +29,6 @@ class Client {
                 const std::string& hostname,
                 const std::string& servname);
 
-        /*
-         * Método el cual ejecuta la lógica del cliente:
-         * - levantar comandos.
-         * - enviarlos por medio del protocolo .
-         * - recibir mensajes en caso de ser indicado.
-         */
         void run();
 
         /*

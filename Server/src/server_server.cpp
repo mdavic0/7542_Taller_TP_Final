@@ -1,7 +1,7 @@
 #include "server_server.h"
 #include <utility>
 #include <algorithm>
-#include "server_client_reader.h"
+#include "EventReceiver.h"
 #include "server_games_controller.h"
 #include "common_liberror.h"
 
@@ -35,7 +35,7 @@ void Server::run() {
     while (talking) {
         try {
             Socket peer = skt.accept();
-            ClientReader *reader = new ClientReader(std::move(peer), controller);
+            EventReceiver *reader = new EventReceiver(std::move(peer), controller);
             //  Se lanza hilo lector
             reader->start();
             readers.push_back(reader);   //  Agrego cliente
