@@ -1,5 +1,5 @@
-#ifndef CREATE_VIEW_H_
-#define CREATE_VIEW_H_
+#ifndef JOIN_VIEW_H_
+#define JOIN_VIEW_H_
 
 #include <QWidget>
 #include <QLabel>
@@ -9,20 +9,17 @@
 #include <QGridLayout>
 #include <QPushButton>
 
-class CreateView : public QWidget {
+class JoinView : public QWidget {
     Q_OBJECT
     private:
-        QLabel nameGame;
-        QLineEdit lineName;
-        QCheckBox clearZone;
-        QCheckBox survival;
-        QButtonGroup modeSelect;
+        QLabel codeGame;
+        QLineEdit lineCode;
         QCheckBox idf;
         QCheckBox p90;
         QCheckBox scout;
         QButtonGroup operatorSelect;
         QGridLayout mainLayout;
-        QPushButton createButton;
+        QPushButton joinButton;
         QPushButton backButton;
         QLabel operatorLabel;
         QLabel weaponLabel;
@@ -32,14 +29,13 @@ class CreateView : public QWidget {
         void initStylesheet();
         void initBackground();
     public:
-        explicit CreateView(QWidget* parent = 0);
-        virtual ~CreateView();
-    Q_SIGNALS:
-        void createClicked();
+        explicit JoinView(QWidget* parent = 0);
+        virtual ~JoinView();
+     Q_SIGNALS:
+        void joinClicked();
         void backClicked();
-        // void selectOperator(QAbstractButton* opSelect);
     public slots:
-        void onCreateClicked();
+        void onJoinClicked();
         void onBackClicked();
     private slots:
         void viewIDF();

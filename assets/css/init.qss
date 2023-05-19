@@ -15,3 +15,7 @@ QPushButton {
 QLabel {
     color: white;
 }
+
+QMessageBox {
+    background-image: url(assets/images/message.jpg);
+}

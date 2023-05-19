@@ -8,13 +8,14 @@
 #include <QDebug>
 
 Launcher::Launcher(QWidget* parent): QWidget(parent),
-    initView(), connectView(), menuView(), createView(),
+    initView(), connectView(), menuView(), createView(), joinView(),
     clientProtocol(std::nullopt) {
     this->initWidget();
     mainWidget.addWidget(&initView);
     mainWidget.addWidget(&connectView);
     mainWidget.addWidget(&menuView);
     mainWidget.addWidget(&createView);
+    mainWidget.addWidget(&joinView);
 
     connect(&initView, &InitView::connectClicked, this,
             &Launcher::goToConnect);
@@ -26,6 +27,8 @@ Launcher::Launcher(QWidget* parent): QWidget(parent),
     // Menu de seleccion
     connect(&menuView, &MenuView::createClicked, this,
             &Launcher::goToCreate);
+    connect(&menuView, &MenuView::joinClicked, this,
+            &Launcher::goToJoin);
     connect(&menuView, &MenuView::backClicked, this,
             &Launcher::goToMain);
     // Crear partida
@@ -33,6 +36,10 @@ Launcher::Launcher(QWidget* parent): QWidget(parent),
             &Launcher::sendCreateMatch);
     connect(&createView, &CreateView::backClicked, this,
             &Launcher::goToMenu);
+    // Unirse a partida
+    connect(&joinView, &JoinView::joinClicked, this, &Launcher::sendJoinMatch);
+    connect(&joinView, &JoinView::backClicked, this, &Launcher::goToMenu);
+
 
     QLayout *layout = new QVBoxLayout;
     layout->setMargin(0);
@@ -75,6 +82,10 @@ void Launcher::goToCreate() {
     mainWidget.setCurrentIndex(3);
 }
 
+void Launcher::goToJoin() {
+    mainWidget.setCurrentIndex(4);
+}
+
 void Launcher::createProtocol(const QString& ip, const QString& port) {
     qDebug() << "Ip: " << ip;
     qDebug() << "port: " << port;
@@ -87,6 +98,11 @@ void Launcher::createProtocol(const QString& ip, const QString& port) {
 }
 
 void Launcher::sendCreateMatch() {
+    qDebug() << "Creo partida";
+}
+
+void Launcher::sendJoinMatch() {
+    qDebug() << "Me uno a partida";
 }
 
 Launcher::~Launcher() {

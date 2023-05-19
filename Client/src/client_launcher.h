@@ -8,6 +8,7 @@
 #include "client_initview.h"
 #include "client_menuView.h"
 #include "client_createView.h"
+#include "client_joinView.h"
 #include "client_protocol.h"
 
 class Launcher : public QWidget {
@@ -18,6 +19,7 @@ class Launcher : public QWidget {
         ConnectView connectView;
         MenuView menuView;
         CreateView createView;
+        JoinView joinView;
         std::optional<ClientProtocol> clientProtocol;
         void initWidget();
         void initFont();
@@ -31,8 +33,10 @@ class Launcher : public QWidget {
         void goToConnect();
         void goToMenu();
         void goToCreate();
+        void goToJoin();
         void createProtocol(const QString& ip, const QString& port);
         void sendCreateMatch();
+        void sendJoinMatch();
 
 };
 
