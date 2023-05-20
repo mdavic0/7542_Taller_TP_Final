@@ -91,15 +91,15 @@ void Launcher::goToJoin() {
 void Launcher::createProtocol(const QString& ip, const QString& port) {
     qDebug() << "Ip: " << ip;
     qDebug() << "port: " << port;
+    try {
+        this->clientProtocol = ClientProtocol(Socket(ip.toStdString().c_str(), port.toStdString().c_str()));
         mainWidget.setCurrentIndex(2);
-    // try {
-    //     this->clientProtocol = ClientProtocol(Socket(ip.toStdString().c_str(), port.toStdString().c_str()));
-    // } catch (std::exception &exc){
-    //     //  Q_EMIT errorConnection();
-    //     QMessageBox::information(this, "Error", 
-    //                 "Datos ingresados no validos",
-    //                 QMessageBox::Close);
-    // }
+    } catch (std::exception &exc){
+        //  Q_EMIT errorConnection();
+        QMessageBox::information(this, "Error", 
+                    "Datos ingresados no validos",
+                    QMessageBox::Close);
+    }
 }
 
 void Launcher::sendCreateMatch(int operatorSelect) {

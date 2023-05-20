@@ -59,7 +59,7 @@ class Protocol{
         * */
         Protocol(Protocol&&) = default;
         Protocol& operator=(Protocol&&) = default;
-
-    void stop();
+    
+        void stop();
 };
 #endif  // COMMON_PROTOCOL_H_

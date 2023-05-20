@@ -12,10 +12,7 @@ void EventReceiver::run() {
         try {
             EventDTO* eventDto = new EventDTO(protocol.getEvent());
             Event event = eventDto->getEvent();
-            if (event == Event::event_invalid) {
-                delete eventDto;
-                talking = false;
-            } else if (event == Event::event_create) {
+            if (event == Event::event_create) {
                 game = controller.create(eventDto, &snapshot_queue);
                 this->event_queue = controller.get_event_queue(game);
                 event_queue->push(eventDto);
