@@ -15,5 +15,3 @@ enum class MoveTo : int8_t {
     move_down_left = 0x08,
 
 };
-
-#endif  // COMMON_MOVETO_H_

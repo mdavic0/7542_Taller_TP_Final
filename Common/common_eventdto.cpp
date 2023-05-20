@@ -1,7 +1,7 @@
 #include "common_eventdto.h"
 
 EventDTO::EventDTO(Event event, MoveTo moveTo, const std::string& str, uint32_t n):
-    event(event), str(str), n(n) {}
+        event(event), str(str), n(n) {}
 
 Event EventDTO::getEvent() const {
     return event;

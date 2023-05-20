@@ -45,11 +45,9 @@ class Protocol{
            */
         std::string recvString();
 
-        void stop();
-        
-        /*
-        * No queremos permitir que alguien haga copias
-        * */
+    /*
+    * No queremos permitir que alguien haga copias
+    * */
         Protocol(const Protocol&) = delete;
         Protocol& operator=(const Protocol&) = delete;
 
@@ -61,5 +59,7 @@ class Protocol{
         * */
         Protocol(Protocol&&) = default;
         Protocol& operator=(Protocol&&) = default;
+
+    void stop();
 };
 #endif  // COMMON_PROTOCOL_H_

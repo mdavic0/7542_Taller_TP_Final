@@ -33,20 +33,18 @@ Snapshot ClientProtocol::getCreate () {
 
     code = htonl(code);
 
-    return Snapshot(Event::event_create, code, 0);
-
+    return Snapshot(Event::event_create, code, 0, "");
 }
 
 Snapshot ClientProtocol::getJoin () {
     uint8_t res;
     recvAll(&res, sizeof(res));
 
-    return Snapshot(Event::event_join, 0, res);
-
+    return Snapshot(Event::event_join, 0, res, "");
 }
 
 Snapshot ClientProtocol::getMove () {
-    return Snapshot(Event::event_move, 0, 0);
+    return Snapshot(Event::event_move, 0, 0, "");
 }
 
 void ClientProtocol::sendEvent(const EventDTO& eventdto) {
@@ -73,6 +71,5 @@ Snapshot ClientProtocol::getSnapshot() {
     } else if (event == 0x03) {
         return getMove();
     }
-
-    return Snapshot(Event::event_invalid, 0, 0);
+    return Snapshot(Event::event_invalid, 0, 0, "");
 }

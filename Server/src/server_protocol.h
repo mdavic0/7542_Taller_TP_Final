@@ -16,6 +16,7 @@ class ServerProtocol : Protocol {
     
         EventDTO getCreate();
         EventDTO getJoin();
+        EventDTO getBroadcast();
         EventDTO getMove();
         void sendCreate(uint32_t code);
         void sendJoin(uint8_t ok);
@@ -47,6 +48,7 @@ class ServerProtocol : Protocol {
          * */
         ServerProtocol(ServerProtocol&&) = default;
         ServerProtocol& operator=(ServerProtocol&&) = default;
+        void stop();
 };
 
 #endif  // SERVER_PROTOCOL_H_

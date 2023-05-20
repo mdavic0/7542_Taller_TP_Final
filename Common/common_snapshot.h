@@ -5,28 +5,28 @@
 #include <string>
 
 class Snapshot {
-        Event event;
-        uint32_t code;
-        uint8_t ok;
+    Event event;
+    uint32_t code;
+    uint8_t ok;
 
-    public:
-        explicit Snapshot(
+public:
+    explicit Snapshot(
             Event event, uint32_t code, uint8_t ok);
 
-        Event getEvent() const;
+    Event getEvent() const;
 
-        uint32_t getCode() const;
+    uint32_t getCode() const;
 
-        uint8_t getOk() const;
+    uint8_t getOk() const;
 
-        /*
-         * No queremos permitir que alguien haga copias
-         */
-         Snapshot(const Snapshot&) = delete;
-         Snapshot& operator=(const Snapshot&) = delete;
+    /*
+     * No queremos permitir que alguien haga copias
+     */
+    Snapshot(const Snapshot&) = delete;
+    Snapshot& operator=(const Snapshot&) = delete;
 
-         Snapshot(Snapshot&&);
-         Snapshot& operator=(Snapshot&&);
+    Snapshot(Snapshot&&);
+    Snapshot& operator=(Snapshot&&);
 };
 
 #endif  // COMMON_SNAPSHOT_H_

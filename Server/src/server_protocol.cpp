@@ -6,15 +6,16 @@
 ServerProtocol::ServerProtocol(Socket&& skt) : Protocol(std::move(skt)) { }
 
 EventDTO ServerProtocol::getCreate() {
-    return EventDTO(Event::event_create, MoveTo::move_idle, recvString(), 0);
+    return EventDTO(Event::event_create, MoveTo::move_not, recvString(), 0);
 }
 
 EventDTO ServerProtocol::getJoin() {
     uint32_t code;
     recvAll(&code, 4);
     code = ntohl(code);
-
+  
     return EventDTO(Event::event_join, MoveTo::move_idle, "", code);
+
 }
 
 EventDTO ServerProtocol::getMove() {
@@ -67,4 +68,8 @@ void ServerProtocol::sendSnapshot(const Snapshot &snapshot) {
     } else if (event == Event::event_move) {
         sendMove();
     }
+}
+
+void ServerProtocol::stop() {
+    Protocol::stop();
 }

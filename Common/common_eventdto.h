@@ -6,32 +6,32 @@
 #include <string>
 
 class EventDTO {
-    private:
-        Event event;
-        MoveTo moveTo;
-        std::string str;
-        uint32_t n;
+private:
+    Event event;
+    MoveTo moveTo;
+    std::string str;
+    uint32_t n;
 
-    public:
-        explicit EventDTO(
+public:
+    explicit EventDTO(
             Event event, MoveTo moveTo, const std::string& str, uint32_t n);
 
-        Event getEvent() const;
+    Event getEvent() const;
 
-        MoveTo getMoveTo() const;
+    MoveTo getMoveTo() const;
 
-        std::string getStr() const;
+    std::string getStr() const;
 
-        uint32_t getN() const;
+    uint32_t getN() const;
 
-        /*
-         * No queremos permitir que alguien haga copias
-         */
-         EventDTO(const EventDTO&) = delete;
-         EventDTO& operator=(const EventDTO&) = delete;
+    /*
+     * No queremos permitir que alguien haga copias
+     */
+    EventDTO(const EventDTO&) = delete;
+    EventDTO& operator=(const EventDTO&) = delete;
 
-         EventDTO(EventDTO&&);
-         EventDTO& operator=(EventDTO&&);
+    EventDTO(EventDTO&&);
+    EventDTO& operator=(EventDTO&&);
 };
 
 #endif  // COMMON_EVENTDTO_H_
