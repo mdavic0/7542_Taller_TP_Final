@@ -1,8 +1,8 @@
+cmake_minimum_required(VERSION 3.16)
 project(left4dead)
 
-cmake_minimum_required(VERSION 3.16)
+# GoogleTest requires at least C++17
 
-# GoogleTest requires at least C++14
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
@@ -13,6 +13,24 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -O0 -Werror -pedantic -Wno-reorde
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ggdb -DDEBUG -fno-inline ")
 # threads
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+
+# Qt UI
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
+
+find_package(Qt5 COMPONENTS REQUIRED Core)
+find_package(Qt5 COMPONENTS REQUIRED Widgets)
+
+# ASSETS
+add_custom_target(assets_target ALL
+  COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_SOURCE_DIR}/assets
+    ${CMAKE_BINARY_DIR}/assets
+  COMMENT "Copiando assets"
+)
+
+set(ASSETS_DIR ${CMAKE_BINARY_DIR}/assets)
 
 # COMMON
 include_directories(${PROJECT_SOURCE_DIR}/Common)
@@ -38,21 +56,20 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 
-
-# EJECUTABLES
+#EJECUTABLES
 add_executable(server "Server/main.cpp")
 target_link_libraries(server server_classes common_classes)
 
 add_executable(client "Client/main.cpp")
 target_link_libraries(client client_classes common_classes)
 
-#add_executable(testprotocol "Testing/testprotocol.cpp" )
-#target_link_libraries(testprotocol server_classes client_classes common_classes)
+# add_executable(testprotocol "Testing/testprotocol.cpp" )
+# target_link_libraries(testprotocol server_classes client_classes common_classes)
 
-#target_link_libraries(
-#  testprotocol
-#  GTest::gtest_main
-#)
+# target_link_libraries(
+#   testprotocol
+#   GTest::gtest_main
+# )
 
-#include(GoogleTest)
-#gtest_discover_tests(testprotocol)
+# include(GoogleTest)
+# gtest_discover_tests(testprotocol)

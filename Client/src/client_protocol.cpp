@@ -34,7 +34,6 @@ Snapshot ClientProtocol::getCreate () {
     code = htonl(code);
 
     return Snapshot(Event::event_create, code, 0, "");
-
 }
 
 Snapshot ClientProtocol::getJoin () {
@@ -42,7 +41,6 @@ Snapshot ClientProtocol::getJoin () {
     recvAll(&res, sizeof(res));
 
     return Snapshot(Event::event_join, 0, res, "");
-
 }
 
 Snapshot ClientProtocol::getMove () {
@@ -73,6 +71,5 @@ Snapshot ClientProtocol::getSnapshot() {
     } else if (event == 0x03) {
         return getMove();
     }
-
     return Snapshot(Event::event_invalid, 0, 0, "");
 }

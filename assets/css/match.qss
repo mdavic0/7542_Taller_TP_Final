@@ -1,0 +1,111 @@
+QWidget {
+    font: 15pt;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+QPushButton {
+    color: white;
+    background-color: transparent;
+    border: none;
+    min-width: 12em;
+    min-height: 2em;
+}
+
+QLabel {
+    color: white;
+}
+
+QMessageBox {
+    background-image: url(assets/images/launcher/message.jpg);
+}
+
+QGroupBox {
+    color: white;
+}
+
+QCheckBox {
+    color: white;
+}
+
+QCheckBox::checked {
+    color: red;
+}
+
+QCheckBox::unchecked {
+    color: black;
+}
+
+QCheckBox#IDF::indicator {
+    width: 54px;
+    height: 70px
+}
+
+QCheckBox#IDF::indicator:unchecked {
+    background-image: url(assets/images/launcher/idf.png);
+    background-repeat: no-repeat;
+}
+
+QCheckBox#IDF::indicator:checked {
+    height: 66px;
+    background-image: url(assets/images/launcher/idf.png);
+    background-repeat: no-repeat;
+    border: 2px solid red;
+    color: red;
+}
+
+QCheckBox#IDF::checked {
+    color: red;
+}
+
+QCheckBox#P90::indicator {
+    width: 55px;
+    height: 69px
+}
+
+QCheckBox#P90::indicator:unchecked {
+    background-image: url(assets/images/launcher/p90.png);
+    background-repeat: no-repeat;
+}
+
+QCheckBox#P90::indicator:checked {
+    height: 65px;
+    background-image: url(assets/images/launcher/p90.png);
+    background-repeat: no-repeat;
+    border: 2px solid red;
+    color: red;
+}
+
+QCheckBox#P90::checked {
+    color: red;
+}
+
+QCheckBox#Scout::indicator {
+    width: 56px;
+    height: 68px
+}
+
+QGroupBox#Profile {
+    border: none;
+}
+
+QGroupBox#Profile QLabel {
+    color: rgb(173, 48, 48);
+}
+
+QCheckBox#Scout::indicator:unchecked {
+    background-image: url(assets/images/launcher/scout.png);
+    background-repeat: no-repeat;
+}
+
+QCheckBox#Scout::indicator:checked {
+    height: 63px;
+    background-image: url(assets/images/launcher/scout.png);
+    background-repeat: no-repeat;
+    border: 2px solid red;
+    color: red;
+}
+
+QCheckBox#Scout::checked {
+    color: red;
+}

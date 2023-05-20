@@ -1,0 +1,21 @@
+QWidget {
+    font: 15pt;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+QPushButton {
+    color: white;
+    background-color: transparent;
+    border: none;
+    min-width: 12em;
+    min-height: 2em;
+}
+
+QLabel {
+    color: white;
+}
+
+QMessageBox {
+    background-image: url(assets/images/launcher/message.jpg);
+}

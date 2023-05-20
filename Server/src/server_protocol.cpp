@@ -13,16 +13,13 @@ EventDTO ServerProtocol::getJoin() {
     uint32_t code;
     recvAll(&code, 4);
     code = ntohl(code);
+  
+    return EventDTO(Event::event_join, MoveTo::move_idle, "", code);
 
-    return EventDTO(Event::event_join, MoveTo::move_not, "", code);
 }
 
 EventDTO ServerProtocol::getMove() {
     return EventDTO(Event::event_move, MoveTo::move_right, "", 0);
-}
-
-EventDTO ServerProtocol::getBroadcast() {
-    return EventDTO(Event::event_broadcast, MoveTo::move_not,recvString(), 0);
 }
 
 void ServerProtocol::sendCreate(uint32_t code) {
@@ -55,12 +52,10 @@ EventDTO ServerProtocol::getEvent() {
     } else if (event == 0x02) {
         return getJoin();
     } else if (event == 0x03) {
-        return getBroadcast();
-    } else if (event == 0x06) {
         return getMove();
     }
 
-    return EventDTO(Event::event_invalid, MoveTo::move_not, "", 0);
+    return EventDTO(Event::event_invalid, MoveTo::move_idle, "", 0);
 }
 
 void ServerProtocol::sendSnapshot(const Snapshot &snapshot) {
