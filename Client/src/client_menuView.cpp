@@ -27,7 +27,7 @@ MenuView::MenuView(QWidget* parent) : QWidget(parent),
 
 void MenuView::initWidget() {
     this->setObjectName("Menu");
-    this->setWindowTitle("Left 2 Dead");
+    this->setWindowTitle("Left 4 Dead");
     this->setFixedSize(800, 600);
     this->initStylesheet();
     this->initBackground();

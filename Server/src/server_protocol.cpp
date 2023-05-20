@@ -6,7 +6,7 @@
 ServerProtocol::ServerProtocol(Socket&& skt) : Protocol(std::move(skt)) { }
 
 EventDTO ServerProtocol::getCreate() {
-    return EventDTO(Event::event_create, MoveTo::move_not, recvString(), 0);
+    return EventDTO(Event::event_create, MoveTo::move_idle, recvString(), 0);
 }
 
 EventDTO ServerProtocol::getJoin() {

@@ -17,7 +17,7 @@ InitView::InitView(QWidget* parent) : QWidget(parent),
 
 void InitView::initWidget() {
     this->setFixedSize(800, 600);
-    this->setWindowTitle("Left 2 Dead");
+    this->setWindowTitle("Left 4 Dead");
     this->setObjectName("InitWidget");
     this->initStylesheet();
     this->initBackground();

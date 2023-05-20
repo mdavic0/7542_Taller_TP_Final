@@ -3,6 +3,7 @@
 #include <QDialogButtonBox>
 #include <QMessageBox>
 #include <QFile>
+#include "client_launcher.h"
 
 ConnectView ::ConnectView (QWidget* parent) : QWidget(parent),
     ipLabel("IP", this), lineIp(this), portLabel("Puerto"), linePort(this),
@@ -42,6 +43,7 @@ ConnectView ::ConnectView (QWidget* parent) : QWidget(parent),
     connect(&connectButton, &QPushButton::clicked, this, 
             &ConnectView::connectToServer);
     connect(&backButton, &QPushButton::clicked, this, &ConnectView::goBack);
+    // connect(&Launcher, &Launcher::errorConnection, this, &ConnectView::errorConection);
 
     this->setLayout(&mainLayout);
 
@@ -65,7 +67,7 @@ void ConnectView::connectToServer() {
 
 void ConnectView::initWidget() {
     this->setObjectName("Connect");
-    this->setWindowTitle("Left 2 Dead");
+    this->setWindowTitle("Left 4 Dead");
     this->setFixedSize(800, 600);
     this->initStylesheet();
     this->initBackground();
