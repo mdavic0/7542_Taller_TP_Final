@@ -23,9 +23,16 @@ class Game : public Thread {
         std::atomic<bool> talking;
         std::atomic<bool> alive;
     public:
-        explicit Game(const uint32_t id, const std::string& name, Queue<Snapshot*> *q);
+        explicit Game(const uint32_t id, const std::string& name, Queue<Snapshot*>* snapshot_queue);
+
+        Queue<EventDTO*>* get_event_queue();
 
         virtual void run() override;
+
+        /*
+        * Método para detener la ejecución el hilo.
+        */
+        virtual void stop() override;
 
         /*
         * Método que devuelve true cuando el hilo termino de ejecutarse.

@@ -25,7 +25,7 @@ class SnapshotSender : public Thread {
          * Además, recibe una queue por referencia, de la cual obtendrá
          * las respuestas que debe enviar.
          */
-        explicit SnapshotSender(ServerProtocol& protocol, Queue<Snapshot *> &q);
+        explicit SnapshotSender(ServerProtocol& protocol, Queue<Snapshot*>& snapshot_queue);
 
         /*
          * Método que devuelve true cuando el hilo termino de ejecutarse.

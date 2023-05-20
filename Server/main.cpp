@@ -1,4 +1,4 @@
-#include "server_server.h"
+#include "Server.h"
 #include <arpa/inet.h>
 #include <iostream>
 #include <sstream>
@@ -13,15 +13,9 @@ int main(int argc, char *argv[]) {
             return 1;
         }
 
-        Server server(argv[1]);     // aceptador
-        server.start();
+        Server server(argv[1]);
+        server.run();
 
-        std::string input;
-        while (input != "q") {
-            std::getline(std::cin, input);
-        }
-
-        server.stop();
         return 0;
     } catch (const std::exception& err) {
         std::cerr

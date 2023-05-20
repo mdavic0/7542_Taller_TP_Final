@@ -14,8 +14,12 @@
  */
 class EventReceiver : public Thread {
     private:
-        ServerProtocol& protocol;
-        Queue<EventDTO*>& event_queue;
+        ServerProtocol protocol;
+        Queue<EventDTO*>* event_queue;
+        Queue<Snapshot*> snapshot_queue;
+        SnapshotSender sender;
+        GamesController& controller;
+        uint32_t game;
         std::atomic<bool> talking;
         std::atomic<bool> alive;
 
@@ -24,7 +28,7 @@ class EventReceiver : public Thread {
          * Constructor que recibe el protocolo y la queue de eventos
          * por referencia.
          */
-        explicit EventReceiver(ServerProtocol& protocol, Queue<EventDTO *> &event_queue);
+        explicit EventReceiver(Socket&& skt, GamesController& controller);
 
         /*
          * Método que devuelve true cuando el hilo termino de ejecutarse.

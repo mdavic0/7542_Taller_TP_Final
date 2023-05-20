@@ -2,16 +2,36 @@
 #include <utility>
 #include "common_liberror.h"
 
-EventReceiver::EventReceiver(ServerProtocol &protocol, Queue<EventDTO *> &event_queue) :
-    protocol(protocol), event_queue(event_queue), talking(true), alive(true) {}
+EventReceiver::EventReceiver(Socket&& skt, GamesController& controller) :
+    protocol(std::move(skt)), event_queue(),
+    snapshot_queue(100), sender(protocol, snapshot_queue),
+    controller(controller), game(0), talking(true), alive(true) {}
 
 void EventReceiver::run() {
-    EventDTO eventDto(Event::event_invalid, MoveTo::move_not, "", 0);
-
     while (talking) {
         try {
-            EventDTO* event = new EventDTO(protocol.getEvent());
-            event_queue.push(event);
+            EventDTO* eventDto = new EventDTO(protocol.getEvent());
+            Event event = eventDto->getEvent();
+            if (event == Event::event_invalid) {
+                delete eventDto;
+                talking = false;
+            } else if (event == Event::event_create) {
+                game = controller.create(eventDto, &snapshot_queue);
+                this->event_queue = controller.get_event_queue(game);
+                event_queue->push(eventDto);
+            } else if (event == Event::event_join) {
+                uint32_t code = eventDto->getN();
+                uint8_t join_result = controller.join(eventDto, &snapshot_queue);
+                if (join_result == 0) {
+                    game = code;
+                }
+                this->event_queue = controller.get_event_queue(game);
+                event_queue->push(eventDto);
+            } else if (event == Event::event_move) {
+                event_queue->push(eventDto);
+            } else {
+                talking = false;
+            }
         } catch (const LibError& err) {
             // socket closed
             break;
@@ -22,7 +42,7 @@ void EventReceiver::run() {
 
 void EventReceiver::stop() {
     talking = false;
-    // protocol.stop(); ???
+    protocol.stop();
 }
 
 bool EventReceiver::ended() {
@@ -30,5 +50,7 @@ bool EventReceiver::ended() {
 }
 
 EventReceiver::~EventReceiver() {
-
+    snapshot_queue.close();
+    sender.stop();
+    join();
 }

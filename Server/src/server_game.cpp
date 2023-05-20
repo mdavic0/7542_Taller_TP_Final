@@ -2,10 +2,15 @@
 #include <string>
 
 Game::Game(const uint32_t id, const std::string& name, Queue<Snapshot*> *q) :
-    id(id), name(name.c_str()), mutex(), unprocessed_events(1000),client_snapshot_queues(),
+    id(id), name(name), mutex(),
+    unprocessed_events(1000), client_snapshot_queues(),
     talking(true), alive(true) {
     client_snapshot_queues.push_back(q);
     }
+
+Queue<EventDTO *> *Game::get_event_queue() {
+    return &this->unprocessed_events;
+}
 
 void Game::run() {
     try {
@@ -14,6 +19,10 @@ void Game::run() {
 
     }
     alive = false;
+}
+
+void Game::stop() {
+    //talking = false;
 }
 
 bool Game::ended() {
