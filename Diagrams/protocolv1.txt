@@ -52,6 +52,8 @@ class EventDTO {
 - n : uint32_t
 + getEvent() : Event
 + getMoveTo() :  MoveTo
++ getOperator() : TypeOperator
++ getGameType() : TypeGame
 + getStr() : std::string
 + getN() : uint32_t
 }
@@ -60,9 +62,12 @@ class EventDTO {
 class Snapshot {
 - code : uint32_t
 - ok : uint8_t
+- position : std::pair<uint16_t>
 + getEvent() : Event
++ getOperator() : TypeOperator
 + getCode() : uint32_t
 + getOk() : uint8_t
++ getPosition() : std::pair<uint16_t> 
 }
 
 note right of Snapshot
@@ -75,6 +80,7 @@ enum Event {
 - event_create
 - event_join
 - event_move
+- event_stop_move
 - event_leave
 }
 
@@ -94,7 +100,26 @@ enum MoveTo {
 
 hide MoveTo methods
 
+enum TypeOperator {
+ - type_idf
+ - type_p90
+ - type_scout
+}
+
+hide TypeOperator methods
+
+
+enum TypeGame {
+ - type_survival
+ - type_clear_zone
+}
+
+hide TypeGame methods
+
 EventDTO --> Event
 EventDTO --> MoveTo
+EventDTO --> TypeOperator
+EventDTO --> TypeGame
 
 Event <-- Snapshot
+TypeOperator <-- Snapshot
