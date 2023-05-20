@@ -27,7 +27,6 @@ void Protocol::recvAll(void *data, unsigned int sz) {
 }
 
 void Protocol::sendAll(const void *data, unsigned int sz) {
-
 }
 
 void Protocol::sendString(const std::string& str) {
