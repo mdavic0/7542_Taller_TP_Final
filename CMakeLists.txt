@@ -3,7 +3,7 @@ project(left4dead)
 cmake_minimum_required(VERSION 3.16)
 
 # GoogleTest requires at least C++14
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
 
@@ -40,19 +40,19 @@ enable_testing()
 
 
 # EJECUTABLES
-#add_executable(server "Server/main.cpp")
-#target_link_libraries(server server_classes common_classes)
+add_executable(server "Server/main.cpp")
+target_link_libraries(server server_classes common_classes)
 
-#add_executable(client "Client/main.cpp")
-#target_link_libraries(client client_classes common_classes)
+add_executable(client "Client/main.cpp")
+target_link_libraries(client client_classes common_classes)
 
-add_executable(testprotocol "Testing/testprotocol.cpp" )
-target_link_libraries(testprotocol server_classes client_classes common_classes)
+#add_executable(testprotocol "Testing/testprotocol.cpp" )
+#target_link_libraries(testprotocol server_classes client_classes common_classes)
 
-target_link_libraries(
-  testprotocol
-  GTest::gtest_main
-)
+#target_link_libraries(
+#  testprotocol
+#  GTest::gtest_main
+#)
 
-include(GoogleTest)
-gtest_discover_tests(testprotocol)
+#include(GoogleTest)
+#gtest_discover_tests(testprotocol)

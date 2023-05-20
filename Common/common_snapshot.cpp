@@ -1,10 +1,8 @@
 #include "common_snapshot.h"
 #include <string>
-#include <iostream>
-#include <sstream>
 
 Snapshot::Snapshot(Event event, uint32_t code, uint8_t ok) :
-    event(event), code(code), ok(ok) {}
+        event(event), code(code), ok(ok) {}
 
 Event Snapshot::getEvent() const {
     return event;

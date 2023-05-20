@@ -8,6 +8,15 @@
 Protocol::Protocol(Socket&& skt) :
     skt(std::move(skt)) {}
 
+void Protocol::sendAll(const void *data, unsigned int sz) {
+    bool was_closed = false;
+    bool sokcet_ret = skt.sendall(data, sz, &was_closed);
+
+    if (was_closed && sokcet_ret == 0) {
+        throw LibError(errno, "Socket is closed in rev when receive a new byte is neccesary");
+    }
+}
+
 void Protocol::recvAll(void *data, unsigned int sz) {
     bool was_closed = false;
     bool sokcet_ret = skt.recvall(data, sz, &was_closed);

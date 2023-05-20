@@ -6,7 +6,7 @@
 ServerProtocol::ServerProtocol(Socket&& skt) : Protocol(std::move(skt)) { }
 
 EventDTO ServerProtocol::getCreate() {
-    return std::move(EventDTO(Event::event_create, MoveTo::move_not, recvString(), 0));
+    return EventDTO(Event::event_create, MoveTo::move_not, recvString(), 0);
 }
 
 EventDTO ServerProtocol::getJoin() {
@@ -14,11 +14,15 @@ EventDTO ServerProtocol::getJoin() {
     recvAll(&code, 4);
     code = ntohl(code);
 
-    return std::move(EventDTO(Event::event_join, MoveTo::move_not, "", code));
+    return EventDTO(Event::event_join, MoveTo::move_not, "", code);
 }
 
 EventDTO ServerProtocol::getMove() {
-    return std::move(EventDTO(Event::event_move, MoveTo::move_right, "", 0));
+    return EventDTO(Event::event_move, MoveTo::move_right, "", 0);
+}
+
+EventDTO ServerProtocol::getBroadcast() {
+    return EventDTO(Event::event_broadcast, MoveTo::move_not,recvString(), 0);
 }
 
 void ServerProtocol::sendCreate(uint32_t code) {
@@ -47,14 +51,16 @@ EventDTO ServerProtocol::getEvent() {
 
 
     if (event == 0x01) {
-        return std::move(getCreate());
+        return getCreate();
     } else if (event == 0x02) {
-        return std::move(getJoin());
+        return getJoin();
     } else if (event == 0x03) {
-        return std::move(getMove());
+        return getBroadcast();
+    } else if (event == 0x06) {
+        return getMove();
     }
 
-    return std::move(EventDTO(Event::event_invalid, MoveTo::move_not, "", 0));
+    return EventDTO(Event::event_invalid, MoveTo::move_not, "", 0);
 }
 
 void ServerProtocol::sendSnapshot(const Snapshot &snapshot) {
@@ -67,4 +73,8 @@ void ServerProtocol::sendSnapshot(const Snapshot &snapshot) {
     } else if (event == Event::event_move) {
         sendMove();
     }
+}
+
+void ServerProtocol::stop() {
+    Protocol::stop();
 }
