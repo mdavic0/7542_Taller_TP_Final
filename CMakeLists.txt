@@ -13,6 +13,9 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ggdb -DDEBUG -fno-inline ")
 # threads
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 
+# SDL
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lSDL2 -lSDL2_image") # -lSDL2_ttf -lSDL2_gfx")
+
 # Qt UI
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
@@ -23,11 +26,11 @@ find_package(Qt5 COMPONENTS REQUIRED Widgets)
 
 # SDL2
 
-find_package(SDL2 REQUIRED)
+#find_package(SDL2 REQUIRED)
 
-set(SDL2_IMAGE_INCLUDE_DIRS /usr/include/SDL2)
-set(SDL2_IMAGE_LIBRARIES /usr/lib/libSDL2_image.so)
-include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS})
+#set(SDL2_IMAGE_INCLUDE_DIRS /usr/include/SDL2)
+#set(SDL2_IMAGE_LIBRARIES /usr/lib/libSDL2_image.so)
+#include_directories(${SDL2_INCLUDE_DIRS} ${SDL2_IMAGE_INCLUDE_DIRS})
 
 # ASSETS
 add_custom_target(assets_target ALL
@@ -68,8 +71,9 @@ add_executable(server "Server/main.cpp")
 target_link_libraries(server server_classes common_classes)
 
 add_executable(client "Client/main.cpp")
-target_link_libraries(client ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})
-target_link_libraries(client client_classes common_classes)
+#target_link_libraries(client ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})
+target_link_libraries(client client_classes common_classes SDL2 SDL2_image)
+#target_link_libraries(client client_classes common_classes)
 
 # add_executable(testprotocol "Testing/testprotocol.cpp" )
 # target_link_libraries(testprotocol server_classes client_classes common_classes)
