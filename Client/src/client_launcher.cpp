@@ -6,6 +6,8 @@
 #include <QStringList>
 #include <QFile>
 #include <QDebug>
+#include "client_gameSdl.h"
+#include <QMessageBox>
 
 Launcher::Launcher(QWidget* parent): QWidget(parent),
     initView(), connectView(), menuView(), createView(), joinView(),
@@ -51,7 +53,7 @@ Launcher::Launcher(QWidget* parent): QWidget(parent),
 
 void Launcher::initWidget() {
     this->setObjectName("MainWidget");
-    this->setWindowTitle("Left 2 Dead");
+    this->setWindowTitle("Left 4 Dead");
     this->setFixedSize(800, 600);
     this->initFont();
 }
@@ -93,12 +95,20 @@ void Launcher::createProtocol(const QString& ip, const QString& port) {
     // try {
     //     this->clientProtocol = ClientProtocol(Socket(ip.toStdString().c_str(), port.toStdString().c_str()));
     // } catch (std::exception &exc){
-    //     Q_EMIT errorConnection();
+    //     //  Q_EMIT errorConnection();
+    //     QMessageBox::information(this, "Error", 
+    //                 "Datos ingresados no validos",
+    //                 QMessageBox::Close);
     // }
 }
 
-void Launcher::sendCreateMatch() {
+void Launcher::sendCreateMatch(int operatorSelect) {
+    qDebug() << "Seleccione operador " << operatorSelect;
     qDebug() << "Creo partida";
+    this->hide();
+    GameSdl game(operatorSelect);
+    game.run();
+    this->show();
 }
 
 void Launcher::sendJoinMatch() {

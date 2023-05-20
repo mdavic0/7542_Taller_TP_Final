@@ -26,6 +26,10 @@ void Protocol::recvAll(void *data, unsigned int sz) {
     }
 }
 
+void Protocol::sendAll(const void *data, unsigned int sz) {
+
+}
+
 void Protocol::sendString(const std::string& str) {
     uint16_t len = htons(str.size());
     sendAll(&len, 2);

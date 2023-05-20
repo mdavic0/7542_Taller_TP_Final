@@ -35,7 +35,7 @@ class Launcher : public QWidget {
         void goToCreate();
         void goToJoin();
         void createProtocol(const QString& ip, const QString& port);
-        void sendCreateMatch();
+        void sendCreateMatch(int operatorSelect);
         void sendJoinMatch();
 
 };

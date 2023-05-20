@@ -116,7 +116,7 @@ void JoinView::onBackClicked() {
 
 void JoinView::initWidget() {
     this->setObjectName("Create");
-    this->setWindowTitle("Left 2 Dead");
+    this->setWindowTitle("Left 4 Dead");
     this->setFixedSize(800, 600);
     this->initStylesheet();
     this->initBackground();

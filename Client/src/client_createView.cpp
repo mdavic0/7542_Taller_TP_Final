@@ -129,7 +129,7 @@ void CreateView::viewScout() {
 }
 
 void CreateView::onCreateClicked() {
-    Q_EMIT createClicked();
+    Q_EMIT createClicked(this->operatorSelect.checkedId());
     // enviar los datos al launcher;
 }
 
@@ -139,7 +139,7 @@ void CreateView::onBackClicked() {
 
 void CreateView::initWidget() {
     this->setObjectName("Create");
-    this->setWindowTitle("Left 2 Dead");
+    this->setWindowTitle("Left 4 Dead");
     this->setFixedSize(800, 600);
     this->initStylesheet();
     this->initBackground();

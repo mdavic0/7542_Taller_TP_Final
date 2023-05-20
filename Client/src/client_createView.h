@@ -35,7 +35,7 @@ class CreateView : public QWidget {
         explicit CreateView(QWidget* parent = 0);
         virtual ~CreateView();
     Q_SIGNALS:
-        void createClicked();
+        void createClicked(int operatorSelect);
         void backClicked();
         // void selectOperator(QAbstractButton* opSelect);
     public slots:
