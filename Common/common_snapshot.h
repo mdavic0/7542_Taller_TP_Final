@@ -2,22 +2,30 @@
 #define COMMON_SNAPSHOT_H_
 
 #include "common_event.h"
+#include "common_type_operator.h"
+#include <utility>
 #include <string>
 
 class Snapshot {
     Event event;
+    TypeOperator typeOperator;
     uint32_t code;
     uint8_t ok;
+    std::pair<uint16_t, uint16_t> position;
 
 public:
-    explicit Snapshot(
-            Event event, uint32_t code, uint8_t ok);
+    explicit Snapshot(Event event, TypeOperator typeOperator, const uint32_t& code,
+        const uint8_t& ok, const uint16_t& x, const uint16_t& y);
 
     Event getEvent() const;
+
+    TypeOperator getTypeOperator() const;
 
     uint32_t getCode() const;
 
     uint8_t getOk() const;
+
+    std::pair<uint16_t, uint16_t> getPosition() const;
 
     /*
      * No queremos permitir que alguien haga copias

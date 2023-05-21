@@ -13,7 +13,7 @@ void Protocol::sendAll(const void *data, unsigned int sz) {
     bool sokcet_ret = skt.sendall(data, sz, &was_closed);
 
     if (was_closed && sokcet_ret == 0) {
-        throw LibError(errno, "Socket is closed in rev when receive a new byte is neccesary");
+        throw LibError(errno, "Socket is closed in rev when send a new byte is neccesary");
     }
 }
 

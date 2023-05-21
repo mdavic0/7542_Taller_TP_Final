@@ -3,43 +3,37 @@ class Protocol {
 - skt : Socket
 + sendAll(const void *data, unsigned int sz) : void
 + recvAll( void *data, unsigned int sz) : void
-+ sendString(const std::string& str) : void
++ sendString(const std::string str) : void
 + recvString() : std::string
 + stop () : void
 }
 
-note top of Protocol
-metodos publicos solo por herencia
-para que puedan ser usados en las clases hijas
-to do: pensar mejora
-end note
 
 class ClientProtocol{
-- sendCreate(const std::string& scenario) : void
-- sendJoin(const uint32_t& code) : void
-- sendMove() : void
+- sendCreate(std::string scenario, TypeOperator typeOperator, TypeGame typeGame) : void
+- sendJoin(uint32_t code, TypeOperator typeOperator) : void
+- sendMove(MoveTo moveTo) : void
+- sendStopMove() : void
 - getCreate() : Snapshot
 - getJoin() : Snapshot
 - getMove() : Snapshot
+- getStopMove() : Snapshot
 + getSnapshot() : Snapshot
 + sendEvent(const EventDTO& eventdto) : void
 }
 
-note left of ClientProtocol
-hilo sender usa el método sendEvent
-sin importar el tipo de evento.
-hilo reciver usa metodo getSnapshot.
-"sanpshot.getEvent()" para saber si es la 
-respuesta de un create o join.
-end note
 
 class ServerProtocol {
 - getCreate() : EventDTO
 - getJoin() : EventDTO
 - getMove() : EventDTO
-- responseCreate(uint32_t code) : void
-- responseJoin(uint8_t ok) : void
-- respondeMove() : void
+- getStopMove() : EventDTO
+- sendCreate(uint32_t code) : void
+- sendJoin(uint8_t ok) : void
+- sendMove(TypeOperator typeOperator, uint16_t x, uint16_t y) : void
+- sendStopMove(TypeOperator typeOperator, uint16_t x, uint16_t y) : void
+- sendOperator(TypeOperator typeOperator) : void
+- sendPosition(const uint16_t x, const uint16_t y) : void
 + getEvent() : EventDTO
 + sendSnapshot(const Snapshot &snapshot) : void
 }
@@ -52,8 +46,8 @@ class EventDTO {
 - n : uint32_t
 + getEvent() : Event
 + getMoveTo() :  MoveTo
-+ getOperator() : TypeOperator
-+ getGameType() : TypeGame
++ getTypeOperator() : TypeOperator
++ getTypeGame() : TypeGame
 + getStr() : std::string
 + getN() : uint32_t
 }
@@ -64,7 +58,7 @@ class Snapshot {
 - ok : uint8_t
 - position : std::pair<uint16_t>
 + getEvent() : Event
-+ getOperator() : TypeOperator
++ getTypeOperator() : TypeOperator
 + getCode() : uint32_t
 + getOk() : uint8_t
 + getPosition() : std::pair<uint16_t> 
@@ -87,7 +81,7 @@ enum Event {
 hide Event methods
 
 enum MoveTo {
-- move_not
+- move_idle
 - move_right
 - move_left
 - move_up
@@ -101,17 +95,19 @@ enum MoveTo {
 hide MoveTo methods
 
 enum TypeOperator {
- - type_idf
- - type_p90
- - type_scout
+- operator_idle
+- operator_idf
+- operator_p90
+- operator_scout
 }
 
 hide TypeOperator methods
 
 
 enum TypeGame {
- - type_survival
- - type_clear_zone
+- game_idle
+- game_survival
+- game_clear_zone
 }
 
 hide TypeGame methods

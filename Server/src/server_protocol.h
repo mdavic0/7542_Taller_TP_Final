@@ -16,11 +16,14 @@ class ServerProtocol : Protocol {
     
         EventDTO getCreate();
         EventDTO getJoin();
-        EventDTO getBroadcast();
         EventDTO getMove();
+        EventDTO getStopMove();
         void sendCreate(uint32_t code);
         void sendJoin(uint8_t ok);
-        void sendMove();
+        void sendMove(TypeOperator typeOperator, const uint16_t& x, const uint16_t& y);
+        void sendStopMove(TypeOperator typeOperator, const uint16_t& x, const uint16_t& y);
+        void sendOperator(TypeOperator typeOperator);
+        void sendPosition(const uint16_t& x, const uint16_t& y);
 
     public:
         /*

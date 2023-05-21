@@ -3,22 +3,30 @@
 
 #include "common_event.h"
 #include "common_move.h"
+#include "common_type_operator.h"
+#include "common_type_game.h"
 #include <string>
 
 class EventDTO {
 private:
     Event event;
     MoveTo moveTo;
+    TypeOperator typeOperator;
+    TypeGame typeGame;
     std::string str;
     uint32_t n;
 
 public:
-    explicit EventDTO(
-            Event event, MoveTo moveTo, const std::string& str, uint32_t n);
+    explicit EventDTO(Event event, MoveTo moveTo, TypeOperator typeOperator, TypeGame typeGame,
+         const std::string& str, const uint32_t& n);
 
     Event getEvent() const;
 
     MoveTo getMoveTo() const;
+
+    TypeOperator getTypeOperator() const;
+
+    TypeGame getTypeGame() const;
 
     std::string getStr() const;
 

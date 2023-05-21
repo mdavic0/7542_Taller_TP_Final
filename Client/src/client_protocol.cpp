@@ -7,13 +7,33 @@
 ClientProtocol::ClientProtocol(Socket&& skt) :
     Protocol(std::move(skt)) {}
 
-void ClientProtocol::sendCreate(const std::string& scenario) {
+void ClientProtocol::sendCreate(const std::string& scenario, TypeOperator typeOperator,
+            TypeGame typeGame) {
     uint8_t command = 0x01;
     sendAll(&command, 1);
+
+    uint8_t idOperator;
+    if (typeOperator == TypeOperator::operator_idf) {
+        idOperator = IDF_CODE;
+    } else if (typeOperator == TypeOperator::operator_p90) {
+        idOperator = P90_CODE;
+    } else if (typeOperator == TypeOperator::operator_scout) {
+        idOperator = SCOUT_CODE;
+    }
+    sendAll(&idOperator, 1);
+
+    uint8_t idGame;
+    if (typeGame == TypeGame::game_survival) {
+        idGame = SURVIVAL_CODE;
+    } else if (typeGame == TypeGame::game_clear_zone) {
+        idGame = CLEAR_ZONE_CODE;
+    }
+    sendAll(&idGame, 1);
+
     sendString(scenario);
 }
 
-void ClientProtocol::sendJoin(const uint32_t& code) {
+void ClientProtocol::sendJoin(const uint32_t& code, TypeOperator typeOperator) {
     uint8_t command = 0x02;
     sendAll(&command, 1);
 
@@ -21,41 +41,128 @@ void ClientProtocol::sendJoin(const uint32_t& code) {
     sendAll(&codeAux, 4);
 }
 
-void ClientProtocol::sendMove () {
+void ClientProtocol::sendMove (MoveTo moveTo) {
     uint8_t command = 0x03;
     sendAll(&command, 1);
 
+    uint8_t idDirection;
+    if (moveTo == MoveTo::move_down) {
+        idDirection = DOWN_CODE;
+    } else if (moveTo == MoveTo::move_up) {
+        idDirection = UP_CODE;
+    } else if (moveTo == MoveTo::move_left) {
+        idDirection = LEFT_CODE;
+    } else if (moveTo == MoveTo::move_right) {
+        idDirection = RIGHT_CODE;
+    } else if (moveTo == MoveTo::move_down_left) {
+        idDirection = DOWN_LEFT_CODE;
+    } else if (moveTo == MoveTo::move_down_right) {
+        idDirection = DOWN_RIGHT_CODE;
+    } else if (moveTo == MoveTo::move_up_left) {
+        idDirection = UP_LEFT_CODE;
+    } else if (moveTo == MoveTo::move_up_right) {
+        idDirection = UP_RIGHT_CODE;
+    }
+    sendAll(&idDirection, 1);
+}
+
+void ClientProtocol::sendStopMove () {
+    uint8_t command = 0x04;
+    sendAll(&command, 1);
 }
 
 Snapshot ClientProtocol::getCreate () {
     uint32_t code;
     recvAll(&code, 4);
+    code = ntohl(code);
 
-    code = htonl(code);
-
-    return Snapshot(Event::event_create, code, 0);
+    return Snapshot(Event::event_create, TypeOperator::operator_idle, code, 0, 0, 0);
 }
 
 Snapshot ClientProtocol::getJoin () {
-    uint8_t res;
-    recvAll(&res, sizeof(res));
+    uint8_t ok;
+    recvAll(&ok, 1);
 
-    return Snapshot(Event::event_join, 0, res);
+    return Snapshot(Event::event_join, TypeOperator::operator_idle, 0, ok, 0, 0);
 }
 
 Snapshot ClientProtocol::getMove () {
-    return Snapshot(Event::event_move, 0, 0);
+    uint8_t idOperator;
+    recvAll(&idOperator, 1);
+    TypeOperator type = TypeOperator::operator_idle;
+
+    switch (idOperator) {
+    case IDF_CODE:
+        type = TypeOperator::operator_idf;
+        break;
+    
+    case P90_CODE:
+        type = TypeOperator::operator_p90;
+        break;
+    
+    case SCOUT_CODE:
+        type = TypeOperator::operator_scout;
+        break;
+    
+    default:
+        break;
+    }
+
+    uint16_t x;
+    recvAll(&x, 2);
+    x = ntohs(x);
+    
+    uint16_t y;
+    recvAll(&y, 2);
+    y = ntohs(y);
+
+    return Snapshot(Event::event_move, type, 0, 0, x, y);
+}
+
+Snapshot ClientProtocol::getStopMove () {
+    uint8_t idOperator;
+    recvAll(&idOperator, 1);
+    TypeOperator type = TypeOperator::operator_idle;
+
+    switch (idOperator) {
+    case IDF_CODE:
+        type = TypeOperator::operator_idf;
+        break;
+    
+    case P90_CODE:
+        type = TypeOperator::operator_p90;
+        break;
+    
+    case SCOUT_CODE:
+        type = TypeOperator::operator_scout;
+        break;
+    
+    default:
+        break;
+    }
+
+    uint16_t x;
+    recvAll(&x, 2);
+    x = ntohs(x);
+    
+    uint16_t y;
+    recvAll(&y, 2);
+    y = ntohs(y);
+
+    return Snapshot(Event::event_stop_move, type, 0, 0, x, y);
 }
 
 void ClientProtocol::sendEvent(const EventDTO& eventdto) {
     Event event = eventdto.getEvent();
 
     if (event == Event::event_create) {
-        sendCreate(eventdto.getStr());
+        sendCreate(eventdto.getStr(), eventdto.getTypeOperator(), eventdto.getTypeGame());
     } else if (event == Event::event_join) {
-        sendJoin(eventdto.getN());
+        sendJoin(eventdto.getN(), eventdto.getTypeOperator());
     } else if (event == Event::event_move) {
-        sendMove();
+        sendMove(eventdto.getMoveTo());
+    } else if (event == Event::event_stop_move) {
+        sendStopMove();
     }
     
 }
@@ -64,12 +171,25 @@ Snapshot ClientProtocol::getSnapshot() {
     uint8_t event;
     recvAll(&event, 1);
 
-    if (event == 0x01) {
+    switch (event) {
+    case CREATE_CODE:
         return getCreate();
-    } else if (event == 0x02) {
+        break;
+
+    case JOIN_CODE:
         return getJoin();
-    } else if (event == 0x03) {
+        break;
+
+    case MOVE_CODE:
         return getMove();
+        break;
+
+    case STOP_MOVE_CODE:
+        return getStopMove();
+        break;
+
+    default:
+        break;
     }
-    return Snapshot(Event::event_invalid, 0, 0);
+    return Snapshot(Event::event_invalid, TypeOperator::operator_idle, 0, 0, 0, 0);
 }

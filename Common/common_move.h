@@ -13,7 +13,6 @@ enum class MoveTo : int8_t {
     move_up_left = 0x06,
     move_down_right = 0x07,
     move_down_left = 0x08,
-
 };
 
 #endif
