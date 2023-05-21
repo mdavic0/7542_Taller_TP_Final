@@ -106,8 +106,8 @@ void Launcher::sendCreateMatch(const QString& name, int mode,
         int operatorSelect) {
     std::string nameMatch = name.toStdString();
     qDebug() << "Nombre " << name;
-    qDebug() << "Seleccione operador " << operatorSelect;
     qDebug() << "Seleccione modo juego " << mode;
+    qDebug() << "Seleccione operador " << operatorSelect;
     qDebug() << "Creo partida";
     this->hide();
     GameSdl game(operatorSelect);
