@@ -32,7 +32,7 @@ class JoinView : public QWidget {
         explicit JoinView(QWidget* parent = 0);
         virtual ~JoinView();
      Q_SIGNALS:
-        void joinClicked();
+        void joinClicked(int code, int operatorSelect);
         void backClicked();
     public slots:
         void onJoinClicked();

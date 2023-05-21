@@ -87,14 +87,15 @@ void JoinView::viewIDF() {
     this->operatorLabel.setText("Nombre: Scott");
     this->weaponLabel.setText("Arma: Rifle de asalto IDF");
     this->rateLabel.setText(
-        "Cadencia: Rafaga de 20 balas.\n Danio considerable a corta distancia");
+        "Cadencia: Rafaga de 20 balas.\n Mucho danio a corta distancia");
     this->habilityLabel.setText("Habilidad: Granadas");
 }
 
 void JoinView::viewP90() {
     this->operatorLabel.setText("Nombre: James");
     this->weaponLabel.setText("Arma: Subfusil P90");
-    this->rateLabel.setText("Cadencia: Rafaga de 10 balas.\n Danio Equilibrado");
+    this->rateLabel.setText(
+		"Cadencia: Rafaga de 10 balas.\n Danio Equilibrado");
     this->habilityLabel.setText("Habilidad: Bombardeo Aereo");
 }
 
@@ -106,8 +107,8 @@ void JoinView::viewScout() {
 }
 
 void JoinView::onJoinClicked() {
-    Q_EMIT joinClicked();
-    // enviar los datos al launcher;
+    Q_EMIT joinClicked(this->lineCode.text().toInt(),
+						this->operatorSelect.checkedId());
 }
 
 void JoinView::onBackClicked() {
