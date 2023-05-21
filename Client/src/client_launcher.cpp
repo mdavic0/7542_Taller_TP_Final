@@ -1,6 +1,13 @@
 #include "client_launcher.h"
-#include "client_protocol.h"
+#include "common_eventdto.h"
+#include "common_event.h"
+#include "common_move.h"
+#include "common_type_game.h"
+#include "common_type_operator.h"
 #include "common_socket.h"
+#include "common_defines.h"
+#include "common_snapshot.h"
+#include "client_protocol.h"
 #include <QApplication>
 #include <QFontDatabase>
 #include <QStringList>
@@ -93,6 +100,7 @@ void Launcher::createProtocol(const QString& ip, const QString& port) {
     qDebug() << "port: " << port;
     try {
         this->clientProtocol = ClientProtocol(Socket(ip.toStdString().c_str(), port.toStdString().c_str()));
+        // hilos sender y receive
         mainWidget.setCurrentIndex(2);
     } catch (std::exception &exc){
         //  Q_EMIT errorConnection();
@@ -108,16 +116,24 @@ void Launcher::sendCreateMatch(const QString& name, int mode,
     qDebug() << "Nombre " << name;
     qDebug() << "Seleccione modo juego " << mode;
     qDebug() << "Seleccione operador " << operatorSelect;
-    qDebug() << "Creo partida";
-    this->hide();
-    GameSdl game(operatorSelect);
-    game.run();
+    EventDTO eventCreate(Event(CREATE_CODE), nameMatch, TypeGame(mode), TypeOperator(operatorSelect));
+    clientProtocol->sendEvent(eventCreate);
+    // queueEvent.push(evenCreate)
+    // Snapshot receive = queueSnapshot.pop();
+    // Snapshot receive = clientProtocol->getSnapshot();
+    // int code = receive.getCode();
+    // if (receive.getCode()) {KC
+    // this->hide();
+    // GameSdl game(operatorSelect);
+    // game.run();
     this->show();
 }
 
 void Launcher::sendJoinMatch(int code, int operatorSelect) {
     qDebug() << "Me uno a partida con code: " << code;
     qDebug() << "Seleccione operador " << operatorSelect;
+    EventDTO eventCreate(Event(JOIN_CODE), code, TypeOperator(operatorSelect));
+    clientProtocol->sendEvent(eventCreate);
 }
 
 Launcher::~Launcher() {

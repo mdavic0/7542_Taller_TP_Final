@@ -4,6 +4,12 @@ EventDTO::EventDTO(Event event, MoveTo moveTo, TypeOperator typeOperator, TypeGa
     const std::string& str, const uint32_t& n) : event(event), moveTo(moveTo),
     typeOperator(typeOperator), typeGame(typeGame), str(str), n(n) {}
 
+EventDTO::EventDTO(Event event, const std::string& name, TypeGame typeGame, TypeOperator typeOperator) : 
+    event(event), moveTo(MoveTo::move_idle), typeOperator(typeOperator), typeGame(typeGame), str(name), n(-1) {}
+
+EventDTO::EventDTO(Event event, uint32_t code, TypeOperator typeOperator) : 
+    event(event), moveTo(MoveTo::move_idle), typeOperator(typeOperator), typeGame(TypeGame::game_idle), str(""), n(code) {}
+
 Event EventDTO::getEvent() const {
     return event;
 }

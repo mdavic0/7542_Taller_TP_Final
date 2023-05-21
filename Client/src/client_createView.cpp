@@ -24,8 +24,8 @@ CreateView::CreateView(QWidget* parent) : QWidget(parent),
     clearZone.setChecked(true);
     survival.setObjectName("survival");
     survival.setChecked(false);
-    modeSelect.addButton(&clearZone, 0);
-    modeSelect.addButton(&survival, 1);
+    modeSelect.addButton(&clearZone, 0x01);
+    modeSelect.addButton(&survival, 0x02);
 
     QHBoxLayout* layoutMode = new QHBoxLayout;
     layoutMode->addWidget(&clearZone);
@@ -48,15 +48,15 @@ CreateView::CreateView(QWidget* parent) : QWidget(parent),
     p90.setChecked(false);
     scout.setObjectName("Scout");
     scout.setChecked(false);
-    operatorSelect.addButton(&idf, 0x00);
-    operatorSelect.addButton(&p90, 0x01);
-    operatorSelect.addButton(&scout, 0x02);
+    operatorSelect.addButton(&idf, 0x01);
+    operatorSelect.addButton(&p90, 0x02);
+    operatorSelect.addButton(&scout, 0x03);
 
     QVBoxLayout* layoutOperator = new QVBoxLayout;
     layoutOperator->setSpacing(30);
-    layoutOperator->addWidget(&idf, 0);
-    layoutOperator->addWidget(&p90, 1);
-    layoutOperator->addWidget(&scout, 2);
+    layoutOperator->addWidget(&idf);
+    layoutOperator->addWidget(&p90);
+    layoutOperator->addWidget(&scout);
 
     QVBoxLayout* layoutGroup = new QVBoxLayout;
     layoutGroup->addLayout(layoutOperator, Qt::AlignCenter); 

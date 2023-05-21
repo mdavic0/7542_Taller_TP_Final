@@ -25,9 +25,9 @@ JoinView::JoinView(QWidget* parent) : QWidget(parent),
 	p90.setChecked(false);
 	scout.setObjectName("Scout");
 	scout.setChecked(false);
-	operatorSelect.addButton(&idf, 0x00);
-	operatorSelect.addButton(&p90, 0x01);
-	operatorSelect.addButton(&scout, 0x02);
+	operatorSelect.addButton(&idf, 0x01);
+	operatorSelect.addButton(&p90, 0x02);
+	operatorSelect.addButton(&scout, 0x03);
 
 	QVBoxLayout* layoutOperator = new QVBoxLayout;
 	layoutOperator->setSpacing(30);

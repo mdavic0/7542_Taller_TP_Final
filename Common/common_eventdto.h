@@ -14,11 +14,17 @@ private:
     TypeOperator typeOperator;
     TypeGame typeGame;
     std::string str;
-    uint32_t n;
+    uint32_t n; // code join
 
 public:
     explicit EventDTO(Event event, MoveTo moveTo, TypeOperator typeOperator, TypeGame typeGame,
          const std::string& str, const uint32_t& n);
+    
+    // Event create
+    EventDTO(Event event, const std::string& name, TypeGame typeGame, TypeOperator typeOperator);
+
+    // Event join
+    EventDTO(Event event, uint32_t code, TypeOperator typeOperator);
 
     Event getEvent() const;
 

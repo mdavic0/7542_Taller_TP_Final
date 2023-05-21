@@ -37,8 +37,19 @@ void ClientProtocol::sendJoin(const uint32_t& code, TypeOperator typeOperator) {
     uint8_t command = 0x02;
     sendAll(&command, 1);
 
+    uint8_t idOperator;
+    if (typeOperator == TypeOperator::operator_idf) {
+        idOperator = IDF_CODE;
+    } else if (typeOperator == TypeOperator::operator_p90) {
+        idOperator = P90_CODE;
+    } else if (typeOperator == TypeOperator::operator_scout) {
+        idOperator = SCOUT_CODE;
+    }
+    sendAll(&idOperator, 1);
+    
     uint32_t codeAux = htonl(code);
     sendAll(&codeAux, 4);
+    
 }
 
 void ClientProtocol::sendMove (MoveTo moveTo) {
