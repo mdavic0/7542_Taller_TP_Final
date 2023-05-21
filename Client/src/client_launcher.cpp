@@ -102,8 +102,12 @@ void Launcher::createProtocol(const QString& ip, const QString& port) {
     }
 }
 
-void Launcher::sendCreateMatch(int operatorSelect) {
+void Launcher::sendCreateMatch(const QString& name, int mode, 
+        int operatorSelect) {
+    std::string nameMatch = name.toStdString();
+    qDebug() << "Nombre " << name;
     qDebug() << "Seleccione operador " << operatorSelect;
+    qDebug() << "Seleccione modo juego " << mode;
     qDebug() << "Creo partida";
     this->hide();
     GameSdl game(operatorSelect);
@@ -111,8 +115,9 @@ void Launcher::sendCreateMatch(int operatorSelect) {
     this->show();
 }
 
-void Launcher::sendJoinMatch() {
-    qDebug() << "Me uno a partida";
+void Launcher::sendJoinMatch(int code, int operatorSelect) {
+    qDebug() << "Me uno a partida con code: " << code;
+    qDebug() << "Seleccione operador " << operatorSelect;
 }
 
 Launcher::~Launcher() {

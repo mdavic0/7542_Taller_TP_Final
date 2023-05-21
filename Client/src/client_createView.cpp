@@ -129,7 +129,8 @@ void CreateView::viewScout() {
 }
 
 void CreateView::onCreateClicked() {
-    Q_EMIT createClicked(this->operatorSelect.checkedId());
+    Q_EMIT createClicked(this->lineName.text(), this->modeSelect.checkedId(),
+                this->operatorSelect.checkedId());
     // enviar los datos al launcher;
 }
 
