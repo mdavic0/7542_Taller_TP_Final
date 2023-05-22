@@ -37,7 +37,7 @@ class GamesController {
      * Para hacerlo debera proteger el el map de salas para que no sea
      * modificado mientras se lo esta 'iterando'.
      */
-    uint8_t join(EventDTO* eventdto, Queue<Snapshot*> *q);
+    uint8_t try_join_game(EventDTO* eventdto, Queue<Snapshot*> *q);
 
     Queue<EventDTO*>* get_event_queue(uint32_t code);
 

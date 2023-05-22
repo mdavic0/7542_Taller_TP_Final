@@ -8,8 +8,9 @@ void SnapshotSender::run() {
     while (talking) {
         try {
             Snapshot* response = snapshot_queue.pop();
+            std::cout << "enviando snapshot" << std::endl;
             protocol.sendSnapshot(*response);
-            delete response;
+            // delete response;
         } catch (const ClosedQueue&) {
              break;
         } catch (const LibError& err) {

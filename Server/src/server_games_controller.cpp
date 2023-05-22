@@ -8,15 +8,16 @@ uint32_t GamesController::create(EventDTO *eventdto, Queue<Snapshot *>* snapshot
     std::lock_guard<std::mutex> locker(mutex);
     Game *newGame = new Game(counter, scenario, snapshot_queue);
     games.insert(std::pair{counter, newGame});
+    newGame->start();
     return counter++;
 }
 
-uint8_t GamesController::join(EventDTO* eventdto, Queue<Snapshot*> *q) {
+uint8_t GamesController::try_join_game(EventDTO* eventdto, Queue<Snapshot*> *q) {
     std::lock_guard<std::mutex> locker(mutex);
     uint32_t code = eventdto->getN();
     auto search = games.find(code);
     if (search != games.end()) {
-        search->second->join(q);
+        search->second->join_game(q);
         return 0x00;    // join client to game
     }
     return 0x01;

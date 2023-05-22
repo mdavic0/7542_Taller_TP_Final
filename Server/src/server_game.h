@@ -43,7 +43,7 @@ class Game : public Thread {
          * Este método debe añadir una nueva queue a la lista
          * de forma atomica
          */
-        void join(Queue<Snapshot*> *q);
+        void join_game(Queue<Snapshot*> *q);
 
         /*
          * No queremos permitir que alguien haga copias
@@ -53,8 +53,8 @@ class Game : public Thread {
 
     private:
         void game_loop();
-        void process_events();
-        void broadcast_snapshot();
+        Snapshot* process_events();
+        void broadcast_snapshot(Snapshot* snapshot);
 };
 
 #endif  // SERVER_GAME_H_

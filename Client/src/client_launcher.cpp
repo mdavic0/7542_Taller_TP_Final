@@ -120,12 +120,12 @@ void Launcher::sendCreateMatch(const QString& name, int mode,
     clientProtocol->sendEvent(eventCreate);
     // queueEvent.push(evenCreate)
     // Snapshot receive = queueSnapshot.pop();
-    // Snapshot receive = clientProtocol->getSnapshot();
-    // int code = receive.getCode();
-    // if (receive.getCode()) {KC
-    // this->hide();
-    // GameSdl game(operatorSelect);
-    // game.run();
+    Snapshot receive = clientProtocol->getSnapshot();
+    //int code = receive.getCode();
+    //if (receive.getCode()) {KC
+    this->hide();
+    GameSdl game((int)receive.getTypeOperator() /*operatorSelect*/);
+    game.run();
     this->show();
 }
 
