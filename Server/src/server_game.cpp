@@ -76,22 +76,23 @@ Snapshot* Game::process_events() {
     try {
         // try_pop es no bloqueante y devuelve false en caso de que la queue este vacia
         while (unprocessed_events.try_pop(event)) {
-            std::cout << "Game: popeando un evento y procesando..." << std::endl;
             if (event->getEvent() == Event::event_create) {
-                std::cout << "Game: pusheando create snapshot" << std::endl;
                 snapshot = new Snapshot(Event::event_create,
                                         event->getTypeOperator(),
                                         event->getN(),
                                         0, 0, 0);
+                break;
             } else if (event->getEvent() == Event::event_join) {
-                std::cout << "Game: join" << std::endl;
                 snapshot = new Snapshot(Event::event_join,
                                         event->getTypeOperator(),
                                         event->getN(),
                                         0, 0, 0);
+                break;
             } else if (event->getEvent() == Event::event_move) {
-                // TODO: actualizo la position del player y creo el snapshot
-                std::cout << "Game: move" << std::endl;
+                // TODO: actualizo la position del player y creo el snapshot.
+                //       En realidad en este caso no se va a crear el snapshot de una
+                //       sino que se va a actualizar el 'gameworld' y una vez
+                //       que no haya mas events por procesar se crea el snapshot
                 snapshot = new Snapshot(Event::event_move,
                                         event->getTypeOperator(),
                                         event->getN(),

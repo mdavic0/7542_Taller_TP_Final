@@ -14,12 +14,9 @@ void EventReceiver::run() {
         try {
             EventDTO* eventDto = new EventDTO(protocol.getEvent());
             Event event = eventDto->getEvent();
-            std::cout << "EventReceiver recibio un evento" << std::endl;
             if (event == Event::event_create) {
-                std::cout << "El evento es: create" << std::endl;
                 game = controller.create(eventDto, &snapshot_queue);
                 this->event_queue = controller.get_event_queue(game);
-                std::cout << "EventReceiver pushea evento a la queue" << std::endl;
                 event_queue->push(eventDto);
             } else if (event == Event::event_join) {
                 uint32_t code = eventDto->getN();
