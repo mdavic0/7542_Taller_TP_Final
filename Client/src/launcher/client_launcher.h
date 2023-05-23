@@ -23,6 +23,8 @@ class Launcher : public QWidget {
         std::optional<ClientProtocol> clientProtocol;
         void initWidget();
         void initFont();
+        void initGame(int operatorSelect);
+        void initThreadsConnection();
     public:
         explicit Launcher(QWidget* parent = 0);
         virtual ~Launcher();

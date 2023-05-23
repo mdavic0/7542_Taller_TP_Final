@@ -71,9 +71,7 @@ add_executable(server "Server/main.cpp")
 target_link_libraries(server server_classes common_classes)
 
 add_executable(client "Client/main.cpp")
-#target_link_libraries(client ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})
 target_link_libraries(client client_classes common_classes SDL2 SDL2_image)
-#target_link_libraries(client client_classes common_classes)
 
 # add_executable(testprotocol "Testing/testprotocol.cpp" )
 # target_link_libraries(testprotocol server_classes client_classes common_classes)

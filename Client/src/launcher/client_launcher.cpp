@@ -1,7 +1,6 @@
 #include "client_launcher.h"
 #include "common_eventdto.h"
 #include "common_event.h"
-#include "common_move.h"
 #include "common_type_game.h"
 #include "common_type_operator.h"
 #include "common_socket.h"
@@ -99,11 +98,11 @@ void Launcher::createProtocol(const QString& ip, const QString& port) {
     qDebug() << "Ip: " << ip;
     qDebug() << "port: " << port;
     try {
-        this->clientProtocol = ClientProtocol(Socket(ip.toStdString().c_str(), port.toStdString().c_str()));
+        this->clientProtocol = ClientProtocol(
+            Socket(ip.toStdString().c_str(), port.toStdString().c_str()));
         // hilos sender y receive
         mainWidget.setCurrentIndex(2);
     } catch (std::exception &exc){
-        //  Q_EMIT errorConnection();
         QMessageBox::information(this, "Error", 
                     "Datos ingresados no validos",
                     QMessageBox::Close);
@@ -116,17 +115,23 @@ void Launcher::sendCreateMatch(const QString& name, int mode,
     qDebug() << "Nombre " << name;
     qDebug() << "Seleccione modo juego " << mode;
     qDebug() << "Seleccione operador " << operatorSelect;
-    EventDTO eventCreate(Event(CREATE_CODE), nameMatch, TypeGame(mode), TypeOperator(operatorSelect));
+    EventDTO eventCreate(Event(CREATE_CODE), nameMatch, TypeGame(mode),
+            TypeOperator(operatorSelect));
     clientProtocol->sendEvent(eventCreate);
-    // queueEvent.push(evenCreate)
-    // Snapshot receive = queueSnapshot.pop();
     Snapshot receive = clientProtocol->getSnapshot();
-    //int code = receive.getCode();
-    //if (receive.getCode()) {KC
-    this->hide();
-    GameSdl game((int)receive.getTypeOperator() /*operatorSelect*/);
-    game.run();
-    this->show();
+    if (receive.getCode() == 0) {
+        std::string message = "Partida creada con codigo: " + 
+            std::to_string(receive.getCode());
+        QMessageBox::information(this, "Exito", message.c_str(),
+            QMessageBox::Close);
+        this->hide();
+        this->initGame((int)receive.getTypeOperator());
+        this->show();
+    } else {
+        QMessageBox::information(this, "Error", 
+                    "No se pudo crear la partida",
+                    QMessageBox::Close);
+    }
 }
 
 void Launcher::sendJoinMatch(int code, int operatorSelect) {
@@ -134,6 +139,12 @@ void Launcher::sendJoinMatch(int code, int operatorSelect) {
     qDebug() << "Seleccione operador " << operatorSelect;
     EventDTO eventCreate(Event(JOIN_CODE), code, TypeOperator(operatorSelect));
     clientProtocol->sendEvent(eventCreate);
+    this->initGame(operatorSelect);
+}
+
+void Launcher::initGame(int operatorSelect) {
+    GameSdl game(operatorSelect);
+    game.run();
 }
 
 Launcher::~Launcher() {

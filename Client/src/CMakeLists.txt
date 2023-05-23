@@ -1,5 +1,8 @@
 project(left4dead)
 
+add_subdirectory(launcher)
+add_subdirectory(sdl)
+
 FILE(GLOB_RECURSE myFiles *.cpp *.h)
 
 add_library(client_classes ${myFiles})
@@ -11,4 +14,5 @@ target_link_libraries(client_classes
                         Qt5::Core
                         ${SDL2_LIBRARIES}
                         ${SDL2_IMAGE_LIBRARIES}
-                        client)
+                        launcher sdlLibrary)
+target_include_directories(client_classes PUBLIC launcher sdlLibrary)
