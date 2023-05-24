@@ -5,6 +5,19 @@ Snapshot::Snapshot(Event event, TypeOperator typeOperator, const uint32_t& code,
         const uint8_t& ok, const uint16_t& x, const uint16_t& y) : event(event),
         typeOperator(typeOperator), code(code), ok(ok), position(x,y) {}
 
+// TODO: HACER QUE PROTOCOLO MANDE EL SNAPSHOT CON TODOS LOS
+//      TYPEOPERATOR Y TODAS LAS POSICIONES.
+//     SERIA ALGO DEL ESTILO:
+//              1Byte                 a definir                a definir
+//     |cantidad de jugadores|  |cosas del jugador 1| .... |cosas del jugador n|
+//      En un principio 'cosas del jugador i' van a ser el typeOp y la position
+Snapshot::Snapshot(std::map<TypeOperator, Player>& players) : event(Event::event_playing),
+    code(0), ok(0){
+    for(auto &player : players) {
+        player_positions.insert({player.first, player.second.get_position()});
+    }
+}
+
 Event Snapshot::getEvent() const {
     return event;
 }

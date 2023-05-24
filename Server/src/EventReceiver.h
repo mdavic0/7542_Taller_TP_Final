@@ -3,7 +3,7 @@
 
 #include "common_thread.h"
 #include "server_protocol.h"
-#include "server_games_controller.h"
+#include "GamesController.h"
 #include "SnapshotSender.h"
 #include <atomic>
 #include <map>
@@ -19,7 +19,7 @@ class EventReceiver : public Thread {
         Queue<Snapshot*> snapshot_queue;
         SnapshotSender sender;
         GamesController& controller;
-        uint32_t game;
+        uint32_t game_code;
         std::atomic<bool> talking;
         std::atomic<bool> alive;
 

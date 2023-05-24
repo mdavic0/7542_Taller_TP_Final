@@ -3,7 +3,7 @@
 #include <utility>
 #include <algorithm>
 #include "EventReceiver.h"
-#include "server_games_controller.h"
+#include "GamesController.h"
 #include "common_liberror.h"
 
 Acceptor::Acceptor(const std::string &servname) :
