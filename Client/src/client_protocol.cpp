@@ -65,14 +65,6 @@ void ClientProtocol::sendMove (MoveTo moveTo) {
         idDirection = LEFT_CODE;
     } else if (moveTo == MoveTo::move_right) {
         idDirection = RIGHT_CODE;
-    } else if (moveTo == MoveTo::move_down_left) {
-        idDirection = DOWN_LEFT_CODE;
-    } else if (moveTo == MoveTo::move_down_right) {
-        idDirection = DOWN_RIGHT_CODE;
-    } else if (moveTo == MoveTo::move_up_left) {
-        idDirection = UP_LEFT_CODE;
-    } else if (moveTo == MoveTo::move_up_right) {
-        idDirection = UP_RIGHT_CODE;
     }
     sendAll(&idDirection, 1);
 }

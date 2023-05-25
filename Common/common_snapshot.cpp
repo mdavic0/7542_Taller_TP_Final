@@ -11,12 +11,11 @@ Snapshot::Snapshot(Event event, TypeOperator typeOperator, const uint32_t& code,
 //              1Byte                 a definir                a definir
 //     |cantidad de jugadores|  |cosas del jugador 1| .... |cosas del jugador n|
 //      En un principio 'cosas del jugador i' van a ser el typeOp y la position
-Snapshot::Snapshot(std::map<TypeOperator, Player>& players) : event(Event::event_playing),
-    code(0), ok(0){
-    for(auto &player : players) {
-        player_positions.insert({player.first, player.second.get_position()});
-    }
-}
+Snapshot::Snapshot(std::map<TypeOperator, std::pair<uint16_t, uint16_t>> &players_position) :
+    event(Event::event_create), player_positions(players_position),
+    typeOperator(players_position.begin()->first), code(0), ok(0) {
+} // TODO: Ver como solucionar el event_create o event_join (de momento esta
+//    hardcodeado el Event a event_create )
 
 Event Snapshot::getEvent() const {
     return event;

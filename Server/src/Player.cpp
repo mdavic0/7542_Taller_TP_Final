@@ -25,7 +25,7 @@ void Player::apply_step() {
     //this->attack();
 }
 
-std::pair<uint16_t, uint16_t> & Player::get_position() {
+std::pair<uint16_t, uint16_t>& Player::get_position() {
     return this->position;
 }
 

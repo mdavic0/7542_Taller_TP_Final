@@ -17,7 +17,7 @@ class Player {
         Player(TypeOperator typeOperator);
         void set_movement_direction(MoveTo direction);
         void apply_step();
-        std::pair<uint16_t, uint16_t> & get_position();
+        std::pair<uint16_t, uint16_t>& get_position();
         TypeOperator& get_type_operator();
 
     private:

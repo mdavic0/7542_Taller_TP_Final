@@ -50,6 +50,7 @@ class Game : public Thread {
          * */
          Game(const Game&) = delete;
          Game& operator=(const Game&) = delete;
+         ~Game();
 
     private:
         void game_loop();

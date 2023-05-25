@@ -3,7 +3,9 @@
 
 GamesController::GamesController() : counter(0), games(), mutex() {}
 
-Queue<EventDTO*>* GamesController::create(EventDTO *eventdto, Queue<Snapshot *> *snapshot_queue, uint32_t &code) {
+Queue<EventDTO*>* GamesController::create(EventDTO *eventdto,
+                                          Queue<Snapshot *> *snapshot_queue,
+                                          uint32_t &code) {
     std::string scenario = eventdto->getStr();
     std::lock_guard<std::mutex> locker(mutex);
     Game *newGame = new Game(counter, scenario);
@@ -13,7 +15,9 @@ Queue<EventDTO*>* GamesController::create(EventDTO *eventdto, Queue<Snapshot *> 
     return newGame->join_game(snapshot_queue);
 }
 
-Queue<EventDTO*>* GamesController::try_join_game(EventDTO* eventdto, Queue<Snapshot*> *q, uint8_t& ok) {
+Queue<EventDTO*>* GamesController::try_join_game(EventDTO* eventdto,
+                                                 Queue<Snapshot*> *q,
+                                                 uint8_t& ok) {
     std::lock_guard<std::mutex> locker(mutex);
     uint32_t code = eventdto->getN();
     auto search = games.find(code);

@@ -3,8 +3,6 @@
 
 #include "common_event.h"
 #include "common_type_operator.h"
-//#include "Player.h"
-#include "../Server/src/Player.h"
 #include <utility>
 #include <string>
 #include <map>
@@ -20,7 +18,7 @@ class Snapshot {
 public:
     explicit Snapshot(Event event, TypeOperator typeOperator, const uint32_t& code,
         const uint8_t& ok, const uint16_t& x, const uint16_t& y);
-    explicit  Snapshot(std::map<TypeOperator, Player>& players);
+    explicit  Snapshot(std::map<TypeOperator, std::pair<uint16_t, uint16_t>>& players_position);
 
     Event getEvent() const;
 

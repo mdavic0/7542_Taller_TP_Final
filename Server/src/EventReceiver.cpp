@@ -4,7 +4,7 @@
 
 EventReceiver::EventReceiver(Socket&& skt, GamesController& controller) :
     protocol(std::move(skt)), event_queue(),
-    snapshot_queue(100), sender(protocol, snapshot_queue),
+    snapshot_queue(1000), sender(protocol, snapshot_queue),
     controller(controller), game_code(0), talking(true), alive(true) {
 }
 

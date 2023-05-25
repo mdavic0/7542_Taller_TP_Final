@@ -74,7 +74,8 @@ void Game::process_events() {
             } else if (event->getEvent() == Event::event_join) {
                 gameWorld.add_player(event->getTypeOperator());
             } else if (event->getEvent() == Event::event_move) {
-                gameWorld.update_movement_direction(event->getTypeOperator(), event->getMoveTo());
+                gameWorld.update_movement_direction(event->getTypeOperator(),
+                                                    event->getMoveTo());
             }
         }
     } catch(ClosedQueue& e) {
@@ -92,3 +93,6 @@ void Game::broadcast_snapshot(Snapshot* snapshot) {
     }
 }
 
+Game::~Game() {
+    join();
+}

@@ -97,22 +97,6 @@ EventDTO ServerProtocol::getMove() {
     case LEFT_CODE:
         return EventDTO(Event::event_move, MoveTo::move_left, TypeOperator::operator_idle, TypeGame::game_idle, "", 0);
         break;
-        
-    case UP_LEFT_CODE:
-        return EventDTO(Event::event_move, MoveTo::move_up_left, TypeOperator::operator_idle, TypeGame::game_idle, "", 0);
-        break;
-        
-    case UP_RIGHT_CODE:
-        return EventDTO(Event::event_move, MoveTo::move_up_right, TypeOperator::operator_idle, TypeGame::game_idle, "", 0);
-        break;
-        
-    case DOWN_LEFT_CODE:
-        return EventDTO(Event::event_move, MoveTo::move_down_left, TypeOperator::operator_idle, TypeGame::game_idle, "", 0);
-        break;
-        
-    case DOWN_RIGHT_CODE:
-        return EventDTO(Event::event_move, MoveTo::move_down_right, TypeOperator::operator_idle, TypeGame::game_idle, "", 0);
-        break;
 
     default:
         break;
@@ -206,7 +190,10 @@ EventDTO ServerProtocol::getEvent() {
 
 void ServerProtocol::sendSnapshot(const Snapshot &snapshot) {
     Event event = snapshot.getEvent();
-
+    // TODO: En realidad el snapshot se crea una vez que pasaron 0 o muchos eventos,
+    //       es como una foto del momento, no se si hay que separar los sends,
+    //       por que los eventos se procesan del lado del sv, los que si hay que distinguir
+    //       es create y join seguro
     if (event == Event::event_create) {
         sendCreate(snapshot.getCode());
     } else if (event == Event::event_join) {
