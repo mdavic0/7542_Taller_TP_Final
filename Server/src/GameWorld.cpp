@@ -28,3 +28,13 @@ Snapshot *GameWorld::get_snapshot() {
     }
     return new Snapshot(players_position);
 }
+
+Snapshot *GameWorld::get_snapshot(Event event) {
+    std::map<TypeOperator, std::pair<uint16_t, uint16_t>> players_position;
+    for (auto player : players) {
+        players_position.insert({player.first, player.second.get_position()});
+    }
+    return new Snapshot(players_position, event);
+}
+
+

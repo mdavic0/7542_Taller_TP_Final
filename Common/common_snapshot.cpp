@@ -12,10 +12,12 @@ Snapshot::Snapshot(Event event, TypeOperator typeOperator, const uint32_t& code,
 //     |cantidad de jugadores|  |cosas del jugador 1| .... |cosas del jugador n|
 //      En un principio 'cosas del jugador i' van a ser el typeOp y la position
 Snapshot::Snapshot(std::map<TypeOperator, std::pair<uint16_t, uint16_t>> &players_position) :
-    event(Event::event_create), player_positions(players_position),
-    typeOperator(players_position.begin()->first), code(0), ok(0) {
-} // TODO: Ver como solucionar el event_create o event_join (de momento esta
-//    hardcodeado el Event a event_create )
+    event(Event::event_playing), player_positions(players_position),
+    typeOperator(players_position.begin()->first), code(0), ok(0) {}
+
+Snapshot::Snapshot(std::map<TypeOperator, std::pair<uint16_t, uint16_t>> &players_position, Event event) :
+        event(event), player_positions(players_position),
+        typeOperator(players_position.begin()->first), code(0), ok(0) {}
 
 Event Snapshot::getEvent() const {
     return event;

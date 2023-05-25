@@ -24,6 +24,7 @@ class Game : public Thread {
         std::atomic<bool> talking;
         std::atomic<bool> alive;
         GameWorld gameWorld;
+        bool started;
     public:
         explicit Game(const uint32_t id, const std::string& name);
 
@@ -45,6 +46,7 @@ class Game : public Thread {
          */
         Queue<EventDTO*>* join_game(Queue<Snapshot*> *q);
 
+        void start_playing();
         /*
          * No queremos permitir que alguien haga copias
          * */

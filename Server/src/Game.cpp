@@ -4,7 +4,7 @@
 Game::Game(const uint32_t id, const std::string& name) :
     id(id), name(name), mutex(),
     unprocessed_events(1000), client_snapshot_queues(),
-    talking(true), alive(true), gameWorld() {}
+    talking(true), alive(true), gameWorld(), started(false) {}
 
 void Game::run() {
     try {
@@ -29,6 +29,10 @@ Queue<EventDTO*>* Game::join_game(Queue<Snapshot*> *q) {
     return &this->unprocessed_events;
 }
 
+void Game::start_playing() {
+    started = true;
+}
+
 void Game::game_loop() {
     using namespace std::chrono;
     auto begin = steady_clock::now();
@@ -42,6 +46,9 @@ void Game::game_loop() {
         // y los procesa en el gameworld.
         process_events();
 
+        if (not started) {
+            continue;
+        }
 
         // TODO:
         //  step(some_time)
@@ -66,17 +73,26 @@ void Game::game_loop() {
 
 void Game::process_events() {
     EventDTO *event = nullptr;
+    int iterations = 0;
     try {
         // try_pop es no bloqueante y devuelve false en caso de que la queue este vacia
-        while (unprocessed_events.try_pop(event)) {
+        while (unprocessed_events.try_pop(event) && iterations < 10) {
             if (event->getEvent() == Event::event_create) {
                 gameWorld.add_player(event->getTypeOperator());
+                broadcast_snapshot(gameWorld.get_snapshot(Event::event_create));
+                break;
             } else if (event->getEvent() == Event::event_join) {
                 gameWorld.add_player(event->getTypeOperator());
+                broadcast_snapshot(gameWorld.get_snapshot(Event::event_join));
+                break;
+            } else if (event->getEvent() == Event::event_start_game) {
+                start_playing();
+                break;
             } else if (event->getEvent() == Event::event_move) {
                 gameWorld.update_movement_direction(event->getTypeOperator(),
                                                     event->getMoveTo());
             }
+            iterations++;
         }
     } catch(ClosedQueue& e) {
             // hacer algo

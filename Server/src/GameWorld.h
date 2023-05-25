@@ -17,6 +17,7 @@ class GameWorld {
     void update_movement_direction(TypeOperator id, MoveTo direction);
     void simulate_step();
     Snapshot* get_snapshot();
+    Snapshot* get_snapshot(Event event);
 };
 
 
