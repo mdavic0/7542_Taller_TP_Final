@@ -11,12 +11,13 @@ class Texture {
     private:
         Renderer& textureRender;
         SDL_Texture* texture;
-        void loadTexture(const std::string& file);
+        void loadTexture(const std::string& file, bool resize);
         void freeTexture();
     public:
-        Texture(Renderer& renderer, const std::string& file);
+        Texture(Renderer& renderer, const std::string& file, bool resize);
         ~Texture();
         SDL_Texture* getTexture();
+        int frames();
 };
 
 #endif

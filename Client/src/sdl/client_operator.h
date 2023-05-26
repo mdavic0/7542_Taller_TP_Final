@@ -2,6 +2,7 @@
 #define OPERATOR_H_
 
 #include "common_move.h"
+#include "common_states.h"
 #include "client_textureSdl.h"
 #include "client_rendererSdl.h"
 #include <SDL2/SDL.h>
@@ -11,15 +12,23 @@
 class Operator {
     private:
         int operatorId;
-        int posX;
-        int posY;
+        std::pair<int, int> position;
         std::map<std::string, Texture*> textures;
-        void chargeTexture(Renderer& renderer);
+        States stateOperator;
         Renderer renderPlayer;
+        int numFrames;
+        int currentFrame;
+        Uint32 lastUpdateTime;
+        void chargeTexture(Renderer& renderer);
+        void renderIdle();
+        void renderMove();
+        void setState(States state);
+        int setNumFrames(States state);
     public:
         Operator(int id, Renderer& renderer);
         ~Operator();     
-        void move(MoveTo direction);
+        void update(MoveTo direction);
+        void updateCurrentFrame();
         void render();
 };
 

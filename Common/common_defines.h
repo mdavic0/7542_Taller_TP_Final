@@ -4,6 +4,8 @@
 #define WINDOW_WIDTH 1024
 #define WINDOW_HEIGTH 768
 
+#define FRAME_RATE 60
+
 #define CREATE_CODE 0x01
 #define JOIN_CODE 0x02
 #define MOVE_CODE 0x03

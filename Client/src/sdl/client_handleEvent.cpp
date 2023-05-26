@@ -28,22 +28,19 @@ void EventHandler::listen() {
 void EventHandler::handleKeyDownEvent(SDL_Keysym keysym) {
     switch(keysym.sym) {
         case SDLK_w:
-            std::cout << "Presione w\n";
             moveDirection = MoveTo::move_up;
             break;
         case SDLK_s:
-            std::cout << "Presione s\n";
             moveDirection = MoveTo::move_down;
             break;
         case SDLK_a:
-            std::cout << "Presione a\n";
             moveDirection = MoveTo::move_left;
             break;
         case SDLK_d:
-            std::cout << "Presione d\n";
             moveDirection = MoveTo::move_right;
             break;
         default:
+            moveDirection = MoveTo::move_idle;
             break;
     }
 }
@@ -57,6 +54,7 @@ void EventHandler::handleKeyUpEvent(SDL_Keysym keysym) {
             moveDirection = MoveTo::move_idle;
             break;
         default:
+            moveDirection = MoveTo::move_idle;
             break;
     }
 

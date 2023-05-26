@@ -1,6 +1,7 @@
 #include "client_gameSdl.h"
 #include "client_handleEvent.h"
 #include "common_defines.h"
+#include "mapSdl.h"
 #include <stdexcept>
 
 GameSdl::GameSdl(int id) : idOperator(id), renderer(std::nullopt) {
@@ -26,18 +27,24 @@ void GameSdl::run() {
     EventHandler event;
     Renderer render(window, -1, SDL_RENDERER_ACCELERATED);
     Operator soldier(idOperator, render);
+    MapSdl map(0, render);
     while (event.isRunning()) { 
         uint32_t frameInit = SDL_GetTicks();
+
+        render.clear();
         SDL_PumpEvents();
         event.listen();
-        soldier.move(event.getMoveDirection());
-        render.clear();
+        soldier.update(event.getMoveDirection());
+        map.render();
         soldier.render();
         render.present();
+        soldier.updateCurrentFrame();
+
         uint32_t frameEnd = SDL_GetTicks();
         uint32_t processTime = frameEnd - frameInit;
-        if (1000 / 60 > processTime)
-            SDL_Delay(1000/60 - processTime);
+
+        if (1000 / 20 > processTime)
+            SDL_Delay(1000 / 20 - processTime);
     }
 }
 
