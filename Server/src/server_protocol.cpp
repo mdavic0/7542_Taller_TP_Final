@@ -124,21 +124,13 @@ void ServerProtocol::sendJoin(uint8_t ok) {
     sendAll(&ok, 1);
 }
 
-void ServerProtocol::sendMove(TypeOperator typeOperator, const uint16_t& x, const uint16_t& y) {
-    uint8_t event = 0x03;
-    sendAll(&event, 1);
-    
-    sendOperator(typeOperator);
-    sendPosition(x, y);
+void ServerProtocol::sendPlaying(std::map<TypeOperator, std::pair<uint16_t, uint16_t>> &playersInfo) {
+    for (auto it = playersInfo.begin(); it != playersInfo.end(); ++it) {
+        sendOperator(it->first);
+        sendPosition(std::get<0>(it->second), std::get<1>(it->second));
+  }
 }
 
-void ServerProtocol::sendStopMove(TypeOperator typeOperator, const uint16_t& x, const uint16_t& y) {
-    uint8_t event = 0x04;
-    sendAll(&event, 1);
-    
-    sendOperator(typeOperator);
-    sendPosition(x, y);
-}
 
 void ServerProtocol::sendOperator(TypeOperator typeOperator) {
     if(typeOperator == TypeOperator::operator_idf){
@@ -198,12 +190,9 @@ void ServerProtocol::sendSnapshot(const Snapshot &snapshot) {
         sendCreate(snapshot.getCode());
     } else if (event == Event::event_join) {
         sendJoin(snapshot.getOk());
-    } else if (event == Event::event_move) {
-        std::pair<uint16_t, uint16_t> pos = snapshot.getPosition();
-        sendMove(snapshot.getTypeOperator(), std::get<0>(pos), std::get<1>(pos));
-    } else if (event == Event::event_stop_move) {
-        std::pair<uint16_t, uint16_t> pos = snapshot.getPosition();
-        sendStopMove(snapshot.getTypeOperator(), std::get<0>(pos), std::get<1>(pos));
+    } else {
+        std::map<TypeOperator, std::pair<uint16_t, uint16_t>> pos = snapshot.getPositions();
+        sendPlaying(pos);
     }
 }
 

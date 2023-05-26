@@ -20,8 +20,7 @@ class ClientProtocol : public Protocol {
 
         Snapshot getCreate();
         Snapshot getJoin();
-        Snapshot getMove();
-        Snapshot getStopMove();
+        Snapshot getPlaying();
     public:
         /*
         * Constructor que llama al constructor del padre
