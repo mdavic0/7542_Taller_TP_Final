@@ -5,9 +5,11 @@
 #include "common_type_operator.h"
 #include <utility>
 #include <string>
+#include <map>
 
 class Snapshot {
     Event event;
+    std::map<TypeOperator, std::pair<uint16_t, uint16_t>> player_positions;
     TypeOperator typeOperator;
     uint32_t code;
     uint8_t ok;
@@ -16,6 +18,8 @@ class Snapshot {
 public:
     explicit Snapshot(Event event, TypeOperator typeOperator, const uint32_t& code,
         const uint8_t& ok, const uint16_t& x, const uint16_t& y);
+    explicit  Snapshot(std::map<TypeOperator, std::pair<uint16_t, uint16_t>>& players_position);
+    explicit  Snapshot(std::map<TypeOperator, std::pair<uint16_t, uint16_t>>& players_position, Event event);
 
     Event getEvent() const;
 
