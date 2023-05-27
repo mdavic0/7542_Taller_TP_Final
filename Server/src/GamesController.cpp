@@ -12,7 +12,7 @@ Queue<EventDTO*>* GamesController::create(EventDTO *eventdto,
     games.insert(std::pair{counter, newGame});
     code = counter++;
     newGame->start();
-    return newGame->join_game(snapshot_queue);
+    return newGame->joinGame(snapshot_queue);
 }
 
 Queue<EventDTO*>* GamesController::try_join_game(EventDTO* eventdto,
@@ -23,7 +23,7 @@ Queue<EventDTO*>* GamesController::try_join_game(EventDTO* eventdto,
     auto search = games.find(code);
     if (search != games.end()) {
         ok = 0x00;    // join client to game
-        return search->second->join_game(q);
+        return search->second->joinGame(q);
     }
     ok = 0x01;
     return nullptr;

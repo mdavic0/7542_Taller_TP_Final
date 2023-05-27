@@ -108,6 +108,9 @@ EventDTO ServerProtocol::getMove() {
 EventDTO ServerProtocol::getStopMove() {
     return EventDTO(Event::event_stop_move, MoveTo::move_idle, TypeOperator::operator_idle, TypeGame::game_idle, "", 0);
 }
+EventDTO ServerProtocol::getStart() {
+    return EventDTO(Event::event_start_game, MoveTo::move_idle, TypeOperator::operator_idle, TypeGame::game_idle, "", 0);
+}
 
 void ServerProtocol::sendCreate(uint32_t code) {
     uint8_t event = 0x01;
@@ -171,6 +174,10 @@ EventDTO ServerProtocol::getEvent() {
         
     case STOP_MOVE_CODE:
         return getStopMove();
+        break;
+
+    case START_CODE:
+        return getStart();
         break;
 
     default:

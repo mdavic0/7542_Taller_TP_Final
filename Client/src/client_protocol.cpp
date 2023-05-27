@@ -74,19 +74,24 @@ void ClientProtocol::sendStopMove () {
     sendAll(&command, 1);
 }
 
+void ClientProtocol::sendStart() {
+    uint8_t command = 0x06;
+    sendAll(&command, 1);
+}
+
 Snapshot ClientProtocol::getCreate () {
     uint32_t code;
     recvAll(&code, 4);
     code = ntohl(code);
 
-    return Snapshot(Event::event_create, TypeOperator::operator_idle, code, 0);
+    return Snapshot(Event::event_create, code);
 }
 
 Snapshot ClientProtocol::getJoin () {
     uint8_t ok;
     recvAll(&ok, 1);
 
-    return Snapshot(Event::event_join, TypeOperator::operator_idle, 0, ok);
+    return Snapshot(Event::event_join, ok);
 }
 
 Snapshot ClientProtocol::getPlaying () {
@@ -125,7 +130,7 @@ Snapshot ClientProtocol::getPlaying () {
         map.insert({type, {x, y}});
     }
 
-    return Snapshot(map, Event(5));
+    return Snapshot(map);
 }
 
 void ClientProtocol::sendEvent(const EventDTO& eventdto) {
@@ -135,6 +140,8 @@ void ClientProtocol::sendEvent(const EventDTO& eventdto) {
         sendCreate(eventdto.getStr(), eventdto.getTypeOperator(), eventdto.getTypeGame());
     } else if (event == Event::event_join) {
         sendJoin(eventdto.getN(), eventdto.getTypeOperator());
+    } else if (event == Event::event_start_game) {
+        sendStart();
     } else if (event == Event::event_move) {
         sendMove(eventdto.getMoveTo());
     } else if (event == Event::event_stop_move) {
@@ -160,12 +167,8 @@ Snapshot ClientProtocol::getSnapshot() {
         return getPlaying();
         break;
 
-    case START_CODE:
-        return getPlaying();
-        break;
-
     default:
         break;
     }
-    return Snapshot(Event::event_invalid, TypeOperator::operator_idle, 0, 0);
+    return Snapshot(Event::event_invalid, (uint8_t)0);
 }

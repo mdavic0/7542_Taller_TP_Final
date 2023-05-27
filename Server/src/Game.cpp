@@ -8,7 +8,7 @@ Game::Game(const uint32_t id, const std::string& name) :
 
 void Game::run() {
     try {
-        game_loop();
+        gameLoop();
     } catch(std::exception& e) {
         // hacer algo
     }
@@ -23,17 +23,17 @@ bool Game::ended() {
     return !alive;
 }
 
-Queue<EventDTO*>* Game::join_game(Queue<Snapshot*> *q) {
+Queue<EventDTO*>* Game::joinGame(Queue<Snapshot*> *q) {
     std::lock_guard<std::mutex> locker(mutex);
     client_snapshot_queues.push_back(q);
     return &this->unprocessed_events;
 }
 
-void Game::start_playing() {
+void Game::startPlaying() {
     started = true;
 }
 
-void Game::game_loop() {
+void Game::gameLoop() {
     using namespace std::chrono;
     auto begin = steady_clock::now();
     auto end = steady_clock::now();
@@ -44,7 +44,7 @@ void Game::game_loop() {
 
         //process_events() // popea hasta que no haya más eventos en la queue
         // y los procesa en el gameworld.
-        process_events();
+        processEvents();
 
         if (not started) {
             continue;
@@ -52,17 +52,17 @@ void Game::game_loop() {
 
         // TODO:
         //  step(some_time)
-        gameWorld.simulate_step();
+        gameWorld.simulateStep();
         // simula un tiempito en el 'gameworld'.
         // Este tiempito lo que va a hacer es hacer que falte menos
         // para poder lanzar una grandada, que los jugadores se muevan,
         // todos los eventos que tienen que ver con el tiempo.
 
-        Snapshot* snapshot = gameWorld.get_snapshot();
-        // broadcast_snapshot() # acá recien se agarra el snapshot y se lo pushea
+        Snapshot* snapshot = gameWorld.getSnapshot();
+        // broadcastSnapshot() # acá recien se agarra el snapshot y se lo pushea
         // a los hilos sender. Un snapshot por gameloop. Si hacen uno por evento,
         // saturan la red sin sentido
-        broadcast_snapshot(snapshot);
+        broadcastSnapshot(snapshot);
 
         // ->>Bueno y el sleep de tiempo variable también
         end = steady_clock::now();
@@ -71,25 +71,25 @@ void Game::game_loop() {
     }
 }
 
-void Game::process_events() {
+void Game::processEvents() {
     EventDTO *event = nullptr;
     int iterations = 0;
     try {
         // try_pop es no bloqueante y devuelve false en caso de que la queue este vacia
         while (unprocessed_events.try_pop(event) && iterations < 10) {
             if (event->getEvent() == Event::event_create) {
-                gameWorld.add_player(event->getTypeOperator());
-                broadcast_snapshot(gameWorld.get_snapshot(Event::event_create));
+                gameWorld.addPlayer(event->getTypeOperator());
+                broadcastSnapshot(new Snapshot(Event::event_create, id));
                 break;
             } else if (event->getEvent() == Event::event_join) {
-                gameWorld.add_player(event->getTypeOperator());
-                broadcast_snapshot(gameWorld.get_snapshot(Event::event_join));
+                gameWorld.addPlayer(event->getTypeOperator());
+                broadcastSnapshot(new Snapshot(Event::event_join, (uint8_t)0x01));
                 break;
             } else if (event->getEvent() == Event::event_start_game) {
-                start_playing();
+                startPlaying();
                 break;
             } else if (event->getEvent() == Event::event_move) {
-                gameWorld.update_movement_direction(event->getTypeOperator(),
+                gameWorld.updateMovementDirection(event->getTypeOperator(),
                                                     event->getMoveTo());
             }
             iterations++;
@@ -99,7 +99,7 @@ void Game::process_events() {
     }
 }
 
-void Game::broadcast_snapshot(Snapshot* snapshot) {
+void Game::broadcastSnapshot(Snapshot* snapshot) {
     std::lock_guard<std::mutex> l(mutex);
     for (auto const& i : this->client_snapshot_queues) {
         // TODO: usar shared pointer para el snapshot (ya que sino el

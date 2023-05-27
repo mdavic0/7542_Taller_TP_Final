@@ -17,6 +17,7 @@ class ClientProtocol : public Protocol {
         void sendJoin(const uint32_t& code, TypeOperator typeOperator);
         void sendMove(MoveTo moveTo);
         void sendStopMove();
+        void sendStart();
 
         Snapshot getCreate();
         Snapshot getJoin();

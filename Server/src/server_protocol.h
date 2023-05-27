@@ -18,6 +18,7 @@ class ServerProtocol : Protocol {
         EventDTO getJoin();
         EventDTO getMove();
         EventDTO getStopMove();
+        EventDTO getStart();
         void sendCreate(uint32_t code);
         void sendJoin(uint8_t ok);
         void sendPlaying(std::map<TypeOperator, std::pair<uint16_t, uint16_t>> &playersInfo);

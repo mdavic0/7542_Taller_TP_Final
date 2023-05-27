@@ -11,13 +11,12 @@ class GameWorld {
         std::map<TypeOperator, Player> players;
     public:
     GameWorld();
-    void add_player(TypeOperator id);
-    void delete_player(TypeOperator id);
+    void addPlayer(TypeOperator id);
+    void deletePlayer(TypeOperator id);
 
-    void update_movement_direction(TypeOperator id, MoveTo direction);
-    void simulate_step();
-    Snapshot* get_snapshot();
-    Snapshot* get_snapshot(Event event);
+    void updateMovementDirection(TypeOperator id, MoveTo direction);
+    void simulateStep();
+    Snapshot* getSnapshot();
 };
 
 
