@@ -88,8 +88,9 @@ void Game::processEvents() {
             } else if (event->getEvent() == Event::event_start_game) {
                 startPlaying();
                 break;
-            } else if (event->getEvent() == Event::event_move) {
-                gameWorld.updateMovementDirection(event->getTypeOperator(),
+            } else if (event->getEvent() == Event::event_move
+                    || event->getEvent() == Event::event_stop_move) {
+                gameWorld.updateMovementDirection(event->getEvent(), event->getTypeOperator(),
                                                     event->getMoveTo());
             }
             iterations++;

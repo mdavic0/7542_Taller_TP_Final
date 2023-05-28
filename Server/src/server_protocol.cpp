@@ -44,7 +44,7 @@ EventDTO ServerProtocol::getCreate() {
         break;
     }
 
-    return EventDTO(Event::event_create, MoveTo::move_idle, op, game, recvString(), 0);
+    return EventDTO(recvString(), game, op);
 }
 
 EventDTO ServerProtocol::getJoin() {
@@ -73,41 +73,110 @@ EventDTO ServerProtocol::getJoin() {
     recvAll(&code, 4);
     code = ntohl(code);
   
-    return EventDTO(Event::event_join, MoveTo::move_idle, op, TypeGame::game_idle, "", code);
+    return EventDTO(code, op);
 
 }
 
 EventDTO ServerProtocol::getMove() {
+    uint8_t idOperator;
+    recvAll(&idOperator, 1);
+    TypeOperator op = TypeOperator::operator_idle;
+
+    switch (idOperator) {
+    case IDF_CODE:
+        op = TypeOperator::operator_idf;
+        break;
+        
+    case P90_CODE:
+        op = TypeOperator::operator_p90;
+        break;
+        
+    case SCOUT_CODE:
+        op = TypeOperator::operator_scout;
+        break;
+    
+    default:
+        break;
+    }
+
     uint8_t direction;
     recvAll(&direction, 1);
+    MoveTo moveTo = MoveTo::move_idle;
 
     switch (direction) {
     case UP_CODE:
-        return EventDTO(Event::event_move, MoveTo::move_up, TypeOperator::operator_idle, TypeGame::game_idle, "", 0);
+        moveTo = MoveTo::move_up;
         break;
     
     case DOWN_CODE:
-        return EventDTO(Event::event_move, MoveTo::move_down, TypeOperator::operator_idle, TypeGame::game_idle, "", 0);
+        moveTo = MoveTo::move_down;
         break;
         
     case RIGHT_CODE:
-        return EventDTO(Event::event_move, MoveTo::move_right, TypeOperator::operator_idle, TypeGame::game_idle, "", 0);
+        moveTo = MoveTo::move_right;
         break;
         
     case LEFT_CODE:
-        return EventDTO(Event::event_move, MoveTo::move_left, TypeOperator::operator_idle, TypeGame::game_idle, "", 0);
+        moveTo = MoveTo::move_left;
         break;
 
     default:
         break;
     }
 
-    return EventDTO(Event::event_invalid, MoveTo::move_idle, TypeOperator::operator_idle, TypeGame::game_idle, "", 0);
+    return EventDTO(Event::event_move, moveTo, op);
 }
 
 EventDTO ServerProtocol::getStopMove() {
-    return EventDTO(Event::event_stop_move, MoveTo::move_idle, TypeOperator::operator_idle, TypeGame::game_idle, "", 0);
+    uint8_t idOperator;
+    recvAll(&idOperator, 1);
+    TypeOperator op = TypeOperator::operator_idle;
+
+    switch (idOperator) {
+    case IDF_CODE:
+        op = TypeOperator::operator_idf;
+        break;
+        
+    case P90_CODE:
+        op = TypeOperator::operator_p90;
+        break;
+        
+    case SCOUT_CODE:
+        op = TypeOperator::operator_scout;
+        break;
+    
+    default:
+        break;
+    }
+
+    uint8_t direction;
+    recvAll(&direction, 1);
+    MoveTo moveTo = MoveTo::move_idle;
+
+    switch (direction) {
+    case UP_CODE:
+        moveTo = MoveTo::move_up;
+        break;
+    
+    case DOWN_CODE:
+        moveTo = MoveTo::move_down;
+        break;
+        
+    case RIGHT_CODE:
+        moveTo = MoveTo::move_right;
+        break;
+        
+    case LEFT_CODE:
+        moveTo = MoveTo::move_left;
+        break;
+
+    default:
+        break;
+    }
+
+    return EventDTO(Event::event_stop_move, moveTo, op);
 }
+
 EventDTO ServerProtocol::getStart() {
     return EventDTO(Event::event_start_game, MoveTo::move_idle, TypeOperator::operator_idle, TypeGame::game_idle, "", 0);
 }

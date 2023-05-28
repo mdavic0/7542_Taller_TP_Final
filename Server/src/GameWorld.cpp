@@ -11,20 +11,24 @@ void GameWorld::deletePlayer(TypeOperator id) {
     this->players.erase(id);
 }
 
-void GameWorld::updateMovementDirection(TypeOperator id, MoveTo direction) {
-    players.at(id).set_movement_direction(direction);
+void GameWorld::updateMovementDirection(Event event, TypeOperator id, MoveTo direction) {
+    if (event == Event::event_move) {
+        players.at(id).setMovementDirection(direction);
+    } else {
+        players.at(id).stopMovementDirection(direction);        
+    }
 }
 
 void GameWorld::simulateStep() {
     for (auto player : players) {
-        players.at(player.first).apply_step();
+        players.at(player.first).applyStep();
     }
 }
 
 Snapshot *GameWorld::getSnapshot() {
     std::map<TypeOperator, std::pair<uint16_t, uint16_t>> players_position;
     for (auto player : players) {
-        players_position.insert({player.first, player.second.get_position()});
+        players_position.insert({player.first, player.second.getPosition()});
     }
     return new Snapshot(players_position);
 }

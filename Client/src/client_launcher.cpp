@@ -116,7 +116,7 @@ void Launcher::sendCreateMatch(const QString& name, int mode,
     qDebug() << "Nombre " << name;
     qDebug() << "Seleccione modo juego " << mode;
     qDebug() << "Seleccione operador " << operatorSelect;
-    EventDTO eventCreate(Event(CREATE_CODE), nameMatch, TypeGame(mode), TypeOperator(operatorSelect));
+    EventDTO eventCreate(nameMatch, TypeGame(mode), TypeOperator(operatorSelect));
     clientProtocol->sendEvent(eventCreate);
     // queueEvent.push(evenCreate)
     // Snapshot receive = queueSnapshot.pop();
@@ -132,7 +132,7 @@ void Launcher::sendCreateMatch(const QString& name, int mode,
 void Launcher::sendJoinMatch(int code, int operatorSelect) {
     qDebug() << "Me uno a partida con code: " << code;
     qDebug() << "Seleccione operador " << operatorSelect;
-    EventDTO eventCreate(Event(JOIN_CODE), code, TypeOperator(operatorSelect));
+    EventDTO eventCreate(code, TypeOperator(operatorSelect));
     clientProtocol->sendEvent(eventCreate);
 }
 
