@@ -19,12 +19,15 @@ private:
 public:
     explicit EventDTO(Event event, MoveTo moveTo, TypeOperator typeOperator, TypeGame typeGame,
          const std::string& str, const uint32_t& n);
-    
+
     // Event create
-    EventDTO(Event event, const std::string& name, TypeGame typeGame, TypeOperator typeOperator);
+    explicit EventDTO(const std::string& name, TypeGame typeGame, TypeOperator typeOperator);
 
     // Event join
-    EventDTO(Event event, uint32_t code, TypeOperator typeOperator);
+    explicit EventDTO(const uint32_t& code, TypeOperator typeOperator);
+
+    // Event move or stop
+    explicit EventDTO(Event event, MoveTo moveTo, TypeOperator typeOperator);
 
     Event getEvent() const;
 

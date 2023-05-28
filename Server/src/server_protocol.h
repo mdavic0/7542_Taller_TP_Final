@@ -18,10 +18,10 @@ class ServerProtocol : Protocol {
         EventDTO getJoin();
         EventDTO getMove();
         EventDTO getStopMove();
+        EventDTO getStart();
         void sendCreate(uint32_t code);
         void sendJoin(uint8_t ok);
-        void sendMove(TypeOperator typeOperator, const uint16_t& x, const uint16_t& y);
-        void sendStopMove(TypeOperator typeOperator, const uint16_t& x, const uint16_t& y);
+        void sendPlaying(std::map<TypeOperator, std::pair<uint16_t, uint16_t>> &playersInfo);
         void sendOperator(TypeOperator typeOperator);
         void sendPosition(const uint16_t& x, const uint16_t& y);
 

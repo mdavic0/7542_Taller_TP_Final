@@ -8,6 +8,9 @@
 #define JOIN_CODE 0x02
 #define MOVE_CODE 0x03
 #define STOP_MOVE_CODE 0x04
+#define PLAYING_CODE 0x05
+#define START_CODE 0x06
+
 
 #define IDF_CODE 0x01
 #define P90_CODE 0x02
@@ -20,9 +23,5 @@
 #define LEFT_CODE 0x02
 #define UP_CODE 0x03
 #define DOWN_CODE 0x04
-#define UP_RIGHT_CODE 0x05
-#define UP_LEFT_CODE 0x06
-#define DOWN_RIGHT_CODE 0x07
-#define DOWN_LEFT_CODE 0x08
 
 #endif

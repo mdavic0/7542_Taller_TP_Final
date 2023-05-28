@@ -28,6 +28,8 @@ void EventReceiver::run() {
                 if (join_result == 0) {
                     game_code = code;
                     event_queue->push(eventDto);
+                } else {
+                    snapshot_queue.push(new Snapshot(Event(JOIN_CODE), join_result));
                 }
             } else if (event == Event::event_move) {
                 event_queue->push(eventDto);

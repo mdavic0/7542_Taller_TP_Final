@@ -44,7 +44,7 @@ EventDTO ServerProtocol::getCreate() {
         break;
     }
 
-    return EventDTO(Event::event_create, MoveTo::move_idle, op, game, recvString(), 0);
+    return EventDTO(recvString(), game, op);
 }
 
 EventDTO ServerProtocol::getJoin() {
@@ -73,40 +73,112 @@ EventDTO ServerProtocol::getJoin() {
     recvAll(&code, 4);
     code = ntohl(code);
   
-    return EventDTO(Event::event_join, MoveTo::move_idle, op, TypeGame::game_idle, "", code);
+    return EventDTO(code, op);
 
 }
 
 EventDTO ServerProtocol::getMove() {
+    uint8_t idOperator;
+    recvAll(&idOperator, 1);
+    TypeOperator op = TypeOperator::operator_idle;
+
+    switch (idOperator) {
+    case IDF_CODE:
+        op = TypeOperator::operator_idf;
+        break;
+        
+    case P90_CODE:
+        op = TypeOperator::operator_p90;
+        break;
+        
+    case SCOUT_CODE:
+        op = TypeOperator::operator_scout;
+        break;
+    
+    default:
+        break;
+    }
+
     uint8_t direction;
     recvAll(&direction, 1);
+    MoveTo moveTo = MoveTo::move_idle;
 
     switch (direction) {
     case UP_CODE:
-        return EventDTO(Event::event_move, MoveTo::move_up, TypeOperator::operator_idle, TypeGame::game_idle, "", 0);
+        moveTo = MoveTo::move_up;
         break;
     
     case DOWN_CODE:
-        return EventDTO(Event::event_move, MoveTo::move_down, TypeOperator::operator_idle, TypeGame::game_idle, "", 0);
+        moveTo = MoveTo::move_down;
         break;
         
     case RIGHT_CODE:
-        return EventDTO(Event::event_move, MoveTo::move_right, TypeOperator::operator_idle, TypeGame::game_idle, "", 0);
+        moveTo = MoveTo::move_right;
         break;
         
     case LEFT_CODE:
-        return EventDTO(Event::event_move, MoveTo::move_left, TypeOperator::operator_idle, TypeGame::game_idle, "", 0);
+        moveTo = MoveTo::move_left;
         break;
 
     default:
         break;
     }
 
-    return EventDTO(Event::event_invalid, MoveTo::move_idle, TypeOperator::operator_idle, TypeGame::game_idle, "", 0);
+    return EventDTO(Event::event_move, moveTo, op);
 }
 
 EventDTO ServerProtocol::getStopMove() {
-    return EventDTO(Event::event_stop_move, MoveTo::move_idle, TypeOperator::operator_idle, TypeGame::game_idle, "", 0);
+    uint8_t idOperator;
+    recvAll(&idOperator, 1);
+    TypeOperator op = TypeOperator::operator_idle;
+
+    switch (idOperator) {
+    case IDF_CODE:
+        op = TypeOperator::operator_idf;
+        break;
+        
+    case P90_CODE:
+        op = TypeOperator::operator_p90;
+        break;
+        
+    case SCOUT_CODE:
+        op = TypeOperator::operator_scout;
+        break;
+    
+    default:
+        break;
+    }
+
+    uint8_t direction;
+    recvAll(&direction, 1);
+    MoveTo moveTo = MoveTo::move_idle;
+
+    switch (direction) {
+    case UP_CODE:
+        moveTo = MoveTo::move_up;
+        break;
+    
+    case DOWN_CODE:
+        moveTo = MoveTo::move_down;
+        break;
+        
+    case RIGHT_CODE:
+        moveTo = MoveTo::move_right;
+        break;
+        
+    case LEFT_CODE:
+        moveTo = MoveTo::move_left;
+        break;
+
+    default:
+        break;
+    }
+
+    return EventDTO(Event::event_stop_move, moveTo, op);
+}
+
+EventDTO ServerProtocol::getStart() {
+    return EventDTO(Event::event_start_game, MoveTo::move_idle, TypeOperator::operator_idle, TypeGame::game_idle, "", 0);
 }
 
 void ServerProtocol::sendCreate(uint32_t code) {
@@ -124,21 +196,13 @@ void ServerProtocol::sendJoin(uint8_t ok) {
     sendAll(&ok, 1);
 }
 
-void ServerProtocol::sendMove(TypeOperator typeOperator, const uint16_t& x, const uint16_t& y) {
-    uint8_t event = 0x03;
-    sendAll(&event, 1);
-    
-    sendOperator(typeOperator);
-    sendPosition(x, y);
+void ServerProtocol::sendPlaying(std::map<TypeOperator, std::pair<uint16_t, uint16_t>> &playersInfo) {
+    for (auto it = playersInfo.begin(); it != playersInfo.end(); ++it) {
+        sendOperator(it->first);
+        sendPosition(std::get<0>(it->second), std::get<1>(it->second));
+  }
 }
 
-void ServerProtocol::sendStopMove(TypeOperator typeOperator, const uint16_t& x, const uint16_t& y) {
-    uint8_t event = 0x04;
-    sendAll(&event, 1);
-    
-    sendOperator(typeOperator);
-    sendPosition(x, y);
-}
 
 void ServerProtocol::sendOperator(TypeOperator typeOperator) {
     if(typeOperator == TypeOperator::operator_idf){
@@ -181,6 +245,10 @@ EventDTO ServerProtocol::getEvent() {
         return getStopMove();
         break;
 
+    case START_CODE:
+        return getStart();
+        break;
+
     default:
         break;
     }
@@ -198,12 +266,9 @@ void ServerProtocol::sendSnapshot(const Snapshot &snapshot) {
         sendCreate(snapshot.getCode());
     } else if (event == Event::event_join) {
         sendJoin(snapshot.getOk());
-    } else if (event == Event::event_move) {
-        std::pair<uint16_t, uint16_t> pos = snapshot.getPosition();
-        sendMove(snapshot.getTypeOperator(), std::get<0>(pos), std::get<1>(pos));
-    } else if (event == Event::event_stop_move) {
-        std::pair<uint16_t, uint16_t> pos = snapshot.getPosition();
-        sendStopMove(snapshot.getTypeOperator(), std::get<0>(pos), std::get<1>(pos));
+    } else {
+        std::map<TypeOperator, std::pair<uint16_t, uint16_t>> pos = snapshot.getPositions();
+        sendPlaying(pos);
     }
 }
 

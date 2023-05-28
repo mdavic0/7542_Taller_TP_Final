@@ -13,13 +13,14 @@ class Snapshot {
     TypeOperator typeOperator;
     uint32_t code;
     uint8_t ok;
-    std::pair<uint16_t, uint16_t> position;
 
 public:
-    explicit Snapshot(Event event, TypeOperator typeOperator, const uint32_t& code,
-        const uint8_t& ok, const uint16_t& x, const uint16_t& y);
-    explicit  Snapshot(std::map<TypeOperator, std::pair<uint16_t, uint16_t>>& players_position);
-    explicit  Snapshot(std::map<TypeOperator, std::pair<uint16_t, uint16_t>>& players_position, Event event);
+    // CREATE 
+    explicit Snapshot(Event event, const uint32_t& code);
+    // JOIN
+    explicit Snapshot(Event event, const uint8_t& ok);
+    // PLAYING
+    explicit Snapshot(std::map<TypeOperator, std::pair<uint16_t, uint16_t>>& players_position);
 
     Event getEvent() const;
 
@@ -29,7 +30,7 @@ public:
 
     uint8_t getOk() const;
 
-    std::pair<uint16_t, uint16_t> getPosition() const;
+    std::map<TypeOperator, std::pair<uint16_t, uint16_t>> getPositions() const;
 
     /*
      * No queremos permitir que alguien haga copias

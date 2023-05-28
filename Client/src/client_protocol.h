@@ -13,15 +13,17 @@
 class ClientProtocol : public Protocol {
     private:
 
-        void sendCreate(const std::string& scenario, TypeOperator typeOperator, TypeGame typeGame);
-        void sendJoin(const uint32_t& code, TypeOperator typeOperator);
-        void sendMove(MoveTo moveTo);
-        void sendStopMove();
+        void sendCreate(const std::string& scenario, const TypeOperator& typeOperator, const TypeGame& typeGame);
+        void sendJoin(const uint32_t& code, const TypeOperator& typeOperator);
+        void sendMove(const MoveTo& moveTo, const TypeOperator& typeOperator);
+        void sendStopMove(const MoveTo& moveTo, const TypeOperator& typeOperator);
+        void sendStart();
+        void sendOperator(const TypeOperator& typeOperator);
+        void sendMoveTo(const MoveTo& moveTo);
 
         Snapshot getCreate();
         Snapshot getJoin();
-        Snapshot getMove();
-        Snapshot getStopMove();
+        Snapshot getPlaying();
     public:
         /*
         * Constructor que llama al constructor del padre
