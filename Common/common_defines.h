@@ -10,6 +10,9 @@
 #define JOIN_CODE 0x02
 #define MOVE_CODE 0x03
 #define STOP_MOVE_CODE 0x04
+#define PLAYING_CODE 0x05
+#define START_CODE 0x06
+
 
 #define IDF_CODE 0x01
 #define P90_CODE 0x02

@@ -74,85 +74,63 @@ void ClientProtocol::sendStopMove () {
     sendAll(&command, 1);
 }
 
+void ClientProtocol::sendStart() {
+    uint8_t command = 0x06;
+    sendAll(&command, 1);
+}
+
 Snapshot ClientProtocol::getCreate () {
     uint32_t code;
     recvAll(&code, 4);
     code = ntohl(code);
 
-    return Snapshot(Event::event_create, TypeOperator::operator_idle, code, 0, 0, 0);
+    return Snapshot(Event::event_create, code);
 }
 
 Snapshot ClientProtocol::getJoin () {
     uint8_t ok;
     recvAll(&ok, 1);
 
-    return Snapshot(Event::event_join, TypeOperator::operator_idle, 0, ok, 0, 0);
+    return Snapshot(Event::event_join, ok);
 }
 
-Snapshot ClientProtocol::getMove () {
-    uint8_t idOperator;
-    recvAll(&idOperator, 1);
-    TypeOperator type = TypeOperator::operator_idle;
+Snapshot ClientProtocol::getPlaying () {
+    std::map<TypeOperator, std::pair<uint16_t, uint16_t>> map;
 
-    switch (idOperator) {
-    case IDF_CODE:
-        type = TypeOperator::operator_idf;
-        break;
-    
-    case P90_CODE:
-        type = TypeOperator::operator_p90;
-        break;
-    
-    case SCOUT_CODE:
-        type = TypeOperator::operator_scout;
-        break;
-    
-    default:
-        break;
+    uint8_t idOperator;
+    TypeOperator type = TypeOperator::operator_idle;
+    uint16_t x;
+    uint16_t y;
+    for (uint8_t i = 0; i < 3; i++) {
+        recvAll(&idOperator, 1);
+
+        switch (idOperator) {
+        case IDF_CODE:
+            type = TypeOperator::operator_idf;
+            break;
+        
+        case P90_CODE:
+            type = TypeOperator::operator_p90;
+            break;
+        
+        case SCOUT_CODE:
+            type = TypeOperator::operator_scout;
+            break;
+        
+        default:
+            break;
+        }
+
+        recvAll(&x, 2);
+        x = ntohs(x);
+        
+        recvAll(&y, 2);
+        y = ntohs(y);
+
+        map.insert({type, {x, y}});
     }
 
-    uint16_t x;
-    recvAll(&x, 2);
-    x = ntohs(x);
-    
-    uint16_t y;
-    recvAll(&y, 2);
-    y = ntohs(y);
-
-    return Snapshot(Event::event_move, type, 0, 0, x, y);
-}
-
-Snapshot ClientProtocol::getStopMove () {
-    uint8_t idOperator;
-    recvAll(&idOperator, 1);
-    TypeOperator type = TypeOperator::operator_idle;
-
-    switch (idOperator) {
-    case IDF_CODE:
-        type = TypeOperator::operator_idf;
-        break;
-    
-    case P90_CODE:
-        type = TypeOperator::operator_p90;
-        break;
-    
-    case SCOUT_CODE:
-        type = TypeOperator::operator_scout;
-        break;
-    
-    default:
-        break;
-    }
-
-    uint16_t x;
-    recvAll(&x, 2);
-    x = ntohs(x);
-    
-    uint16_t y;
-    recvAll(&y, 2);
-    y = ntohs(y);
-
-    return Snapshot(Event::event_stop_move, type, 0, 0, x, y);
+    return Snapshot(map);
 }
 
 void ClientProtocol::sendEvent(const EventDTO& eventdto) {
@@ -162,6 +140,8 @@ void ClientProtocol::sendEvent(const EventDTO& eventdto) {
         sendCreate(eventdto.getStr(), eventdto.getTypeOperator(), eventdto.getTypeGame());
     } else if (event == Event::event_join) {
         sendJoin(eventdto.getN(), eventdto.getTypeOperator());
+    } else if (event == Event::event_start_game) {
+        sendStart();
     } else if (event == Event::event_move) {
         sendMove(eventdto.getMoveTo());
     } else if (event == Event::event_stop_move) {
@@ -183,16 +163,12 @@ Snapshot ClientProtocol::getSnapshot() {
         return getJoin();
         break;
 
-    case MOVE_CODE:
-        return getMove();
-        break;
-
-    case STOP_MOVE_CODE:
-        return getStopMove();
+    case PLAYING_CODE:
+        return getPlaying();
         break;
 
     default:
         break;
     }
-    return Snapshot(Event::event_invalid, TypeOperator::operator_idle, 0, 0, 0, 0);
+    return Snapshot(Event::event_invalid, (uint8_t)0);
 }

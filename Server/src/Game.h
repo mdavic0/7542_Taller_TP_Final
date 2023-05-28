@@ -44,9 +44,9 @@ class Game : public Thread {
          * Este método debe añadir una nueva queue a la lista
          * de forma atomica
          */
-        Queue<EventDTO*>* join_game(Queue<Snapshot*> *q);
+        Queue<EventDTO*>* joinGame(Queue<Snapshot*> *q);
 
-        void start_playing();
+        void startPlaying();
         /*
          * No queremos permitir que alguien haga copias
          * */
@@ -55,9 +55,9 @@ class Game : public Thread {
          ~Game();
 
     private:
-        void game_loop();
-        void process_events();
-        void broadcast_snapshot(Snapshot* snapshot);
+        void gameLoop();
+        void processEvents();
+        void broadcastSnapshot(Snapshot* snapshot);
 };
 
 #endif  // SERVER_GAME_H_
