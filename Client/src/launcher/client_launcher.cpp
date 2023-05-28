@@ -1,23 +1,21 @@
 #include "client_launcher.h"
-#include "common_eventdto.h"
 #include "common_event.h"
 #include "common_type_game.h"
 #include "common_type_operator.h"
 #include "common_socket.h"
 #include "common_defines.h"
-#include "common_snapshot.h"
-#include "client_protocol.h"
 #include <QApplication>
 #include <QFontDatabase>
 #include <QStringList>
 #include <QFile>
 #include <QDebug>
-#include "client_gameSdl.h"
 #include <QMessageBox>
+#include "common_liberror.h"
+#include "client_gameSdl.h"
 
 Launcher::Launcher(QWidget* parent): QWidget(parent),
     initView(), connectView(), menuView(), createView(), joinView(),
-    clientProtocol(std::nullopt) {
+    clientProtocol(std::nullopt), snapshotQueue(256), eventQueue(256) {
     this->initWidget();
     mainWidget.addWidget(&initView);
     mainWidget.addWidget(&connectView);
@@ -100,7 +98,6 @@ void Launcher::createProtocol(const QString& ip, const QString& port) {
     try {
         this->clientProtocol = ClientProtocol(
             Socket(ip.toStdString().c_str(), port.toStdString().c_str()));
-        // hilos sender y receive
         mainWidget.setCurrentIndex(2);
     } catch (std::exception &exc){
         QMessageBox::information(this, "Error", 
@@ -125,7 +122,8 @@ void Launcher::sendCreateMatch(const QString& name, int mode,
         QMessageBox::information(this, "Exito", message.c_str(),
             QMessageBox::Close);
         this->hide();
-        this->initGame((int)receive.getTypeOperator());
+        this->initGame();
+        qDebug() << "termine juego";
         this->show();
     } else {
         QMessageBox::information(this, "Error", 
@@ -139,13 +137,37 @@ void Launcher::sendJoinMatch(int code, int operatorSelect) {
     qDebug() << "Seleccione operador " << operatorSelect;
     EventDTO eventCreate(Event(JOIN_CODE), code, TypeOperator(operatorSelect));
     clientProtocol->sendEvent(eventCreate);
-    this->initGame(operatorSelect);
+    Snapshot receive = clientProtocol->getSnapshot();
+     if (receive.getOk() == 0) {
+        QMessageBox::information(this, "Exito", "Union Exitosa",
+            QMessageBox::Close);
+        this->hide();
+        this->initGame();
+        this->show();
+    } else {
+        QMessageBox::information(this, "Error", 
+                    "No se pudo crear la partida",
+                    QMessageBox::Close);
+    }
 }
 
-void Launcher::initGame(int operatorSelect) {
-    GameSdl game(operatorSelect);
-    game.run();
+void Launcher::initGame() {
+    bool endGame = false;
+    GameSdl gameDrawner(2, snapshotQueue, eventQueue, endGame);
+    // SnapshotReceiver snapshotReceiver(clientProtocol.value(), snapshotQueue, endGame);
+    EventSender eventSender(eventQueue, clientProtocol.value(), endGame);
+    // try {
+        gameDrawner.run();
+    // // snapshotReceiver.start();
+        eventSender.start();
+    
+    // } catch (std::exception &exc) {
+    //     std::cerr << "erororiri\n";
+    // } catch (...) {
+    //     std::cerr << "cualquier error\n"; 
+    // }
 }
 
 Launcher::~Launcher() {
+    clientProtocol->stop();
 }

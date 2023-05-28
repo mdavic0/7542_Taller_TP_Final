@@ -12,8 +12,9 @@ class SnapshotReceiver : public Thread {
         Queue<Snapshot*>& snapshot_queue;
         std::atomic<bool> talking;
         std::atomic<bool> alive;
+        bool& endGame;
     public:
-        SnapshotReceiver(ClientProtocol& protocol, Queue<Snapshot*>& snapshots);
+        SnapshotReceiver(ClientProtocol& protocol, Queue<Snapshot*>& snapshots, bool& endGame);
 
         /*
         * Método que devuelve true cuando el hilo termino de ejecutarse.

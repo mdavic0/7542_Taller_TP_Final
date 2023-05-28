@@ -1,8 +1,9 @@
 #include "client_handleEvent.h"
+#include "common_event.h"
 #include <iostream>
 
-EventHandler::EventHandler() : moveDirection(MoveTo::move_idle),
-    running(true) {
+EventHandler::EventHandler(Queue<EventDTO*>& eventQueue) : moveDirection(MoveTo::move_idle),
+    running(true), eventQueue(eventQueue) {
 }
 
 void EventHandler::listen() {
@@ -43,6 +44,7 @@ void EventHandler::handleKeyDownEvent(SDL_Keysym keysym) {
             moveDirection = MoveTo::move_idle;
             break;
     }
+    this->eventQueue.push(new EventDTO(Event::event_move, moveDirection));
 }
 
 void EventHandler::handleKeyUpEvent(SDL_Keysym keysym) {

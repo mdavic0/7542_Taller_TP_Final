@@ -3,15 +3,18 @@
 
 #include <SDL2/SDL.h>
 #include "common_move.h"
+#include "common_queue.h"
+#include "common_eventdto.h"
 
 class EventHandler {
     private:
         MoveTo moveDirection;
         bool running;
+        Queue<EventDTO*>& eventQueue;
         void handleKeyDownEvent(SDL_Keysym keysym);
         void handleKeyUpEvent(SDL_Keysym keysym);
     public:
-        EventHandler();
+        EventHandler(Queue<EventDTO*>& eventQueue);
         ~EventHandler();
         MoveTo getMoveDirection() const;
         bool isRunning();

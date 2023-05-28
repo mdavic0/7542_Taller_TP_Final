@@ -5,16 +5,21 @@
 #include <SDL2/SDL_image.h>
 #include "client_operator.h"
 #include "client_rendererSdl.h"
-#include <optional>
+#include "common_queue.h"
+#include "common_snapshot.h" 
+#include "common_eventdto.h" 
 
 class GameSdl {
     private:
         SDL_Window* window;
-        std::optional<Renderer> renderer;
+        Queue<Snapshot*>& snapshotQueue;
+        Queue<EventDTO*>& eventQueue;
         bool running;
         int idOperator;
+        bool& endGame;
     public:
-        explicit GameSdl(int id);
+        GameSdl(int id, Queue<Snapshot*>& snapshotQueue,
+                Queue<EventDTO*>& eventQueue, bool& endGame);
         ~GameSdl();
         void run();
 };

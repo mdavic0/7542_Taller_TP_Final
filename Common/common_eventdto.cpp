@@ -10,6 +10,9 @@ EventDTO::EventDTO(Event event, const std::string& name, TypeGame typeGame, Type
 EventDTO::EventDTO(Event event, uint32_t code, TypeOperator typeOperator) : 
     event(event), moveTo(MoveTo::move_idle), typeOperator(typeOperator), typeGame(TypeGame::game_idle), str(""), n(code) {}
 
+EventDTO::EventDTO(Event event, MoveTo moveTo) : 
+    event(event), moveTo(moveTo), typeOperator(TypeOperator::operator_idle), typeGame(TypeGame::game_idle), str(""), n(0) {}
+
 Event EventDTO::getEvent() const {
     return event;
 }

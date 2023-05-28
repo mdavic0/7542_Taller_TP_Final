@@ -4,7 +4,10 @@
 #include "mapSdl.h"
 #include <stdexcept>
 
-GameSdl::GameSdl(int id) : idOperator(id), renderer(std::nullopt) {
+GameSdl::GameSdl(int id, Queue<Snapshot*>& snapshotQueue,
+    Queue<EventDTO*>& eventQueue, bool& endGame) : idOperator(id),
+    snapshotQueue(snapshotQueue), eventQueue(eventQueue), endGame(endGame) {
+
     if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
         throw std::runtime_error("Failed to init SDL");
     
@@ -19,12 +22,10 @@ GameSdl::GameSdl(int id) : idOperator(id), renderer(std::nullopt) {
                                     SDL_WINDOW_SHOWN);
     if (!this->window)
         throw std::runtime_error("Failed to create a window");
-
-    this->renderer = std::make_optional<Renderer>(window, -1, SDL_RENDERER_ACCELERATED);   
 }
 
 void GameSdl::run() {
-    EventHandler event;
+    EventHandler event(this->eventQueue);
     Renderer render(window, -1, SDL_RENDERER_ACCELERATED);
     Operator soldier(idOperator, render);
     MapSdl map(0, render);
@@ -46,6 +47,8 @@ void GameSdl::run() {
         if (1000 / 20 > processTime)
             SDL_Delay(1000 / 20 - processTime);
     }
+    this->endGame = true;
+    eventQueue.close();
 }
 
 GameSdl::~GameSdl() {

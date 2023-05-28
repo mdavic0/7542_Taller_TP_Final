@@ -10,6 +10,12 @@
 #include "client_createView.h"
 #include "client_joinView.h"
 #include "client_protocol.h"
+#include "common_queue.h"
+#include "common_snapshot.h"
+#include "common_eventdto.h"
+#include "EventSender.h"
+#include "SnapshotReceiver.h"
+#include "GameDrawner.h"
 
 class Launcher : public QWidget {
     Q_OBJECT
@@ -21,10 +27,12 @@ class Launcher : public QWidget {
         CreateView createView;
         JoinView joinView;
         std::optional<ClientProtocol> clientProtocol;
+        Queue<Snapshot*> snapshotQueue;
+        Queue<EventDTO*> eventQueue;
         void initWidget();
         void initFont();
-        void initGame(int operatorSelect);
-        void initThreadsConnection();
+        void initGame();
+        // void initThreadsConnection();
     public:
         explicit Launcher(QWidget* parent = 0);
         virtual ~Launcher();

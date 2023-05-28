@@ -26,6 +26,9 @@ public:
     // Event join
     EventDTO(Event event, uint32_t code, TypeOperator typeOperator);
 
+    // Event move
+    EventDTO(Event event, MoveTo moveTo);
+
     Event getEvent() const;
 
     MoveTo getMoveTo() const;
