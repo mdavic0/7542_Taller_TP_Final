@@ -44,10 +44,14 @@ set(ASSETS_DIR ${CMAKE_BINARY_DIR}/assets)
 
 # COMMON
 include_directories(${PROJECT_SOURCE_DIR}/Common)
+include_directories(${PROJECT_SOURCE_DIR}/Common/Communication)
+include_directories(${PROJECT_SOURCE_DIR}/Common/Thread)
+
 add_subdirectory("Common")
 
 # SERVER
 include_directories(${PROJECT_SOURCE_DIR}/Server/src)
+include_directories(${PROJECT_SOURCE_DIR}/Server/src/CommunicationThreads)
 add_subdirectory("Server/src")
 
 # CLIENT
@@ -71,9 +75,7 @@ add_executable(server "Server/main.cpp")
 target_link_libraries(server server_classes common_classes)
 
 add_executable(client "Client/main.cpp")
-#target_link_libraries(client ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES})
 target_link_libraries(client client_classes common_classes SDL2 SDL2_image)
-#target_link_libraries(client client_classes common_classes)
 
 # add_executable(testprotocol "Testing/testprotocol.cpp" )
 # target_link_libraries(testprotocol server_classes client_classes common_classes)

@@ -4,10 +4,10 @@
 #include <list>
 #include <mutex>
 #include <string>
-#include "common_eventdto.h"
-#include "common_snapshot.h"
-#include "common_queue.h"
-#include "common_thread.h"
+#include "EventDTO.h"
+#include "Snapshot.h"
+#include "Queue.h"
+#include "Thread.h"
 #include "GameWorld.h"
 #include <atomic>
 

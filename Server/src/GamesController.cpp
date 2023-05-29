@@ -11,7 +11,8 @@ Queue<EventDTO*>* GamesController::create(EventDTO *eventdto,
     Game *newGame = new Game(counter, scenario);
     games.insert(std::pair{counter, newGame});
     code = counter++;
-    newGame->start();
+    // newGame->start(); TODO: QUE LO HAGA EL GAME CUANDO LLEGAN N JUGADORES (INTERNAMENTE) /
+    //                      O CUANDO LLEGA UN START_GAME DEL LADO DEL CLIENT
     return newGame->joinGame(snapshot_queue);
 }
 

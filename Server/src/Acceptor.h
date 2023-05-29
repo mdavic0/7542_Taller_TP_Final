@@ -3,9 +3,9 @@
 #include <string>
 #include <vector>
 #include <atomic>
-#include "common_thread.h"
+#include "Thread.h"
 #include "EventReceiver.h"
-#include "common_socket.h"
+#include "Socket.h"
 
 
 class Acceptor : public Thread {

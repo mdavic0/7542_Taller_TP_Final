@@ -1,9 +1,9 @@
 #ifndef LEFT4DEAD_SNAPSHOTRECEIVER_H
 #define LEFT4DEAD_SNAPSHOTRECEIVER_H
-#include "common_thread.h"
-#include "common_queue.h"
-#include "client_protocol.h"
-#include "common_snapshot.h"
+#include "Thread.h"
+#include "Queue.h"
+#include "ClientProtocol.h"
+#include "Snapshot.h"
 #include <atomic>
 
 class SnapshotReceiver : public Thread {
@@ -12,8 +12,9 @@ class SnapshotReceiver : public Thread {
         Queue<Snapshot*>& snapshot_queue;
         std::atomic<bool> talking;
         std::atomic<bool> alive;
+        bool& endGame;
     public:
-        SnapshotReceiver(ClientProtocol& protocol, Queue<Snapshot*>& snapshots);
+        SnapshotReceiver(ClientProtocol& protocol, Queue<Snapshot*>& snapshots, bool& endGame);
 
         /*
         * Método que devuelve true cuando el hilo termino de ejecutarse.

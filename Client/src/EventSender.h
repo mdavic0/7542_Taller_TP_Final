@@ -1,8 +1,8 @@
 #ifndef LEFT4DEAD_EVENTSENDER_H
 #define LEFT4DEAD_EVENTSENDER_H
-#include "common_thread.h"
-#include "common_queue.h"
-#include "client_protocol.h"
+#include "Thread.h"
+#include "Queue.h"
+#include "ClientProtocol.h"
 #include <atomic>
 
 class EventSender : public Thread  {
@@ -11,7 +11,7 @@ class EventSender : public Thread  {
         ClientProtocol& protocol;
         std::atomic<bool> talking;
         std::atomic<bool> alive;
-
+        bool& endGame;
     public:
         /*
         * Constructor recibe protocolo por referencia, el cual contiene
@@ -19,7 +19,7 @@ class EventSender : public Thread  {
         * Además, recibe una queue por referencia, de la cual obtendrá
         * las respuestas que debe enviar.
         */
-        EventSender(Queue<EventDTO*>& sdl_events, ClientProtocol& protocol);
+        EventSender(Queue<EventDTO*>& sdl_events, ClientProtocol& protocol, bool& endGame);
 
         /*
         * Método que devuelve true cuando el hilo termino de ejecutarse.

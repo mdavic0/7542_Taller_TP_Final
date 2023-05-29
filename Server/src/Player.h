@@ -2,9 +2,10 @@
 #define LEFT4DEAD_PLAYER_H
 #include <cstdint>
 #include <utility>
-#include "common_type_operator.h"
-#include "common_move.h"
+#include "TypeOperator.h"
+#include "Move.h"
 
+// TODO: USAR POLIMORFISMO YA QUE HAY != TIPOS DE PLAYER
 class Player {
     private:
         TypeOperator typeOperator;
@@ -13,6 +14,7 @@ class Player {
         std::pair<uint16_t, uint16_t> position;
         std::pair<uint16_t, uint16_t> movement_direction;
         //Weapon; delega al arma el ataque
+        // TODO: WAPON TAMBIEN SERA POLIMORFICA
     public:
         Player(TypeOperator typeOperator);
         void setMovementDirection(MoveTo direction);
