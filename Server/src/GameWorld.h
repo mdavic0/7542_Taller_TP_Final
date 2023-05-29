@@ -17,7 +17,7 @@ class GameWorld {
     void addPlayer(TypeOperator id);
     void deletePlayer(TypeOperator id);
 
-    void updateMovementDirection(TypeOperator id, MoveTo direction);
+    void updateMovementDirection(Event event, TypeOperator id, MoveTo direction);
     void simulateStep();
     Snapshot* getSnapshot();
 };

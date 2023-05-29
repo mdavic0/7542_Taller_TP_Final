@@ -3,9 +3,9 @@
 
 #include <string>
 #include <sstream>
-#include "Protocol.h"
-#include "EventDTO.h"
-#include "Snapshot.h"
+#include "common_protocol.h"
+#include "common_eventdto.h"
+#include "common_snapshot.h"
 /*
  * TDA ClientProtocol
  * Se comunica con el servidor a través de su socket.
@@ -13,11 +13,13 @@
 class ClientProtocol : public Protocol {
     private:
 
-        void sendCreate(const std::string& scenario, TypeOperator typeOperator, TypeGame typeGame);
-        void sendJoin(const uint32_t& code, TypeOperator typeOperator);
-        void sendMove(MoveTo moveTo);
-        void sendStopMove();
+        void sendCreate(const std::string& scenario, const TypeOperator& typeOperator, const TypeGame& typeGame);
+        void sendJoin(const uint32_t& code, const TypeOperator& typeOperator);
+        void sendMove(const MoveTo& moveTo, const TypeOperator& typeOperator);
+        void sendStopMove(const MoveTo& moveTo, const TypeOperator& typeOperator);
         void sendStart();
+        void sendOperator(const TypeOperator& typeOperator);
+        void sendMoveTo(const MoveTo& moveTo);
 
         Snapshot getCreate();
         Snapshot getJoin();

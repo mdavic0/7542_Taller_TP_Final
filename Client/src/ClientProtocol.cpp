@@ -1,4 +1,4 @@
-#include "ClientProtocol.h"
+#include "client_protocol.h"
 #include <arpa/inet.h>
 #include <vector>
 #include <utility>
@@ -7,20 +7,12 @@
 ClientProtocol::ClientProtocol(Socket&& skt) :
     Protocol(std::move(skt)) {}
 
-void ClientProtocol::sendCreate(const std::string& scenario, TypeOperator typeOperator,
-            TypeGame typeGame) {
+void ClientProtocol::sendCreate(const std::string& scenario, const TypeOperator& typeOperator,
+    const TypeGame& typeGame) {
     uint8_t command = 0x01;
     sendAll(&command, 1);
 
-    uint8_t idOperator;
-    if (typeOperator == TypeOperator::operator_idf) {
-        idOperator = IDF_CODE;
-    } else if (typeOperator == TypeOperator::operator_p90) {
-        idOperator = P90_CODE;
-    } else if (typeOperator == TypeOperator::operator_scout) {
-        idOperator = SCOUT_CODE;
-    }
-    sendAll(&idOperator, 1);
+    sendOperator(typeOperator);
 
     uint8_t idGame;
     if (typeGame == TypeGame::game_survival) {
@@ -33,29 +25,53 @@ void ClientProtocol::sendCreate(const std::string& scenario, TypeOperator typeOp
     sendString(scenario);
 }
 
-void ClientProtocol::sendJoin(const uint32_t& code, TypeOperator typeOperator) {
+void ClientProtocol::sendJoin(const uint32_t& code, const TypeOperator& typeOperator) {
     uint8_t command = 0x02;
     sendAll(&command, 1);
 
-    uint8_t idOperator;
-    if (typeOperator == TypeOperator::operator_idf) {
-        idOperator = IDF_CODE;
-    } else if (typeOperator == TypeOperator::operator_p90) {
-        idOperator = P90_CODE;
-    } else if (typeOperator == TypeOperator::operator_scout) {
-        idOperator = SCOUT_CODE;
-    }
-    sendAll(&idOperator, 1);
+    sendOperator(typeOperator);
     
     uint32_t codeAux = htonl(code);
     sendAll(&codeAux, 4);
     
 }
 
-void ClientProtocol::sendMove (MoveTo moveTo) {
+void ClientProtocol::sendMove (const MoveTo& moveTo, const TypeOperator& typeOperator) {
     uint8_t command = 0x03;
     sendAll(&command, 1);
 
+    sendOperator(typeOperator);
+
+    sendMoveTo(moveTo);
+}
+
+void ClientProtocol::sendStopMove (const MoveTo& moveTo, const TypeOperator& typeOperator) {
+    uint8_t command = 0x04;
+    sendAll(&command, 1);
+
+    sendOperator(typeOperator);
+
+    sendMoveTo(moveTo);
+}
+
+void ClientProtocol::sendStart() {
+    uint8_t command = 0x06;
+    sendAll(&command, 1);
+}
+
+void ClientProtocol::sendOperator(const TypeOperator& typeOperator) {
+    uint8_t op;
+    if(typeOperator == TypeOperator::operator_idf){
+        op = IDF_CODE;
+    } else if (typeOperator == TypeOperator::operator_p90) {
+        op = P90_CODE;
+    } else if (typeOperator == TypeOperator::operator_scout) {
+        op = SCOUT_CODE;
+    }
+    sendAll(&op, 1);
+}
+
+void ClientProtocol::sendMoveTo(const MoveTo& moveTo) {
     uint8_t idDirection;
     if (moveTo == MoveTo::move_down) {
         idDirection = DOWN_CODE;
@@ -67,16 +83,6 @@ void ClientProtocol::sendMove (MoveTo moveTo) {
         idDirection = RIGHT_CODE;
     }
     sendAll(&idDirection, 1);
-}
-
-void ClientProtocol::sendStopMove () {
-    uint8_t command = 0x04;
-    sendAll(&command, 1);
-}
-
-void ClientProtocol::sendStart() {
-    uint8_t command = 0x06;
-    sendAll(&command, 1);
 }
 
 Snapshot ClientProtocol::getCreate () {
@@ -143,9 +149,9 @@ void ClientProtocol::sendEvent(const EventDTO& eventdto) {
     } else if (event == Event::event_start_game) {
         sendStart();
     } else if (event == Event::event_move) {
-        sendMove(eventdto.getMoveTo());
+        sendMove(eventdto.getMoveTo(), eventdto.getTypeOperator());
     } else if (event == Event::event_stop_move) {
-        sendStopMove();
+        sendStopMove(eventdto.getMoveTo(), eventdto.getTypeOperator());
     }
     
 }

@@ -5,31 +5,54 @@ Player::Player(TypeOperator typeOperator) : typeOperator(typeOperator),
     // weapon(TypeOperator)
 }
 
-void Player::set_movement_direction(MoveTo direction) {
+void Player::setMovementDirection(MoveTo direction) {
     switch (direction) {
-        case MoveTo::move_idle:
-            movement_direction = {0,0};
         case MoveTo::move_up:
             movement_direction.second = 1;
+            break;
         case MoveTo::move_down:
             movement_direction.second = -1;
+            break;
         case MoveTo::move_left:
             movement_direction.first = -1;
+            break;
         case MoveTo::move_right:
             movement_direction.first = 1;
+            break;
+        default:
+            break;
     }
 }
 
-void Player::apply_step() {
+void Player::stopMovementDirection(MoveTo direction) {
+    switch (direction) {
+        case MoveTo::move_up:
+            movement_direction.second = 0;
+            break;
+        case MoveTo::move_down:
+            movement_direction.second = 0;
+            break;
+        case MoveTo::move_left:
+            movement_direction.first = 0;
+            break;
+        case MoveTo::move_right:
+            movement_direction.first = 0;
+            break;
+        default:
+            break;
+    }
+}
+
+void Player::applyStep() {
     this->move();
     //this->attack();
 }
 
-std::pair<uint16_t, uint16_t>& Player::get_position() {
+std::pair<uint16_t, uint16_t>& Player::getPosition() {
     return this->position;
 }
 
-TypeOperator& Player::get_type_operator() {
+TypeOperator& Player::getTypeOperator() {
     return this->typeOperator;
 }
 

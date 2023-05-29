@@ -17,10 +17,11 @@ class Player {
         // TODO: WAPON TAMBIEN SERA POLIMORFICA
     public:
         Player(TypeOperator typeOperator);
-        void set_movement_direction(MoveTo direction);
-        void apply_step();
-        std::pair<uint16_t, uint16_t>& get_position();
-        TypeOperator& get_type_operator();
+        void setMovementDirection(MoveTo direction);
+        void stopMovementDirection(MoveTo direction);
+        void applyStep();
+        std::pair<uint16_t, uint16_t>& getPosition();
+        TypeOperator& getTypeOperator();
 
     private:
         void move();

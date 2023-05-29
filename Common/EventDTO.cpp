@@ -1,14 +1,21 @@
 #include "EventDTO.h"
 
 EventDTO::EventDTO(Event event, MoveTo moveTo, TypeOperator typeOperator, TypeGame typeGame,
-    const std::string& str, const uint32_t& n) : event(event), moveTo(moveTo),
+         const std::string& str, const uint32_t& n) : event(event), moveTo(moveTo),
     typeOperator(typeOperator), typeGame(typeGame), str(str), n(n) {}
 
-EventDTO::EventDTO(Event event, const std::string& name, TypeGame typeGame, TypeOperator typeOperator) : 
-    event(event), moveTo(MoveTo::move_idle), typeOperator(typeOperator), typeGame(typeGame), str(name), n(-1) {}
+EventDTO::EventDTO(const std::string& name, TypeGame typeGame, TypeOperator typeOperator) : 
+    event(Event::event_create), moveTo(MoveTo::move_idle), typeOperator(typeOperator),
+    typeGame(typeGame), str(name), n(-1) {}
 
-EventDTO::EventDTO(Event event, uint32_t code, TypeOperator typeOperator) : 
-    event(event), moveTo(MoveTo::move_idle), typeOperator(typeOperator), typeGame(TypeGame::game_idle), str(""), n(code) {}
+EventDTO::EventDTO(const uint32_t& code, TypeOperator typeOperator) : 
+    event(Event::event_join), moveTo(MoveTo::move_idle), typeOperator(typeOperator),
+    typeGame(TypeGame::game_idle), str(), n(code) {}
+
+EventDTO::EventDTO(Event event, MoveTo moveTo, TypeOperator typeOperator) : 
+    event(event), moveTo(moveTo), typeOperator(typeOperator),
+    typeGame(TypeGame::game_idle), str(), n(-1) {}
+
 
 EventDTO::EventDTO(Event event, MoveTo moveTo) : 
     event(event), moveTo(moveTo), typeOperator(TypeOperator::operator_idle), typeGame(TypeGame::game_idle), str(""), n(0) {}
