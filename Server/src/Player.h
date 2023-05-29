@@ -2,8 +2,8 @@
 #define LEFT4DEAD_PLAYER_H
 #include <cstdint>
 #include <utility>
-#include "common_type_operator.h"
-#include "common_move.h"
+#include "TypeOperator.h"
+#include "Move.h"
 
 class Player {
     private:

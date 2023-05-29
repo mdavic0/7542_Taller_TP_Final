@@ -1,8 +1,8 @@
 #ifndef SERVER_CLIENT_READER_H_
 #define SERVER_CLIENT_READER_H_
 
-#include "common_thread.h"
-#include "server_protocol.h"
+#include "Thread.h"
+#include "ServerProtocol.h"
 #include "GamesController.h"
 #include "SnapshotSender.h"
 #include <atomic>

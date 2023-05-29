@@ -1,5 +1,5 @@
 #include "SnapshotReceiver.h"
-#include "common_liberror.h"
+#include "Liberror.h"
 
 SnapshotReceiver::SnapshotReceiver(ClientProtocol &protocol,
     Queue<Snapshot*> &snapshots, bool& endGame) :

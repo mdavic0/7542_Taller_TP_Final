@@ -1,8 +1,8 @@
 #ifndef MAPSDL_H_
 #define MAPDSL_H_
 
-#include "client_rendererSdl.h"
-#include "client_textureSdl.h"
+#include "RendererSdl.h"
+#include "TextureSdl.h"
 #include <map>
 #include <string>
 

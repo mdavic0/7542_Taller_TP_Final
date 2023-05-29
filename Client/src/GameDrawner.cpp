@@ -1,5 +1,5 @@
 #include "GameDrawner.h"
-#include "client_gameSdl.h"
+#include "GameSdl.h"
 
 GameDrawner::GameDrawner(Queue<EventDTO *> &client_events,
     Queue<Snapshot *> &snapshot_queue, bool& endGame) :

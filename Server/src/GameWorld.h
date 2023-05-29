@@ -2,8 +2,8 @@
 #define LEFT4DEAD_GAMEWORLD_H
 #include <map>
 #include "Player.h"
-#include "common_snapshot.h"
-#include "common_move.h"
+#include "Snapshot.h"
+#include "Move.h"
 
 class GameWorld {
     private:

@@ -4,7 +4,7 @@
 #include <algorithm>
 #include "EventReceiver.h"
 #include "GamesController.h"
-#include "common_liberror.h"
+#include "Liberror.h"
 
 Acceptor::Acceptor(const std::string &servname) :
         skt(servname.c_str()), readers(), controller(), talking(true), alive(true) {}

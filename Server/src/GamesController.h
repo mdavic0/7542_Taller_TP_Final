@@ -2,8 +2,8 @@
 #define SERVER_GAMES_CONTROLLER_H_
 
 #include "Game.h"
-#include "common_eventdto.h"
-#include "common_snapshot.h"
+#include "EventDTO.h"
+#include "Snapshot.h"
 #include <mutex>
 #include <map>
 

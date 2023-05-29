@@ -1,6 +1,6 @@
 #include "EventReceiver.h"
 #include <utility>
-#include "common_liberror.h"
+#include "Liberror.h"
 
 EventReceiver::EventReceiver(Socket&& skt, GamesController& controller) :
     protocol(std::move(skt)), event_queue(),

@@ -1,5 +1,5 @@
 #include "mapSdl.h"
-#include "common_defines.h"
+#include "Defines.h"
 
 MapSdl::MapSdl(int id, Renderer& renderer) : mapId(id), renderMap(renderer) {
     this->chargeTexture(renderer);

@@ -1,9 +1,9 @@
 #ifndef GAMEDRAWNER_H
 #define GAMEDRAWNER_H
-#include "common_thread.h"
-#include "common_eventdto.h"
-#include "common_queue.h"
-#include "common_snapshot.h"
+#include "Thread.h"
+#include "EventDTO.h"
+#include "Queue.h"
+#include "Snapshot.h"
 
 class GameDrawner : public Thread {
     private:

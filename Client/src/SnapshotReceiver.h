@@ -1,9 +1,9 @@
 #ifndef LEFT4DEAD_SNAPSHOTRECEIVER_H
 #define LEFT4DEAD_SNAPSHOTRECEIVER_H
-#include "common_thread.h"
-#include "common_queue.h"
-#include "client_protocol.h"
-#include "common_snapshot.h"
+#include "Thread.h"
+#include "Queue.h"
+#include "ClientProtocol.h"
+#include "Snapshot.h"
 #include <atomic>
 
 class SnapshotReceiver : public Thread {

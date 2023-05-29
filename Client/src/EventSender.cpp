@@ -1,5 +1,5 @@
 #include "EventSender.h"
-#include "common_liberror.h"
+#include "Liberror.h"
 
 EventSender::EventSender(Queue<EventDTO*> &sdl_events,
     ClientProtocol &protocol, bool& endGame) :

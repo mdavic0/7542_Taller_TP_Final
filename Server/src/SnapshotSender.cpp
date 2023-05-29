@@ -1,5 +1,5 @@
 #include "SnapshotSender.h"
-#include "common_liberror.h"
+#include "Liberror.h"
 
 SnapshotSender::SnapshotSender(ServerProtocol& protocol, Queue<Snapshot*>& q) :
     protocol(protocol), snapshot_queue(q), talking(true), alive(true) {}

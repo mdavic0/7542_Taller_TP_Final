@@ -1,9 +1,9 @@
 #ifndef SERVER_CLIENT_WRITER_H_
 #define SERVER_CLIENT_WRITER_H_
 
-#include "common_thread.h"
-#include "common_queue.h"
-#include "server_protocol.h"
+#include "Thread.h"
+#include "Queue.h"
+#include "ServerProtocol.h"
 #include <atomic>
 #include <map>
 
