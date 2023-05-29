@@ -1,4 +1,4 @@
-#include "server_protocol.h"
+#include "ServerProtocol.h"
 #include <arpa/inet.h>
 #include <vector>
 #include <utility>
@@ -274,3 +274,4 @@ void ServerProtocol::sendSnapshot(const Snapshot &snapshot) {
 
 void ServerProtocol::stop() {
     Protocol::stop();
+}

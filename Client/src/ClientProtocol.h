@@ -3,9 +3,9 @@
 
 #include <string>
 #include <sstream>
-#include "common_protocol.h"
-#include "common_eventdto.h"
-#include "common_snapshot.h"
+#include "Protocol.h"
+#include "EventDTO.h"
+#include "Snapshot.h"
 /*
  * TDA ClientProtocol
  * Se comunica con el servidor a través de su socket.
