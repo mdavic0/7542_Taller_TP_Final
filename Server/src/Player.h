@@ -5,6 +5,7 @@
 #include "TypeOperator.h"
 #include "Move.h"
 
+// TODO: USAR POLIMORFISMO YA QUE HAY != TIPOS DE PLAYER
 class Player {
     private:
         TypeOperator typeOperator;
@@ -13,6 +14,7 @@ class Player {
         std::pair<uint16_t, uint16_t> position;
         std::pair<uint16_t, uint16_t> movement_direction;
         //Weapon; delega al arma el ataque
+        // TODO: WAPON TAMBIEN SERA POLIMORFICA
     public:
         Player(TypeOperator typeOperator);
         void set_movement_direction(MoveTo direction);

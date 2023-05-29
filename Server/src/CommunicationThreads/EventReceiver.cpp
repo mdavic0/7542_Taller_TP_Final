@@ -18,7 +18,7 @@ void EventReceiver::run() {
                 this->event_queue = controller.create(eventDto,
                                                       &snapshot_queue,
                                                       game_code);
-                event_queue->push(eventDto);
+                event_queue->push(eventDto); // TODO: NO PUSHEAR DIRECTAMENTE
             } else if (event == Event::event_join) {
                 uint32_t code = eventDto->getN();
                 uint8_t join_result;
