@@ -44,10 +44,14 @@ set(ASSETS_DIR ${CMAKE_BINARY_DIR}/assets)
 
 # COMMON
 include_directories(${PROJECT_SOURCE_DIR}/Common)
+include_directories(${PROJECT_SOURCE_DIR}/Common/Communication)
+include_directories(${PROJECT_SOURCE_DIR}/Common/Thread)
+
 add_subdirectory("Common")
 
 # SERVER
 include_directories(${PROJECT_SOURCE_DIR}/Server/src)
+include_directories(${PROJECT_SOURCE_DIR}/Server/src/CommunicationThreads)
 add_subdirectory("Server/src")
 
 # CLIENT
