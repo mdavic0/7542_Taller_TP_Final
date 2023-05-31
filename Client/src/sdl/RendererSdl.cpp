@@ -27,6 +27,11 @@ void Renderer::copy(SDL_Texture* texture, SDL_Rect& rectInit,
     SDL_RenderCopy(this->render, texture, &rectInit, &rectFinal);
 }
 
+void Renderer::copy(SDL_Texture* texture, SDL_Rect& rectInit,
+    SDL_Rect& rectFinal, const SDL_RendererFlip& flipType) {
+    SDL_RenderCopyEx(this->render, texture, &rectInit, &rectFinal, 0, nullptr, flipType);
+}
+
 SDL_Renderer* Renderer::get() {
     return this->render;
 }

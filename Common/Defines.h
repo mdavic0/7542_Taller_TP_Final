@@ -5,6 +5,12 @@
 #define WINDOW_HEIGTH 768
 
 #define FRAME_RATE 60
+#define SIZE_QUEUE 256
+
+// Animation SDL
+#define SIZE_SPRITE 128
+#define SPEED_IDLE 150
+#define SPEED_RUN 100
 
 #define CREATE_CODE 0x01
 #define JOIN_CODE 0x02

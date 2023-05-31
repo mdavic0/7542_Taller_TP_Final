@@ -27,8 +27,6 @@ class Launcher : public QWidget {
         CreateView createView;
         JoinView joinView;
         std::optional<ClientProtocol> clientProtocol;
-        Queue<Snapshot*> snapshotQueue;
-        Queue<EventDTO*> eventQueue;
         void initWidget();
         void initFont();
         void initGame();

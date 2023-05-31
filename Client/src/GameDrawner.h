@@ -11,8 +11,8 @@ class GameDrawner : public Thread {
         Queue<Snapshot*>& snapshot_queue;
         bool& endGame;
     public:
-        GameDrawner(Queue<EventDTO*>& client_events,
-            Queue<Snapshot*>& snapshot_queue, bool& endGame);
+        GameDrawner(Queue<Snapshot*>& snapshot_queue,
+            Queue<EventDTO*>& client_events, bool& endGame);
         // implementar gameloop y cosas de SDL (eventos)
         virtual void run() override;
         virtual void stop() override;

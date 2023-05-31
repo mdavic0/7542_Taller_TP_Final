@@ -11,14 +11,10 @@ void SnapshotReceiver::run() {
         try {
             Snapshot* snapshot = new Snapshot(protocol.getSnapshot());
             snapshot_queue.push(snapshot);
-        } catch (const ClosedQueue& err){
+        } catch (const LibError& err){
             talking = false;
+            std::cerr << err.what() << std::endl; 
         } 
-        // catch (const LibError& err) {
-        //     talking = false;
-        //     // socket closed
-        //     // break;
-        // }
     }
     alive = false;
 }

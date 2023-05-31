@@ -11,18 +11,14 @@ void EventSender::run() {
     while (talking) {
         try {
             EventDTO* response = sdl_events.pop();
-            if (response != nullptr) {
-                protocol.sendEvent(*response);
-                delete response;
-            }
+            protocol.sendEvent(*response);
+            delete response;
         } catch (ClosedQueue &exc) {
-            std::cerr << exc.what() << std::endl;
+            protocol.stop();
             talking = false;
+            std::cerr << exc.what() << std::endl;
             break;
-        } // catch (const LibError& err) {
-        //     talking = false;
-        //     // socket closed
-        // }
+        }
     }
     alive = false;
     std::cout << "termine sender\n";

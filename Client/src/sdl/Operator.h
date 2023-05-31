@@ -16,19 +16,16 @@ class Operator {
         std::map<std::string, Texture*> textures;
         States stateOperator;
         Renderer renderPlayer;
+        SDL_RendererFlip flipType;
         int numFrames;
-        int currentFrame;
-        Uint32 lastUpdateTime;
         void chargeTexture(Renderer& renderer);
-        void renderIdle();
-        void renderMove();
+        void renderAnimation(int speed, SDL_Texture* texture);
         void setState(States state);
         int setNumFrames(States state);
     public:
         Operator(int id, Renderer& renderer);
         ~Operator();     
         void update(MoveTo direction);
-        void updateCurrentFrame();
         void render();
 };
 

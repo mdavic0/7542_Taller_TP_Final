@@ -15,7 +15,7 @@
 
 Launcher::Launcher(QWidget* parent): QWidget(parent),
     initView(), connectView(), menuView(), createView(), joinView(),
-    clientProtocol(std::nullopt), snapshotQueue(256), eventQueue(256) {
+    clientProtocol(std::nullopt) {
     this->initWidget();
     mainWidget.addWidget(&initView);
     mainWidget.addWidget(&connectView);
@@ -115,7 +115,7 @@ void Launcher::sendCreateMatch(const QString& name, int mode,
     EventDTO eventCreate(nameMatch, TypeGame(mode), TypeOperator(operatorSelect));
     clientProtocol->sendEvent(eventCreate);
     Snapshot receive = clientProtocol->getSnapshot();
-    if (receive.getCode() == 0) {
+    if (receive.getCode() >= 0) {
         std::string message = "Partida creada con codigo: " + 
             std::to_string(receive.getCode());
         QMessageBox::information(this, "Exito", message.c_str(),
@@ -152,19 +152,14 @@ void Launcher::sendJoinMatch(int code, int operatorSelect) {
 
 void Launcher::initGame() {
     bool endGame = false;
-    GameSdl gameDrawner(2, snapshotQueue, eventQueue, endGame);
-    // SnapshotReceiver snapshotReceiver(clientProtocol.value(), snapshotQueue, endGame);
+    Queue<Snapshot*> snapshotQueue(SIZE_QUEUE);
+    Queue<EventDTO*> eventQueue(SIZE_QUEUE);
+    GameDrawner gameDrawner(snapshotQueue, eventQueue, endGame);
+    SnapshotReceiver snapshotReceiver(clientProtocol.value(), snapshotQueue, endGame);
     EventSender eventSender(eventQueue, clientProtocol.value(), endGame);
-    // try {
-        gameDrawner.run();
-    // // snapshotReceiver.start();
-        eventSender.start();
-    
-    // } catch (std::exception &exc) {
-    //     std::cerr << "erororiri\n";
-    // } catch (...) {
-    //     std::cerr << "cualquier error\n"; 
-    // }
+    gameDrawner.start();
+    snapshotReceiver.start();
+    eventSender.start();
 }
 
 Launcher::~Launcher() {

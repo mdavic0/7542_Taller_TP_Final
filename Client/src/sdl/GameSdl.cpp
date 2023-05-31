@@ -39,7 +39,6 @@ void GameSdl::run() {
         map.render();
         soldier.render();
         render.present();
-        soldier.updateCurrentFrame();
 
         uint32_t frameEnd = SDL_GetTicks();
         uint32_t processTime = frameEnd - frameInit;
