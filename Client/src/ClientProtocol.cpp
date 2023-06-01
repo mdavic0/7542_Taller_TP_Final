@@ -102,12 +102,12 @@ Snapshot ClientProtocol::getJoin () {
 
 Snapshot ClientProtocol::getPlaying () {
     std::map<TypeOperator, std::pair<uint16_t, uint16_t>> map;
-
+    // enviar size del map
     uint8_t idOperator;
     TypeOperator type = TypeOperator::operator_idle;
     uint16_t x;
     uint16_t y;
-    for (uint8_t i = 0; i < 3; i++) {
+    // for (uint8_t i = 0; i < 3; i++) {
         recvAll(&idOperator, 1);
 
         switch (idOperator) {
@@ -134,7 +134,7 @@ Snapshot ClientProtocol::getPlaying () {
         y = ntohs(y);
 
         map.insert({type, {x, y}});
-    }
+    // }
 
     return Snapshot(map);
 }

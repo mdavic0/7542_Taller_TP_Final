@@ -38,15 +38,15 @@ void GameSdl::run() {
         SDL_PumpEvents();
         event.listen();
         // this.update();
-        Snapshot* snap;
-        if (snapshotQueue.try_pop(snap)) {
-            for (auto &op : snap->getPositions()) {
-                if (op.first == soldier.getType()) {
-                    soldier.updatePosition(op.second);
-                    std::cout << "Actualizo la posicion\n";
-                }
-            }
-        }
+        // soldier.update(event.getMoveDirection());
+        Snapshot* snap = snapshotQueue.pop();
+        // std::cout << snap->getPositions()[TypeOperator(1)].first << std::endl;
+        std::map<TypeOperator, std::pair<uint16_t, uint16_t>> posi = snap->getPositions();
+        // std::cout << (int)posi.size() << std::endl;
+        // if (posi[soldier.getType()].first) {
+                soldier.updatePosition(posi[soldier.getType()]);
+                // std::cout << "Actualizo la posicion\n";
+        // }
         map.render();
         soldier.render();
         render.present();

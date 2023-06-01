@@ -6,13 +6,13 @@ Player::Player(TypeOperator typeOperator) : typeOperator(typeOperator),
 }
 #include <iostream>
 void Player::setMovementDirection(MoveTo direction) {
-    std::cout << "Seteando direccion\n";
     switch (direction) {
+        // Por sdl el eje "y" va hacia abajo
         case MoveTo::move_up:
-            movement_direction.second = 1;
+            movement_direction.second = -1;
             break;
         case MoveTo::move_down:
-            movement_direction.second = -1;
+            movement_direction.second = 1;
             break;
         case MoveTo::move_left:
             movement_direction.first = -1;
@@ -23,7 +23,6 @@ void Player::setMovementDirection(MoveTo direction) {
         default:
             break;
     }
-    std::cout << "Direccion seteada\n";
 }
 
 void Player::stopMovementDirection(MoveTo direction) {

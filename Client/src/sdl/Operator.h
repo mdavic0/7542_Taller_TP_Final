@@ -13,7 +13,7 @@
 class Operator {
     private:
         TypeOperator operatorId;
-        std::pair<int, int> position;
+        std::pair<uint16_t, uint16_t> position;
         std::map<std::string, Texture*> textures;
         States stateOperator;
         Renderer renderPlayer;

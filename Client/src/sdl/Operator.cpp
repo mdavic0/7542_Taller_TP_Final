@@ -3,7 +3,7 @@
 #include <iostream>
 
 Operator::Operator(int id, Renderer& renderer) : operatorId(TypeOperator(id)),
-    position({568, 568}), renderPlayer(renderer), stateOperator(States::idle),
+    position({0, 0}), renderPlayer(renderer), stateOperator(States::idle),
     numFrames(0), flipType(SDL_FLIP_NONE) {
     this->chargeTexture(renderer);
     this->setState(States::idle);
@@ -39,8 +39,8 @@ void Operator::update(MoveTo direction) {
 }
 
 void Operator::updatePosition(std::pair<uint16_t, uint16_t> pos) {
-    position.first = pos.first;
-    position.second = pos.second;
+    this->setState(States::idle);
+    this->position = pos;
 }
 
 TypeOperator Operator::getType() {

@@ -35,12 +35,8 @@ void Game::startPlaying() {
 
 void Game::gameLoop() {
     using namespace std::chrono;
-    //auto begin = steady_clock::now();
-    //auto end = steady_clock::now();
-    //double t_delta;
-
     while (alive) {
-        //begin = steady_clock::now();
+        auto begin = std::chrono::steady_clock::now();
 
         //process_events() // popea hasta que no haya más eventos en la queue
         // y los procesa en el gameworld.
@@ -65,9 +61,10 @@ void Game::gameLoop() {
         broadcastSnapshot(snapshot);
 
         // ->>Bueno y el sleep de tiempo variable también
-        //end = steady_clock::now();
-        //t_delta = duration<double>(end - begin).count();
-        //std::this_thread::sleep_for(duration<double>(t_delta));
+        auto end = std::chrono::steady_clock::now();
+        int t_delta = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
+        // duration<double>(t_delta)
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 20 - t_delta));
     }
 }
 

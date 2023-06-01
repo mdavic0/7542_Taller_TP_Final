@@ -32,16 +32,12 @@ void EventReceiver::run() {
                     snapshot_queue.push(new Snapshot(Event(JOIN_CODE), join_result));
                 }
             } else if (event == Event::event_start_game) {
-                std::cout << "Recibo un start\n";
                 event_queue->push(eventDto);
-            } else if (event == Event::event_move) {
-                std::cout << "Recibo un move\n";
+            } else if (event == Event::event_move || event == Event::event_stop_move) {
                 event_queue->push(eventDto);
-            } else {
-                std::cout << "Me voy a la mierda\n";
-                talking = false; // TODO: Analizar bien las condiciones de corte
             }
         } catch (const LibError& err) {
+            talking = false; // TODO: Analizar bien las condiciones de corte
             // socket closed
             break;
         }

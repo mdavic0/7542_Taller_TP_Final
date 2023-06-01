@@ -197,9 +197,11 @@ void ServerProtocol::sendJoin(uint8_t ok) {
 }
 
 void ServerProtocol::sendPlaying(std::map<TypeOperator, std::pair<uint16_t, uint16_t>> &playersInfo) {
+    uint8_t event = 0x05;
+    sendAll(&event, 1);
     for (auto it = playersInfo.begin(); it != playersInfo.end(); ++it) {
         sendOperator(it->first);
-        sendPosition(std::get<0>(it->second), std::get<1>(it->second));
+        sendPosition(it->second.first, it->second.second); // x = it->second.first, y = it->second.second
   }
 }
 
