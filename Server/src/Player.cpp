@@ -4,8 +4,9 @@ Player::Player(TypeOperator typeOperator) : typeOperator(typeOperator),
     life(100), fell_down(0), position(0,0), movement_direction(0,0) {
     // weapon(TypeOperator)
 }
-
+#include <iostream>
 void Player::setMovementDirection(MoveTo direction) {
+    std::cout << "Seteando direccion\n";
     switch (direction) {
         case MoveTo::move_up:
             movement_direction.second = 1;
@@ -22,9 +23,11 @@ void Player::setMovementDirection(MoveTo direction) {
         default:
             break;
     }
+    std::cout << "Direccion seteada\n";
 }
 
 void Player::stopMovementDirection(MoveTo direction) {
+    std::cout << "Seteando direccion\n";
     switch (direction) {
         case MoveTo::move_up:
             movement_direction.second = 0;
@@ -41,6 +44,7 @@ void Player::stopMovementDirection(MoveTo direction) {
         default:
             break;
     }
+    std::cout << "Direccion seteada\n";
 }
 
 void Player::applyStep() {

@@ -35,12 +35,12 @@ void Game::startPlaying() {
 
 void Game::gameLoop() {
     using namespace std::chrono;
-    auto begin = steady_clock::now();
-    auto end = steady_clock::now();
-    double t_delta;
+    //auto begin = steady_clock::now();
+    //auto end = steady_clock::now();
+    //double t_delta;
 
     while (alive) {
-        begin = steady_clock::now();
+        //begin = steady_clock::now();
 
         //process_events() // popea hasta que no haya más eventos en la queue
         // y los procesa en el gameworld.
@@ -65,9 +65,9 @@ void Game::gameLoop() {
         broadcastSnapshot(snapshot);
 
         // ->>Bueno y el sleep de tiempo variable también
-        end = steady_clock::now();
-        t_delta = duration<double>(end - begin).count();
-        std::this_thread::sleep_for(duration<double>(t_delta));
+        //end = steady_clock::now();
+        //t_delta = duration<double>(end - begin).count();
+        //std::this_thread::sleep_for(duration<double>(t_delta));
     }
 }
 
@@ -86,12 +86,15 @@ void Game::processEvents() {
                 broadcastSnapshot(new Snapshot(Event::event_join, (uint8_t)0x01));
                 break;
             } else if (event->getEvent() == Event::event_start_game) {
+                std::cout << "Empieza el juego!\n";
                 startPlaying();
                 break;
             } else if (event->getEvent() == Event::event_move
                     || event->getEvent() == Event::event_stop_move) {
-                gameWorld.updateMovementDirection(event->getEvent(), event->getTypeOperator(),
-                                                    event->getMoveTo());
+                std::cout << "Popeo un evento de movimiento\n";
+                gameWorld.updateMovementDirection(event->getEvent(),
+                                                  event->getTypeOperator(),
+                                                  event->getMoveTo());
             }
             iterations++;
         }

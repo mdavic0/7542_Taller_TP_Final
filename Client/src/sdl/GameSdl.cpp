@@ -40,10 +40,11 @@ void GameSdl::run() {
         // this.update();
         Snapshot* snap;
         if (snapshotQueue.try_pop(snap)) {
-            std::cout << "es mover\n";
             for (auto &op : snap->getPositions()) {
-                if (op.first == soldier.getType()) 
+                if (op.first == soldier.getType()) {
                     soldier.updatePosition(op.second);
+                    std::cout << "Actualizo la posicion\n";
+                }
             }
         }
         map.render();
