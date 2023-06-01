@@ -2,7 +2,7 @@
 #include "Defines.h"
 #include <iostream>
 
-Operator::Operator(int id, Renderer& renderer) : operatorId(id),
+Operator::Operator(int id, Renderer& renderer) : operatorId(TypeOperator(id)),
     position({568, 568}), renderPlayer(renderer), stateOperator(States::idle),
     numFrames(0), flipType(SDL_FLIP_NONE) {
     this->chargeTexture(renderer);
@@ -38,8 +38,17 @@ void Operator::update(MoveTo direction) {
     }
 }
 
+void Operator::updatePosition(std::pair<uint16_t, uint16_t> pos) {
+    position.first = pos.first;
+    position.second = pos.second;
+}
+
+TypeOperator Operator::getType() {
+    return this->operatorId;
+}
+
 void Operator::chargeTexture(Renderer& renderer) {
-    std::string path = "assets/images/sdl/units/" + std::to_string(operatorId);
+    std::string path = "assets/images/sdl/units/" + std::to_string((int)operatorId);
     textures["Idle"] = new Texture(renderer, path + "/Idle.png", false);
     textures["Run"] = new Texture(renderer, path + "/Run.png", false);
 }

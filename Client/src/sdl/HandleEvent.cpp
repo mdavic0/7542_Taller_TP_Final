@@ -27,6 +27,7 @@ void EventHandler::listen() {
 }
 
 void EventHandler::handleKeyDownEvent(SDL_Keysym keysym) {
+    Event event = Event::event_move;
     switch(keysym.sym) {
         case SDLK_w:
             moveDirection = MoveTo::move_up;
@@ -43,8 +44,10 @@ void EventHandler::handleKeyDownEvent(SDL_Keysym keysym) {
         default:
             moveDirection = MoveTo::move_idle;
             break;
+        // agregar tecla space
     }
-    this->eventQueue.push(new EventDTO(Event::event_move, moveDirection));
+    if (moveDirection != MoveTo::move_idle)
+        this->eventQueue.push(new EventDTO(event, moveDirection));
 }
 
 void EventHandler::handleKeyUpEvent(SDL_Keysym keysym) {

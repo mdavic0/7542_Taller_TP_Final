@@ -32,6 +32,8 @@ public:
     // Event move
     EventDTO(Event event, MoveTo moveTo);
 
+    explicit EventDTO(Event event);
+
     Event getEvent() const;
 
     MoveTo getMoveTo() const;

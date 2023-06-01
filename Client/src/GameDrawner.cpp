@@ -8,8 +8,16 @@ GameDrawner::GameDrawner(Queue<Snapshot *> &snapshot_queue,
 }
 
 void GameDrawner::run() {
+    // map<<typeOperator, state>, <x,y>> players = ;
+    // map<<Enemys, state>, <position>>
+    // int map;
+    // int mode;
     GameSdl gameSdl(1, snapshot_queue, client_events, endGame);
+    // while (players.size() < 2) {
+    //     render("Esperando jugadores");
+    // }
     // try {
+
         gameSdl.run();
     // } catch (ClosedQueue &exc) {
     // } catch (...) {}

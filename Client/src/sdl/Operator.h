@@ -3,6 +3,7 @@
 
 #include "Move.h"
 #include "States.h"
+#include "TypeOperator.h"
 #include "TextureSdl.h"
 #include "RendererSdl.h"
 #include <SDL2/SDL.h>
@@ -11,7 +12,7 @@
 
 class Operator {
     private:
-        int operatorId;
+        TypeOperator operatorId;
         std::pair<int, int> position;
         std::map<std::string, Texture*> textures;
         States stateOperator;
@@ -26,7 +27,9 @@ class Operator {
         Operator(int id, Renderer& renderer);
         ~Operator();     
         void update(MoveTo direction);
-        void render();
+        void updatePosition(std::pair<uint16_t, uint16_t> pos);
+        TypeOperator getType();
+                void render();
 };
 
 #endif

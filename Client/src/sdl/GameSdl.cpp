@@ -3,6 +3,7 @@
 #include "Defines.h"
 #include "mapSdl.h"
 #include <stdexcept>
+#include <iostream>
 
 GameSdl::GameSdl(int id, Queue<Snapshot*>& snapshotQueue,
     Queue<EventDTO*>& eventQueue, bool& endGame) : idOperator(id),
@@ -29,13 +30,22 @@ void GameSdl::run() {
     Renderer render(window, -1, SDL_RENDERER_ACCELERATED);
     Operator soldier(idOperator, render);
     MapSdl map(0, render);
+    eventQueue.push(new EventDTO(Event::event_start_game));
     while (event.isRunning()) { 
         uint32_t frameInit = SDL_GetTicks();
 
         render.clear();
         SDL_PumpEvents();
         event.listen();
-        soldier.update(event.getMoveDirection());
+        // this.update();
+        Snapshot* snap;
+        if (snapshotQueue.try_pop(snap)) {
+            std::cout << "es mover\n";
+            for (auto &op : snap->getPositions()) {
+                if (op.first == soldier.getType()) 
+                    soldier.updatePosition(op.second);
+            }
+        }
         map.render();
         soldier.render();
         render.present();

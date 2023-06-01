@@ -16,6 +16,10 @@ EventDTO::EventDTO(Event event, MoveTo moveTo, TypeOperator typeOperator) :
     event(event), moveTo(moveTo), typeOperator(typeOperator),
     typeGame(TypeGame::game_idle), str(), n(-1) {}
 
+EventDTO::EventDTO(Event event) : 
+    event(event), moveTo(MoveTo::move_idle), typeOperator(TypeOperator::operator_idle),
+    typeGame(TypeGame::game_idle), str(), n(-1) {}
+
 
 EventDTO::EventDTO(Event event, MoveTo moveTo) : 
     event(event), moveTo(moveTo), typeOperator(TypeOperator::operator_idle), typeGame(TypeGame::game_idle), str(""), n(0) {}
