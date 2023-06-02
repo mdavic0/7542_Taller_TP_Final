@@ -4,7 +4,7 @@
 Game::Game(const uint32_t id, const std::string& name) :
     id(id), name(name), mutex(),
     unprocessed_events(1000), client_snapshot_queues(),
-    talking(true), alive(true), gameWorld(), started(false) {}
+    talking(true), alive(true), gameWorld() {}
 
 void Game::run() {
     try {
@@ -23,28 +23,31 @@ bool Game::ended() {
     return !alive;
 }
 
-Queue<EventDTO*>* Game::joinGame(Queue<Snapshot*> *q) {
+Queue<EventDTO*>* Game::createGame(Queue<Snapshot*> *q, const TypeOperator& op) {
     std::lock_guard<std::mutex> locker(mutex);
     client_snapshot_queues.push_back(q);
+    uint8_t idPlayer = gameWorld.addPlayer(op);
+    q->push(new Snapshot(Event::event_create, id, idPlayer));
     return &this->unprocessed_events;
 }
 
-void Game::startPlaying() {
-    started = true;
+Queue<EventDTO*>* Game::joinGame(Queue<Snapshot*> *q, const TypeOperator& op) {
+    std::lock_guard<std::mutex> locker(mutex);
+    client_snapshot_queues.push_back(q);
+    uint8_t idPlayer = gameWorld.addPlayer(op);
+    q->push(new Snapshot(Event::event_join, (uint8_t)0x00, idPlayer));
+    return &this->unprocessed_events;
 }
 
+
 void Game::gameLoop() {
-    using namespace std::chrono;
+    // using namespace std::chrono;
     while (alive) {
         auto begin = std::chrono::steady_clock::now();
 
         //process_events() // popea hasta que no haya más eventos en la queue
         // y los procesa en el gameworld.
         processEvents();
-
-        if (not started) {
-            continue;
-        }
 
         // TODO:
         //  step(some_time)
@@ -74,23 +77,11 @@ void Game::processEvents() {
     try {
         // try_pop es no bloqueante y devuelve false en caso de que la queue este vacia
         while (unprocessed_events.try_pop(event) && iterations < 10) {
-            if (event->getEvent() == Event::event_create) {
-                gameWorld.addPlayer(event->getTypeOperator());
-                broadcastSnapshot(new Snapshot(Event::event_create, id));
-                break;
-            } else if (event->getEvent() == Event::event_join) {
-                gameWorld.addPlayer(event->getTypeOperator());
-                broadcastSnapshot(new Snapshot(Event::event_join, (uint8_t)0x01));
-                break;
-            } else if (event->getEvent() == Event::event_start_game) {
-                std::cout << "Empieza el juego!\n";
-                startPlaying();
-                break;
-            } else if (event->getEvent() == Event::event_move
+            if (event->getEvent() == Event::event_move
                     || event->getEvent() == Event::event_stop_move) {
                 std::cout << "Popeo un evento de movimiento\n";
                 gameWorld.updateMovementDirection(event->getEvent(),
-                                                  event->getTypeOperator(),
+                                                  event->getIdPlayer(),
                                                   event->getMoveTo());
             }
             iterations++;

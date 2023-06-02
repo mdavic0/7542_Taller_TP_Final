@@ -41,10 +41,10 @@ void GameSdl::run() {
         // soldier.update(event.getMoveDirection());
         Snapshot* snap = snapshotQueue.pop();
         // std::cout << snap->getPositions()[TypeOperator(1)].first << std::endl;
-        std::map<TypeOperator, std::pair<uint16_t, uint16_t>> posi = snap->getPositions();
+        std::map<uint8_t, std::pair<uint16_t, uint16_t>> posi = snap->getPositions();
         // std::cout << (int)posi.size() << std::endl;
         // if (posi[soldier.getType()].first) {
-                soldier.updatePosition(posi[soldier.getType()]);
+                soldier.updatePosition(posi[soldier.getId()]);
                 // std::cout << "Actualizo la posicion\n";
         // }
         map.render();

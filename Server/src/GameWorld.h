@@ -7,17 +7,17 @@
 
 class GameWorld {
     private:
-        int players_amount;
-        std::map<TypeOperator, Player> players;
+        uint8_t players_amount;
+        std::map<uint8_t, Player> players;
         // TODO: VECTOR DE VECTORES DE POSICIONES (EN ORDEN) DE CADA PLAYER /
         //    MONSTRUITO ENEMIGO EN EL GAME (PARA EFECTUAR BIEN EL ATAQUE, YA QUE
         //    ESTE VARIA DEPENDIENDO DE LA DISTANCIA / ENEMIGOS ATRAVEZADOS)
     public:
     GameWorld();
-    void addPlayer(TypeOperator id);
-    void deletePlayer(TypeOperator id);
+    uint8_t addPlayer(TypeOperator op);
+    void deletePlayer(uint8_t id);
 
-    void updateMovementDirection(Event event, TypeOperator id, MoveTo direction);
+    void updateMovementDirection(Event event, uint8_t id, MoveTo direction);
     void simulateStep();
     Snapshot* getSnapshot();
 };

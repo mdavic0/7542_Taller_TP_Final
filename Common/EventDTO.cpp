@@ -2,27 +2,24 @@
 
 EventDTO::EventDTO(Event event, MoveTo moveTo, TypeOperator typeOperator, TypeGame typeGame,
          const std::string& str, const uint32_t& n) : event(event), moveTo(moveTo),
-    typeOperator(typeOperator), typeGame(typeGame), str(str), n(n) {}
+    typeOperator(typeOperator), typeGame(typeGame), str(str), n(n), idPlayer(0) {}
 
-EventDTO::EventDTO(const std::string& name, TypeGame typeGame, TypeOperator typeOperator) : 
+EventDTO::EventDTO(const std::string& name, const TypeGame& typeGame, const TypeOperator& typeOperator) : 
     event(Event::event_create), moveTo(MoveTo::move_idle), typeOperator(typeOperator),
-    typeGame(typeGame), str(name), n(-1) {}
+    typeGame(typeGame), str(name), n(-1), idPlayer(0) {}
 
-EventDTO::EventDTO(const uint32_t& code, TypeOperator typeOperator) : 
+EventDTO::EventDTO(const uint32_t& code, const TypeOperator& typeOperator) : 
     event(Event::event_join), moveTo(MoveTo::move_idle), typeOperator(typeOperator),
-    typeGame(TypeGame::game_idle), str(), n(code) {}
+    typeGame(TypeGame::game_idle), str(), n(code), idPlayer(0) {}
 
-EventDTO::EventDTO(Event event, MoveTo moveTo, TypeOperator typeOperator) : 
-    event(event), moveTo(moveTo), typeOperator(typeOperator),
-    typeGame(TypeGame::game_idle), str(), n(-1) {}
+EventDTO::EventDTO(const Event& event, const MoveTo& moveTo, const uint8_t& idPlayer) : 
+    event(event), moveTo(moveTo), typeOperator(TypeOperator::operator_idle),
+    typeGame(TypeGame::game_idle), str(), n(0), idPlayer(idPlayer) {}
 
-EventDTO::EventDTO(Event event) : 
+EventDTO::EventDTO(const Event& event) : 
     event(event), moveTo(MoveTo::move_idle), typeOperator(TypeOperator::operator_idle),
-    typeGame(TypeGame::game_idle), str(), n(-1) {}
+    typeGame(TypeGame::game_idle), str(), n(0), idPlayer(0) {}
 
-
-EventDTO::EventDTO(Event event, MoveTo moveTo) : 
-    event(event), moveTo(moveTo), typeOperator(TypeOperator::operator_idle), typeGame(TypeGame::game_idle), str(""), n(0) {}
 
 Event EventDTO::getEvent() const {
     return event;
@@ -48,6 +45,10 @@ uint32_t EventDTO::getN() const {
     return n;
 }
 
+uint8_t EventDTO::getIdPlayer() const {
+    return idPlayer;
+}
+
 EventDTO::EventDTO(EventDTO&& other) {
     this->event = other.event;
     this->moveTo = other.moveTo;
@@ -55,11 +56,13 @@ EventDTO::EventDTO(EventDTO&& other) {
     this->typeGame = other.typeGame;
     this->str = other.str;
     this->n = other.n;
+    this->idPlayer = other.idPlayer;
 
     other.event = Event::event_invalid;
     other.moveTo = MoveTo::move_idle;
     other.str = "";
     other.n = 0;
+    other.idPlayer = 0;
 }
 
 EventDTO& EventDTO::operator=(EventDTO&& other) {
@@ -72,11 +75,13 @@ EventDTO& EventDTO::operator=(EventDTO&& other) {
     this->typeGame = other.typeGame;
     this->str = other.str;
     this->n = other.n;
+    this->idPlayer = other.idPlayer;
 
     other.event = Event::event_invalid;
     other.moveTo = MoveTo::move_idle;
     other.str = "";
     other.n = 0;
+    other.idPlayer = 0;
 
     return *this;
 }

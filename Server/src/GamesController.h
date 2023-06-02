@@ -37,7 +37,12 @@ class GamesController {
      * Para hacerlo debera proteger el el map de salas para que no sea
      * modificado mientras se lo esta 'iterando'.
      */
-    Queue<EventDTO*>* try_join_game(EventDTO* eventdto, Queue<Snapshot*> *q, uint8_t& ok);
+    Queue<EventDTO*>* try_join_game(EventDTO* eventdto, Queue<Snapshot*> *q);
+
+    /*
+     * Iniciar el hilo Game
+     */
+    void startGame(const uint32_t& code);
 
     ~GamesController();
 };

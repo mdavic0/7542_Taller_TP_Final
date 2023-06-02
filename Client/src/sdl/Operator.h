@@ -12,6 +12,7 @@
 
 class Operator {
     private:
+        uint8_t id;
         TypeOperator operatorId;
         std::pair<uint16_t, uint16_t> position;
         std::map<std::string, Texture*> textures;
@@ -24,11 +25,12 @@ class Operator {
         void setState(States state);
         int setNumFrames(States state);
     public:
-        Operator(int id, Renderer& renderer);
+        Operator(int op, Renderer& renderer);
         ~Operator();     
         void update(MoveTo direction);
         void updatePosition(std::pair<uint16_t, uint16_t> pos);
         TypeOperator getType();
+        uint8_t getId();
                 void render();
 };
 

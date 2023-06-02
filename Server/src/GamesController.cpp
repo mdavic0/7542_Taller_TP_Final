@@ -11,23 +11,28 @@ Queue<EventDTO*>* GamesController::create(EventDTO *eventdto,
     Game *newGame = new Game(counter, scenario);
     games.insert(std::pair{counter, newGame});
     code = counter++;
-    newGame->start(); // TODO: QUE LO HAGA EL GAME CUANDO LLEGAN N JUGADORES (INTERNAMENTE) /
-    //                      O CUANDO LLEGA UN START_GAME DEL LADO DEL CLIENT
-    return newGame->joinGame(snapshot_queue);
+    return newGame->createGame(snapshot_queue, eventdto->getTypeOperator());
 }
 
 Queue<EventDTO*>* GamesController::try_join_game(EventDTO* eventdto,
-                                                 Queue<Snapshot*> *q,
-                                                 uint8_t& ok) {
+                                                 Queue<Snapshot*> *snapshot_queue) {
     std::lock_guard<std::mutex> locker(mutex);
     uint32_t code = eventdto->getN();
     auto search = games.find(code);
     if (search != games.end()) {
-        ok = 0x00;    // join client to game
-        return search->second->joinGame(q);
+        return search->second->joinGame(snapshot_queue, eventdto->getTypeOperator());
     }
-    ok = 0x01;
+    snapshot_queue->push(new Snapshot(Event::event_join, (uint8_t)0x01, 0));
     return nullptr;
+}
+
+void GamesController::startGame(const uint32_t& code){
+    std::lock_guard<std::mutex> locker(mutex);
+    auto search = games.find(code);
+    if (search != games.end()) {
+        return search->second->start();
+    }
+
 }
 
 GamesController::~GamesController() {

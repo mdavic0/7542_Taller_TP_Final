@@ -24,7 +24,7 @@ class Game : public Thread {
         std::atomic<bool> talking;
         std::atomic<bool> alive;
         GameWorld gameWorld;
-        bool started;
+
     public:
         explicit Game(const uint32_t id, const std::string& name);
 
@@ -42,11 +42,16 @@ class Game : public Thread {
 
         /*
          * Este método debe añadir una nueva queue a la lista
-         * de forma atomica
+         * de forma atomica y pushear el snapshot de create
          */
-        Queue<EventDTO*>* joinGame(Queue<Snapshot*> *q);
+        Queue<EventDTO*>* createGame(Queue<Snapshot*> *q, const TypeOperator& op);
 
-        void startPlaying();
+        /*
+         * Este método debe añadir una nueva queue a la lista
+         * de forma atomica y pushear el snapshot de join
+         */
+        Queue<EventDTO*>* joinGame(Queue<Snapshot*> *q, const TypeOperator& op);
+
         /*
          * No queremos permitir que alguien haga copias
          * */

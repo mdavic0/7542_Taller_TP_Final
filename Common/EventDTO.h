@@ -15,24 +15,22 @@ private:
     TypeGame typeGame;
     std::string str;
     uint32_t n; // code join
+    uint8_t idPlayer;
 
 public:
     explicit EventDTO(Event event, MoveTo moveTo, TypeOperator typeOperator, TypeGame typeGame,
          const std::string& str, const uint32_t& n);
 
     // Event create
-    explicit EventDTO(const std::string& name, TypeGame typeGame, TypeOperator typeOperator);
+    explicit EventDTO(const std::string& name, const TypeGame& typeGame, const TypeOperator& typeOperator);
 
     // Event join
-    explicit EventDTO(const uint32_t& code, TypeOperator typeOperator);
+    explicit EventDTO(const uint32_t& code, const TypeOperator& typeOperator);
 
     // Event move or stop
-    explicit EventDTO(Event event, MoveTo moveTo, TypeOperator typeOperator);
+    explicit EventDTO(const Event& event, const MoveTo& moveTo, const uint8_t& idPlayer);
 
-    // Event move
-    EventDTO(Event event, MoveTo moveTo);
-
-    explicit EventDTO(Event event);
+    explicit EventDTO(const Event& event);
 
     Event getEvent() const;
 
@@ -45,6 +43,8 @@ public:
     std::string getStr() const;
 
     uint32_t getN() const;
+
+    uint8_t getIdPlayer() const;
 
     /*
      * No queremos permitir que alguien haga copias

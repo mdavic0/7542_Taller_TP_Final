@@ -2,7 +2,7 @@
 #include "Defines.h"
 #include <iostream>
 
-Operator::Operator(int id, Renderer& renderer) : operatorId(TypeOperator(id)),
+Operator::Operator(int op, Renderer& renderer) : id(0), operatorId(TypeOperator(id)),
     position({0, 0}), renderPlayer(renderer), stateOperator(States::idle),
     numFrames(0), flipType(SDL_FLIP_NONE) {
     this->chargeTexture(renderer);
@@ -45,6 +45,10 @@ void Operator::updatePosition(std::pair<uint16_t, uint16_t> pos) {
 
 TypeOperator Operator::getType() {
     return this->operatorId;
+}
+
+uint8_t Operator::getId() {
+    return this->id;
 }
 
 void Operator::chargeTexture(Renderer& renderer) {
