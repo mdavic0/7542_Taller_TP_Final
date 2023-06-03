@@ -6,6 +6,7 @@
 #include "ServerProtocol.h"
 #include <atomic>
 #include <map>
+#include <memory>
 
 /*
  * TDA Client. Representa una conexión aceptada por el servidor.
@@ -14,7 +15,7 @@
 class SnapshotSender : public Thread {
     private:
         ServerProtocol& protocol;
-        Queue<Snapshot*>& snapshot_queue;
+        Queue<std::shared_ptr<Snapshot>>& snapshot_queue;
         std::atomic<bool> talking;
         std::atomic<bool> alive;
 
@@ -25,7 +26,8 @@ class SnapshotSender : public Thread {
          * Además, recibe una queue por referencia, de la cual obtendrá
          * las respuestas que debe enviar.
          */
-        explicit SnapshotSender(ServerProtocol& protocol, Queue<Snapshot*>& snapshot_queue);
+        explicit SnapshotSender(ServerProtocol& protocol,
+                                Queue<std::shared_ptr<Snapshot>>& snapshot_queue);
 
         /*
          * Método que devuelve true cuando el hilo termino de ejecutarse.

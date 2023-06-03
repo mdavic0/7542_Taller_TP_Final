@@ -6,6 +6,7 @@
 #include "Snapshot.h"
 #include <mutex>
 #include <map>
+#include <memory>
 
 /*
  * Monitor sobre el Map que guarda
@@ -30,14 +31,17 @@ class GamesController {
      * - proteger el contador para que otro hilo no cree la misma sala.
      * - mantener el lock hasta que se haya modificado la lista de salas.
      */
-    Queue<EventDTO*>* create(EventDTO* eventdto, Queue<Snapshot*>* snapshot_queue, uint32_t& code);
+    Queue<std::shared_ptr<EventDTO>>* create(std::shared_ptr<EventDTO> eventdto,
+                                             Queue<std::shared_ptr<Snapshot>>* snapshot_queue,
+                                             uint32_t& code);
 
     /*
      * Este método sera el encargado de unir un cliente a un sala.
      * Para hacerlo debera proteger el el map de salas para que no sea
      * modificado mientras se lo esta 'iterando'.
      */
-    Queue<EventDTO*>* try_join_game(EventDTO* eventdto, Queue<Snapshot*> *q);
+    Queue<std::shared_ptr<EventDTO>>* try_join_game(std::shared_ptr<EventDTO> eventdto,
+                                                    Queue<std::shared_ptr<Snapshot>> *q);
 
     /*
      * Iniciar el hilo Game

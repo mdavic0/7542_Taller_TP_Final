@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Snapshot.h"
 #include "Move.h"
+#include <memory>
 
 class GameWorld {
     private:
@@ -19,7 +20,7 @@ class GameWorld {
 
     void updateMovementDirection(Event event, uint8_t id, MoveTo direction);
     void simulateStep();
-    Snapshot* getSnapshot();
+    std::shared_ptr<Snapshot> getSnapshot();
 };
 
 

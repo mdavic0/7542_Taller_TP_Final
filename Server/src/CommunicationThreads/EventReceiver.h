@@ -7,6 +7,7 @@
 #include "SnapshotSender.h"
 #include <atomic>
 #include <map>
+#include <memory>
 
 /*
  * TDA Client. Representa una conexión aceptada por el servidor.
@@ -15,8 +16,8 @@
 class EventReceiver : public Thread {
     private:
         ServerProtocol protocol;
-        Queue<EventDTO*>* event_queue;
-        Queue<Snapshot*> snapshot_queue;
+        Queue<std::shared_ptr<EventDTO>>* event_queue;
+        Queue<std::shared_ptr<Snapshot>> snapshot_queue;
         SnapshotSender sender;
         GamesController& controller;
         uint32_t game_code;

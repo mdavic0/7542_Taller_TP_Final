@@ -1,11 +1,12 @@
 #include "GamesController.h"
 #include <string>
+#include <memory>
 
 GamesController::GamesController() : counter(0), games(), mutex() {}
 
-Queue<EventDTO*>* GamesController::create(EventDTO *eventdto,
-                                          Queue<Snapshot *> *snapshot_queue,
-                                          uint32_t &code) {
+Queue<std::shared_ptr<EventDTO>>* GamesController::create(std::shared_ptr<EventDTO> eventdto,
+                                                          Queue<std::shared_ptr<Snapshot>>* snapshot_queue,
+                                                          uint32_t& code) {
     std::string scenario = eventdto->getStr();
     std::lock_guard<std::mutex> locker(mutex);
     Game *newGame = new Game(counter, scenario);
@@ -14,15 +15,15 @@ Queue<EventDTO*>* GamesController::create(EventDTO *eventdto,
     return newGame->createGame(snapshot_queue, eventdto->getTypeOperator());
 }
 
-Queue<EventDTO*>* GamesController::try_join_game(EventDTO* eventdto,
-                                                 Queue<Snapshot*> *snapshot_queue) {
+Queue<std::shared_ptr<EventDTO>>* GamesController::try_join_game(std::shared_ptr<EventDTO> eventdto,
+                                                 Queue<std::shared_ptr<Snapshot>> *q) {
     std::lock_guard<std::mutex> locker(mutex);
     uint32_t code = eventdto->getN();
     auto search = games.find(code);
     if (search != games.end()) {
-        return search->second->joinGame(snapshot_queue, eventdto->getTypeOperator());
+        return search->second->joinGame(q, eventdto->getTypeOperator());
     }
-    snapshot_queue->push(new Snapshot(Event::event_join, (uint8_t)0x01, 0));
+    q->push(std::make_shared<Snapshot>(Event::event_join, (uint8_t)0x01, 0));
     return nullptr;
 }
 

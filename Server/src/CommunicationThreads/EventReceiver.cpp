@@ -12,7 +12,7 @@ void EventReceiver::run() {
     sender.start();
     while (talking) {
         try {
-            EventDTO* eventDto = new EventDTO(protocol.getEvent());
+            std::shared_ptr<EventDTO> eventDto = std::make_shared<EventDTO>(protocol.getEvent());
             Event event = eventDto->getEvent();
             if (event == Event::event_create) {
                 this->event_queue = controller.create(eventDto,
@@ -30,8 +30,7 @@ void EventReceiver::run() {
                 event_queue->push(eventDto);
             }
         } catch (const LibError& err) {
-            talking = false; // TODO: Analizar bien las condiciones de corte
-            // socket closed
+            talking = false;
             break;
         }
     }

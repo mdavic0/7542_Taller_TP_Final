@@ -10,6 +10,7 @@
 #include "Thread.h"
 #include "GameWorld.h"
 #include <atomic>
+#include <memory>
 
 /*
  * TDA Game
@@ -19,8 +20,8 @@ class Game : public Thread {
         const uint32_t id;
         const std::string name;
         std::mutex mutex;
-        Queue<EventDTO*> unprocessed_events;
-        std::list<Queue<Snapshot*>*> client_snapshot_queues;
+        Queue<std::shared_ptr<EventDTO>> unprocessed_events;
+        std::list<Queue<std::shared_ptr<Snapshot>>*> client_snapshot_queues;
         std::atomic<bool> talking;
         std::atomic<bool> alive;
         GameWorld gameWorld;
@@ -44,13 +45,13 @@ class Game : public Thread {
          * Este método debe añadir una nueva queue a la lista
          * de forma atomica y pushear el snapshot de create
          */
-        Queue<EventDTO*>* createGame(Queue<Snapshot*> *q, const TypeOperator& op);
+        Queue<std::shared_ptr<EventDTO>>* createGame(Queue<std::shared_ptr<Snapshot>> *q, const TypeOperator& op);
 
         /*
          * Este método debe añadir una nueva queue a la lista
          * de forma atomica y pushear el snapshot de join
          */
-        Queue<EventDTO*>* joinGame(Queue<Snapshot*> *q, const TypeOperator& op);
+        Queue<std::shared_ptr<EventDTO>>* joinGame(Queue<std::shared_ptr<Snapshot>> *q, const TypeOperator& op);
 
         /*
          * No queremos permitir que alguien haga copias
@@ -62,7 +63,7 @@ class Game : public Thread {
     private:
         void gameLoop();
         void processEvents();
-        void broadcastSnapshot(Snapshot* snapshot);
+        void broadcastSnapshot(std::shared_ptr<Snapshot> snapshot);
 };
 
 #endif  // SERVER_GAME_H_

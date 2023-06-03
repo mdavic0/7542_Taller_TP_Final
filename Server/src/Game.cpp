@@ -1,4 +1,5 @@
 #include "Game.h"
+#include <memory>
 #include <string>
 
 Game::Game(const uint32_t id, const std::string& name) :
@@ -23,19 +24,21 @@ bool Game::ended() {
     return !alive;
 }
 
-Queue<EventDTO*>* Game::createGame(Queue<Snapshot*> *q, const TypeOperator& op) {
+Queue<std::shared_ptr<EventDTO>>* Game::createGame(Queue<std::shared_ptr<Snapshot>> *q,
+                                                   const TypeOperator& op) {
     std::lock_guard<std::mutex> locker(mutex);
     client_snapshot_queues.push_back(q);
     uint8_t idPlayer = gameWorld.addPlayer(op);
-    q->push(new Snapshot(Event::event_create, id, idPlayer));
+    q->push(std::make_shared<Snapshot> (Event::event_create, id, idPlayer));
     return &this->unprocessed_events;
 }
 
-Queue<EventDTO*>* Game::joinGame(Queue<Snapshot*> *q, const TypeOperator& op) {
+Queue<std::shared_ptr<EventDTO>>* Game::joinGame(Queue<std::shared_ptr<Snapshot>> *q,
+                                                 const TypeOperator& op) {
     std::lock_guard<std::mutex> locker(mutex);
     client_snapshot_queues.push_back(q);
     uint8_t idPlayer = gameWorld.addPlayer(op);
-    q->push(new Snapshot(Event::event_join, (uint8_t)0x00, idPlayer));
+    q->push(std::make_shared<Snapshot>(Event::event_join, (uint8_t)0x00, idPlayer));
     return &this->unprocessed_events;
 }
 
@@ -57,7 +60,7 @@ void Game::gameLoop() {
         // para poder lanzar una grandada, que los jugadores se muevan,
         // todos los eventos que tienen que ver con el tiempo.
 
-        Snapshot* snapshot = gameWorld.getSnapshot();
+        std::shared_ptr<Snapshot> snapshot = gameWorld.getSnapshot();
         // broadcastSnapshot() # acá recien se agarra el snapshot y se lo pushea
         // a los hilos sender. Un snapshot por gameloop. Si hacen uno por evento,
         // saturan la red sin sentido
@@ -72,7 +75,7 @@ void Game::gameLoop() {
 }
 
 void Game::processEvents() {
-    EventDTO *event = nullptr;
+    std::shared_ptr<EventDTO> event = nullptr;
     int iterations = 0;
     try {
         // try_pop es no bloqueante y devuelve false en caso de que la queue este vacia
@@ -91,12 +94,9 @@ void Game::processEvents() {
     }
 }
 
-void Game::broadcastSnapshot(Snapshot* snapshot) {
+void Game::broadcastSnapshot(std::shared_ptr<Snapshot> snapshot) {
     std::lock_guard<std::mutex> l(mutex);
     for (auto const& i : this->client_snapshot_queues) {
-        // TODO: usar shared pointer para el snapshot (ya que sino el
-        //      sender de cada SVclient va a hacer pop del snapshot y
-        //      despues delete, dejandolo null para los demas SVclients).
         i->push(snapshot);
     }
 }

@@ -25,13 +25,13 @@ void GameWorld::simulateStep() {
     }
 }
 
-Snapshot *GameWorld::getSnapshot() {
+std::shared_ptr<Snapshot> GameWorld::getSnapshot() {
     std::map<uint8_t, StOperator> playersInfo;
     for (auto player : players) {
         playersInfo.insert({player.first, StOperator(player.first, player.second.getTypeOperator(), player.second.getState(),
         player.second.getPosition(), player.second.getHealth())});
     }
-    return new Snapshot(playersInfo);
+    return std::make_shared<Snapshot>(playersInfo);
 }
 
 
