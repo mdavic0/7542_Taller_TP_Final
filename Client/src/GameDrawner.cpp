@@ -36,21 +36,25 @@ void GameDrawner::run() {
     //     render(Text);
     // while(no se conecte y no se empezo la partida){
     //     if (join) 
-    //         snapshop.pop()
+    //         snapshop.try_pop()
     //         if (event= start_game)
+    //         else {
+    //             cant map<typeOPerator, id>.size(), pos players, <map>, mode
+    //             };
     //         break;
     //     else if (create) {
     //         while(event)
     //             if presione enter
     //                 client_events.push(new EventDTO(Event::event_start_game));
     //                 break;
-    //         espero respuesta
+    //             snapshot.try_pop();
+    //             cant map<typeOPerator, id>.size(), pos players, <map>, mode
     //     }
+    //     render();
     // }
 
     // mandar configuarcion una sola vez
 
-    // cant <typeOPerator, id>, pos players, <map>, mode;
 
     GameSdl gameSdl(window, render, snapshot_queue, client_events, endGame, 1);
     // while (players.size() < 2) {
