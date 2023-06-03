@@ -38,7 +38,12 @@ Queue<std::shared_ptr<EventDTO>>* Game::joinGame(Queue<std::shared_ptr<Snapshot>
     std::lock_guard<std::mutex> locker(mutex);
     client_snapshot_queues.push_back(q);
     uint8_t idPlayer = gameWorld.addPlayer(op);
-    q->push(std::make_shared<Snapshot>(Event::event_join, (uint8_t)0x00, idPlayer));
+    // Notify all clients that a new player joined
+    for (auto &clientQueue : client_snapshot_queues) {
+        clientQueue->push(std::make_shared<Snapshot>(Event::event_join,
+                                                     (uint8_t)0x00,
+                                                     idPlayer));
+    }
     return &this->unprocessed_events;
 }
 
