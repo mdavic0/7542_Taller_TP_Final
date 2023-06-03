@@ -32,6 +32,26 @@ void GameDrawner::run() {
     // map<<Enemys, state>, <position>>
     // int map;
     // int mode;
+    // while
+    //     render(Text);
+    // while(no se conecte y no se empezo la partida){
+    //     if (join) 
+    //         snapshop.pop()
+    //         if (event= start_game)
+    //         break;
+    //     else if (create) {
+    //         while(event)
+    //             if presione enter
+    //                 client_events.push(new EventDTO(Event::event_start_game));
+    //                 break;
+    //         espero respuesta
+    //     }
+    // }
+
+    // mandar configuarcion una sola vez
+
+    // cant <typeOPerator, id>, pos players, <map>, mode;
+
     GameSdl gameSdl(window, render, snapshot_queue, client_events, endGame, 1);
     // while (players.size() < 2) {
     //     render("Esperando jugadores");

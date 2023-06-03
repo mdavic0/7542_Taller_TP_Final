@@ -1,4 +1,4 @@
-#include "StOperator.h"
+#include "OperatorDto.h"
 
 StOperator::StOperator(const uint8_t& id, const TypeOperator& type, const State& state,
         const std::pair<uint16_t, uint16_t>& position, const uint8_t& health) : id(id), type(type),

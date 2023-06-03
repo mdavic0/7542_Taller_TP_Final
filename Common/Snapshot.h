@@ -2,7 +2,7 @@
 #define COMMON_SNAPSHOT_H_
 
 #include "Event.h"
-#include "StOperator.h"
+#include "OperatorDto.h"
 #include <utility>
 #include <string>
 #include <map>
