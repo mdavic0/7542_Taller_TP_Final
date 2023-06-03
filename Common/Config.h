@@ -5,7 +5,7 @@
 #include <string>
 #include <fstream>
 #include <map>
-#include "StOperator.h"
+#include "StructOperator.h"
 
 class Config {
 private:

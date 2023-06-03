@@ -27,8 +27,8 @@ class Operator {
     public:
         Operator(uint8_t id, uint8_t op, Renderer& renderer);
         ~Operator();     
-        void update(MoveTo direction);
-        void updatePosition(std::pair<uint16_t, uint16_t> pos);
+        void updateMove(MoveTo direction);
+        void update(std::pair<uint16_t, uint16_t> pos, State state);
         TypeOperator getType();
         uint8_t getId();
         void render();

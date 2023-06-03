@@ -9,7 +9,7 @@ Operator::Operator(uint8_t id, uint8_t op, Renderer& renderer) : id(id), operato
     this->setState(State::idle);
 }
 
-void Operator::update(MoveTo direction) {
+void Operator::updateMove(MoveTo direction) {
     // cuando se actualice solo fijarese el eje x para cambiar el sdl_flip
     switch (direction) {
         case MoveTo::move_up:
@@ -38,8 +38,15 @@ void Operator::update(MoveTo direction) {
     }
 }
 
-void Operator::updatePosition(std::pair<uint16_t, uint16_t> pos) {
-    this->setState(State::idle);
+void Operator::update(std::pair<uint16_t, uint16_t> pos, State state) {
+    this->setState(state);
+    if (pos.first < position.first || pos.second < position.second) {
+        this->flipType = SDL_FLIP_HORIZONTAL;
+        this->setState(State::moving);
+    } else if (pos.first > position.first || pos.second > position.second) {
+        this->flipType = SDL_FLIP_NONE;
+        this->setState(State::moving);
+    }
     this->position = pos;
 }
 

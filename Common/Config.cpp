@@ -1,6 +1,5 @@
 #include "Config.h"
 #include <iostream>
-#include <fstream>
 #include "Exception.h"
 
 Config::Config(const std::string& filename) :

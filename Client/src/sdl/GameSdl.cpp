@@ -27,14 +27,14 @@ void GameSdl::run() {
     //     event.listen();
         // this.update();
         // soldier.update(event.getMoveDirection());
-        Snapshot* snap = snapshotQueue.pop();
-        // std::cout << snap->getPositions()[TypeOperator(1)].first << std::endl;
-        std::map<uint8_t, StOperator> players = snap->getInfo();
-        // std::cout << (int)players.size() << std::endl;
-        if (auto search = players.find(soldier.getId()); search != players.end()) {
-                soldier.updatePosition(players.at(soldier.getId()).getPosition());
-                //std::cout << "Actualizo la posicion\n";
-        }
+        // Snapshot* snap = snapshotQueue.pop();
+        // // std::cout << snap->getPositions()[TypeOperator(1)].first << std::endl;
+        // std::map<uint8_t, StOperator> players = snap->getInfo();
+        // // std::cout << (int)players.size() << std::endl;
+        // if (auto search = players.find(soldier.getId()); search != players.end()) {
+        //         soldier.update(players.at(soldier.getId()).getPosition());
+        //         //std::cout << "Actualizo la posicion\n";
+        // }
         // map.render();
         // soldier.render();
         // render.present();
@@ -59,12 +59,10 @@ void GameSdl::update() {
     std::map<uint8_t, StOperator> players = snap->getInfo();
         // std::cout << (int)players.size() << std::endl;
     if (auto search = players.find(soldier.getId()); search != players.end()) {
-            soldier.updatePosition(players.at(soldier.getId()).getPosition());
+            StOperator player = players.at(soldier.getId());
+            soldier.update(player.getPosition(), player.getState());
             //std::cout << "Actualizo la posicion\n";
     }
-    // std::map<TypeOperator, std::pair<uint16_t, uint16_t>> posi = snap->getPositions();
-    // if (posi[soldier.getType()].first)
-    //     soldier.updatePosition(posi[soldier.getType()]);
 }
 
 void GameSdl::handleEvents() {
