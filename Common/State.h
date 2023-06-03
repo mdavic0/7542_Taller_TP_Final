@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-enum class States : int8_t {
+enum class State : uint8_t {
     idle = 0x00,
     moving = 0x01,
     atack = 0x02,

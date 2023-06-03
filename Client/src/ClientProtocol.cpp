@@ -112,10 +112,15 @@ Snapshot ClientProtocol::getPlaying () {
     uint8_t playersCount;
     recvAll(&playersCount, 1);
 
-    std::map<uint8_t, std::pair<uint16_t, uint16_t>> map;
+    std::map<uint8_t, StOperator> map;
     uint8_t idPlayer;
+
     uint8_t idOperator;
-    // TypeOperator type = TypeOperator::operator_idle;
+    TypeOperator type = TypeOperator::operator_idle;
+
+    uint8_t idState;
+    State state = State::idle;
+
     uint16_t x;
     uint16_t y;
 
@@ -123,7 +128,7 @@ Snapshot ClientProtocol::getPlaying () {
         recvAll(&idPlayer, 1);
 
         recvAll(&idOperator, 1);
-        /*switch (idOperator) {
+        switch (idOperator) {
         case IDF_CODE:
             type = TypeOperator::operator_idf;
             break;
@@ -138,15 +143,38 @@ Snapshot ClientProtocol::getPlaying () {
         
         default:
             break;
-        } */
+        }
+
+        recvAll(&idState, 1);
+        switch (idState) {
+        case STATE_MOVING:
+            state = State::moving;
+            break;
+        
+        case STATE_ATACK:
+            state = State::atack;
+            break;
+        
+        case STATE_INJURE:
+            state = State::injure;
+            break;
+
+        case STATE_HABILITY:
+            state = State::hability;
+            break;
+        
+        default:
+            break;
+        }
 
         recvAll(&x, 2);
         x = ntohs(x);
-        
+        // std::cout << "X " << (int)x << std::endl;
         recvAll(&y, 2);
         y = ntohs(y);
-
-        map.insert({idPlayer, {x, y}});
+        // std::cout << "Y " << (int)y << std::endl;
+        map.insert({idPlayer, StOperator(idPlayer, type, state,
+        {x, y}, 100)});
     }
 
     return Snapshot(map);

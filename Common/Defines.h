@@ -19,7 +19,6 @@
 #define PLAYING_CODE 0x05
 #define START_CODE 0x06
 
-
 #define IDF_CODE 0x01
 #define P90_CODE 0x02
 #define SCOUT_CODE 0x03
@@ -31,5 +30,11 @@
 #define LEFT_CODE 0x02
 #define UP_CODE 0x03
 #define DOWN_CODE 0x04
+
+#define STATE_IDLE 0x00
+#define STATE_MOVING 0x01
+#define STATE_ATACK 0x02
+#define STATE_INJURE 0x03
+#define STATE_HABILITY 0x04
 
 #endif

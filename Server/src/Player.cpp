@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(TypeOperator typeOperator) : typeOperator(typeOperator),
+Player::Player(TypeOperator typeOperator) : typeOperator(typeOperator), state(State::idle),
     life(100), fell_down(0), position(0,0), movement_direction(0,0) {
     // weapon(TypeOperator)
 }
@@ -57,6 +57,13 @@ std::pair<uint16_t, uint16_t>& Player::getPosition() {
 
 TypeOperator& Player::getTypeOperator() {
     return this->typeOperator;
+}
+
+State& Player::getState() {
+    return this->state;
+}
+uint8_t& Player::getHealth() {
+    return this->life;
 }
 
 void Player::move() {

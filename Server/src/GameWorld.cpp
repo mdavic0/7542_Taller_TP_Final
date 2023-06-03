@@ -26,10 +26,12 @@ void GameWorld::simulateStep() {
 }
 
 Snapshot *GameWorld::getSnapshot() {
-    std::map<uint8_t, std::pair<uint16_t, uint16_t>> players_position;
+    std::map<uint8_t, StOperator> playersInfo;
     for (auto player : players) {
-        players_position.insert({player.first, player.second.getPosition()});
+        playersInfo.insert({player.first, StOperator(player.first, player.second.getTypeOperator(), player.second.getState(),
+        player.second.getPosition(), player.second.getHealth())});
     }
-    return new Snapshot(players_position);
+    return new Snapshot(playersInfo);
 }
+
 

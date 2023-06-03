@@ -166,15 +166,16 @@ void ServerProtocol::sendJoin(const uint8_t& ok, const uint8_t& idPlayer) {
     }
 }
 
-void ServerProtocol::sendPlaying(std::map<uint8_t, std::pair<uint16_t, uint16_t>> &playersInfo) {
+void ServerProtocol::sendPlaying(const std::map<uint8_t, StOperator> &playersInfo) {
     uint8_t event = 0x05;
     sendAll(&event, 1);
     uint8_t playersCount = playersInfo.size();
     sendAll(&playersCount, 1);
     for (auto it = playersInfo.begin(); it != playersInfo.end(); ++it) {
         sendAll(&it->first, 1);
-        sendOperator(TypeOperator::operator_idf); // CAMBIAR
-        sendPosition(it->second.first, it->second.second); // x = it->second.first, y = it->second.second
+        sendOperator(it->second.getTypeOperator());
+        sendState(it->second.getState());
+        sendPosition(it->second.getPosition().first, it->second.getPosition().second); // x = it->second.first, y = it->second.second
   }
 }
 
@@ -192,9 +193,29 @@ void ServerProtocol::sendOperator(const TypeOperator& typeOperator) {
     }
 }
 
+void ServerProtocol::sendState(const State& state) {
+    if(state == State::idle){
+        uint8_t aux = STATE_IDLE;
+        sendAll(&aux, 1);
+    } else if (state == State::moving) {
+        uint8_t aux = STATE_MOVING;
+        sendAll(&aux, 1);
+    } else if (state == State::atack) {
+        uint8_t aux = STATE_ATACK;
+        sendAll(&aux, 1);       
+    } else if (state == State::injure) {
+        uint8_t aux = STATE_INJURE;
+        sendAll(&aux, 1);       
+    } else if (state == State::hability) {
+        uint8_t aux = STATE_HABILITY;
+        sendAll(&aux, 1);       
+    }
+}
+
 void ServerProtocol::sendPosition(const uint16_t& x, const uint16_t& y) {
     uint16_t xAux = htons(x);
     sendAll(&xAux, 2);
+
     uint16_t yAux = htons(y);
     sendAll(&yAux, 2);
 }
@@ -238,8 +259,7 @@ void ServerProtocol::sendSnapshot(const Snapshot &snapshot) {
     } else if (event == Event::event_join) {
         sendJoin(snapshot.getOk(), snapshot.getIdPlayer());
     } else {
-        std::map<uint8_t, std::pair<uint16_t, uint16_t>> pos = snapshot.getPositions();
-        sendPlaying(pos);
+        sendPlaying(snapshot.getInfo());
     }
 }
 

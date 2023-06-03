@@ -28,7 +28,7 @@ GameSdl::GameSdl(int id, Queue<Snapshot*>& snapshotQueue,
 void GameSdl::run() {
     EventHandler event(this->eventQueue);
     Renderer render(window, -1, SDL_RENDERER_ACCELERATED);
-    Operator soldier(idOperator, render);
+    Operator soldier(0, idOperator, render);
     MapSdl map(0, render);
     eventQueue.push(new EventDTO(Event::event_start_game));
     while (event.isRunning()) { 
@@ -41,12 +41,12 @@ void GameSdl::run() {
         // soldier.update(event.getMoveDirection());
         Snapshot* snap = snapshotQueue.pop();
         // std::cout << snap->getPositions()[TypeOperator(1)].first << std::endl;
-        std::map<uint8_t, std::pair<uint16_t, uint16_t>> posi = snap->getPositions();
-        // std::cout << (int)posi.size() << std::endl;
-        // if (posi[soldier.getType()].first) {
-                soldier.updatePosition(posi[soldier.getId()]);
-                // std::cout << "Actualizo la posicion\n";
-        // }
+        std::map<uint8_t, StOperator> players = snap->getInfo();
+        // std::cout << (int)players.size() << std::endl;
+        if (auto search = players.find(soldier.getId()); search != players.end()) {
+                soldier.updatePosition(players.at(soldier.getId()).getPosition());
+                //std::cout << "Actualizo la posicion\n";
+        }
         map.render();
         soldier.render();
         render.present();
