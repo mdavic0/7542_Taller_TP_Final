@@ -4,14 +4,15 @@
 #include "TypeOperator.h"
 #include "Socket.h"
 #include "Defines.h"
+#include "Liberror.h"
+#include "SdlException.h"
+#include "GameDrawner.h"
 #include <QApplication>
 #include <QFontDatabase>
 #include <QStringList>
 #include <QFile>
 #include <QDebug>
 #include <QMessageBox>
-#include "Liberror.h"
-#include "GameSdl.h"
 
 Launcher::Launcher(QWidget* parent): QWidget(parent),
     initView(), connectView(), menuView(), createView(), joinView(),
@@ -157,11 +158,17 @@ void Launcher::initGame() {
     GameDrawner gameDrawner(snapshotQueue, eventQueue, endGame);
     SnapshotReceiver snapshotReceiver(clientProtocol.value(), snapshotQueue, endGame);
     EventSender eventSender(eventQueue, clientProtocol.value(), endGame);
-    gameDrawner.start();
-    snapshotReceiver.start();
-    eventSender.start();
+    try {
+        gameDrawner.start();
+        snapshotReceiver.start();
+        eventSender.start();
+    } catch (ClosedQueue &exc) {
+        this->clientProtocol->stop();
+    } catch (const SdlException &exc) {
+        std::cerr << exc.what() << std::endl;
+    }
 }
 
 Launcher::~Launcher() {
-    clientProtocol->stop();
+    // clientProtocol->stop();
 }

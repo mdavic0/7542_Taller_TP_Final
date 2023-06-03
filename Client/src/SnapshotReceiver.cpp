@@ -7,13 +7,13 @@ SnapshotReceiver::SnapshotReceiver(ClientProtocol &protocol,
 }
 
 void SnapshotReceiver::run() {
-    while (talking && !endGame) {
+    while (talking) {
         try {
             Snapshot* snapshot = new Snapshot(protocol.getSnapshot());
             snapshot_queue.push(snapshot);
-        } catch (const LibError& err){
+        } catch (const ClosedQueue& err){
             talking = false;
-            std::cerr << err.what() << std::endl; 
+            break;
         } 
     }
     alive = false;

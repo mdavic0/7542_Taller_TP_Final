@@ -23,6 +23,7 @@ set(CMAKE_AUTORCC ON)
 
 find_package(Qt5 COMPONENTS REQUIRED Core)
 find_package(Qt5 COMPONENTS REQUIRED Widgets)
+find_package(yaml-cpp)
 
 # SDL2
 

@@ -3,14 +3,24 @@
 
 #include "TypeOperator.h"
 #include <utility>
+#include <map>
+#include <string>
 
-struct StOperator
-{
+struct Operator {
     TypeOperator type;
-    std::pair<int, int> position;
-    int id;
+    int damage;
     int health;
+    int velocity;
+    int rate;
+    int capacity;
+    std::map<std::string, Skill> skills;
+    int injure;
     
+};
+
+struct Skill {
+    int damage;
+    int recharge;
 };
 
 

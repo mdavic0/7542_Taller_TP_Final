@@ -8,20 +8,30 @@
 #include "Queue.h"
 #include "Snapshot.h"
 #include "EventDTO.h"
+#include "WindowSdl.h"
+#include "HandleEvent.h"
+#include "mapSdl.h"
 
 class GameSdl {
     private:
-        SDL_Window* window;
+        WindowSdl& window;
+        Renderer& renderer;
+        EventHandler events;
         Queue<Snapshot*>& snapshotQueue;
         Queue<EventDTO*>& eventQueue;
+        MapSdl map;
         bool running;
-        int idOperator;
+        Operator soldier;
         bool& endGame;
     public:
-        GameSdl(int id, Queue<Snapshot*>& snapshotQueue,
-                Queue<EventDTO*>& eventQueue, bool& endGame);
+        GameSdl(WindowSdl& window, Renderer& renderer, Queue<Snapshot*>& snapshotQueue,
+                Queue<EventDTO*>& eventQueue, bool& endGame, int id);
         ~GameSdl();
         void run();
+        void update();
+        void render();
+        bool isRunning();
+        void handleEvents();
 };
 
 #endif

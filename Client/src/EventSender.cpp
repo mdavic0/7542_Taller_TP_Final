@@ -14,9 +14,7 @@ void EventSender::run() {
             protocol.sendEvent(*response);
             delete response;
         } catch (ClosedQueue &exc) {
-            protocol.stop();
             talking = false;
-            std::cerr << exc.what() << std::endl;
             break;
         }
     }
