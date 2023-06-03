@@ -2,20 +2,20 @@
 
 GameWorld::GameWorld() : players_amount(0), players() {}
 
-void GameWorld::addPlayer(TypeOperator id) {
-    this->players.insert({id, Player(id)});
-    players_amount++;
+uint8_t GameWorld::addPlayer(TypeOperator op) {
+    this->players.insert({players_amount, Player(op)});
+    return players_amount++;
 }
 
-void GameWorld::deletePlayer(TypeOperator id) {
+void GameWorld::deletePlayer(uint8_t id) {
     this->players.erase(id);
 }
 
-void GameWorld::updateMovementDirection(Event event, TypeOperator id, MoveTo direction) {
+void GameWorld::updateMovementDirection(Event event, uint8_t id, MoveTo direction) {
     if (event == Event::event_move) {
-        players.at((TypeOperator)1).setMovementDirection(direction);
+        players.at(id).setMovementDirection(direction);
     } else {
-        players.at((TypeOperator)1).stopMovementDirection(direction);        
+        players.at(id).stopMovementDirection(direction);        
     }
 }
 
@@ -26,10 +26,12 @@ void GameWorld::simulateStep() {
 }
 
 Snapshot *GameWorld::getSnapshot() {
-    std::map<TypeOperator, std::pair<uint16_t, uint16_t>> players_position;
+    std::map<uint8_t, StOperator> playersInfo;
     for (auto player : players) {
-        players_position.insert({player.first, player.second.getPosition()});
+        playersInfo.insert({player.first, StOperator(player.first, player.second.getTypeOperator(), player.second.getState(),
+        player.second.getPosition(), player.second.getHealth())});
     }
-    return new Snapshot(players_position);
+    return new Snapshot(playersInfo);
 }
+
 

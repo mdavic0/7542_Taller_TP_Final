@@ -47,7 +47,7 @@ void EventHandler::handleKeyDownEvent(SDL_Keysym keysym) {
         // agregar tecla space
     }
     if (moveDirection != MoveTo::move_idle)
-        this->eventQueue.push(new EventDTO(event, moveDirection, TypeOperator(1)));
+        this->eventQueue.push(new EventDTO(event, moveDirection, 0));
 }
 
 void EventHandler::handleKeyUpEvent(SDL_Keysym keysym) {
@@ -70,7 +70,7 @@ void EventHandler::handleKeyUpEvent(SDL_Keysym keysym) {
             break;
     }
     if (moveDirection != MoveTo::move_idle)
-        this->eventQueue.push(new EventDTO(event, moveDirection, TypeOperator(1)));
+        this->eventQueue.push(new EventDTO(event, moveDirection, 0));
 }
 
 MoveTo EventHandler::getMoveDirection() const {

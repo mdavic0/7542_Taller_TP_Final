@@ -15,8 +15,8 @@ class ClientProtocol : public Protocol {
 
         void sendCreate(const std::string& scenario, const TypeOperator& typeOperator, const TypeGame& typeGame);
         void sendJoin(const uint32_t& code, const TypeOperator& typeOperator);
-        void sendMove(const MoveTo& moveTo, const TypeOperator& typeOperator);
-        void sendStopMove(const MoveTo& moveTo, const TypeOperator& typeOperator);
+        void sendMove(const MoveTo& moveTo, const uint8_t& idPlayer);
+        void sendStopMove(const MoveTo& moveTo, const uint8_t& idPlayer);
         void sendStart();
         void sendOperator(const TypeOperator& typeOperator);
         void sendMoveTo(const MoveTo& moveTo);

@@ -78,26 +78,8 @@ EventDTO ServerProtocol::getJoin() {
 }
 
 EventDTO ServerProtocol::getMove() {
-    uint8_t idOperator;
-    recvAll(&idOperator, 1);
-    TypeOperator op = TypeOperator::operator_idle;
-
-    switch (idOperator) {
-    case IDF_CODE:
-        op = TypeOperator::operator_idf;
-        break;
-        
-    case P90_CODE:
-        op = TypeOperator::operator_p90;
-        break;
-        
-    case SCOUT_CODE:
-        op = TypeOperator::operator_scout;
-        break;
-    
-    default:
-        break;
-    }
+    uint8_t id;
+    recvAll(&id, 1);
 
     uint8_t direction;
     recvAll(&direction, 1);
@@ -124,30 +106,12 @@ EventDTO ServerProtocol::getMove() {
         break;
     }
 
-    return EventDTO(Event::event_move, moveTo, op);
+    return EventDTO(Event::event_move, moveTo, id);
 }
 
 EventDTO ServerProtocol::getStopMove() {
-    uint8_t idOperator;
-    recvAll(&idOperator, 1);
-    TypeOperator op = TypeOperator::operator_idle;
-
-    switch (idOperator) {
-    case IDF_CODE:
-        op = TypeOperator::operator_idf;
-        break;
-        
-    case P90_CODE:
-        op = TypeOperator::operator_p90;
-        break;
-        
-    case SCOUT_CODE:
-        op = TypeOperator::operator_scout;
-        break;
-    
-    default:
-        break;
-    }
+    uint8_t id;
+    recvAll(&id, 1);
 
     uint8_t direction;
     recvAll(&direction, 1);
@@ -174,39 +138,49 @@ EventDTO ServerProtocol::getStopMove() {
         break;
     }
 
-    return EventDTO(Event::event_stop_move, moveTo, op);
+    return EventDTO(Event::event_stop_move, moveTo, id);
 }
 
 EventDTO ServerProtocol::getStart() {
     return EventDTO(Event::event_start_game, MoveTo::move_idle, TypeOperator::operator_idle, TypeGame::game_idle, "", 0);
 }
 
-void ServerProtocol::sendCreate(uint32_t code) {
+void ServerProtocol::sendCreate(const uint32_t& code, const uint8_t& idPlayer) {
     uint8_t event = 0x01;
     sendAll(&event, 1);
 
-    code = htonl(code);
-    sendAll(&code, 4);
+    uint32_t aux = htonl(code);
+    sendAll(&aux, 4);
+
+    sendAll(&idPlayer, 1);
 }
 
-void ServerProtocol::sendJoin(uint8_t ok) {
+void ServerProtocol::sendJoin(const uint8_t& ok, const uint8_t& idPlayer) {
     uint8_t event = 0x02;
     sendAll(&event, 1);
 
     sendAll(&ok, 1);
+
+    if (ok == 0) {
+        sendAll(&idPlayer, 1);
+    }
 }
 
-void ServerProtocol::sendPlaying(std::map<TypeOperator, std::pair<uint16_t, uint16_t>> &playersInfo) {
+void ServerProtocol::sendPlaying(const std::map<uint8_t, StOperator> &playersInfo) {
     uint8_t event = 0x05;
     sendAll(&event, 1);
+    uint8_t playersCount = playersInfo.size();
+    sendAll(&playersCount, 1);
     for (auto it = playersInfo.begin(); it != playersInfo.end(); ++it) {
-        sendOperator(it->first);
-        sendPosition(it->second.first, it->second.second); // x = it->second.first, y = it->second.second
+        sendAll(&it->first, 1);
+        sendOperator(it->second.getTypeOperator());
+        sendState(it->second.getState());
+        sendPosition(it->second.getPosition().first, it->second.getPosition().second); // x = it->second.first, y = it->second.second
   }
 }
 
 
-void ServerProtocol::sendOperator(TypeOperator typeOperator) {
+void ServerProtocol::sendOperator(const TypeOperator& typeOperator) {
     if(typeOperator == TypeOperator::operator_idf){
         uint8_t op = IDF_CODE;
         sendAll(&op, 1);
@@ -219,9 +193,29 @@ void ServerProtocol::sendOperator(TypeOperator typeOperator) {
     }
 }
 
+void ServerProtocol::sendState(const State& state) {
+    if(state == State::idle){
+        uint8_t aux = STATE_IDLE;
+        sendAll(&aux, 1);
+    } else if (state == State::moving) {
+        uint8_t aux = STATE_MOVING;
+        sendAll(&aux, 1);
+    } else if (state == State::atack) {
+        uint8_t aux = STATE_ATACK;
+        sendAll(&aux, 1);       
+    } else if (state == State::injure) {
+        uint8_t aux = STATE_INJURE;
+        sendAll(&aux, 1);       
+    } else if (state == State::hability) {
+        uint8_t aux = STATE_HABILITY;
+        sendAll(&aux, 1);       
+    }
+}
+
 void ServerProtocol::sendPosition(const uint16_t& x, const uint16_t& y) {
     uint16_t xAux = htons(x);
     sendAll(&xAux, 2);
+
     uint16_t yAux = htons(y);
     sendAll(&yAux, 2);
 }
@@ -260,17 +254,12 @@ EventDTO ServerProtocol::getEvent() {
 
 void ServerProtocol::sendSnapshot(const Snapshot &snapshot) {
     Event event = snapshot.getEvent();
-    // TODO: En realidad el snapshot se crea una vez que pasaron 0 o muchos eventos,
-    //       es como una foto del momento, no se si hay que separar los sends,
-    //       por que los eventos se procesan del lado del sv, los que si hay que distinguir
-    //       es create y join seguro
     if (event == Event::event_create) {
-        sendCreate(snapshot.getCode());
+        sendCreate(snapshot.getCode(), snapshot.getIdPlayer());
     } else if (event == Event::event_join) {
-        sendJoin(snapshot.getOk());
+        sendJoin(snapshot.getOk(), snapshot.getIdPlayer());
     } else {
-        std::map<TypeOperator, std::pair<uint16_t, uint16_t>> pos = snapshot.getPositions();
-        sendPlaying(pos);
+        sendPlaying(snapshot.getInfo());
     }
 }
 

@@ -2,36 +2,36 @@
 #include "Defines.h"
 #include <iostream>
 
-Operator::Operator(int id, Renderer& renderer) : operatorId(TypeOperator(id)),
-    position({0, 0}), renderPlayer(renderer), stateOperator(States::idle),
+Operator::Operator(uint8_t id, uint8_t op, Renderer& renderer) : id(id), operatorId(TypeOperator(op)),
+    position({0, 0}), renderPlayer(renderer), stateOperator(State::idle),
     numFrames(0), flipType(SDL_FLIP_NONE) {
     this->chargeTexture(renderer);
-    this->setState(States::idle);
+    this->setState(State::idle);
 }
 
 void Operator::update(MoveTo direction) {
     // cuando se actualice solo fijarese el eje x para cambiar el sdl_flip
     switch (direction) {
         case MoveTo::move_up:
-            this->setState(States::moving);
+            this->setState(State::moving);
             position.second--;
             break;
         case MoveTo::move_down:
-            this->setState(States::moving);
+            this->setState(State::moving);
             position.second++;
             break;
         case MoveTo::move_left:
             this->flipType = SDL_FLIP_HORIZONTAL;
-            this->setState(States::moving);
+            this->setState(State::moving);
             position.first--;
             break;
         case MoveTo::move_right:
             this->flipType = SDL_FLIP_NONE;
-            this->setState(States::moving);
+            this->setState(State::moving);
             position.first++;
             break;
         case MoveTo::move_idle:
-            this->setState(States::idle);
+            this->setState(State::idle);
             break;
         default:
             break;
@@ -39,12 +39,16 @@ void Operator::update(MoveTo direction) {
 }
 
 void Operator::updatePosition(std::pair<uint16_t, uint16_t> pos) {
-    this->setState(States::idle);
+    this->setState(State::idle);
     this->position = pos;
 }
 
 TypeOperator Operator::getType() {
     return this->operatorId;
+}
+
+uint8_t Operator::getId() {
+    return this->id;
 }
 
 void Operator::chargeTexture(Renderer& renderer) {
@@ -53,16 +57,16 @@ void Operator::chargeTexture(Renderer& renderer) {
     textures["Run"] = new Texture(renderer, path + "/Run.png", false);
 }
 
-void Operator::setState(States state) {
+void Operator::setState(State state) {
     this->numFrames = setNumFrames(state);
     this->stateOperator = state;
 }
 
-int Operator::setNumFrames(States state) {
+int Operator::setNumFrames(State state) {
     switch (state) {
-        case States::idle:
+        case State::idle:
             return this->textures["Idle"]->frames();
-        case States::moving:
+        case State::moving:
             return this->textures["Run"]->frames();
         default:
             return 0;
@@ -71,10 +75,10 @@ int Operator::setNumFrames(States state) {
 
 void Operator::render() {
     switch (stateOperator) {
-        case States::idle:
+        case State::idle:
             renderAnimation(SPEED_IDLE, textures["Idle"]->getTexture());
             break;
-        case States::moving:
+        case State::moving:
             renderAnimation(SPEED_RUN, textures["Run"]->getTexture());
             break;
         default:

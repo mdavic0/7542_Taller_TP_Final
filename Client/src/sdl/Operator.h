@@ -2,7 +2,7 @@
 #define OPERATOR_H_
 
 #include "Move.h"
-#include "States.h"
+#include "State.h"
 #include "TypeOperator.h"
 #include "TextureSdl.h"
 #include "RendererSdl.h"
@@ -12,24 +12,26 @@
 
 class Operator {
     private:
+        uint8_t id;
         TypeOperator operatorId;
         std::pair<uint16_t, uint16_t> position;
         std::map<std::string, Texture*> textures;
-        States stateOperator;
+        State stateOperator;
         Renderer renderPlayer;
         SDL_RendererFlip flipType;
         int numFrames;
         void chargeTexture(Renderer& renderer);
         void renderAnimation(int speed, SDL_Texture* texture);
-        void setState(States state);
-        int setNumFrames(States state);
+        void setState(State state);
+        int setNumFrames(State state);
     public:
-        Operator(int id, Renderer& renderer);
+        Operator(uint8_t id, uint8_t op, Renderer& renderer);
         ~Operator();     
         void update(MoveTo direction);
         void updatePosition(std::pair<uint16_t, uint16_t> pos);
         TypeOperator getType();
-                void render();
+        uint8_t getId();
+        void render();
 };
 
 #endif

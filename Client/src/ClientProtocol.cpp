@@ -36,20 +36,20 @@ void ClientProtocol::sendJoin(const uint32_t& code, const TypeOperator& typeOper
     
 }
 
-void ClientProtocol::sendMove (const MoveTo& moveTo, const TypeOperator& typeOperator) {
+void ClientProtocol::sendMove (const MoveTo& moveTo, const uint8_t& idPlayer) {
     uint8_t command = 0x03;
     sendAll(&command, 1);
 
-    sendOperator(typeOperator);
+    sendAll(&idPlayer, 1);
 
     sendMoveTo(moveTo);
 }
 
-void ClientProtocol::sendStopMove (const MoveTo& moveTo, const TypeOperator& typeOperator) {
+void ClientProtocol::sendStopMove (const MoveTo& moveTo, const uint8_t& idPlayer) {
     uint8_t command = 0x04;
     sendAll(&command, 1);
 
-    sendOperator(typeOperator);
+    sendAll(&idPlayer, 1);
 
     sendMoveTo(moveTo);
 }
@@ -90,26 +90,44 @@ Snapshot ClientProtocol::getCreate () {
     recvAll(&code, 4);
     code = ntohl(code);
 
-    return Snapshot(Event::event_create, code);
+    uint8_t idPlayer;
+    recvAll(&idPlayer, 1);
+
+    return Snapshot(Event::event_create, code, idPlayer);
 }
 
 Snapshot ClientProtocol::getJoin () {
     uint8_t ok;
     recvAll(&ok, 1);
 
-    return Snapshot(Event::event_join, ok);
+    uint8_t idPlayer = 0;
+    if (ok == 0) {
+        recvAll(&idPlayer, 1);
+    }
+
+    return Snapshot(Event::event_join, ok, idPlayer);
 }
 
 Snapshot ClientProtocol::getPlaying () {
-    std::map<TypeOperator, std::pair<uint16_t, uint16_t>> map;
-    // enviar size del map
+    uint8_t playersCount;
+    recvAll(&playersCount, 1);
+
+    std::map<uint8_t, StOperator> map;
+    uint8_t idPlayer;
+
     uint8_t idOperator;
     TypeOperator type = TypeOperator::operator_idle;
+
+    uint8_t idState;
+    State state = State::idle;
+
     uint16_t x;
     uint16_t y;
-    // for (uint8_t i = 0; i < 3; i++) {
-        recvAll(&idOperator, 1);
 
+    for (uint8_t i = 0; i < playersCount; i++) {
+        recvAll(&idPlayer, 1);
+
+        recvAll(&idOperator, 1);
         switch (idOperator) {
         case IDF_CODE:
             type = TypeOperator::operator_idf;
@@ -127,14 +145,37 @@ Snapshot ClientProtocol::getPlaying () {
             break;
         }
 
+        recvAll(&idState, 1);
+        switch (idState) {
+        case STATE_MOVING:
+            state = State::moving;
+            break;
+        
+        case STATE_ATACK:
+            state = State::atack;
+            break;
+        
+        case STATE_INJURE:
+            state = State::injure;
+            break;
+
+        case STATE_HABILITY:
+            state = State::hability;
+            break;
+        
+        default:
+            break;
+        }
+
         recvAll(&x, 2);
         x = ntohs(x);
-        
+        // std::cout << "X " << (int)x << std::endl;
         recvAll(&y, 2);
         y = ntohs(y);
-
-        map.insert({type, {x, y}});
-    // }
+        // std::cout << "Y " << (int)y << std::endl;
+        map.insert({idPlayer, StOperator(idPlayer, type, state,
+        {x, y}, 100)});
+    }
 
     return Snapshot(map);
 }
@@ -149,9 +190,9 @@ void ClientProtocol::sendEvent(const EventDTO& eventdto) {
     } else if (event == Event::event_start_game) {
         sendStart();
     } else if (event == Event::event_move) {
-        sendMove(eventdto.getMoveTo(), eventdto.getTypeOperator());
+        sendMove(eventdto.getMoveTo(), eventdto.getIdPlayer());
     } else if (event == Event::event_stop_move) {
-        sendStopMove(eventdto.getMoveTo(), eventdto.getTypeOperator());
+        sendStopMove(eventdto.getMoveTo(), eventdto.getIdPlayer());
     }
     
 }
@@ -176,5 +217,5 @@ Snapshot ClientProtocol::getSnapshot() {
     default:
         break;
     }
-    return Snapshot(Event::event_invalid, (uint8_t)0);
+    return Snapshot(Event::event_invalid, (uint8_t)0, 0);
 }
