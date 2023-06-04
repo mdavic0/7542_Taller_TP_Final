@@ -153,8 +153,8 @@ void Launcher::sendJoinMatch(int code, int operatorSelect) {
 
 void Launcher::initGame() {
     bool endGame = false;
-    Queue<Snapshot*> snapshotQueue(SIZE_QUEUE);
-    Queue<EventDTO*> eventQueue(SIZE_QUEUE);
+    Queue<std::shared_ptr<Snapshot>> snapshotQueue(SIZE_QUEUE);
+    Queue<std::shared_ptr<EventDTO>> eventQueue(SIZE_QUEUE);
     GameDrawner gameDrawner(snapshotQueue, eventQueue, endGame);
     SnapshotReceiver snapshotReceiver(clientProtocol.value(), snapshotQueue, endGame);
     EventSender eventSender(eventQueue, clientProtocol.value(), endGame);

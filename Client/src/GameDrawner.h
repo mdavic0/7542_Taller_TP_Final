@@ -4,15 +4,17 @@
 #include "EventDTO.h"
 #include "Queue.h"
 #include "Snapshot.h"
+#include <memory>
 
 class GameDrawner : public Thread {
     private:
-        Queue<EventDTO*>& client_events;
-        Queue<Snapshot*>& snapshot_queue;
+        Queue<std::shared_ptr<EventDTO>>& client_events;
+        Queue<std::shared_ptr<Snapshot>>& snapshot_queue;
         bool& endGame;
     public:
-        GameDrawner(Queue<Snapshot*>& snapshot_queue,
-            Queue<EventDTO*>& client_events, bool& endGame);
+        GameDrawner(Queue<std::shared_ptr<Snapshot>>& snapshot_queue,
+            Queue<std::shared_ptr<EventDTO>>& client_events,
+            bool& endGame);
         // implementar gameloop y cosas de SDL (eventos)
         virtual void run() override;
         virtual void stop() override;

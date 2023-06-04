@@ -3,7 +3,8 @@
 #include <iostream>
 
 GameSdl::GameSdl(WindowSdl& window, Renderer& renderer,
-    Queue<Snapshot*>& snapshotQueue, Queue<EventDTO*>& eventQueue,
+    Queue<std::shared_ptr<Snapshot>>& snapshotQueue,
+    Queue<std::shared_ptr<EventDTO>>& eventQueue,
     bool& endGame, int id) : window(window), renderer(renderer),
     snapshotQueue(snapshotQueue), eventQueue(eventQueue), endGame(endGame),
     events(eventQueue), map(0, this->renderer), soldier(0, id, this->renderer) {
@@ -55,7 +56,7 @@ void GameSdl::render() {
 }
 
 void GameSdl::update() {
-    Snapshot* snap = snapshotQueue.pop();
+    std::shared_ptr<Snapshot> snap = snapshotQueue.pop();
     std::map<uint8_t, StOperator> players = snap->getInfo();
         // std::cout << (int)players.size() << std::endl;
     if (auto search = players.find(soldier.getId()); search != players.end()) {

@@ -8,8 +8,8 @@
 #include "SdlException.h"
 
 
-GameDrawner::GameDrawner(Queue<Snapshot *> &snapshot_queue,
-    Queue<EventDTO *> &client_events, bool& endGame) :
+GameDrawner::GameDrawner(Queue<std::shared_ptr<Snapshot>> &snapshot_queue,
+    Queue<std::shared_ptr<EventDTO>> &client_events, bool& endGame) :
     client_events(client_events), snapshot_queue(snapshot_queue),
     endGame(endGame) {
 }
@@ -61,7 +61,7 @@ void GameDrawner::run() {
     //     render("Esperando jugadores");
     // }
     // try {
-    client_events.push(new EventDTO(Event::event_start_game));
+    client_events.push(std::make_shared<EventDTO>(Event::event_start_game));
     while (gameSdl.isRunning()) { 
         uint32_t frameInit = SDL_GetTicks();
 

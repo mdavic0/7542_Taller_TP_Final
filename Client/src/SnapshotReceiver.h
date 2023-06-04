@@ -5,35 +5,37 @@
 #include "ClientProtocol.h"
 #include "Snapshot.h"
 #include <atomic>
+#include <memory>
 
 class SnapshotReceiver : public Thread {
-    private:
-        ClientProtocol& protocol;
-        Queue<Snapshot*>& snapshot_queue;
-        std::atomic<bool> talking;
-        std::atomic<bool> alive;
-        bool& endGame;
-    public:
-        SnapshotReceiver(ClientProtocol& protocol, Queue<Snapshot*>& snapshots, bool& endGame);
+private:
+    ClientProtocol& protocol;
+    Queue<std::shared_ptr<Snapshot>>& snapshot_queue;
+    std::atomic<bool> talking;
+    std::atomic<bool> alive;
+    bool& endGame;
+public:
+    SnapshotReceiver(ClientProtocol& protocol,
+                     Queue<std::shared_ptr<Snapshot>>& snapshots, bool& endGame);
 
-        /*
-        * Método que devuelve true cuando el hilo termino de ejecutarse.
-        */
-        bool ended();
+    /*
+    * Método que devuelve true cuando el hilo termino de ejecutarse.
+    */
+    bool ended();
 
-        /*
-        * Método de ejecución del hilo, recibe snapshots por medio del
-        * protocolo y los pushea a la queue de snapshots.
-        */
-        virtual void run() override;
+    /*
+    * Método de ejecución del hilo, recibe snapshots por medio del
+    * protocolo y los pushea a la queue de snapshots.
+    */
+    virtual void run() override;
 
-        /*
-        * Método para detener la iteración en la cual se reciben
-        * snapshots por medio del protocolo.
-        */
-        virtual void stop() override;
+    /*
+    * Método para detener la iteración en la cual se reciben
+    * snapshots por medio del protocolo.
+    */
+    virtual void stop() override;
 
-        virtual ~SnapshotReceiver();
+    virtual ~SnapshotReceiver();
 };
 
 

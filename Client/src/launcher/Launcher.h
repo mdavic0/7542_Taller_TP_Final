@@ -16,6 +16,7 @@
 #include "EventSender.h"
 #include "SnapshotReceiver.h"
 #include "GameDrawner.h"
+#include <memory>
 
 class Launcher : public QWidget {
     Q_OBJECT
