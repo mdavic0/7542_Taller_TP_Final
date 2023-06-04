@@ -5,7 +5,7 @@
 Game::Game(const uint32_t id, const std::string& name) :
     id(id), name(name), mutex(),
     unprocessed_events(1000), client_snapshot_queues(),
-    talking(true), alive(true), gameWorld() {}
+    talking(true), alive(true), gameWorld(), started(false) {}
 
 void Game::run() {
     try {
@@ -35,18 +35,28 @@ Queue<std::shared_ptr<EventDTO>>* Game::createGame(Queue<std::shared_ptr<Snapsho
 
 Queue<std::shared_ptr<EventDTO>>* Game::joinGame(Queue<std::shared_ptr<Snapshot>> *q,
                                                  const TypeOperator& op) {
-    std::lock_guard<std::mutex> locker(mutex);
-    client_snapshot_queues.push_back(q);
-    uint8_t idPlayer = gameWorld.addPlayer(op);
-    // Notify all clients that a new player joined
-    for (auto &clientQueue : client_snapshot_queues) {
-        clientQueue->push(std::make_shared<Snapshot>(Event::event_join,
-                                                     (uint8_t)0x00,
-                                                     idPlayer));
+    if (not started) {                   
+        std::lock_guard<std::mutex> locker(mutex);
+        client_snapshot_queues.push_back(q);
+        uint8_t idPlayer = gameWorld.addPlayer(op);
+        
+        // Notify all clients that a new player joined
+        for (auto &clientQueue : client_snapshot_queues) {
+            clientQueue->push(std::make_shared<Snapshot>(Event::event_join,
+                                                        (uint8_t)0x00,
+                                                        idPlayer));
+        }
+        
+        return &this->unprocessed_events;
     }
-    return &this->unprocessed_events;
+    // TODO: LANZAR EXCEPCION CUSTOM?? O USAMOS LIBERROR
+    return nullptr;
 }
 
+void Game::startGame() {
+    this->started = true;
+    this->start();
+} 
 
 void Game::gameLoop() {
     // using namespace std::chrono;

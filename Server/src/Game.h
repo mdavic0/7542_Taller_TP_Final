@@ -25,6 +25,7 @@ class Game : public Thread {
         std::atomic<bool> talking;
         std::atomic<bool> alive;
         GameWorld gameWorld;
+        bool started;
 
     public:
         explicit Game(const uint32_t id, const std::string& name);
@@ -52,6 +53,13 @@ class Game : public Thread {
          * de forma atomica y pushear el snapshot de join
          */
         Queue<std::shared_ptr<EventDTO>>* joinGame(Queue<std::shared_ptr<Snapshot>> *q, const TypeOperator& op);
+
+        /*
+         * Este método setea a true el atributo started que sirve para
+         * que posteriormente no se puedan unir clientes una vez que comenzo
+         * el juego, a su vez hace el start del hilo.
+         */
+        void startGame();
 
         /*
          * No queremos permitir que alguien haga copias

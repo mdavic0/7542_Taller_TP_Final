@@ -31,7 +31,7 @@ void GamesController::startGame(const uint32_t& code){
     std::lock_guard<std::mutex> locker(mutex);
     auto search = games.find(code);
     if (search != games.end()) {
-        return search->second->start();
+        return search->second->startGame();
     }
 
 }
