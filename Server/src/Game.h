@@ -26,6 +26,7 @@ class Game : public Thread {
         std::atomic<bool> alive;
         GameWorld gameWorld;
         bool started;
+        int map;
 
     public:
         explicit Game(const uint32_t id, const std::string& name);
@@ -72,6 +73,7 @@ class Game : public Thread {
         void gameLoop();
         void processEvents();
         void broadcastSnapshot(std::shared_ptr<Snapshot> snapshot);
+        void generateMapType();
 };
 
 #endif  // SERVER_GAME_H_

@@ -1,11 +1,13 @@
 #include "Game.h"
 #include <memory>
 #include <string>
+#include <random>
+#include <functional>
 
 Game::Game(const uint32_t id, const std::string& name) :
     id(id), name(name), mutex(),
     unprocessed_events(1000), client_snapshot_queues(),
-    talking(true), alive(true), gameWorld(), started(false) {}
+    talking(true), alive(true), gameWorld(), started(false), map(1) {}
 
 void Game::run() {
     try {
@@ -28,6 +30,7 @@ Queue<std::shared_ptr<EventDTO>>* Game::createGame(Queue<std::shared_ptr<Snapsho
                                                    const TypeOperator& op) {
     std::lock_guard<std::mutex> locker(mutex);
     client_snapshot_queues.push_back(q);
+    this->generateMapType();
     uint8_t idPlayer = gameWorld.addPlayer(op);
     q->push(std::make_shared<Snapshot> (Event::event_create, id, idPlayer));
     return &this->unprocessed_events;
@@ -114,6 +117,13 @@ void Game::broadcastSnapshot(std::shared_ptr<Snapshot> snapshot) {
     for (auto const& i : this->client_snapshot_queues) {
         i->push(snapshot);
     }
+}
+
+void Game::generateMapType() {
+    std::random_device rand_dev;
+    std::mt19937 generator(rand_dev());
+    std::uniform_int_distribution<int> distr(1, 3);
+   this->map = distr(generator);
 }
 
 Game::~Game() {
