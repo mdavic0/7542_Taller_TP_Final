@@ -4,7 +4,7 @@ Player::Player(TypeOperator typeOperator) : typeOperator(typeOperator), state(St
     life(100), fell_down(0), position(0,0), movement_direction(0,0) {
     // weapon(TypeOperator)
 }
-#include <iostream>
+
 void Player::setMovementDirection(MoveTo direction) {
     switch (direction) {
         // Por sdl el eje "y" va hacia abajo
@@ -23,10 +23,12 @@ void Player::setMovementDirection(MoveTo direction) {
         default:
             break;
     }
+    if (this->movement_direction.first != 0 or this->movement_direction.second != 0) {
+        this->state = State::moving;
+    }
 }
 
 void Player::stopMovementDirection(MoveTo direction) {
-    std::cout << "Seteando direccion\n";
     switch (direction) {
         case MoveTo::move_up:
             movement_direction.second = 0;
@@ -43,7 +45,9 @@ void Player::stopMovementDirection(MoveTo direction) {
         default:
             break;
     }
-    std::cout << "Direccion seteada\n";
+    if (this->movement_direction.first == 0 and this->movement_direction.second == 0) {
+        this->state = State::idle;
+    }
 }
 
 void Player::applyStep() {

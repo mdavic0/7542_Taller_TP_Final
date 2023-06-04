@@ -100,7 +100,6 @@ void Game::processEvents() {
         while (unprocessed_events.try_pop(event) && iterations < 10) {
             if (event->getEvent() == Event::event_move
                     || event->getEvent() == Event::event_stop_move) {
-                std::cout << "Popeo un evento de movimiento\n";
                 gameWorld.updateMovementDirection(event->getEvent(),
                                                   event->getIdPlayer(),
                                                   event->getMoveTo());
