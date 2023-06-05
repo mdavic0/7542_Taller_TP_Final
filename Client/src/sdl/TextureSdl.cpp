@@ -7,6 +7,14 @@ Texture::Texture(Renderer& renderer, const std::string& file, bool resize) :
     this->loadTexture(file, resize);    
 }
 
+Texture::Texture(Renderer& renderer, SDL_Surface* surface) :
+    textureRender(renderer), texture(nullptr) {
+    this->texture = SDL_CreateTextureFromSurface(renderer.get(), surface);
+    if (!texture)
+        throw SdlException("Failed to create texture font");
+    SDL_FreeSurface(surface);
+}
+
 void Texture::loadTexture(const std::string& file, bool resize) {
     this->freeTexture();
     SDL_Surface* surface = IMG_Load(file.c_str());
