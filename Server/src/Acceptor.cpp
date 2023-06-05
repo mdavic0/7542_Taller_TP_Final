@@ -3,8 +3,8 @@
 #include <utility>
 #include <algorithm>
 #include "EventReceiver.h"
-#include "server_games_controller.h"
-#include "common_liberror.h"
+#include "GamesController.h"
+#include "Liberror.h"
 
 Acceptor::Acceptor(const std::string &servname) :
         skt(servname.c_str()), readers(), controller(), talking(true), alive(true) {}

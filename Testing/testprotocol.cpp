@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
-#include "client_protocol.h"
-#include "server_protocol.h"
-#include "common_socket.h"
+#include "ClientProtocol.h"
+#include "ServerProtocol.h"
+#include "Socket.h"
 
 // Demonstrate some basic assertions.
 TEST(HelloTest, BasicAssertions) {

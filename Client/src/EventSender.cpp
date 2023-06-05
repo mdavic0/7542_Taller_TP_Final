@@ -1,22 +1,24 @@
 #include "EventSender.h"
-#include "common_liberror.h"
+#include "Liberror.h"
 
-EventSender::EventSender(Queue<EventDTO*> &sdl_events, ClientProtocol &protocol) :
-        sdl_events(sdl_events), protocol(protocol), talking(true), alive(true) {}
+EventSender::EventSender(Queue<std::shared_ptr<EventDTO>> &sdl_events,
+                         ClientProtocol &protocol, bool& endGame) :
+        sdl_events(sdl_events), protocol(protocol), talking(true), alive(true),
+        endGame(endGame) {
+}
 
 void EventSender::run() {
     while (talking) {
         try {
-            EventDTO* response = sdl_events.pop();
+            std::shared_ptr<EventDTO> response = sdl_events.pop();
             protocol.sendEvent(*response);
-            delete response;
-        } catch (const ClosedQueue&) {
+        } catch (ClosedQueue &exc) {
+            talking = false;
             break;
-        } catch (const LibError& err) {
-            // socket closed
         }
     }
     alive = false;
+    std::cout << "termine sender\n";
 }
 
 void EventSender::stop() {

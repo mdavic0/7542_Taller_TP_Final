@@ -9,6 +9,7 @@ void Server::run() { try {
         // El servidor leerá por entrada estándar y cerrará el programa
         // de forma ordenada cuando lea la letra q
         while (std::cin.get() != 'q') {}
+
         this->acceptor.stop();
     } catch (const std::exception& err) {
         std::cerr
@@ -19,5 +20,3 @@ void Server::run() { try {
         std::cerr << "Something went wrong and an unknown exception was caught.\n";
     }
 }
-
-
