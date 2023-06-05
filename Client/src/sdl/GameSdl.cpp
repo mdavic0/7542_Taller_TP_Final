@@ -7,7 +7,7 @@ GameSdl::GameSdl(WindowSdl& window, Renderer& renderer,
     Queue<std::shared_ptr<EventDTO>>& eventQueue,
     bool& endGame, int id) : window(window), renderer(renderer),
     snapshotQueue(snapshotQueue), eventQueue(eventQueue), endGame(endGame),
-    events(eventQueue), map(0, this->renderer), soldier(0, id, this->renderer) {
+    events(eventQueue), map(1, this->renderer), soldier(0, id, this->renderer) {
 }
 
 bool GameSdl::isRunning() {

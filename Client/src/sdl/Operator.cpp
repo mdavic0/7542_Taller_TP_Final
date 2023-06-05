@@ -40,13 +40,10 @@ void Operator::updateMove(MoveTo direction) {
 
 void Operator::update(std::pair<uint16_t, uint16_t> pos, State state) {
     this->setState(state);
-    if (pos.first < position.first || pos.second < position.second) {
+    if (pos.first < position.first)
         this->flipType = SDL_FLIP_HORIZONTAL;
-        this->setState(State::moving);
-    } else if (pos.first > position.first || pos.second > position.second) {
+    else if (pos.first > position.first)
         this->flipType = SDL_FLIP_NONE;
-        this->setState(State::moving);
-    }
     this->position = pos;
 }
 

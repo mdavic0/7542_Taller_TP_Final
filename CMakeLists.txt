@@ -14,7 +14,7 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ggdb -DDEBUG -fno-inline ")
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 
 # SDL
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lSDL2 -lSDL2_image") # -lSDL2_ttf -lSDL2_gfx")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lSDL2 -lSDL2_image -lSDL2_ttf") # -lSDL2_ttf -lSDL2_gfx")
 
 # Qt UI
 set(CMAKE_AUTOMOC ON)
@@ -76,7 +76,7 @@ add_executable(server "Server/main.cpp")
 target_link_libraries(server server_classes common_classes)
 
 add_executable(client "Client/main.cpp")
-target_link_libraries(client client_classes common_classes SDL2 SDL2_image)
+target_link_libraries(client client_classes common_classes SDL2 SDL2_image SDL2_ttf)
 
 # add_executable(testprotocol "Testing/testprotocol.cpp" )
 # target_link_libraries(testprotocol server_classes client_classes common_classes)

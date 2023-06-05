@@ -9,9 +9,9 @@
 
 
 GameDrawner::GameDrawner(Queue<std::shared_ptr<Snapshot>> &snapshot_queue,
-    Queue<std::shared_ptr<EventDTO>> &client_events, bool& endGame) :
+    Queue<std::shared_ptr<EventDTO>> &client_events, bool& endGame, int menu) :
     client_events(client_events), snapshot_queue(snapshot_queue),
-    endGame(endGame) {
+    endGame(endGame), menu(menu) {
 }
 
 void GameDrawner::run() {

@@ -122,8 +122,7 @@ void Launcher::sendCreateMatch(const QString& name, int mode,
         QMessageBox::information(this, "Exito", message.c_str(),
             QMessageBox::Close);
         this->hide();
-        this->initGame();
-        qDebug() << "termine juego";
+        this->initGame(CREATE_MENU);
         this->show();
     } else {
         QMessageBox::information(this, "Error", 
@@ -142,7 +141,7 @@ void Launcher::sendJoinMatch(int code, int operatorSelect) {
         QMessageBox::information(this, "Exito", "Union Exitosa",
             QMessageBox::Close);
         this->hide();
-        this->initGame();
+        this->initGame(JOIN_MENU);
         this->show();
     } else {
         QMessageBox::information(this, "Error", 
@@ -151,11 +150,11 @@ void Launcher::sendJoinMatch(int code, int operatorSelect) {
     }
 }
 
-void Launcher::initGame() {
+void Launcher::initGame(int menu) {
     bool endGame = false;
     Queue<std::shared_ptr<Snapshot>> snapshotQueue(SIZE_QUEUE);
     Queue<std::shared_ptr<EventDTO>> eventQueue(SIZE_QUEUE);
-    GameDrawner gameDrawner(snapshotQueue, eventQueue, endGame);
+    GameDrawner gameDrawner(snapshotQueue, eventQueue, endGame, menu);
     SnapshotReceiver snapshotReceiver(clientProtocol.value(), snapshotQueue, endGame);
     EventSender eventSender(eventQueue, clientProtocol.value(), endGame);
     try {

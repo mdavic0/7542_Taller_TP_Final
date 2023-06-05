@@ -7,6 +7,9 @@
 #define FRAME_RATE 60
 #define SIZE_QUEUE 256
 
+#define CREATE_MENU 1
+#define JOIN_MENU 2
+
 // Animation SDL
 #define SIZE_SPRITE 128
 #define SPEED_IDLE 150
