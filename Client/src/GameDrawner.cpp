@@ -5,6 +5,7 @@
 #include "Defines.h"
 #include "Sdl.h"
 #include "SdlImage.h"
+#include "SdlTTF.h"
 #include "SdlException.h"
 
 
@@ -18,6 +19,8 @@ void GameDrawner::run() {
     Sdl sdlInit(SDL_INIT_EVERYTHING);
     
     SdlImage sdlImage(IMG_INIT_PNG);
+
+    SdlTTF sdlttf;
 
     WindowSdl window(   "Left 4 Dead", 
                         SDL_WINDOWPOS_CENTERED,

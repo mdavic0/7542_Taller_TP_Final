@@ -1,6 +1,6 @@
 #include "TextureSdl.h"
 #include "Defines.h"
-#include <exception>
+#include "SdlException.h"
 
 Texture::Texture(Renderer& renderer, const std::string& file, bool resize) :
     textureRender(renderer), texture(nullptr) {
@@ -11,16 +11,15 @@ void Texture::loadTexture(const std::string& file, bool resize) {
     this->freeTexture();
     SDL_Surface* surface = IMG_Load(file.c_str());
     if (!surface)
-        throw std::runtime_error("Error charge texture: " + 
-                                std::string(IMG_GetError()));
+        throw SdlException("Error charge text");
     SDL_Surface* resized = nullptr;
     if (resize) {
         resized = SDL_CreateRGBSurface(0, WINDOW_WIDTH, WINDOW_HEIGTH,
-                                                    surface->format->BitsPerPixel,
-                                                    surface->format->Rmask,
-                                                    surface->format->Gmask,
-                                                    surface->format->Bmask,
-                                                    surface->format->Amask);
+                                                surface->format->BitsPerPixel,
+                                                surface->format->Rmask,
+                                                surface->format->Gmask,
+                                                surface->format->Bmask,
+                                                surface->format->Amask);
         SDL_BlitScaled(surface, nullptr, resized, nullptr);
     }
 
@@ -30,8 +29,7 @@ void Texture::loadTexture(const std::string& file, bool resize) {
     else
         this->texture = SDL_CreateTextureFromSurface(render, surface);
     if (!texture)
-        throw std::runtime_error("Error create texture: " + 
-                                std::string(IMG_GetError()));
+        throw SdlException("Error create texture");
     SDL_FreeSurface(surface);
     if (resize)
         SDL_FreeSurface(resized);
@@ -40,7 +38,7 @@ void Texture::loadTexture(const std::string& file, bool resize) {
 int Texture::frames() {
     int w, h;
     if (SDL_QueryTexture(this->texture, nullptr, nullptr, &w, &h) != 0)
-        throw std::runtime_error("Error in number frames");
+        throw SdlException("Error in number frames");
     return (int)w/h;
 }
 
