@@ -15,12 +15,14 @@ class GameDrawner : public Thread {
         Queue<std::shared_ptr<Snapshot>>& snapshot_queue;
         bool& endGame;
         int menu;
+        int cantPlayers;
+        int idPlayer;
         void renderText(const std::string& text1, const std::string& text2,
-                        Renderer& render, Font& font);
+                        Renderer& render, Font& font, int& cantPlayers);
     public:
         GameDrawner(Queue<std::shared_ptr<Snapshot>>& snapshot_queue,
             Queue<std::shared_ptr<EventDTO>>& client_events,
-            bool& endGame, int menu);
+            bool& endGame, int menu, uint8_t idPlayers);
         // implementar gameloop y cosas de SDL (eventos)
         virtual void run() override;
         virtual void stop() override;

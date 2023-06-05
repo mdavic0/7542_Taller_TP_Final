@@ -2,7 +2,7 @@
 #include "Defines.h"
 #include <iostream>
 
-Operator::Operator(uint8_t id, uint8_t op, Renderer& renderer) : id(id), operatorId(TypeOperator(op)),
+Operator::Operator(uint8_t id, TypeOperator op, Renderer& renderer) : id(id), operatorId(op),
     position({0, 0}), renderPlayer(renderer), stateOperator(State::idle),
     numFrames(0), flipType(SDL_FLIP_NONE) {
     this->chargeTexture(renderer);

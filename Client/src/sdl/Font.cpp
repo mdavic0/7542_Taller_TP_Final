@@ -24,7 +24,8 @@ void Font::setHinting() {
 }
 
 void Font::getSizeFont(const std::string& text, int* textW, int* textH) {
-    TTF_SizeText(this->font, text.c_str(), textW, textH);
+    if (TTF_SizeText(this->font, text.c_str(), textW, textH) != 0)
+        throw SdlException("Failed get size font");
 }
 
 Font::Font(Font&& other) noexcept : font(other.font) {

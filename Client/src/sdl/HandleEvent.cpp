@@ -2,8 +2,9 @@
 #include "Event.h"
 #include <iostream>
 
-EventHandler::EventHandler(Queue<std::shared_ptr<EventDTO>>& eventQueue) : moveDirection(MoveTo::move_idle),
-    running(true), eventQueue(eventQueue) {
+EventHandler::EventHandler(Queue<std::shared_ptr<EventDTO>>& eventQueue,
+    uint8_t idPlayer) : moveDirection(MoveTo::move_idle),
+    running(true), eventQueue(eventQueue) , idPlayer(idPlayer) {
 }
 
 void EventHandler::listen() {
@@ -47,7 +48,7 @@ void EventHandler::handleKeyDownEvent(SDL_Keysym keysym) {
         // agregar tecla space
     }
     if (moveDirection != MoveTo::move_idle)
-        this->eventQueue.push(std::make_shared<EventDTO>(event, moveDirection, 0));
+        this->eventQueue.push(std::make_shared<EventDTO>(event, moveDirection, idPlayer));
 }
 
 void EventHandler::handleKeyUpEvent(SDL_Keysym keysym) {
@@ -70,7 +71,7 @@ void EventHandler::handleKeyUpEvent(SDL_Keysym keysym) {
             break;
     }
     if (moveDirection != MoveTo::move_idle)
-        this->eventQueue.push(std::make_shared<EventDTO>(event, moveDirection, 0));
+        this->eventQueue.push(std::make_shared<EventDTO>(event, moveDirection, idPlayer));
 }
 
 MoveTo EventHandler::getMoveDirection() const {

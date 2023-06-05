@@ -12,6 +12,7 @@
 #include "HandleEvent.h"
 #include "mapSdl.h"
 #include <memory>
+#include <map>
 
 class GameSdl {
     private:
@@ -22,12 +23,13 @@ class GameSdl {
         Queue<std::shared_ptr<EventDTO>>& eventQueue;
         MapSdl map;
         bool running;
-        Operator soldier;
+        std::map<uint8_t, Operator*>& soldiers;
         bool& endGame;
     public:
         GameSdl(WindowSdl& window, Renderer& renderer,
                 Queue<std::shared_ptr<Snapshot>>& snapshotQueue,
-                Queue<std::shared_ptr<EventDTO>>& eventQueue, bool& endGame, int id);
+                Queue<std::shared_ptr<EventDTO>>& eventQueue, bool& endGame,
+                std::map<uint8_t, Operator*>& soldiers, uint8_t idPlayer);
         ~GameSdl();
         void run();
         void update();

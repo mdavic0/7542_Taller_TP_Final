@@ -25,7 +25,7 @@ class Operator {
         void setState(State state);
         int setNumFrames(State state);
     public:
-        Operator(uint8_t id, uint8_t op, Renderer& renderer);
+        Operator(uint8_t id, TypeOperator op, Renderer& renderer);
         ~Operator();     
         void updateMove(MoveTo direction);
         void update(std::pair<uint16_t, uint16_t> pos, State state);
