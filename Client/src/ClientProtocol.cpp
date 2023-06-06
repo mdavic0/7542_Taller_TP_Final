@@ -147,24 +147,26 @@ Snapshot ClientProtocol::getPlaying () {
 
         recvAll(&idState, 1);
         switch (idState) {
-        case STATE_MOVING:
-            state = State::moving;
-            break;
-        
-        case STATE_ATACK:
-            state = State::atack;
-            break;
-        
-        case STATE_INJURE:
-            state = State::injure;
-            break;
+            case STATE_IDLE:
+                state = State::idle;
+                break;
+            case STATE_MOVING:
+                state = State::moving;
+                break;
+            case STATE_ATACK:
+                state = State::atack;
+                break;
+            
+            case STATE_INJURE:
+                state = State::injure;
+                break;
 
-        case STATE_HABILITY:
-            state = State::hability;
-            break;
-        
-        default:
-            break;
+            case STATE_HABILITY:
+                state = State::hability;
+                break;
+            
+            default:
+                break;
         }
 
         recvAll(&x, 2);
