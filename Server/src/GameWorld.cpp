@@ -7,11 +7,15 @@ uint8_t GameWorld::addPlayer(TypeOperator op) {
     switch (op) {
         case TypeOperator::operator_idf:
             newPlayer = std::make_shared<IDFPlayer>();
+            break;
         case TypeOperator::operator_scout:
             newPlayer = std::make_shared<SCOUTPlayer>();
+            break;
         case TypeOperator::operator_p90:
             newPlayer = std::make_shared<P90Player>();
+            break;
         default:
+            newPlayer = std::make_shared<IDFPlayer>();
             break;
     }
     this->players.insert({players_amount, newPlayer});
