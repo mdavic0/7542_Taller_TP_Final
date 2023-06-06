@@ -1,9 +1,14 @@
 #include "Player.h"
 
+#include <utility>
+
 Player::Player(TypeOperator typeOperator) : typeOperator(typeOperator), state(State::idle),
-    life(100), fell_down(0), position(0,0), movement_direction(0,0) {
-    // weapon(TypeOperator)
-}
+    life(100), fell_down(0), position(0,0), movement_direction(0,0), velocity(1), weapon() {}
+
+Player::Player(TypeOperator typeOperator, uint8_t life, uint8_t velocity,
+               std::shared_ptr<Weapon> weapon) : typeOperator(typeOperator),
+    state(State::idle), life(life), fell_down(0), position(0,0), movement_direction(0,0),
+    velocity(velocity), weapon(std::move(weapon)) {}
 
 void Player::setMovementDirection(MoveTo direction) {
     switch (direction) {
@@ -71,6 +76,6 @@ uint8_t& Player::getHealth() {
 }
 
 void Player::move() {
-    this->position.first += this->movement_direction.first;
-    this->position.second += this->movement_direction.second;
+    this->position.first += movement_direction.first + movement_direction.first * (velocity / 10);
+    this->position.second += movement_direction.second + movement_direction.second * (velocity / 10);
 }

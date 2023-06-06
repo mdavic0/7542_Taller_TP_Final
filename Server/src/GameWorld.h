@@ -5,11 +5,14 @@
 #include "Snapshot.h"
 #include "Move.h"
 #include <memory>
+#include "IDFPlayer.h"
+#include "SCOUTPlayer.h"
+#include "P90Player.h"
 
 class GameWorld {
     private:
         uint8_t players_amount;
-        std::map<uint8_t, Player> players;
+        std::map<uint8_t, std::shared_ptr<Player>> players;
         // TODO: VECTOR DE VECTORES DE POSICIONES (EN ORDEN) DE CADA PLAYER /
         //    MONSTRUITO ENEMIGO EN EL GAME (PARA EFECTUAR BIEN EL ATAQUE, YA QUE
         //    ESTE VARIA DEPENDIENDO DE LA DISTANCIA / ENEMIGOS ATRAVEZADOS)

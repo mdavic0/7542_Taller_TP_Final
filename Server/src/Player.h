@@ -5,8 +5,10 @@
 #include "TypeOperator.h"
 #include "Move.h"
 #include "State.h"
+#include "Event.h"
+#include "Weapon.h"
+#include <memory>
 
-// TODO: USAR POLIMORFISMO YA QUE HAY != TIPOS DE PLAYER
 class Player {
     private:
         TypeOperator typeOperator;
@@ -15,10 +17,15 @@ class Player {
         uint8_t fell_down;
         std::pair<uint16_t, uint16_t> position;
         std::pair<uint16_t, uint16_t> movement_direction;
-        //Weapon; delega al arma el ataque
-        // TODO: WAPON TAMBIEN SERA POLIMORFICA
+        uint8_t velocity;
+        std::shared_ptr<Weapon> weapon;
+
     public:
-        Player(TypeOperator typeOperator);
+        explicit Player(TypeOperator typeOperator);
+        Player(TypeOperator typeOperator,
+               uint8_t life,
+               uint8_t velocity,
+               std::shared_ptr<Weapon> weapon);
         void setMovementDirection(MoveTo direction);
         void stopMovementDirection(MoveTo direction);
         void applyStep();
@@ -26,9 +33,10 @@ class Player {
         TypeOperator& getTypeOperator();
         State& getState();
         uint8_t& getHealth();
-
+        virtual ~Player() = default;
     private:
         void move();
+        virtual void specialAtack(Event event) = 0;
 };
 
 

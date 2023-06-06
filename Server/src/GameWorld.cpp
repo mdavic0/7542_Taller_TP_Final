@@ -3,7 +3,18 @@
 GameWorld::GameWorld() : players_amount(0), players() {}
 
 uint8_t GameWorld::addPlayer(TypeOperator op) {
-    this->players.insert({players_amount, Player(op)});
+    std::shared_ptr<Player> newPlayer = nullptr;
+    switch (op) {
+        case TypeOperator::operator_idf:
+            newPlayer = std::make_shared<IDFPlayer>();
+        case TypeOperator::operator_scout:
+            newPlayer = std::make_shared<SCOUTPlayer>();
+        case TypeOperator::operator_p90:
+            newPlayer = std::make_shared<P90Player>();
+        default:
+            break;
+    }
+    this->players.insert({players_amount, newPlayer});
     return players_amount++;
 }
 
@@ -13,23 +24,25 @@ void GameWorld::deletePlayer(uint8_t id) {
 
 void GameWorld::updateMovementDirection(Event event, uint8_t id, MoveTo direction) {
     if (event == Event::event_move) {
-        players.at(id).setMovementDirection(direction);
+        players.at(id)->setMovementDirection(direction);
     } else {
-        players.at(id).stopMovementDirection(direction);        
+        players.at(id)->stopMovementDirection(direction);
     }
 }
 
 void GameWorld::simulateStep() {
     for (auto player : players) {
-        players.at(player.first).applyStep();
+        players.at(player.first)->applyStep();
     }
 }
 
 std::shared_ptr<Snapshot> GameWorld::getSnapshot() {
     std::map<uint8_t, StOperator> playersInfo;
     for (auto player : players) {
-        playersInfo.insert({player.first, StOperator(player.first, player.second.getTypeOperator(), player.second.getState(),
-        player.second.getPosition(), player.second.getHealth())});
+        playersInfo.insert({player.first, StOperator(player.first,
+                                                     player.second->getTypeOperator(),
+                                                     player.second->getState(),
+        player.second->getPosition(), player.second->getHealth())});
     }
     return std::make_shared<Snapshot>(playersInfo);
 }
