@@ -18,7 +18,7 @@ class GameDrawner : public Thread {
         int cantPlayers;
         int idPlayer;
         void renderText(const std::string& text1, const std::string& text2,
-                        Renderer& render, Font& font, int& cantPlayers);
+                        Renderer& render, Font& font);
     public:
         GameDrawner(Queue<std::shared_ptr<Snapshot>>& snapshot_queue,
             Queue<std::shared_ptr<EventDTO>>& client_events,

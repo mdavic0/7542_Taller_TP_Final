@@ -45,9 +45,9 @@ void GameDrawner::run() {
         while(noReady)  {
             render.clear();
             if (menu == JOIN_MENU)
-                this->renderText(text1, text2, render, font, cantPlayers);
+                this->renderText(text1, text2, render, font);
             else if (menu == CREATE_MENU)
-                this->renderText(text1, text3, render, font, cantPlayers);
+                this->renderText(text1, text3, render, font);
             SDL_Event event;
             while (SDL_PollEvent(&event)) {
                 switch (event.type) {
@@ -126,7 +126,7 @@ void GameDrawner::run() {
 }
 
 void GameDrawner::renderText(const std::string& text1, const std::string& text2,
-    Renderer& render, Font& font, int& cantPlayers) {
+    Renderer& render, Font& font) {
     SDL_Color color = {255, 255, 255, 255};
     int w, h, w2, h2, w3, h3;
     font.getSizeFont(text1, &w, &h);

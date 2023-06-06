@@ -59,6 +59,7 @@ void Operator::chargeTexture(Renderer& renderer) {
     std::string path = "assets/images/sdl/units/" + std::to_string((int)operatorId);
     textures["Idle"] = new Texture(renderer, path + "/Idle.png", false);
     textures["Run"] = new Texture(renderer, path + "/Run.png", false);
+    textures["Shot"] = new Texture(renderer, path + "/Shot_1.png", false);
 }
 
 void Operator::setState(State state) {
@@ -72,6 +73,8 @@ int Operator::setNumFrames(State state) {
             return this->textures["Idle"]->frames();
         case State::moving:
             return this->textures["Run"]->frames();
+        case State::atack:
+            return this->textures["Shot"]->frames();
         default:
             return 0;
     }
@@ -84,6 +87,9 @@ void Operator::render() {
             break;
         case State::moving:
             renderAnimation(SPEED_RUN, textures["Run"]->getTexture());
+            break;
+        case State::atack:
+            renderAnimation(100, textures["Shot"]->getTexture());
             break;
         default:
             break;

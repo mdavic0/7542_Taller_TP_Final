@@ -42,10 +42,13 @@ void EventHandler::handleKeyDownEvent(SDL_Keysym keysym) {
         case SDLK_d:
             moveDirection = MoveTo::move_right;
             break;
+        case SDLK_SPACE:
+            event = Event::event_shoot_left;
+            std::cout << "shooting\n";
+            break;
         default:
             moveDirection = MoveTo::move_idle;
             break;
-        // agregar tecla space
     }
     if (moveDirection != MoveTo::move_idle)
         this->eventQueue.push(std::make_shared<EventDTO>(event, moveDirection, idPlayer));
@@ -65,6 +68,9 @@ void EventHandler::handleKeyUpEvent(SDL_Keysym keysym) {
             break;
         case SDLK_d:
             moveDirection = MoveTo::move_right;
+            break;
+        case SDLK_SPACE:
+            event = Event::event_shoot_left;
             break;
         default:
             moveDirection = MoveTo::move_idle;

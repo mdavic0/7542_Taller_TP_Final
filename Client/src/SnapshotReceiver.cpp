@@ -11,15 +11,12 @@ void SnapshotReceiver::run() {
         try {
             snapshot_queue.push(std::make_shared<Snapshot>(protocol.getSnapshot()));
         } catch (const LibError &exc) {
-            std::cerr << "receiver: " << exc.what() << std::endl;
             talking = false;
             snapshot_queue.close();
         } catch (const ClosedQueue& err){
-            std::cerr << "receiver snap: " << err.what() << std::endl;
             talking = false;
         } catch (...) {}
     }
-    std::cout << "termine receiver\n";
     alive = false;
 }
 

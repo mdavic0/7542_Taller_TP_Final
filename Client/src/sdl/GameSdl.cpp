@@ -60,12 +60,8 @@ void GameSdl::render() {
 void GameSdl::update() {
     std::shared_ptr<Snapshot> snap = snapshotQueue.pop();
     std::map<uint8_t, StOperator> players = snap->getInfo();
-        // std::cout << (int)players.size() << std::endl;
-    for (auto &player : players) {
+    for (auto &player : players)
         soldiers[player.second.getId()]->update(player.second.getPosition(), player.second.getState());
-        std::cout << static_cast<int>(player.second.getId()) << std::endl;
-    }
-    
 }
 
 void GameSdl::handleEvents() {
