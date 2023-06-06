@@ -13,9 +13,13 @@ void EventSender::run() {
             std::shared_ptr<EventDTO> response = sdl_events.pop();
             protocol.sendEvent(*response);
         } catch (ClosedQueue &exc) {
+            std::cerr << "sender: " << exc.what() << std::endl;
             talking = false;
-            break;
-        }
+            protocol.stop();
+        } catch (const LibError &exc) {
+            std::cerr << "sender protocol: " << exc.what() << std::endl;
+            talking = false;
+        } catch (...) {}
     }
     alive = false;
     std::cout << "termine sender\n";
@@ -23,6 +27,7 @@ void EventSender::run() {
 
 void EventSender::stop() {
     talking = false;
+    sdl_events.close();
 }
 
 bool EventSender::ended() {

@@ -63,6 +63,7 @@ void GameSdl::update() {
         // std::cout << (int)players.size() << std::endl;
     for (auto &player : players) {
         soldiers[player.second.getId()]->update(player.second.getPosition(), player.second.getState());
+        std::cout << static_cast<int>(player.second.getId()) << std::endl;
     }
     
 }
