@@ -24,6 +24,7 @@ class GameDrawner : public Thread {
             Queue<std::shared_ptr<EventDTO>>& client_events,
             bool& endGame, int menu, uint8_t idPlayers);
         // implementar gameloop y cosas de SDL (eventos)
+        virtual ~GameDrawner();
         virtual void run() override;
         virtual void stop() override;
 

@@ -122,7 +122,8 @@ void Launcher::sendCreateMatch(const QString& name, int mode,
         QMessageBox::information(this, "Exito", message.c_str(),
             QMessageBox::Close);
         this->hide();
-        this->initGame(CREATE_MENU, receive.getIdPlayer());
+        this->initGame(CREATE_MENU, 0);
+        //clientProtocol->shutdown(2); 
         this->show();
     } else {
         QMessageBox::information(this, "Error", 
@@ -142,6 +143,7 @@ void Launcher::sendJoinMatch(int code, int operatorSelect) {
             QMessageBox::Close);
         this->hide();
         this->initGame(JOIN_MENU, receive.getIdPlayer());
+        //clientProtocol->shutdown(2); 
         this->show();
     } else {
         QMessageBox::information(this, "Error", 
@@ -157,15 +159,9 @@ void Launcher::initGame(int menu, uint8_t idPlayer) {
     GameDrawner gameDrawner(snapshotQueue, eventQueue, endGame, menu, idPlayer);
     SnapshotReceiver snapshotReceiver(clientProtocol.value(), snapshotQueue, endGame);
     EventSender eventSender(eventQueue, clientProtocol.value(), endGame);
-    try {
-        gameDrawner.start();
-        snapshotReceiver.start();
-        eventSender.start();
-    } catch (ClosedQueue &exc) {
-        this->clientProtocol->stop();
-    } catch (const SdlException &exc) {
-        std::cerr << exc.what() << std::endl;
-    }
+    eventSender.start();
+    snapshotReceiver.start();
+    gameDrawner.start();
 }
 
 Launcher::~Launcher() {
