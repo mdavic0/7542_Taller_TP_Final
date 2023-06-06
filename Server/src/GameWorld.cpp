@@ -34,6 +34,14 @@ void GameWorld::updateMovementDirection(Event event, uint8_t id, MoveTo directio
     }
 }
 
+void GameWorld::updateShootingState(Event event, uint8_t id) {
+    if (event == Event::event_shoot) {
+        players.at(id)->setShootingState();
+    } else {
+        players.at(id)->stopShootingState();
+    }
+}
+
 void GameWorld::simulateStep() {
     for (auto player : players) {
         players.at(player.first)->applyStep();
@@ -50,5 +58,3 @@ std::shared_ptr<Snapshot> GameWorld::getSnapshot() {
     }
     return std::make_shared<Snapshot>(playersInfo);
 }
-
-

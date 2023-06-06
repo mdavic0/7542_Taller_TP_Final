@@ -5,7 +5,7 @@
 class Idf : public Weapon {
     public:
         Idf();
-        void shoot(Event event) override;
+        void shoot(bool right) override;
 };
 
 
