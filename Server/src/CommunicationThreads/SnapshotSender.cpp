@@ -12,9 +12,9 @@ void SnapshotSender::run() {
             protocol.sendSnapshot(*response);
             // delete response;
         } catch (const ClosedQueue&) {
-             break;
+            break;
         } catch (const LibError& err) {
-            // socket closed
+            break;
         }
     }
     alive = false;

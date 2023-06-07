@@ -30,16 +30,17 @@ void EventReceiver::run() {
                 event_queue->push(eventDto);
             }
         } catch (const LibError& err) {
-            talking = false;
             break;
         }
     }
     alive = false;
+    snapshot_queue.close();
 }
 
 void EventReceiver::stop() {
     talking = false;
-    protocol.stop();
+    sender.stop();
+    // protocol.stop();
 }
 
 bool EventReceiver::ended() {
@@ -47,7 +48,5 @@ bool EventReceiver::ended() {
 }
 
 EventReceiver::~EventReceiver() {
-    snapshot_queue.close();
-    sender.stop();
     join();
 }

@@ -29,7 +29,7 @@ class Game : public Thread {
         int map;
 
     public:
-        explicit Game(const uint32_t id, const std::string& name);
+        explicit Game(const uint32_t id, const std::string& name, const TypeGame& type);
 
         virtual void run() override;
 
