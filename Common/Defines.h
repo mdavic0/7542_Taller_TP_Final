@@ -11,7 +11,9 @@
 #define JOIN_MENU 2
 
 // Animation SDL
-#define SIZE_SPRITE 128
+#define SIZE_FRAME 128
+#define SIZE_SPRITE_X 64
+#define SIZE_SPRITE_Y 68
 #define SPEED_IDLE 150
 #define SPEED_RUN 100
 

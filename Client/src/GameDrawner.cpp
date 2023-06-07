@@ -54,7 +54,6 @@ void GameDrawner::run() {
                     case SDL_QUIT: {
                             noReady = false;
                             game = false;
-                            std::cout << "Cerre el juego\n";
                         }
                         break;
                     case SDL_KEYDOWN:
@@ -64,7 +63,6 @@ void GameDrawner::run() {
                                     std::make_shared<EventDTO>(
                                         Event::event_start_game));
                                 noReady = false;
-                                std::cout << "presione enter\n";
                             }
                         }
                         break;

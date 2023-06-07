@@ -13,7 +13,6 @@ void EventHandler::listen() {
         switch (event.type) {
             case SDL_QUIT:
                 this->running = false;
-                std::cout << "Cerre el juego\n";
                 break;
             case SDL_KEYDOWN:
                 handleKeyDownEvent(event.key.keysym);

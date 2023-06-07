@@ -94,8 +94,6 @@ void Launcher::goToJoin() {
 }
 
 void Launcher::createProtocol(const QString& ip, const QString& port) {
-    qDebug() << "Ip: " << ip;
-    qDebug() << "port: " << port;
     try {
         this->clientProtocol = ClientProtocol(
             Socket(ip.toStdString().c_str(), port.toStdString().c_str()));
@@ -110,9 +108,6 @@ void Launcher::createProtocol(const QString& ip, const QString& port) {
 void Launcher::sendCreateMatch(const QString& name, int mode, 
         int operatorSelect) {
     std::string nameMatch = name.toStdString();
-    qDebug() << "Nombre " << name;
-    qDebug() << "Seleccione modo juego " << mode;
-    qDebug() << "Seleccione operador " << operatorSelect;
     EventDTO eventCreate(nameMatch, TypeGame(mode), TypeOperator(operatorSelect));
     clientProtocol->sendEvent(eventCreate);
     Snapshot receive = clientProtocol->getSnapshot();
@@ -123,7 +118,7 @@ void Launcher::sendCreateMatch(const QString& name, int mode,
             QMessageBox::Close);
         this->hide();
         this->initGame(CREATE_MENU, 0);
-        //clientProtocol->shutdown(2); 
+        this->goToConnect();
         this->show();
     } else {
         QMessageBox::information(this, "Error", 
@@ -133,8 +128,6 @@ void Launcher::sendCreateMatch(const QString& name, int mode,
 }
 
 void Launcher::sendJoinMatch(int code, int operatorSelect) {
-    qDebug() << "Me uno a partida con code: " << code;
-    qDebug() << "Seleccione operador " << operatorSelect;
     EventDTO eventCreate(code, TypeOperator(operatorSelect));
     clientProtocol->sendEvent(eventCreate);
     Snapshot receive = clientProtocol->getSnapshot();
@@ -143,7 +136,7 @@ void Launcher::sendJoinMatch(int code, int operatorSelect) {
             QMessageBox::Close);
         this->hide();
         this->initGame(JOIN_MENU, receive.getIdPlayer());
-        //clientProtocol->shutdown(2); 
+        this->goToConnect();
         this->show();
     } else {
         QMessageBox::information(this, "Error", 
@@ -165,5 +158,4 @@ void Launcher::initGame(int menu, uint8_t idPlayer) {
 }
 
 Launcher::~Launcher() {
-    // clientProtocol->stop();
 }
