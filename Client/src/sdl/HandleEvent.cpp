@@ -43,7 +43,7 @@ void EventHandler::handleKeyDownEvent(SDL_Keysym keysym) {
             moveDirection = MoveTo::move_right;
             break;
         case SDLK_SPACE:
-            event = Event::event_shoot_left;
+            event = Event::event_shoot;
             std::cout << "shooting\n";
             break;
         default:
@@ -70,7 +70,7 @@ void EventHandler::handleKeyUpEvent(SDL_Keysym keysym) {
             moveDirection = MoveTo::move_right;
             break;
         case SDLK_SPACE:
-            event = Event::event_shoot_left;
+            event = Event::event_stop_shooting;
             break;
         default:
             moveDirection = MoveTo::move_idle;

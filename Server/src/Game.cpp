@@ -102,10 +102,14 @@ void Game::processEvents() {
         // try_pop es no bloqueante y devuelve false en caso de que la queue este vacia
         while (unprocessed_events.try_pop(event) && iterations < 10) {
             if (event->getEvent() == Event::event_move
-                    || event->getEvent() == Event::event_stop_move) {
+                    or event->getEvent() == Event::event_stop_move) {
                 gameWorld.updateMovementDirection(event->getEvent(),
                                                   event->getIdPlayer(),
                                                   event->getMoveTo());
+            } else if (event->getEvent() == Event::event_shoot
+                        or event->getEvent() == Event::event_stop_shooting) {
+                gameWorld.updateShootingState(event->getEvent(),
+                                              event->getIdPlayer());
             }
             iterations++;
         }

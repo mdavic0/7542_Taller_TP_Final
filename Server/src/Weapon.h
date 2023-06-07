@@ -8,10 +8,14 @@ class Weapon {
         uint8_t damage;
         uint8_t rate;
         uint8_t capacity;
-    public:
+protected:
+    bool activated;
+public:
         Weapon();
         Weapon(uint8_t damage, uint8_t rate, uint8_t capacity);
-        virtual void shoot(Event event/*,List of zombies*/) = 0;
+        void activate();
+        void deactivate();
+        virtual void shoot(bool right/*,List of zombies*/) = 0;
         virtual ~Weapon();
 };
 

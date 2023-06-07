@@ -5,7 +5,7 @@
 class P90 : public Weapon {
 public:
     P90();
-    void shoot(Event event) override;
+    void shoot(bool right) override;
 };
 
 

@@ -19,7 +19,7 @@ class Player {
         std::pair<uint16_t, uint16_t> movement_direction;
         uint8_t velocity;
         std::shared_ptr<Weapon> weapon;
-
+        bool lookingRight;
     public:
         explicit Player(TypeOperator typeOperator);
         Player(TypeOperator typeOperator,
@@ -28,6 +28,8 @@ class Player {
                std::shared_ptr<Weapon> weapon);
         void setMovementDirection(MoveTo direction);
         void stopMovementDirection(MoveTo direction);
+        void setShootingState();
+        void stopShootingState();
         void applyStep();
         std::pair<uint16_t, uint16_t>& getPosition();
         TypeOperator& getTypeOperator();
@@ -36,6 +38,7 @@ class Player {
         virtual ~Player() = default;
     private:
         void move();
+        void shoot();
         virtual void specialAtack(Event event) = 0;
 };
 

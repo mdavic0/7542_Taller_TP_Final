@@ -22,6 +22,7 @@ class GameWorld {
     void deletePlayer(uint8_t id);
 
     void updateMovementDirection(Event event, uint8_t id, MoveTo direction);
+    void updateShootingState(Event event, uint8_t id);
     void simulateStep();
     std::shared_ptr<Snapshot> getSnapshot();
 };

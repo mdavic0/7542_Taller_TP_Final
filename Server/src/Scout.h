@@ -5,7 +5,7 @@
 class Scout : public Weapon {
 public:
     Scout();
-    void shoot(Event event) override;
+    void shoot(bool right) override;
 };
 
 
