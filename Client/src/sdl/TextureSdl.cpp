@@ -15,6 +15,24 @@ Texture::Texture(Renderer& renderer, SDL_Surface* surface) :
     SDL_FreeSurface(surface);
 }
 
+Texture::Texture(Renderer& renderer, const std::string& file, SDL_Color c) :
+    textureRender(renderer), texture(nullptr) {
+    this->freeTexture();
+    SDL_Surface* surface = IMG_Load(file.c_str());
+    if (!surface)
+        throw SdlException("Error charge text ");
+    if (SDL_SetSurfaceAlphaMod(surface, c.a) != 0)
+        throw SdlException("Failed set Alpha texture ");
+    if (SDL_SetSurfaceColorMod(surface, c.r, c.g, c.b) != 0)
+        throw SdlException("Failed set color ");
+    this->texture = SDL_CreateTextureFromSurface(textureRender.get(), surface);
+    if (!texture)
+        throw SdlException("Error create texture");
+    if (SDL_SetTextureAlphaMod(this->texture, c.a) != 0)
+        throw SdlException("Failed set Alpha texture ");
+    SDL_FreeSurface(surface);
+}
+
 void Texture::loadTexture(const std::string& file, bool resize) {
     this->freeTexture();
     SDL_Surface* surface = IMG_Load(file.c_str());
