@@ -18,11 +18,13 @@ class ClientProtocol : public Protocol {
         void sendMove(const MoveTo& moveTo, const uint8_t& idPlayer);
         void sendStopMove(const MoveTo& moveTo, const uint8_t& idPlayer);
         void sendStart();
+        void sendLeave(const uint8_t& idPlayer);
         void sendOperator(const TypeOperator& typeOperator);
         void sendMoveTo(const MoveTo& moveTo);
 
         Snapshot getCreate();
         Snapshot getJoin();
+        Snapshot getStart();
         Snapshot getPlaying();
     public:
         /*
