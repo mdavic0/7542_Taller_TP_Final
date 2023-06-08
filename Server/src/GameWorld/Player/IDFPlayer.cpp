@@ -1,9 +1,11 @@
 #include "IDFPlayer.h"
 
-IDFPlayer::IDFPlayer() : Player(TypeOperator::operator_idf,
-                                150,
-                                15,
-                                std::make_shared<Idf>()) {}
+#include <utility>
+
+IDFPlayer::IDFPlayer(std::pair<uint16_t, uint16_t>& position,
+                     std::shared_ptr<Collidable> collidable) :
+    Player(TypeOperator::operator_idf, 150, 15,
+           std::make_shared<Idf>(), position, std::move(collidable)) {}
 
 void IDFPlayer::specialAtack(Event event) {
     switch (event) {

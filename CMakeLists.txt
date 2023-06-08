@@ -57,8 +57,10 @@ include_directories(${PROJECT_SOURCE_DIR}/Server/src/CommunicationThreads)
 include_directories(${PROJECT_SOURCE_DIR}/Server/src/GameThread)
 include_directories(${PROJECT_SOURCE_DIR}/Server/src/GameWorld)
 include_directories(${PROJECT_SOURCE_DIR}/Server/src/Protocol)
-include_directories(${PROJECT_SOURCE_DIR}/Server/src/GameWorld/Weapon)
+include_directories(${PROJECT_SOURCE_DIR}/Server/src/GameWorld/Collision)
 include_directories(${PROJECT_SOURCE_DIR}/Server/src/GameWorld/Player)
+include_directories(${PROJECT_SOURCE_DIR}/Server/src/GameWorld/Weapon)
+
 
 add_subdirectory("Server/src")
 

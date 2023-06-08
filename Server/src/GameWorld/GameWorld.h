@@ -8,6 +8,9 @@
 #include "IDFPlayer.h"
 #include "SCOUTPlayer.h"
 #include "P90Player.h"
+#include "Collidable.h"
+#include "Collision/Collidable.h"
+#include "Defines.h"
 
 class GameWorld {
     private:
@@ -16,6 +19,8 @@ class GameWorld {
         // TODO: VECTOR DE VECTORES DE POSICIONES (EN ORDEN) DE CADA PLAYER /
         //    MONSTRUITO ENEMIGO EN EL GAME (PARA EFECTUAR BIEN EL ATAQUE, YA QUE
         //    ESTE VARIA DEPENDIENDO DE LA DISTANCIA / ENEMIGOS ATRAVEZADOS)
+        std::map<int, std::shared_ptr<Collidable>> collidables;
+
     public:
     GameWorld();
     uint8_t addPlayer(TypeOperator op);

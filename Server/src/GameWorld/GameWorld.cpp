@@ -1,23 +1,30 @@
 #include "GameWorld.h"
 
-GameWorld::GameWorld() : players_amount(0), players() {}
+GameWorld::GameWorld() : players_amount(0), players(), collidables() {}
 
 uint8_t GameWorld::addPlayer(TypeOperator op) {
     std::shared_ptr<Player> newPlayer = nullptr;
+    std::pair<uint16_t, uint16_t> position = {(WINDOW_WIDTH / 2) + 40 * players_amount,
+                                              (WINDOW_HEIGTH / 2) + (WINDOW_HEIGTH / 4)};
+
+    std::shared_ptr<Collidable> collidable =  std::make_shared<Collidable>(
+            (int)players_amount,position,20, 20);
+
     switch (op) {
         case TypeOperator::operator_idf:
-            newPlayer = std::make_shared<IDFPlayer>();
+            newPlayer = std::make_shared<IDFPlayer>(position, collidable);
             break;
         case TypeOperator::operator_scout:
-            newPlayer = std::make_shared<SCOUTPlayer>();
+            newPlayer = std::make_shared<SCOUTPlayer>(position, collidable);
             break;
         case TypeOperator::operator_p90:
-            newPlayer = std::make_shared<P90Player>();
+            newPlayer = std::make_shared<P90Player>(position, collidable);
             break;
         default:
-            newPlayer = std::make_shared<IDFPlayer>();
+            newPlayer = std::make_shared<IDFPlayer>(position, collidable);
             break;
     }
+    this->collidables.insert({players_amount, collidable});
     this->players.insert({players_amount, newPlayer});
     return players_amount++;
 }
@@ -43,14 +50,14 @@ void GameWorld::updateShootingState(Event event, uint8_t id) {
 }
 
 void GameWorld::simulateStep() {
-    for (auto player : players) {
-        players.at(player.first)->applyStep();
+    for (auto& player : players) {
+        players.at(player.first)->applyStep(this->collidables);
     }
 }
 
 std::shared_ptr<Snapshot> GameWorld::getSnapshot() {
     std::map<uint8_t, StOperator> playersInfo;
-    for (auto player : players) {
+    for (auto& player : players) {
         playersInfo.insert({player.first, StOperator(player.first,
                                                      player.second->getTypeOperator(),
                                                      player.second->getState(),

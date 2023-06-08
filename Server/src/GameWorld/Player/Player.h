@@ -8,6 +8,7 @@
 #include "Event.h"
 #include "Weapon.h"
 #include <memory>
+#include "Collidable.h"
 
 class Player {
     private:
@@ -20,24 +21,24 @@ class Player {
         uint8_t velocity;
         std::shared_ptr<Weapon> weapon;
         bool lookingRight;
+        std::shared_ptr<Collidable> collidable;
     public:
         explicit Player(TypeOperator typeOperator);
-        Player(TypeOperator typeOperator,
-               uint8_t life,
-               uint8_t velocity,
-               std::shared_ptr<Weapon> weapon);
+        Player(TypeOperator typeOperator,uint8_t life,uint8_t velocity,
+               std::shared_ptr<Weapon> weapon, std::pair<uint16_t,
+               uint16_t>& position, std::shared_ptr<Collidable> collidable);
         void setMovementDirection(MoveTo direction);
         void stopMovementDirection(MoveTo direction);
         void setShootingState();
         void stopShootingState();
-        void applyStep();
+        void applyStep(std::map<int, std::shared_ptr<Collidable>>& collidables);
         std::pair<uint16_t, uint16_t>& getPosition();
         TypeOperator& getTypeOperator();
         State& getState();
         uint8_t& getHealth();
         virtual ~Player() = default;
     private:
-        void move();
+        void move(std::map<int, std::shared_ptr<Collidable>>& collidables);
         void shoot();
         virtual void specialAtack(Event event) = 0;
 };

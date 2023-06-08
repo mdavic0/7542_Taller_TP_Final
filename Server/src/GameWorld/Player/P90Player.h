@@ -6,7 +6,8 @@
 
 class P90Player : public Player {
 public:
-    P90Player();
+    P90Player(std::pair<uint16_t, uint16_t>& position,
+                       std::shared_ptr<Collidable> collidable);
     void specialAtack(Event event) override;
     ~P90Player() override;
 private:

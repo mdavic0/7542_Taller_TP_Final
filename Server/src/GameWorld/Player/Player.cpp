@@ -7,9 +7,11 @@ Player::Player(TypeOperator typeOperator) : typeOperator(typeOperator),
     movement_direction(0,0), velocity(1), weapon(), lookingRight(true) {}
 
 Player::Player(TypeOperator typeOperator, uint8_t life, uint8_t velocity,
-    std::shared_ptr<Weapon> weapon) : typeOperator(typeOperator), state(State::idle),
-    life(life), fell_down(0), position(0,0), movement_direction(0,0),
-    velocity(velocity), weapon(std::move(weapon)), lookingRight(true) {}
+    std::shared_ptr<Weapon> weapon, std::pair<uint16_t, uint16_t>& position,
+    std::shared_ptr<Collidable> collidable) :
+    typeOperator(typeOperator), state(State::idle), life(life), fell_down(0),
+    position(position), movement_direction(0,0), velocity(velocity),
+    weapon(std::move(weapon)), lookingRight(true), collidable(std::move(collidable)) {}
 
 void Player::setMovementDirection(MoveTo direction) {
     switch (direction) {
@@ -72,8 +74,8 @@ void Player::stopShootingState() {
     this->weapon->deactivate();
 }
 
-void Player::applyStep() {
-    this->move();
+void Player::applyStep(std::map<int, std::shared_ptr<Collidable>>& collidables) {
+    this->move(collidables);
     this->shoot();
 }
 
@@ -92,9 +94,18 @@ uint8_t& Player::getHealth() {
     return this->life;
 }
 
-void Player::move() {
-    this->position.first += movement_direction.first + movement_direction.first * (velocity / 10);
-    this->position.second += movement_direction.second + movement_direction.second * (velocity / 10);
+void Player::move(std::map<int, std::shared_ptr<Collidable>>& collidables) {
+    if (not this->collidable->collidesWith(collidables)) {
+        this->position.first += movement_direction.first + movement_direction.first * (velocity / 10);
+        this->position.second += movement_direction.second + movement_direction.second * (velocity / 10);
+        this->collidable->updatePosition(this->position);
+    }
+    if (this->collidable->collidesWith(collidables)) {
+        this->position.first -= movement_direction.first + movement_direction.first * (velocity / 10);
+        this->position.second -= movement_direction.second + movement_direction.second * (velocity / 10);
+        this->collidable->updatePosition(this->position);
+    }
+
 }
 
 void Player::shoot() {
