@@ -7,6 +7,7 @@
 #include "SdlImage.h"
 #include "SdlTTF.h"
 #include "SdlException.h"
+#include "Configuration.h"
 #include "Font.h"
 #include <map>
 #include "Operator.h"

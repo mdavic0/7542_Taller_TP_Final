@@ -46,6 +46,12 @@ set(ASSETS_DIR ${CMAKE_BINARY_DIR}/assets)
 # COMMON
 include_directories(${PROJECT_SOURCE_DIR}/Common)
 include_directories(${PROJECT_SOURCE_DIR}/Common/Communication)
+include_directories(${PROJECT_SOURCE_DIR}/Common/Configuration)
+include_directories(${PROJECT_SOURCE_DIR}/Common/Defines)
+include_directories(${PROJECT_SOURCE_DIR}/Common/Event)
+include_directories(${PROJECT_SOURCE_DIR}/Common/Exception)
+include_directories(${PROJECT_SOURCE_DIR}/Common/GameStructure)
+include_directories(${PROJECT_SOURCE_DIR}/Common/Snapshot)
 include_directories(${PROJECT_SOURCE_DIR}/Common/Thread)
 
 add_subdirectory("Common")
@@ -66,6 +72,12 @@ add_subdirectory("Server/src")
 
 # CLIENT
 include_directories(${PROJECT_SOURCE_DIR}/Client/src)
+include_directories(${PROJECT_SOURCE_DIR}/Client/src/ClientProtocol)
+include_directories(${PROJECT_SOURCE_DIR}/Client/src/CommunicationThreads)
+include_directories(${PROJECT_SOURCE_DIR}/Client/src/Game)
+include_directories(${PROJECT_SOURCE_DIR}/Client/src/GameThread)
+include_directories(${PROJECT_SOURCE_DIR}/Client/src/Launcher)
+include_directories(${PROJECT_SOURCE_DIR}/Client/src/Sdl)
 add_subdirectory("Client/src")
 
 include(FetchContent)
@@ -85,7 +97,7 @@ add_executable(server "Server/main.cpp")
 target_link_libraries(server server_classes common_classes)
 
 add_executable(client "Client/main.cpp")
-target_link_libraries(client client_classes common_classes SDL2 SDL2_image SDL2_ttf)
+target_link_libraries(client client_classes common_classes SDL2 SDL2_image SDL2_ttf yaml-cpp)
 
 # add_executable(testprotocol "Testing/testprotocol.cpp" )
 # target_link_libraries(testprotocol server_classes client_classes common_classes)

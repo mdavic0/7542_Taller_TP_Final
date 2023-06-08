@@ -6,7 +6,7 @@ GameWorld::GameWorld(const TypeGame& type) :
 
 uint8_t GameWorld::addPlayer(TypeOperator op) {
     std::shared_ptr<Player> newPlayer = nullptr;
-    std::pair<uint16_t, uint16_t> position = {(WINDOW_WIDTH / 2) + 40 * players_amount,
+    std::pair<uint16_t, uint16_t> position = {(WINDOW_WIDTH / 2) + SIZE_SPRITE_X * players_amount,
                                               (WINDOW_HEIGTH / 2) + (WINDOW_HEIGTH / 4)};
 
     std::shared_ptr<Collidable> collidable =  std::make_shared<Collidable>(

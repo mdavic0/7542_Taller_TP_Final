@@ -1,4 +1,6 @@
 #include "Hud.h"
+#include "Configuration.h"
+#include <iostream>
 
 Hud::Hud(TypeOperator type, Renderer& render) : type(type), renderHud(render) {
     this->loadTextures();
@@ -44,7 +46,13 @@ void Hud::renderHealthBar() {
                             35,
                             512 * 6/10,
                             128 * 7/10};
+    std::cout << "salud" << Configuration::idf_health << std::endl;
+    SDL_Rect rectFinal2 = {  30,
+                            35,
+                            512 * 6/10 * 100/Configuration::idf_health,
+                            128 * 7/10};
     this->renderHud.copy(texturesHud["bar-bg"]->getTexture(), rectInit, rectFinal);
+    this->renderHud.copy(texturesHud["bar-fill"]->getTexture(), rectInit, rectFinal2);
 }
 
 Hud::~Hud() {

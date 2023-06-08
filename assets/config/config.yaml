@@ -1,38 +1,36 @@
 ---
-1: # Idf
-  damage: 30
-  health: 150
-  velocity: 15
-  rate: 20
-  capacity: 50
-  skills: [grenade, smoke]
-  injure: 3
-2: # p90
-  damage: 20
-  health: 140
-  velocity: 20
-  rate: 10
-  capacity: 30
-  skills: [grenade, smoke]
-  injure: 3
-3: # scout
-  damage: 60
-  health: 200
-  velocity: 8
-  rate: 1
-  capacity: 20
-  skills: [blitz]
-  injure: 3
+idf_damage: 30
+idf_health: 150
+idf_velocity: 15
+idf_rate: 20
+idf_capacity: 50
+idf_injure: 3
+# 2: # p90
+#   damage: 20
+#   health: 140
+#   velocity: 20
+#   rate: 10
+#   capacity: 30
+#   skills: [grenade, smoke]
+#   injure: 3
+# 3: # scout
+#   damage: 60
+#   health: 200
+#   velocity: 8
+#   rate: 1
+#   capacity: 20
+#   skills: [blitz]
+#   injure: 3
 
-hability:
-  grenade:
-    damage: 50
-    recharge: 10
-  smoke:
-    damage: 0
-    recharge: 10
-  blitz:
-    damage: 100
-    recharge: 30
+# hability:
+#   grenade:
+#     damage: 50
+#     recharge: 10
+#   smoke:
+#     damage: 0
+#     recharge: 10
+#   blitz:
+#     damage: 100
+#     recharge: 30
 
 
