@@ -30,6 +30,10 @@ public:
     // Event move or stop
     explicit EventDTO(const Event& event, const MoveTo& moveTo, const uint8_t& idPlayer);
 
+    // Leave
+    explicit EventDTO(const uint8_t& idPlayer);
+
+    // Generic
     explicit EventDTO(const Event& event);
 
     Event getEvent() const;

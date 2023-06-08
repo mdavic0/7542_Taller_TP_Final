@@ -30,7 +30,7 @@ class Launcher : public QWidget {
         std::optional<ClientProtocol> clientProtocol;
         void initWidget();
         void initFont();
-        void initGame(int menu, uint8_t idPlayer);
+        void initGame(int menu, uint8_t idPlayer, uint8_t numPlayers);
         // void initThreadsConnection();
     public:
         explicit Launcher(QWidget* parent = 0);

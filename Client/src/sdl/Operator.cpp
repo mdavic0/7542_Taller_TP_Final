@@ -98,14 +98,14 @@ void Operator::render() {
 
 void Operator::renderAnimation(int speed, SDL_Texture* texture) {
     int speedAnimation = static_cast<int>((SDL_GetTicks() / speed) % numFrames);
-    SDL_Rect rectInit = {   SIZE_SPRITE * speedAnimation,
-                            0,
-                            SIZE_SPRITE,
-                            SIZE_SPRITE};
+    SDL_Rect rectInit = {   (35 + speedAnimation * (SIZE_FRAME)),
+                            60,
+                            SIZE_SPRITE_X,
+                            SIZE_SPRITE_Y};
     SDL_Rect rectFinal = {  position.first,
                             position.second,
-                            SIZE_SPRITE,
-                            SIZE_SPRITE};
+                            SIZE_SPRITE_X,
+                            SIZE_SPRITE_Y};
     this->renderPlayer.copy(texture, rectInit, rectFinal, this->flipType);
 }
 

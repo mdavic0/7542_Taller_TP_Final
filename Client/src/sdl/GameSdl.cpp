@@ -8,7 +8,8 @@ GameSdl::GameSdl(WindowSdl& window, Renderer& renderer,
     bool& endGame, std::map<uint8_t, Operator*>& soldiers, uint8_t idPlayer) : 
     window(window), renderer(renderer),
     snapshotQueue(snapshotQueue), eventQueue(eventQueue), endGame(endGame),
-    events(eventQueue, idPlayer), map(1, this->renderer), soldiers(soldiers) {
+    events(eventQueue, idPlayer), map(1, this->renderer), soldiers(soldiers),
+    hud(soldiers[idPlayer]->getType(), renderer) {
 }
 
 bool GameSdl::isRunning() {
@@ -53,6 +54,7 @@ void GameSdl::run() {
 
 void GameSdl::render() {
     this->map.render();
+    this->hud.render();
     for (auto &soldier : this->soldiers)
         soldier.second->render();
 }

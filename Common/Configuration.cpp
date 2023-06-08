@@ -1,16 +1,14 @@
-#include "Config.h"
+#include "Configuration.h"
 #include <iostream>
 #include "Exception.h"
 
-Config::Config(const std::string& filename) :
-    file(filename), filename(filename) {
-    this->loadConfig();
-    this->readFile();
+Configuration::Configuration() {
 }
 
-void Config::readFile() {
-    if (config["hability"]) {
-        const YAML::Node& skills = config["hability"];
+void Configuration::loadConfiguration(const std::string& filename) {
+    file = YAML::LoadFile(filename);
+    if (file["hability"]) {
+        const YAML::Node& skills = file["hability"];
         for (const auto& hability : skills) {
             std::string name = hability.first.as<std::string>();
             const YAML::Node& data = hability.second;
@@ -19,12 +17,12 @@ void Config::readFile() {
             stSkill.damage = data["damage"].as<int>();
             stSkill.recharge = data["recharge"].as<int>();
 
-            this->listSkill[name] = stSkill;
+            listSkill[name] = stSkill;
         }
     }
 
-    if (config.IsSequence()) {
-        for (const auto& op : config) {
+    if (file.IsSequence()) {
+        for (const auto& op : file) {
             Operator stOperator;
             stOperator.type = TypeOperator(op["name"].as<int>());
             stOperator.damage = op["damage"].as<int>();
@@ -44,18 +42,5 @@ void Config::readFile() {
     }
 }
 
-Operator Config::getOperator(int id) {
-    return this->listOperator[id];
+Configuration::~Configuration() {
 }
-
-void Config::loadConfig() {
-    if (!this->file.is_open())
-        throw Exception("%s %s", "Failed to open config file: ", filename);
-    this->config = YAML::Load(file);
-}
-
-Config::~Config() {
-    if (this->file.is_open())
-        this->file.close();
-}
-

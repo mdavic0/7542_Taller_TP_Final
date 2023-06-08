@@ -11,6 +11,7 @@
 #include "WindowSdl.h"
 #include "HandleEvent.h"
 #include "mapSdl.h"
+#include "Hud.h"
 #include <memory>
 #include <map>
 
@@ -23,8 +24,9 @@ class GameSdl {
         Queue<std::shared_ptr<EventDTO>>& eventQueue;
         MapSdl map;
         bool running;
-        std::map<uint8_t, Operator*>& soldiers;
         bool& endGame;
+        std::map<uint8_t, Operator*>& soldiers;
+        Hud hud;
     public:
         GameSdl(WindowSdl& window, Renderer& renderer,
                 Queue<std::shared_ptr<Snapshot>>& snapshotQueue,

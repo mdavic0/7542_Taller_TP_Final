@@ -4,10 +4,10 @@
 #include <random>
 #include <functional>
 
-Game::Game(const uint32_t id, const std::string& name) :
+Game::Game(const uint32_t id, const std::string& name, const TypeGame& type) :
     id(id), name(name), mutex(),
     unprocessed_events(1000), client_snapshot_queues(),
-    talking(true), alive(true), gameWorld(), started(false), map(1) {}
+    talking(true), alive(true), gameWorld(type), started(false), map(1) {}
 
 void Game::run() {
     try {
@@ -47,19 +47,20 @@ Queue<std::shared_ptr<EventDTO>>* Game::joinGame(Queue<std::shared_ptr<Snapshot>
         for (auto &clientQueue : client_snapshot_queues) {
             clientQueue->push(std::make_shared<Snapshot>(Event::event_join,
                                                         (uint8_t)0x00,
-                                                        idPlayer));
+                                                        idPlayer, client_snapshot_queues.size()));
         }
         
         return &this->unprocessed_events;
     }
-    // TODO: LANZAR EXCEPCION CUSTOM?? O USAMOS LIBERROR
+    // JOIN FAILED
+    q->push(std::make_shared<Snapshot>(Event::event_join, (uint8_t)0x01, 0, 0));
     return nullptr;
 }
 
 void Game::startGame() {
     this->started = true;
     for (auto &clientQueue : client_snapshot_queues) {
-        clientQueue->push(gameWorld.getSnapshot());
+        clientQueue->push(gameWorld.getSnapshot(true));
     }
     this->start();
 } 
@@ -81,7 +82,7 @@ void Game::gameLoop() {
         // para poder lanzar una grandada, que los jugadores se muevan,
         // todos los eventos que tienen que ver con el tiempo.
 
-        std::shared_ptr<Snapshot> snapshot = gameWorld.getSnapshot();
+        std::shared_ptr<Snapshot> snapshot = gameWorld.getSnapshot(false);
         // broadcastSnapshot() # acá recien se agarra el snapshot y se lo pushea
         // a los hilos sender. Un snapshot por gameloop. Si hacen uno por evento,
         // saturan la red sin sentido
@@ -110,6 +111,8 @@ void Game::processEvents() {
                         or event->getEvent() == Event::event_stop_shooting) {
                 gameWorld.updateShootingState(event->getEvent(),
                                               event->getIdPlayer());
+            } else if (event->getEvent() == Event::event_leave) {
+                gameWorld.deletePlayer(event->getIdPlayer());
             }
             iterations++;
         }

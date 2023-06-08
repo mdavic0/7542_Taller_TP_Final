@@ -16,6 +16,10 @@ EventDTO::EventDTO(const Event& event, const MoveTo& moveTo, const uint8_t& idPl
     event(event), moveTo(moveTo), typeOperator(TypeOperator::operator_idle),
     typeGame(TypeGame::game_idle), str(), n(0), idPlayer(idPlayer) {}
 
+EventDTO::EventDTO(const uint8_t& idPlayer) : 
+    event(Event::event_leave), moveTo(MoveTo::move_idle), typeOperator(TypeOperator::operator_idle),
+    typeGame(TypeGame::game_idle), str(), n(0), idPlayer(idPlayer) {}
+
 EventDTO::EventDTO(const Event& event) : 
     event(event), moveTo(MoveTo::move_idle), typeOperator(TypeOperator::operator_idle),
     typeGame(TypeGame::game_idle), str(), n(0), idPlayer(0) {}

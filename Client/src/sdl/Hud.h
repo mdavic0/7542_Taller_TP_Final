@@ -12,6 +12,8 @@ class Hud {
         Renderer& renderHud;
         std::map<std::string, Texture*> texturesHud;
         void loadTextures();
+        void renderBg();
+        void renderHealthBar();
     public:
         Hud(TypeOperator type, Renderer& render);
         ~Hud();

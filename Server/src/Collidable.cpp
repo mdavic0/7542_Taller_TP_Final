@@ -18,13 +18,13 @@ bool Collidable::collidesWith(std::map<int, std::shared_ptr<Collidable>> &collid
 }
 
 bool Collidable::collidesWith(std::shared_ptr<Collidable>& other) {
-   std::cout << "(" << this->topLeftCorner.first << "," << this->topLeftCorner.second << ")\n";
-   std::cout << "(" << other->topLeftCorner.first << "," << other->topLeftCorner.second << ")\n";
+   // std::cout << "(" << this->topLeftCorner.first << "," << this->topLeftCorner.second << ")\n";
+   // std::cout << "(" << other->topLeftCorner.first << "," << other->topLeftCorner.second << ")\n";
    if (this->topLeftCorner.first < other->topLeftCorner.first + other->width &&
         this->topLeftCorner.first + this->width > other->topLeftCorner.first &&
         this->topLeftCorner.second < other->topLeftCorner.second + other->height &&
         this->topLeftCorner.second + this->height > other->topLeftCorner.second) {
-       std::cout << "Hay colision!\n";
+       // std::cout << "Hay colision!\n";
        return  true;
    }
    return false;

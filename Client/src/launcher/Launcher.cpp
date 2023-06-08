@@ -94,8 +94,6 @@ void Launcher::goToJoin() {
 }
 
 void Launcher::createProtocol(const QString& ip, const QString& port) {
-    qDebug() << "Ip: " << ip;
-    qDebug() << "port: " << port;
     try {
         this->clientProtocol = ClientProtocol(
             Socket(ip.toStdString().c_str(), port.toStdString().c_str()));
@@ -110,9 +108,6 @@ void Launcher::createProtocol(const QString& ip, const QString& port) {
 void Launcher::sendCreateMatch(const QString& name, int mode, 
         int operatorSelect) {
     std::string nameMatch = name.toStdString();
-    qDebug() << "Nombre " << name;
-    qDebug() << "Seleccione modo juego " << mode;
-    qDebug() << "Seleccione operador " << operatorSelect;
     EventDTO eventCreate(nameMatch, TypeGame(mode), TypeOperator(operatorSelect));
     clientProtocol->sendEvent(eventCreate);
     Snapshot receive = clientProtocol->getSnapshot();
@@ -122,8 +117,8 @@ void Launcher::sendCreateMatch(const QString& name, int mode,
         QMessageBox::information(this, "Exito", message.c_str(),
             QMessageBox::Close);
         this->hide();
-        this->initGame(CREATE_MENU, 0);
-        //clientProtocol->shutdown(2); 
+        this->initGame(CREATE_MENU, receive.getIdPlayer(), 1);
+        this->goToConnect();
         this->show();
     } else {
         QMessageBox::information(this, "Error", 
@@ -133,8 +128,6 @@ void Launcher::sendCreateMatch(const QString& name, int mode,
 }
 
 void Launcher::sendJoinMatch(int code, int operatorSelect) {
-    qDebug() << "Me uno a partida con code: " << code;
-    qDebug() << "Seleccione operador " << operatorSelect;
     EventDTO eventCreate(code, TypeOperator(operatorSelect));
     clientProtocol->sendEvent(eventCreate);
     Snapshot receive = clientProtocol->getSnapshot();
@@ -142,8 +135,8 @@ void Launcher::sendJoinMatch(int code, int operatorSelect) {
         QMessageBox::information(this, "Exito", "Union Exitosa",
             QMessageBox::Close);
         this->hide();
-        this->initGame(JOIN_MENU, receive.getIdPlayer());
-        //clientProtocol->shutdown(2); 
+        this->initGame(JOIN_MENU, receive.getIdPlayer(), receive.getSize());
+        this->goToConnect();
         this->show();
     } else {
         QMessageBox::information(this, "Error", 
@@ -152,12 +145,14 @@ void Launcher::sendJoinMatch(int code, int operatorSelect) {
     }
 }
 
-void Launcher::initGame(int menu, uint8_t idPlayer) {
+void Launcher::initGame(int menu, uint8_t idPlayer, uint8_t numPlayers) {
     bool endGame = false;
     Queue<std::shared_ptr<Snapshot>> snapshotQueue(SIZE_QUEUE);
     Queue<std::shared_ptr<EventDTO>> eventQueue(SIZE_QUEUE);
-    GameDrawner gameDrawner(snapshotQueue, eventQueue, endGame, menu, idPlayer);
-    SnapshotReceiver snapshotReceiver(clientProtocol.value(), snapshotQueue, endGame);
+    GameDrawner gameDrawner(snapshotQueue, eventQueue, endGame, menu, idPlayer,
+                            numPlayers);
+    SnapshotReceiver snapshotReceiver(clientProtocol.value(), snapshotQueue,
+                                        endGame);
     EventSender eventSender(eventQueue, clientProtocol.value(), endGame);
     eventSender.start();
     snapshotReceiver.start();
@@ -165,5 +160,4 @@ void Launcher::initGame(int menu, uint8_t idPlayer) {
 }
 
 Launcher::~Launcher() {
-    // clientProtocol->stop();
 }

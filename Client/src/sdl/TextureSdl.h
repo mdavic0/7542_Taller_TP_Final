@@ -15,6 +15,7 @@ class Texture {
         void freeTexture();
     public:
         Texture(Renderer& renderer, const std::string& file, bool resize);
+        Texture(Renderer& renderer, const std::string& file, SDL_Color c);
         Texture(Renderer& renderer, SDL_Surface* surface);
         ~Texture();
         SDL_Texture* getTexture();

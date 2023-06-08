@@ -7,9 +7,8 @@ GamesController::GamesController() : counter(0), games(), mutex() {}
 Queue<std::shared_ptr<EventDTO>>* GamesController::create(std::shared_ptr<EventDTO> eventdto,
                                                           Queue<std::shared_ptr<Snapshot>>* snapshot_queue,
                                                           uint32_t& code) {
-    std::string scenario = eventdto->getStr();
     std::lock_guard<std::mutex> locker(mutex);
-    Game *newGame = new Game(counter, scenario);
+    Game *newGame = new Game(counter, eventdto->getStr(), eventdto->getTypeGame());
     games.insert(std::pair{counter, newGame});
     code = counter++;
     return newGame->createGame(snapshot_queue, eventdto->getTypeOperator());

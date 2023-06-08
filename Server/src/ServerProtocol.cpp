@@ -142,7 +142,14 @@ EventDTO ServerProtocol::getStopMove() {
 }
 
 EventDTO ServerProtocol::getStart() {
-    return EventDTO(Event::event_start_game, MoveTo::move_idle, TypeOperator::operator_idle, TypeGame::game_idle, "", 0);
+    return EventDTO(Event::event_start_game);
+}
+
+EventDTO ServerProtocol::getLeave() {
+    uint8_t id;
+    recvAll(&id, 1);
+
+    return EventDTO(id);
 }
 
 void ServerProtocol::sendCreate(const uint32_t& code, const uint8_t& idPlayer) {
@@ -155,7 +162,7 @@ void ServerProtocol::sendCreate(const uint32_t& code, const uint8_t& idPlayer) {
     sendAll(&idPlayer, 1);
 }
 
-void ServerProtocol::sendJoin(const uint8_t& ok, const uint8_t& idPlayer) {
+void ServerProtocol::sendJoin(const uint8_t& ok, const uint8_t& idPlayer, const uint8_t& size) {
     uint8_t event = 0x02;
     sendAll(&event, 1);
 
@@ -163,20 +170,33 @@ void ServerProtocol::sendJoin(const uint8_t& ok, const uint8_t& idPlayer) {
 
     if (ok == 0) {
         sendAll(&idPlayer, 1);
+        sendAll(&size, 1);
     }
+}
+
+void ServerProtocol::sendStart(const std::map<uint8_t, StOperator> &playersInfo,
+    const TypeGame& typeGame, const uint8_t& idMap) {
+    uint8_t event = 0x06;
+    sendAll(&event, 1);
+    
+    sendPlayersInfo(playersInfo);
+    
+    uint8_t idGame;
+    if (typeGame == TypeGame::game_survival) {
+        idGame = SURVIVAL_CODE;
+    } else if (typeGame == TypeGame::game_clear_zone) {
+        idGame = CLEAR_ZONE_CODE;
+    }
+    sendAll(&idGame, 1);
+
+    sendAll(&idMap, 1);
 }
 
 void ServerProtocol::sendPlaying(const std::map<uint8_t, StOperator> &playersInfo) {
     uint8_t event = 0x05;
     sendAll(&event, 1);
-    uint8_t playersCount = playersInfo.size();
-    sendAll(&playersCount, 1);
-    for (auto it = playersInfo.begin(); it != playersInfo.end(); ++it) {
-        sendAll(&it->first, 1);
-        sendOperator(it->second.getTypeOperator());
-        sendState(it->second.getState());
-        sendPosition(it->second.getPosition().first, it->second.getPosition().second); // x = it->second.first, y = it->second.second
-  }
+
+    sendPlayersInfo(playersInfo);
 }
 
 
@@ -212,6 +232,17 @@ void ServerProtocol::sendState(const State& state) {
     }
 }
 
+void ServerProtocol::sendPlayersInfo(const std::map<uint8_t, StOperator> &playersInfo) {
+    uint8_t playersCount = playersInfo.size();
+    sendAll(&playersCount, 1);
+    for (auto it = playersInfo.begin(); it != playersInfo.end(); ++it) {
+        sendAll(&it->first, 1);
+        sendOperator(it->second.getTypeOperator());
+        sendState(it->second.getState());
+        sendPosition(it->second.getPosition().first, it->second.getPosition().second); // x = it->second.first, y = it->second.second
+  }
+}
+
 void ServerProtocol::sendPosition(const uint16_t& x, const uint16_t& y) {
     uint16_t xAux = htons(x);
     sendAll(&xAux, 2);
@@ -245,11 +276,15 @@ EventDTO ServerProtocol::getEvent() {
         return getStart();
         break;
 
+    case LEAVE_CODE:
+        return getLeave();
+        break;
+
     default:
         break;
     }
 
-    return EventDTO(Event::event_invalid, MoveTo::move_idle, TypeOperator::operator_idle, TypeGame::game_idle, "", 0);
+    return EventDTO(Event::event_invalid);
 }
 
 void ServerProtocol::sendSnapshot(const Snapshot &snapshot) {
@@ -257,7 +292,9 @@ void ServerProtocol::sendSnapshot(const Snapshot &snapshot) {
     if (event == Event::event_create) {
         sendCreate(snapshot.getCode(), snapshot.getIdPlayer());
     } else if (event == Event::event_join) {
-        sendJoin(snapshot.getOk(), snapshot.getIdPlayer());
+        sendJoin(snapshot.getOk(), snapshot.getIdPlayer(), snapshot.getSize());
+    } else if (event == Event::event_start_game) {
+        sendStart(snapshot.getInfo(), snapshot.getTypeGame(), snapshot.getMap());
     } else {
         sendPlaying(snapshot.getInfo());
     }

@@ -13,9 +13,9 @@
 
 GameDrawner::GameDrawner(Queue<std::shared_ptr<Snapshot>> &snapshot_queue,
     Queue<std::shared_ptr<EventDTO>> &client_events, bool& endGame, int menu,
-    uint8_t idPlayer) :
+    uint8_t idPlayer, uint8_t numPlayers) :
     client_events(client_events), snapshot_queue(snapshot_queue),
-    endGame(endGame), menu(menu), cantPlayers(idPlayer + 1), idPlayer(idPlayer) {
+    endGame(endGame), menu(menu), numPlayers(numPlayers), idPlayer(idPlayer) {
 }
 
 void GameDrawner::run() {
@@ -42,6 +42,10 @@ void GameDrawner::run() {
         std::string text3 = "Press enter for play";
         bool noReady = true;
         bool game = true;
+
+        // Por si recibo el evento start_game
+        std::shared_ptr<Snapshot> snap = nullptr;
+
         while(noReady)  {
             render.clear();
             if (menu == JOIN_MENU)
@@ -54,7 +58,9 @@ void GameDrawner::run() {
                     case SDL_QUIT: {
                             noReady = false;
                             game = false;
-                            std::cout << "Cerre el juego\n";
+                            // client_events.push(
+                            //         std::make_shared<EventDTO>(
+                            //             Event::event_leave));
                         }
                         break;
                     case SDL_KEYDOWN:
@@ -64,7 +70,6 @@ void GameDrawner::run() {
                                     std::make_shared<EventDTO>(
                                         Event::event_start_game));
                                 noReady = false;
-                                std::cout << "presione enter\n";
                             }
                         }
                         break;
@@ -73,25 +78,18 @@ void GameDrawner::run() {
                 }
             }
             render.present();
-            std::shared_ptr<Snapshot> snap = nullptr;
             snapshot_queue.try_pop(snap);
             if (snap != nullptr && snap->getEvent() == Event::event_join)
-                cantPlayers++; // = snap->getAmountPlayers();
+                numPlayers = snap->getSize(); // = snap->getAmountPlayers();
             else if (snap != nullptr && snap->getEvent() == Event::event_playing)
                 noReady = false;
             SDL_Delay(1000 / 40);
         }
-        // map<<typeOperator, state>, <x,y>> players = ;
-        // map<<Enemys, state>, <position>>
-        // int map;
-        // int mode;
-
+        
         if (game) {
             // mandar configuarcion una sola vez
-            std::shared_ptr<Snapshot> snap = snapshot_queue.pop();
-            std::map<uint8_t,Operator*> players;
-            // int mode, map;
-
+            snap = snapshot_queue.pop();
+            std::map<uint8_t,Operator*> players;    
             for (auto &player : snap->getInfo()) {
                 StOperator st = player.second;
                 players[st.getId()] = new Operator(st.getId(), 
@@ -142,7 +140,7 @@ void GameDrawner::renderText(const std::string& text1, const std::string& text2,
                         w2,
                         h2};
     font.getSizeFont(text2, &w3, &h3);
-    std::string text3 = "Connected Players: " + std::to_string(cantPlayers);
+    std::string text3 = "Connected Players: " + std::to_string(numPlayers);
     Texture textureFontPlayer(render, font.RenderText_Solid(text3, color));
     SDL_Rect final3 = {(WINDOW_WIDTH - w3 - 30), 15, w3, h3};
     render.copyFont(textureFontPlayer.getTexture(), final3);

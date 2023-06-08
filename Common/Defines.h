@@ -11,7 +11,9 @@
 #define JOIN_MENU 2
 
 // Animation SDL
-#define SIZE_SPRITE 128
+#define SIZE_FRAME 128
+#define SIZE_SPRITE_X 64
+#define SIZE_SPRITE_Y 68
 #define SPEED_IDLE 150
 #define SPEED_RUN 100
 
@@ -21,6 +23,7 @@
 #define STOP_MOVE_CODE 0x04
 #define PLAYING_CODE 0x05
 #define START_CODE 0x06
+#define LEAVE_CODE 0x07
 
 #define IDF_CODE 0x01
 #define P90_CODE 0x02
