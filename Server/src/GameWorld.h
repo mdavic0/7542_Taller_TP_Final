@@ -9,7 +9,6 @@
 #include "SCOUTPlayer.h"
 #include "P90Player.h"
 #include "Collidable.h"
-#include "Collision/Collidable.h"
 #include "Defines.h"
 
 class GameWorld {
