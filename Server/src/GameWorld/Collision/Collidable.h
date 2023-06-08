@@ -12,9 +12,9 @@ class Collidable {
         int height;
 
     public:
-        Collidable(int id, std::pair<uint16_t, uint16_t>& position, int width, int height);
+        Collidable(int id, std::pair<int16_t, int16_t>& position, int width, int height);
         bool collidesWith(std::map<int, std::shared_ptr<Collidable>>& collidables);
-        void updatePosition(std::pair<uint16_t, uint16_t>& position);
+        void updatePosition(std::pair<int16_t, int16_t>& position);
     private:
         bool collidesWith(std::shared_ptr<Collidable>& other);
 };

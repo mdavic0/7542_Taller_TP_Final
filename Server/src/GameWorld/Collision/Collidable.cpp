@@ -1,6 +1,6 @@
 #include "Collidable.h"
 
-Collidable::Collidable(int id, std::pair<uint16_t, uint16_t>& position,
+Collidable::Collidable(int id, std::pair<int16_t, int16_t>& position,
                        int width, int height) : id(id),
                        width(width) , height(height) {
     this->topLeftCorner = {(position.first - (width / 2)) , (position.second + (height / 2))};
@@ -30,6 +30,6 @@ bool Collidable::collidesWith(std::shared_ptr<Collidable>& other) {
    return false;
 }
 
-void Collidable::updatePosition(std::pair<uint16_t, uint16_t> &position) {
+void Collidable::updatePosition(std::pair<int16_t, int16_t> &position) {
     this->topLeftCorner = {(position.first - (width / 2)) , (position.second + (height / 2))};
 }

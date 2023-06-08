@@ -7,7 +7,7 @@ Player::Player(TypeOperator typeOperator) : typeOperator(typeOperator),
     movement_direction(0,0), velocity(1), weapon(), lookingRight(true) {}
 
 Player::Player(TypeOperator typeOperator, uint8_t life, uint8_t velocity,
-    std::shared_ptr<Weapon> weapon, std::pair<uint16_t, uint16_t>& position,
+    std::shared_ptr<Weapon> weapon, std::pair<int16_t, int16_t>& position,
     std::shared_ptr<Collidable> collidable) :
     typeOperator(typeOperator), state(State::idle), life(life), fell_down(0),
     position(position), movement_direction(0,0), velocity(velocity),
@@ -79,7 +79,7 @@ void Player::applyStep(std::map<int, std::shared_ptr<Collidable>>& collidables) 
     this->shoot();
 }
 
-std::pair<uint16_t, uint16_t>& Player::getPosition() {
+std::pair<int16_t, int16_t>& Player::getPosition() {
     return this->position;
 }
 

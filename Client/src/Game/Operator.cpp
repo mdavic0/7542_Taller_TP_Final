@@ -38,7 +38,7 @@ void Operator::updateMove(MoveTo direction) {
     }
 }
 
-void Operator::update(std::pair<uint16_t, uint16_t> pos, State state,
+void Operator::update(std::pair<int16_t, int16_t> pos, State state,
     int health) {
     this->setState(state);
     if (pos.first < position.first)

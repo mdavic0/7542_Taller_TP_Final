@@ -16,8 +16,8 @@ class Player {
         State state;
         uint8_t life;
         uint8_t fell_down;
-        std::pair<uint16_t, uint16_t> position;
-        std::pair<uint16_t, uint16_t> movement_direction;
+        std::pair<int16_t, int16_t> position;
+        std::pair<int16_t, int16_t> movement_direction;
         uint8_t velocity;
         std::shared_ptr<Weapon> weapon;
         bool lookingRight;
@@ -25,14 +25,14 @@ class Player {
     public:
         explicit Player(TypeOperator typeOperator);
         Player(TypeOperator typeOperator,uint8_t life,uint8_t velocity,
-               std::shared_ptr<Weapon> weapon, std::pair<uint16_t,
-               uint16_t>& position, std::shared_ptr<Collidable> collidable);
+               std::shared_ptr<Weapon> weapon, std::pair<int16_t,
+               int16_t>& position, std::shared_ptr<Collidable> collidable);
         void setMovementDirection(MoveTo direction);
         void stopMovementDirection(MoveTo direction);
         void setShootingState();
         void stopShootingState();
         void applyStep(std::map<int, std::shared_ptr<Collidable>>& collidables);
-        std::pair<uint16_t, uint16_t>& getPosition();
+        std::pair<int16_t, int16_t>& getPosition();
         TypeOperator& getTypeOperator();
         State& getState();
         uint8_t& getHealth();

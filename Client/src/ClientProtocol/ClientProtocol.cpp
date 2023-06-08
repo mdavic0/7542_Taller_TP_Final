@@ -130,8 +130,8 @@ Snapshot ClientProtocol::getStart () {uint8_t playersCount;
     uint8_t idState;
     State state = State::idle;
 
-    uint16_t x;
-    uint16_t y;
+    int16_t x;
+    int16_t y;
 
     for (uint8_t i = 0; i < playersCount; i++) {
         recvAll(&idPlayer, 1);
@@ -221,8 +221,8 @@ Snapshot ClientProtocol::getPlaying () {
     uint8_t idState;
     State state = State::idle;
 
-    uint16_t x;
-    uint16_t y;
+    int16_t x;
+    int16_t y;
 
     for (uint8_t i = 0; i < playersCount; i++) {
         recvAll(&idPlayer, 1);

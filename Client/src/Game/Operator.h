@@ -15,7 +15,7 @@ class Operator {
     private:
         uint8_t id;
         TypeOperator operatorId;
-        std::pair<uint16_t, uint16_t> position;
+        std::pair<int16_t, int16_t> position;
         std::map<std::string, Texture*> textures;
         State stateOperator;
         Renderer renderPlayer;
@@ -30,7 +30,7 @@ class Operator {
         Operator(uint8_t id, TypeOperator op, Renderer& renderer);
         ~Operator();     
         void updateMove(MoveTo direction);
-        void update(std::pair<uint16_t, uint16_t> pos, State state,
+        void update(std::pair<int16_t, int16_t> pos, State state,
                     int health);
         TypeOperator getType();
         uint8_t getId();
