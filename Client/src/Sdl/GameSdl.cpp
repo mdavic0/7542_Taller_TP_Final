@@ -9,7 +9,7 @@ GameSdl::GameSdl(WindowSdl& window, Renderer& renderer,
     window(window), renderer(renderer),
     snapshotQueue(snapshotQueue), eventQueue(eventQueue), endGame(endGame),
     events(eventQueue, idPlayer), map(1, this->renderer), soldiers(soldiers),
-    hud(soldiers[idPlayer]->getType(), renderer) {
+    hud(soldiers[idPlayer]->getType(), renderer), idPlayer(idPlayer) {
 }
 
 bool GameSdl::isRunning() {
@@ -54,7 +54,7 @@ void GameSdl::run() {
 
 void GameSdl::render() {
     this->map.render();
-    this->hud.render();
+    this->hud.render(soldiers[idPlayer]->getHealth());
     for (auto &soldier : this->soldiers)
         soldier.second->render();
 }
@@ -63,7 +63,9 @@ void GameSdl::update() {
     std::shared_ptr<Snapshot> snap = snapshotQueue.pop();
     std::map<uint8_t, StOperator> players = snap->getInfo();
     for (auto &player : players)
-        soldiers[player.second.getId()]->update(player.second.getPosition(), player.second.getState());
+        soldiers[player.second.getId()]->update(player.second.getPosition(),
+                                                player.second.getState(),
+                                                player.second.getHealth());
 }
 
 void GameSdl::handleEvents() {

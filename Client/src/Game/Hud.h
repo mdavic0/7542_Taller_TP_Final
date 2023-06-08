@@ -11,13 +11,15 @@ class Hud {
         TypeOperator type;
         Renderer& renderHud;
         std::map<std::string, Texture*> texturesHud;
+        uint8_t healthInit;
         void loadTextures();
         void renderBg();
         void renderHealthBar();
+        void renderHealthFill(uint8_t healthPlayer);
     public:
         Hud(TypeOperator type, Renderer& render);
         ~Hud();
-        void render();
+        void render(uint8_t healthPlayer);
 };
 
 #endif

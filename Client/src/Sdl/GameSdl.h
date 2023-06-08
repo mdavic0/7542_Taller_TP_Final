@@ -27,6 +27,7 @@ class GameSdl {
         bool& endGame;
         std::map<uint8_t, Operator*>& soldiers;
         Hud hud;
+        uint8_t idPlayer;
     public:
         GameSdl(WindowSdl& window, Renderer& renderer,
                 Queue<std::shared_ptr<Snapshot>>& snapshotQueue,

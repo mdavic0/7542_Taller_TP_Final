@@ -4,7 +4,7 @@
 
 Operator::Operator(uint8_t id, TypeOperator op, Renderer& renderer) : id(id), operatorId(op),
     position({0, 0}), renderPlayer(renderer), stateOperator(State::idle),
-    numFrames(0), flipType(SDL_FLIP_NONE) {
+    numFrames(0), flipType(SDL_FLIP_NONE), health(0) {
     this->chargeTexture(renderer);
     this->setState(State::idle);
 }
@@ -38,13 +38,15 @@ void Operator::updateMove(MoveTo direction) {
     }
 }
 
-void Operator::update(std::pair<uint16_t, uint16_t> pos, State state) {
+void Operator::update(std::pair<uint16_t, uint16_t> pos, State state,
+    int health) {
     this->setState(state);
     if (pos.first < position.first)
         this->flipType = SDL_FLIP_HORIZONTAL;
     else if (pos.first > position.first)
         this->flipType = SDL_FLIP_NONE;
     this->position = pos;
+    this->health = health;
 }
 
 TypeOperator Operator::getType() {
@@ -53,6 +55,10 @@ TypeOperator Operator::getType() {
 
 uint8_t Operator::getId() {
     return this->id;
+}
+
+uint8_t Operator::getHealth() {
+    return this->health;
 }
 
 void Operator::chargeTexture(Renderer& renderer) {

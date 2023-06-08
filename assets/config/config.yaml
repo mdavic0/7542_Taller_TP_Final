@@ -6,31 +6,29 @@ idf_rate: 20
 idf_capacity: 50
 idf_injure: 3
 # 2: # p90
-#   damage: 20
-#   health: 140
-#   velocity: 20
-#   rate: 10
-#   capacity: 30
-#   skills: [grenade, smoke]
-#   injure: 3
+p90_damage: 20
+p90_health: 140
+p90_velocity: 20
+p90_rate: 10
+p90_capacity: 30
+p90_injure: 3
 # 3: # scout
-#   damage: 60
-#   health: 200
-#   velocity: 8
-#   rate: 1
-#   capacity: 20
-#   skills: [blitz]
-#   injure: 3
+scout_damage: 60
+scout_health: 200
+scout_velocity: 8
+scout_rate: 1
+scout_capacity: 20
+scout_injure: 3
 
-# hability:
+# skills:
 #   grenade:
-#     damage: 50
-#     recharge: 10
+grenade_damage: 50
+grenade_recharge: 10
 #   smoke:
-#     damage: 0
-#     recharge: 10
+smoke_damage: 0
+smoke_recharge: 10
 #   blitz:
-#     damage: 100
-#     recharge: 30
+blitz_damage: 100
+blitz_recharge: 30
 
 

@@ -20,6 +20,7 @@ class Operator {
         Renderer renderPlayer;
         SDL_RendererFlip flipType;
         int numFrames;
+        int health;
         void chargeTexture(Renderer& renderer);
         void renderAnimation(int speed, SDL_Texture* texture);
         void setState(State state);
@@ -28,9 +29,11 @@ class Operator {
         Operator(uint8_t id, TypeOperator op, Renderer& renderer);
         ~Operator();     
         void updateMove(MoveTo direction);
-        void update(std::pair<uint16_t, uint16_t> pos, State state);
+        void update(std::pair<uint16_t, uint16_t> pos, State state,
+                    int health);
         TypeOperator getType();
         uint8_t getId();
+        uint8_t getHealth();
         void render();
 };
 
