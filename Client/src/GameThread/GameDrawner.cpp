@@ -81,19 +81,17 @@ void GameDrawner::run() {
             }
             render.present();
             snapshot_queue.try_pop(snap);
-            if (snap != nullptr && snap->getEvent() == Event::event_join) {
+            if (snap != nullptr && snap->getEvent() == Event::event_join)
                 numPlayers = snap->getSize();
-            } else if (snap != nullptr && snap->getEvent() == Event::event_start_game) {
+            else if (snap != nullptr && snap->getEvent() == Event::event_start_game)
                 noReady = false;
-                // std::cout << snap->getInfo().size() << std::endl;
-                // break;
-            }
             SDL_Delay(1000 / 40);
         }
         
         if (game) {
             // mandar configuarcion una sola vez
-            snap = snapshot_queue.pop();
+            if (menu == CREATE_MENU)
+                snap = snapshot_queue.pop();
             for (auto &player : snap->getInfo()) {
                 StOperator st = player.second;
                 players[st.getId()] = new Operator(st.getId(), 
