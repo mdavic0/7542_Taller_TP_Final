@@ -61,6 +61,10 @@ uint8_t Operator::getHealth() {
     return this->health;
 }
 
+uint16_t Operator::getPosY() {
+    return this->position.second;
+}
+
 void Operator::chargeTexture(Renderer& renderer) {
     std::string path = "assets/images/sdl/units/" + std::to_string((int)operatorId);
     textures["Idle"] = new Texture(renderer, path + "/Idle.png", false);

@@ -9,6 +9,7 @@
 #include <SDL2/SDL.h>
 #include <map>
 #include <string>
+#include <iostream>
 
 class Operator {
     private:
@@ -34,7 +35,12 @@ class Operator {
         TypeOperator getType();
         uint8_t getId();
         uint8_t getHealth();
+        uint16_t getPosY();
         void render();
+
+        bool operator<(const Operator& other) const {
+            return  position.second < other.position.second;
+        };
 };
 
 #endif

@@ -46,6 +46,7 @@ void GameDrawner::run() {
 
         // Por si recibo el evento start_game
         std::shared_ptr<Snapshot> snap = nullptr;
+        std::map<uint8_t,Operator*> players;    
 
         while(noReady)  {
             render.clear();
@@ -59,9 +60,9 @@ void GameDrawner::run() {
                     case SDL_QUIT: {
                             noReady = false;
                             game = false;
-                            // client_events.push(
-                            //         std::make_shared<EventDTO>(
-                            //             Event::event_leave));
+                            client_events.push(
+                                    std::make_shared<EventDTO>(
+                                        idPlayer));
                         }
                         break;
                     case SDL_KEYDOWN:
@@ -80,17 +81,19 @@ void GameDrawner::run() {
             }
             render.present();
             snapshot_queue.try_pop(snap);
-            if (snap != nullptr && snap->getEvent() == Event::event_join)
-                numPlayers = snap->getSize(); // = snap->getAmountPlayers();
-            else if (snap != nullptr && snap->getEvent() == Event::event_playing)
+            if (snap != nullptr && snap->getEvent() == Event::event_join) {
+                numPlayers = snap->getSize();
+            } else if (snap != nullptr && snap->getEvent() == Event::event_start_game) {
                 noReady = false;
+                // std::cout << snap->getInfo().size() << std::endl;
+                // break;
+            }
             SDL_Delay(1000 / 40);
         }
         
         if (game) {
             // mandar configuarcion una sola vez
             snap = snapshot_queue.pop();
-            std::map<uint8_t,Operator*> players;    
             for (auto &player : snap->getInfo()) {
                 StOperator st = player.second;
                 players[st.getId()] = new Operator(st.getId(), 

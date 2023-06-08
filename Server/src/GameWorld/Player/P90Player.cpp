@@ -11,6 +11,7 @@ void P90Player::specialAtack(Event event) {
     switch (event) {
         case Event::event_blitz_atack:
             // se lanza el bombardeo aereo wach
+            // state::grenade
             this->blitz();
         default:
             break;
