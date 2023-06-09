@@ -1,7 +1,7 @@
 #include "mapSdl.h"
 #include "Defines.h"
 
-MapSdl::MapSdl(int id, Renderer& renderer) : mapId(id), renderMap(renderer) {
+MapSdl::MapSdl(uint8_t id, Renderer& renderer) : mapId(id), renderMap(renderer) {
     this->chargeTexture(renderer);
 }
 
@@ -32,7 +32,7 @@ void MapSdl::render() {
 }
 
 void MapSdl::chargeTexture(Renderer& renderer) {
-    std::string path = "assets/images/sdl/maps/" + std::to_string(mapId);
+    std::string path = "assets/images/sdl/maps/" + std::to_string((int)mapId);
     textures["sky"] = new Texture(renderer, path + "/sky.png", true);
     textures["sun"] = new Texture(renderer, path + "/sun.png", true);
     textures["ruins"] = new Texture(renderer, path + "/ruins.png", true);
@@ -41,7 +41,7 @@ void MapSdl::chargeTexture(Renderer& renderer) {
     textures["house1"] = new Texture(renderer, path + "/houses1.png", true);
     textures["fence"] = new Texture(renderer, path + "/fence.png", true);
     textures["road"] = new Texture(renderer, path + "/road.png", true);
-    textures["crater1"] = new Texture(renderer, path + "/crater1.png", true);
-    textures["crater2"] = new Texture(renderer, path + "/crater2.png", true);
-    textures["crater3"] = new Texture(renderer, path + "/crater3.png", true);
+    // textures["crater1"] = new Texture(renderer, path + "/crater1.png", true);
+    // textures["crater2"] = new Texture(renderer, path + "/crater2.png", true);
+    // textures["crater3"] = new Texture(renderer, path + "/crater3.png", true);
 }

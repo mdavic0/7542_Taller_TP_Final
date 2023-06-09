@@ -8,12 +8,12 @@
 
 class MapSdl {
     private:
-        int mapId;
+        uint8_t mapId;
         Renderer& renderMap;
         std::map<std::string, Texture*> textures;
         void chargeTexture(Renderer& renderer);
     public:
-        MapSdl(int id, Renderer& renderer);
+        MapSdl(uint8_t id, Renderer& renderer);
         ~MapSdl();
         void render();
 };

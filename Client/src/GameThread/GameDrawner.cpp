@@ -9,8 +9,9 @@
 #include "SdlException.h"
 #include "Configuration.h"
 #include "Font.h"
-#include <map>
 #include "Operator.h"
+#include "Enemy.h"
+#include <map>
 
 GameDrawner::GameDrawner(Queue<std::shared_ptr<Snapshot>> &snapshot_queue,
     Queue<std::shared_ptr<EventDTO>> &client_events, bool& endGame, int menu,
@@ -46,7 +47,8 @@ void GameDrawner::run() {
 
         // Por si recibo el evento start_game
         std::shared_ptr<Snapshot> snap = nullptr;
-        std::map<uint8_t,Operator*> players;    
+        std::map<uint8_t,std::shared_ptr<Operator>> players;    
+        std::map<uint8_t,std::shared_ptr<Enemy>> enemys;    
 
         while(noReady)  {
             render.clear();
@@ -94,12 +96,20 @@ void GameDrawner::run() {
                 snap = snapshot_queue.pop();
             for (auto &player : snap->getInfo()) {
                 StOperator st = player.second;
-                players[st.getId()] = new Operator(st.getId(), 
+                players[st.getId()] = std::make_shared<Operator>(st.getId(), 
                     st.getTypeOperator(), render);
             }
+            for (uint8_t i = 0; i < 5; i++) {
+                enemys[i] = std::make_shared<Enemy>(render, i);
+            }
+
+            uint8_t idMap = snap->getMap();
+            std::cout << "map " << (int)idMap << std::endl;
+            TypeGame mode = snap->getTypeGame();
 
             GameSdl gameSdl(window, render, snapshot_queue, client_events,
-                            endGame, players, idPlayer);
+                            endGame, players, idPlayer, idMap, mode, font,
+                            enemys);
 
             while (gameSdl.isRunning()) {
                 uint32_t frameInit = SDL_GetTicks();

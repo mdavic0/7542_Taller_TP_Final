@@ -61,7 +61,7 @@ uint8_t Operator::getHealth() {
     return this->health;
 }
 
-uint16_t Operator::getPosY() {
+int16_t Operator::getPosY() {
     return this->position.second;
 }
 
