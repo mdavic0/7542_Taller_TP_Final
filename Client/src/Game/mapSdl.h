@@ -5,12 +5,13 @@
 #include "TextureSdl.h"
 #include <map>
 #include <string>
+#include <memory>
 
 class MapSdl {
     private:
         uint8_t mapId;
         Renderer& renderMap;
-        std::map<std::string, Texture*> textures;
+        std::map<std::string, std::shared_ptr<Texture>> textures;
         void chargeTexture(Renderer& renderer);
     public:
         MapSdl(uint8_t id, Renderer& renderer);

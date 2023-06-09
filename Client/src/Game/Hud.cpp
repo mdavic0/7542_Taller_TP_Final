@@ -23,27 +23,27 @@ Hud::Hud(TypeOperator type, Renderer& render, Font& font) : type(type),
 void Hud::loadTextures() {
     std::string path = "assets/images/sdl/hud/";
     SDL_Color c = {0, 0, 0, 255};
-    texturesHud["healthbg1"] = new Texture(
+    texturesHud["healthbg1"] = std::make_unique<Texture>(
                                     renderHud, path + "healthbg_1.png",c);
-    texturesHud["healthbg2"] = new Texture(
+    texturesHud["healthbg2"] = std::make_unique<Texture>(
                                     renderHud, path + "healthbg_2.png", c);
-    texturesHud["healthbg3"] = new Texture(
+    texturesHud["healthbg3"] = std::make_unique<Texture>(
                                     renderHud, path + "healthbg_3.png", c);
-    texturesHud["healthbg4"] = new Texture(
+    texturesHud["healthbg4"] = std::make_unique<Texture>(
                                     renderHud, path + "healthbg_4.png", c);
-    texturesHud["bar-bg"] = new Texture(
+    texturesHud["bar-bg"] = std::make_unique<Texture>(
                                     renderHud, path + "bar_bg.png", false);
-    texturesHud["bar-fill"] = new Texture(
+    texturesHud["bar-fill"] = std::make_unique<Texture>(
                                     renderHud, path + "bar_fill.png", false);
-    texturesHud["health-icon"] = new Texture(
+    texturesHud["health-icon"] = std::make_unique<Texture>(
                                     renderHud, path + "health_icon.png", false);
-    texturesHud["rifle"] = new Texture(
+    texturesHud["rifle"] = std::make_unique<Texture>(
                                     renderHud, path + "icon_rifle.png", false);
-    texturesHud["hunting"] = new Texture(
+    texturesHud["hunting"] = std::make_unique<Texture>(
                                     renderHud, path + "icon_hunting.png", false);
-    texturesHud["bullet-rifle"] = new Texture(
+    texturesHud["bullet-rifle"] = std::make_unique<Texture>(
                                     renderHud, path + "bullet_rifle.png", false);
-    texturesHud["bullet-hunting"] = new Texture(
+    texturesHud["bullet-hunting"] = std::make_unique<Texture>(
                                     renderHud, path + "bullet_hunting.png", false);
 }
 
@@ -173,7 +173,5 @@ void Hud::renderNumBullet(int numBullet) {
 }
 
 Hud::~Hud() {
-    for (auto &texture : texturesHud)
-        delete texture.second;
 }
 

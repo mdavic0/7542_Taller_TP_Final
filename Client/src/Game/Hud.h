@@ -6,12 +6,13 @@
 #include "TextureSdl.h"
 #include "Font.h"
 #include <map>
+#include <memory>
 
 class Hud {
     private:
         TypeOperator type;
         Renderer& renderHud;
-        std::map<std::string, Texture*> texturesHud;
+        std::map<std::string, std::unique_ptr<Texture>> texturesHud;
         uint8_t healthInit;
         Font& fontHud;
         void loadTextures();

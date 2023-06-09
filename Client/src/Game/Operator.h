@@ -8,6 +8,7 @@
 #include "RendererSdl.h"
 #include <SDL2/SDL.h>
 #include <map>
+#include <memory>
 #include <string>
 #include <iostream>
 
@@ -16,7 +17,7 @@ class Operator {
         uint8_t id;
         TypeOperator operatorId;
         std::pair<int16_t, int16_t> position;
-        std::map<std::string, Texture*> textures;
+        std::map<std::string, std::unique_ptr<Texture>> textures;
         State stateOperator;
         Renderer renderPlayer;
         SDL_RendererFlip flipType;

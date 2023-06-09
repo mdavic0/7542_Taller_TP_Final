@@ -66,10 +66,16 @@ int16_t Operator::getPosY() {
 }
 
 void Operator::chargeTexture(Renderer& renderer) {
-    std::string path = "assets/images/sdl/units/" + std::to_string((int)operatorId);
-    textures["Idle"] = new Texture(renderer, path + "/Idle.png", false);
-    textures["Run"] = new Texture(renderer, path + "/Run.png", false);
-    textures["Shot"] = new Texture(renderer, path + "/Shot_1.png", false);
+    std::string path = 
+                "assets/images/sdl/units/" + std::to_string((int)operatorId);
+    textures["Idle"] = std::make_unique<Texture>(renderer,
+                                                path + "/Idle.png", false);
+    textures["Run"] = std::make_unique<Texture>(renderer,
+                                                path + "/Run.png", false);
+    textures["Shot"] = std::make_unique<Texture>(renderer,
+                                                path + "/Shot_1.png", false);
+    textures["Recharge"] = std::make_unique<Texture>(renderer,
+                                                path + "/Recharge.png", false);
 }
 
 void Operator::setState(State state) {
@@ -85,6 +91,8 @@ int Operator::setNumFrames(State state) {
             return this->textures["Run"]->frames();
         case State::atack:
             return this->textures["Shot"]->frames();
+        case State::recharge:
+            return this->textures["Recharge"]->frames();
         default:
             return 0;
     }
@@ -100,6 +108,9 @@ void Operator::render() {
             break;
         case State::atack:
             renderAnimation(100, textures["Shot"]->getTexture());
+            break;
+        case State::recharge:
+            renderAnimation(100, textures["Recharge"]->getTexture());
             break;
         default:
             break;
@@ -120,7 +131,5 @@ void Operator::renderAnimation(int speed, SDL_Texture* texture) {
 }
 
 Operator::~Operator() {
-    for (const auto &text: this->textures)
-        delete text.second;
 }
 
