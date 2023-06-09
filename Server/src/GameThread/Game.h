@@ -26,10 +26,9 @@ class Game : public Thread {
         std::atomic<bool> alive;
         GameWorld gameWorld;
         bool started;
-        int map;
 
     public:
-        explicit Game(const uint32_t id, const std::string& name, const TypeGame& type);
+        explicit Game(const uint32_t id, std::string  name, const TypeGame& type);
 
         virtual void run() override;
 
@@ -73,7 +72,7 @@ class Game : public Thread {
         void gameLoop();
         void processEvents();
         void broadcastSnapshot(std::shared_ptr<Snapshot> snapshot);
-        void generateMapType();
+        int generateMapType();
 };
 
 #endif  // SERVER_GAME_H_

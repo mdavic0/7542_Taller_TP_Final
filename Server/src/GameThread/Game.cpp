@@ -4,11 +4,12 @@
 #include <random>
 #include <functional>
 #include <iterator>
+#include <utility>
 
-Game::Game(const uint32_t id, const std::string& name, const TypeGame& type) :
-    id(id), name(name), mutex(),
+Game::Game(const uint32_t id, std::string name, const TypeGame& type) :
+    id(id), name(std::move(name)), mutex(),
     unprocessed_events(1000), client_snapshot_queues(),
-    talking(true), alive(true), gameWorld(type), started(false), map(1) {}
+    talking(true), alive(true), gameWorld(type, this->generateMapType()), started(false) {}
 
 void Game::run() {
     try {
@@ -131,11 +132,11 @@ void Game::broadcastSnapshot(std::shared_ptr<Snapshot> snapshot) {
     }
 }
 
-void Game::generateMapType() {
+int Game::generateMapType() {
     std::random_device rand_dev;
     std::mt19937 generator(rand_dev());
     std::uniform_int_distribution<int> distr(1, 3);
-   this->map = distr(generator);
+   return distr(generator);
 }
 
 Game::~Game() {

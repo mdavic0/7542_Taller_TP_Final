@@ -34,7 +34,7 @@ class GameWorld {
 
 
     public:
-        GameWorld(const TypeGame& type);
+        GameWorld(const TypeGame& type, int map);
         uint8_t addPlayer(TypeOperator op);
         void deletePlayer(uint8_t id);
 

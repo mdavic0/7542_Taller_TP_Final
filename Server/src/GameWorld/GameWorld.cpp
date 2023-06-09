@@ -1,7 +1,7 @@
 #include "GameWorld.h"
 
-GameWorld::GameWorld(const TypeGame& type) :
-    players_amount(0), players(), type(type), map(0), collidables(), infectedId(200) {
+GameWorld::GameWorld(const TypeGame& type, int map) :
+    players_amount(0), players(), type(type), map(map), collidables(), infectedId(200) {
     this->generateInfecteds();
 }
 
