@@ -12,7 +12,7 @@ GameSdl::GameSdl(WindowSdl& window, Renderer& renderer,
     std::map<uint8_t, std::shared_ptr<Enemy>>& enemys) :
     window(window), renderer(renderer), snapshotQueue(snapshotQueue),
     eventQueue(eventQueue), endGame(endGame), events(eventQueue, idPlayer),
-    map(3, this->renderer), soldiers(soldiers),
+    map(idMap, this->renderer), soldiers(soldiers),
     hud(soldiers[idPlayer]->getType(), renderer, font),
     idPlayer(idPlayer), mode(mode), font(font), enemys(enemys) {
 }
