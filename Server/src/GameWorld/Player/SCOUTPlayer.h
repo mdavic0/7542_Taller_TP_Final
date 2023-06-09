@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Event.h"
 #include "Scout.h"
+#include "Configuration.h"
 
 class SCOUTPlayer : public Player {
     public:
@@ -10,6 +11,7 @@ class SCOUTPlayer : public Player {
                              std::shared_ptr<Collidable> collidable);
         void specialAtack(Event event) override;
         ~SCOUTPlayer() override;
+
     private:
         void throwGrenade();
         void throwSmoke();

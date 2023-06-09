@@ -11,6 +11,12 @@
 #include "P90Player.h"
 #include "Collidable.h"
 #include "Defines.h"
+#include "Infected.h"
+#include "Zombie.h"
+#include "Spear.h"
+#include "Witch.h"
+#include "Jumper.h"
+#include "Venom.h"
 
 class GameWorld {
     private:
@@ -23,15 +29,22 @@ class GameWorld {
         //    ESTE VARIA DEPENDIENDO DE LA DISTANCIA / ENEMIGOS ATRAVEZADOS)
         std::map<int, std::shared_ptr<Collidable>> collidables;
 
-    public:
-    GameWorld(const TypeGame& type);
-    uint8_t addPlayer(TypeOperator op);
-    void deletePlayer(uint8_t id);
+        uint8_t infectedId;
+        std::map<uint8_t, std::shared_ptr<Infected>> infecteds;
 
-    void updateMovementDirection(Event event, uint8_t id, MoveTo direction);
-    void updateShootingState(Event event, uint8_t id);
-    void simulateStep();
-    std::shared_ptr<Snapshot> getSnapshot(bool first);
+
+    public:
+        GameWorld(const TypeGame& type, int map);
+        uint8_t addPlayer(TypeOperator op);
+        void deletePlayer(uint8_t id);
+
+        void updateMovementDirection(Event event, uint8_t id, MoveTo direction);
+        void updateShootingState(Event event, uint8_t id);
+        void simulateStep();
+        std::shared_ptr<Snapshot> getSnapshot(bool first);
+
+    private:
+        void generateInfecteds();
 };
 
 

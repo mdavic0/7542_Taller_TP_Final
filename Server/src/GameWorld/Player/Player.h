@@ -9,6 +9,7 @@
 #include "Weapon.h"
 #include <memory>
 #include "Collidable.h"
+#include "Infected.h"
 
 class Player {
     private:
@@ -31,7 +32,8 @@ class Player {
         void stopMovementDirection(MoveTo direction);
         void setShootingState();
         void stopShootingState();
-        void applyStep(std::map<int, std::shared_ptr<Collidable>>& collidables);
+        void applyStep(std::map<int, std::shared_ptr<Collidable>>& collidables,
+                       std::map<uint8_t, std::shared_ptr<Infected>>& infecteds);
         std::pair<int16_t, int16_t>& getPosition();
         TypeOperator& getTypeOperator();
         State& getState();
@@ -39,7 +41,7 @@ class Player {
         virtual ~Player() = default;
     private:
         void move(std::map<int, std::shared_ptr<Collidable>>& collidables);
-        void shoot();
+        void shoot(std::map<uint8_t, std::shared_ptr<Infected>>& infecteds);
         virtual void specialAtack(Event event) = 0;
 };
 

@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Event.h"
 #include "Idf.h"
+#include "Configuration.h"
 
 class IDFPlayer : public Player {
     public:
@@ -10,6 +11,7 @@ class IDFPlayer : public Player {
                            std::shared_ptr<Collidable> collidable);
         void specialAtack(Event event) override;
         ~IDFPlayer() override;
+
     private:
         void throwGrenade();
         void throwSmoke();

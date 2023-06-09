@@ -4,7 +4,7 @@
 
 P90Player::P90Player(std::pair<int16_t, int16_t>& position,
                      std::shared_ptr<Collidable> collidable) :
-    Player(TypeOperator::operator_p90, 140, 20,
+    Player(TypeOperator::operator_p90, CF::p90_health, CF::p90_velocity,
            std::make_shared<P90>(), position, std::move(collidable)) {}
 
 void P90Player::specialAtack(Event event) {

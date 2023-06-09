@@ -1,13 +1,15 @@
 #include "GameWorld.h"
 
-GameWorld::GameWorld(const TypeGame& type) :
-    players_amount(0), players(), type(type), map(0), collidables() {}
+GameWorld::GameWorld(const TypeGame& type, int map) :
+    players_amount(0), players(), type(type), map(map), collidables(), infectedId(200) {
+    this->generateInfecteds();
+}
 
 
 uint8_t GameWorld::addPlayer(TypeOperator op) {
     std::shared_ptr<Player> newPlayer = nullptr;
     std::pair<int16_t, int16_t> position = {(WINDOW_WIDTH / 2) + SIZE_SPRITE_X * players_amount,
-                                              (WINDOW_HEIGTH / 2) + (WINDOW_HEIGTH / 4)};
+                                              (WINDOW_HEIGTH / 2) + (WINDOW_HEIGTH / 3.5)};
 
     std::shared_ptr<Collidable> collidable =  std::make_shared<Collidable>(
             (int)players_amount,position,20, 20);
@@ -53,7 +55,14 @@ void GameWorld::updateShootingState(Event event, uint8_t id) {
 
 void GameWorld::simulateStep() {
     for (auto& player : players) {
-        players.at(player.first)->applyStep(this->collidables);
+        players.at(player.first)->applyStep(this->collidables, this->infecteds);
+    }
+
+    for(auto& infected : infecteds) {
+        if (not infected.second->isAlive()) {
+            this->infecteds.erase(infected.first);
+            this->collidables.erase(infected.first);
+        }
     }
 }
 
@@ -69,4 +78,56 @@ std::shared_ptr<Snapshot> GameWorld::getSnapshot(bool first) {
         return std::make_shared<Snapshot>(playersInfo, type, map);        
     }
     return std::make_shared<Snapshot>(playersInfo);
+}
+
+void GameWorld::generateInfecteds() {
+    // Zombie:
+    std::shared_ptr<Infected> zombie = nullptr;
+    std::pair<int16_t, int16_t> zombie_position = {(WINDOW_WIDTH / 2) - 50,
+                                                   (WINDOW_HEIGTH / 2) + (WINDOW_HEIGTH / 3.5) - 25};
+    std::shared_ptr<Collidable> zombie_collidable =  std::make_shared<Collidable>(
+            (int)players_amount, zombie_position, 20,  20);
+    zombie = std::make_shared<Zombie>(infectedId, zombie_position, zombie_collidable);
+    this->collidables.insert({infectedId, zombie_collidable});
+    this->infecteds.insert({infectedId++, zombie});
+
+    // Spear:
+    std::shared_ptr<Infected> spear = nullptr;
+    std::pair<int16_t, int16_t> spear_position = {(WINDOW_WIDTH / 2) - 50,
+                                                  (WINDOW_HEIGTH / 2) + (WINDOW_HEIGTH / 3.5)};
+    std::shared_ptr<Collidable> spear_collidable =  std::make_shared<Collidable>(
+            (int)players_amount, spear_position, 20,  20);
+    spear = std::make_shared<Spear>(infectedId, spear_position, spear_collidable);
+    this->collidables.insert({infectedId, spear_collidable});
+    this->infecteds.insert({infectedId++, spear});
+
+    // Venom:
+    std::shared_ptr<Infected> venom = nullptr;
+    std::pair<int16_t, int16_t> venom_position = {(WINDOW_WIDTH / 2) - 50,
+                                                  (WINDOW_HEIGTH / 2) + (WINDOW_HEIGTH / 3.5) + 25};
+    std::shared_ptr<Collidable> venom_collidable =  std::make_shared<Collidable>(
+            (int)players_amount,venom_position,20, 20);
+    venom = std::make_shared<Venom>(infectedId, venom_position, venom_collidable);
+    this->collidables.insert({infectedId, venom_collidable});
+    this->infecteds.insert({infectedId++, venom});
+
+    // Jumper:
+    std::shared_ptr<Infected> jumper = nullptr;
+    std::pair<int16_t, int16_t> jumper_position = {(WINDOW_WIDTH / 2) - 50,
+                                                   (WINDOW_HEIGTH / 2) + (WINDOW_HEIGTH / 3.5) + 50};
+    std::shared_ptr<Collidable> jumper_collidable =  std::make_shared<Collidable>(
+            (int)players_amount,venom_position,20, 20);
+    jumper = std::make_shared<Jumper>(infectedId, jumper_position, jumper_collidable);
+    this->collidables.insert({infectedId, jumper_collidable});
+    this->infecteds.insert({infectedId++, jumper});
+
+    // Witch
+    std::shared_ptr<Infected> witch = nullptr;
+    std::pair<int16_t, int16_t> witch_position = {(WINDOW_WIDTH / 2) - 50,
+                                                   (WINDOW_HEIGTH / 2) + (WINDOW_HEIGTH / 3.5) + 75};
+    std::shared_ptr<Collidable> witch_collidable =  std::make_shared<Collidable>(
+            (int)players_amount,witch_position,20, 20);
+    witch = std::make_shared<Witch>(infectedId, witch_position, witch_collidable);
+    this->collidables.insert({infectedId, witch_collidable});
+    this->infecteds.insert({infectedId++, witch});
 }

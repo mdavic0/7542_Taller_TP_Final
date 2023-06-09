@@ -64,6 +64,7 @@ include_directories(${PROJECT_SOURCE_DIR}/Server/src/GameThread)
 include_directories(${PROJECT_SOURCE_DIR}/Server/src/GameWorld)
 include_directories(${PROJECT_SOURCE_DIR}/Server/src/Protocol)
 include_directories(${PROJECT_SOURCE_DIR}/Server/src/GameWorld/Collision)
+include_directories(${PROJECT_SOURCE_DIR}/Server/src/GameWorld/Infected)
 include_directories(${PROJECT_SOURCE_DIR}/Server/src/GameWorld/Player)
 include_directories(${PROJECT_SOURCE_DIR}/Server/src/GameWorld/Weapon)
 
@@ -94,7 +95,7 @@ enable_testing()
 
 #EJECUTABLES
 add_executable(server "Server/main.cpp")
-target_link_libraries(server server_classes common_classes)
+target_link_libraries(server server_classes common_classes yaml-cpp)
 
 add_executable(client "Client/main.cpp")
 target_link_libraries(client client_classes common_classes SDL2 SDL2_image SDL2_ttf yaml-cpp)

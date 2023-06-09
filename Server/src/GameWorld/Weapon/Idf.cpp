@@ -1,13 +1,26 @@
 #include "Idf.h"
 
-Idf::Idf() : Weapon(30, 20, 50) {}
+Idf::Idf() : Weapon(CF::idf_damage,
+                    CF::idf_rate,
+                    CF::idf_capacity) {}
 
-void Idf::shoot(bool right) {
+void Idf::shoot(std::shared_ptr<Collidable>& player, bool right,
+                std::map<uint8_t, std::shared_ptr<Infected>>& infecteds) {
     if (activated) {
         if (right) {
             //atacar a los q tan a la derecha...
+            for (auto &infected : infecteds) {
+                if (player->isAlignedRight(infected.second->getCollidable())) {
+                    infected.second->applyDamage(this->damage);
+                }
+            }
         } else {
             //atacar a los que tan a la izq
+            for (auto &infected : infecteds) {
+                if (player->isAlignedLeft(infected.second->getCollidable())) {
+                    infected.second->applyDamage(this->damage);
+                }
+            }
         }
     }
 }
