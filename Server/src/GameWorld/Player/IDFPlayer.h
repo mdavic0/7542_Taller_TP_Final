@@ -6,7 +6,7 @@
 
 class IDFPlayer : public Player {
     public:
-        IDFPlayer(std::pair<uint16_t, uint16_t>& position,
+        IDFPlayer(std::pair<int16_t, int16_t>& position,
                            std::shared_ptr<Collidable> collidable);
         void specialAtack(Event event) override;
         ~IDFPlayer() override;

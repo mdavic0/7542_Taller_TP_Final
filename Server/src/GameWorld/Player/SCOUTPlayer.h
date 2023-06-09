@@ -6,7 +6,7 @@
 
 class SCOUTPlayer : public Player {
     public:
-        SCOUTPlayer(std::pair<uint16_t, uint16_t>& position,
+        SCOUTPlayer(std::pair<int16_t, int16_t>& position,
                              std::shared_ptr<Collidable> collidable);
         void specialAtack(Event event) override;
         ~SCOUTPlayer() override;

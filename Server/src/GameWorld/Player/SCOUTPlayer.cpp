@@ -2,7 +2,7 @@
 
 #include <utility>
 
-SCOUTPlayer::SCOUTPlayer(std::pair<uint16_t, uint16_t>& position,
+SCOUTPlayer::SCOUTPlayer(std::pair<int16_t, int16_t>& position,
                          std::shared_ptr<Collidable> collidable) :
     Player(TypeOperator::operator_scout, 200, 8,
            std::make_shared<Scout>(), position, std::move(collidable)) {}

@@ -130,8 +130,8 @@ Snapshot ClientProtocol::getStart () {uint8_t playersCount;
     uint8_t idState;
     State state = State::idle;
 
-    uint16_t x;
-    uint16_t y;
+    int16_t x;
+    int16_t y;
 
     for (uint8_t i = 0; i < playersCount; i++) {
         recvAll(&idPlayer, 1);
@@ -156,24 +156,23 @@ Snapshot ClientProtocol::getStart () {uint8_t playersCount;
 
         recvAll(&idState, 1);
         switch (idState) {
-        case STATE_MOVING:
-            state = State::moving;
-            break;
-        
-        case STATE_ATACK:
-            state = State::atack;
-            break;
-        
-        case STATE_INJURE:
-            state = State::injure;
-            break;
-
-        case STATE_HABILITY:
-            state = State::hability;
-            break;
-        
-        default:
-            break;
+            case STATE_IDLE:
+                state = State::idle;
+                break;
+            case STATE_MOVING:
+                state = State::moving;
+                break;
+            case STATE_ATACK:
+                state = State::atack;
+                break;
+            case STATE_INJURE:
+                state = State::injure;
+                break;
+            case STATE_HABILITY:
+                state = State::hability;
+                break;  
+            default:
+                break;
         }
 
         recvAll(&x, 2);
@@ -205,7 +204,7 @@ Snapshot ClientProtocol::getStart () {uint8_t playersCount;
     
     uint8_t idMap;
     recvAll(&idMap, 1);
-
+    
     return Snapshot(map, game, idMap);
 }
 
@@ -222,8 +221,8 @@ Snapshot ClientProtocol::getPlaying () {
     uint8_t idState;
     State state = State::idle;
 
-    uint16_t x;
-    uint16_t y;
+    int16_t x;
+    int16_t y;
 
     for (uint8_t i = 0; i < playersCount; i++) {
         recvAll(&idPlayer, 1);

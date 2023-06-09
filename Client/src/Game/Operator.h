@@ -9,12 +9,13 @@
 #include <SDL2/SDL.h>
 #include <map>
 #include <string>
+#include <iostream>
 
 class Operator {
     private:
         uint8_t id;
         TypeOperator operatorId;
-        std::pair<uint16_t, uint16_t> position;
+        std::pair<int16_t, int16_t> position;
         std::map<std::string, Texture*> textures;
         State stateOperator;
         Renderer renderPlayer;
@@ -29,12 +30,17 @@ class Operator {
         Operator(uint8_t id, TypeOperator op, Renderer& renderer);
         ~Operator();     
         void updateMove(MoveTo direction);
-        void update(std::pair<uint16_t, uint16_t> pos, State state,
+        void update(std::pair<int16_t, int16_t> pos, State state,
                     int health);
         TypeOperator getType();
         uint8_t getId();
         uint8_t getHealth();
+        uint16_t getPosY();
         void render();
+
+        bool operator<(const Operator& other) const {
+            return  position.second < other.position.second;
+        };
 };
 
 #endif

@@ -2,7 +2,7 @@
 
 #include <utility>
 
-IDFPlayer::IDFPlayer(std::pair<uint16_t, uint16_t>& position,
+IDFPlayer::IDFPlayer(std::pair<int16_t, int16_t>& position,
                      std::shared_ptr<Collidable> collidable) :
     Player(TypeOperator::operator_idf, 150, 15,
            std::make_shared<Idf>(), position, std::move(collidable)) {}

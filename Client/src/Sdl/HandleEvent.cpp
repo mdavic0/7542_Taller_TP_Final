@@ -13,8 +13,8 @@ void EventHandler::listen() {
         switch (event.type) {
             case SDL_QUIT:
                 this->running = false;
-                // this->eventQueue.push(
-                //     std::make_shared<EventDTO>(Event::event_leave));
+                this->eventQueue.push(
+                    std::make_shared<EventDTO>(idPlayer));
                 break;
             case SDL_KEYDOWN:
                 handleKeyDownEvent(event.key.keysym);

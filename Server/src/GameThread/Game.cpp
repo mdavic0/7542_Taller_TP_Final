@@ -3,6 +3,7 @@
 #include <string>
 #include <random>
 #include <functional>
+#include <iterator>
 
 Game::Game(const uint32_t id, const std::string& name, const TypeGame& type) :
     id(id), name(name), mutex(),
@@ -59,9 +60,8 @@ Queue<std::shared_ptr<EventDTO>>* Game::joinGame(Queue<std::shared_ptr<Snapshot>
 
 void Game::startGame() {
     this->started = true;
-    for (auto &clientQueue : client_snapshot_queues) {
-        clientQueue->push(gameWorld.getSnapshot(true));
-    }
+    std::shared_ptr<Snapshot> snapshot = gameWorld.getSnapshot(true);
+    broadcastSnapshot(snapshot);
     this->start();
 } 
 
@@ -112,7 +112,9 @@ void Game::processEvents() {
                 gameWorld.updateShootingState(event->getEvent(),
                                               event->getIdPlayer());
             } else if (event->getEvent() == Event::event_leave) {
+                std::cout << "se desconecto cliente\n";
                 gameWorld.deletePlayer(event->getIdPlayer());
+                // falta eliminar al player de la queue
             }
             iterations++;
         }
