@@ -7,7 +7,7 @@ Infected::Infected(uint8_t id, uint8_t life, uint8_t velocity, uint8_t damage,
                    std::shared_ptr<Collidable> collidable) : id(id), life(life),
                    velocity(velocity), damage(damage), state(State::idle),
                    position(position), movement_direction(0,0),
-                   collidable(std::move(collidable)) {}
+                   collidable(std::move(collidable)), alive(true) {}
 
 void Infected::setMovementDirection(MoveTo direction) {
     switch (direction) {
@@ -77,3 +77,19 @@ void Infected::applyStep(std::map<int, std::shared_ptr<Collidable>> &collidables
     this->move(collidables);
     this->atack();
 }
+
+std::shared_ptr<Collidable> &Infected::getCollidable() {
+    return this->collidable;
+}
+
+void Infected::applyDamage(const int &amount) {
+    this->life -= amount;
+    if (this->life <= 0) {
+        this->alive = false;
+    }
+}
+
+bool Infected::isAlive() {
+    return this->alive;
+}
+

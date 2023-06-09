@@ -23,6 +23,7 @@ class Infected {
 
         std::shared_ptr<Collidable> collidable;
 
+        bool alive;
     public:
         Infected(uint8_t id, uint8_t life, uint8_t velocity, uint8_t damage,
                  std::pair<int16_t, int16_t>& position,
@@ -31,6 +32,9 @@ class Infected {
         void setMovementDirection(MoveTo direction);
         void stopMovementDirection(MoveTo direction);
         void applyStep(std::map<int, std::shared_ptr<Collidable>>& collidables);
+        std::shared_ptr<Collidable>& getCollidable();
+        void applyDamage(const int& amount);
+        bool isAlive();
         virtual ~Infected() = default;
 
     private:
