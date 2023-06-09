@@ -2,6 +2,8 @@
 #include <arpa/inet.h>
 #include <iostream>
 #include <sstream>
+#include "Defines.h"
+#include "Configuration.h"
 
 int main(int argc, char *argv[]) {
     try {
@@ -12,6 +14,8 @@ int main(int argc, char *argv[]) {
                 << argv[0] << " <servname>\n";
             return 1;
         }
+
+        CF::loadConfiguration(PATH);
 
         Server server(argv[1]);
         server.run();
