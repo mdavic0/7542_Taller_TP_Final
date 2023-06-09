@@ -1,4 +1,8 @@
 ---
+####################################################
+# Operators
+####################################################
+# 1: # idf
 idf_damage: 30
 idf_health: 150
 idf_velocity: 15
@@ -31,4 +35,30 @@ smoke_recharge: 10
 blitz_damage: 100
 blitz_recharge: 30
 
+####################################################
+# Infected
+####################################################
+# Zombie
+zombie_damage: 5
+zombie_health: 80
+zombie_velocity: 15
 
+# Jumper
+jumper_damage: 15
+jumper_health: 120
+jumper_velocity: 30
+
+# Witch
+witch_damage: 50
+witch_health: 900
+witch_velocity: 40
+
+# Spear
+spear_damage: 30
+spear_health: 200
+spear_velocity: 20
+
+# Venom
+venom_damage: 25
+venom_health: 180
+venom_velocity: 20
