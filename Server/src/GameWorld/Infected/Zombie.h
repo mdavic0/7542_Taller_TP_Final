@@ -4,6 +4,7 @@
 #include "Infected.h"
 #include "Event.h"
 #include "Configuration.h"
+#include "TypeInfected.h"
 
 
 class Zombie : public Infected {

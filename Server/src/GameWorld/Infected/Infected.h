@@ -7,9 +7,11 @@
 #include "State.h"
 #include "Event.h"
 #include "Collidable.h"
+#include "TypeInfected.h"
 
 class Infected {
     private:
+        TypeInfected typeInfected;
         uint8_t id;
 
         uint8_t life;
@@ -25,7 +27,8 @@ class Infected {
 
         bool alive;
     public:
-        Infected(uint8_t id, uint8_t life, uint8_t velocity, uint8_t damage,
+        Infected(TypeInfected typeInfected, uint8_t id, uint8_t life,
+                 uint8_t velocity, uint8_t damage,
                  std::pair<int16_t, int16_t>& position,
                  std::shared_ptr<Collidable> collidable);
 
@@ -35,6 +38,11 @@ class Infected {
         std::shared_ptr<Collidable>& getCollidable();
         void applyDamage(const int& amount);
         bool isAlive();
+
+        std::pair<int16_t, int16_t>& getPosition();
+        TypeInfected& getTypeInfected();
+        State& getState();
+
         virtual ~Infected() = default;
 
     private:

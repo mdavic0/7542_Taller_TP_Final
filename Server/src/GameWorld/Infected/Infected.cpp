@@ -2,9 +2,9 @@
 
 #include <utility>
 
-Infected::Infected(uint8_t id, uint8_t life, uint8_t velocity, uint8_t damage,
+Infected::Infected(TypeInfected typeInfected, uint8_t id, uint8_t life, uint8_t velocity, uint8_t damage,
                    std::pair<int16_t, int16_t> &position,
-                   std::shared_ptr<Collidable> collidable) : id(id), life(life),
+                   std::shared_ptr<Collidable> collidable) : typeInfected(typeInfected), id(id), life(life),
                    velocity(velocity), damage(damage), state(State::idle),
                    position(position), movement_direction(0,0),
                    collidable(std::move(collidable)), alive(true) {}
@@ -91,5 +91,17 @@ void Infected::applyDamage(const int &amount) {
 
 bool Infected::isAlive() {
     return this->alive;
+}
+
+std::pair<int16_t, int16_t> &Infected::getPosition() {
+    return this->position;
+}
+
+TypeInfected &Infected::getTypeInfected() {
+    return this->typeInfected;
+}
+
+State &Infected::getState() {
+    return this->state;
 }
 

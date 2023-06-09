@@ -4,6 +4,8 @@
 #include "Infected.h"
 #include "Event.h"
 #include "Configuration.h"
+#include "TypeInfected.h"
+
 
 class Witch : public Infected {
     public:
