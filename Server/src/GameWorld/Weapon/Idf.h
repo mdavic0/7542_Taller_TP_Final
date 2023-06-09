@@ -1,6 +1,7 @@
 #ifndef LEFT4DEAD_IDF_H
 #define LEFT4DEAD_IDF_H
 #include "Weapon.h"
+#include "Configuration.h"
 
 class Idf : public Weapon {
     public:

@@ -1,6 +1,8 @@
 #include "Idf.h"
 
-Idf::Idf() : Weapon(30, 20, 50) {}
+Idf::Idf() : Weapon(CF::idf_damage,
+                    CF::idf_rate,
+                    CF::idf_capacity) {}
 
 void Idf::shoot(bool right) {
     if (activated) {

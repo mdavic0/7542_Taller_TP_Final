@@ -1,6 +1,8 @@
 #include "P90.h"
 
-P90::P90() : Weapon(20, 10, 30) {}
+P90::P90() : Weapon(CF::p90_damage,
+                    CF::p90_rate,
+                    CF::p90_capacity) {}
 
 void P90::shoot(bool right) {
     if (activated) {

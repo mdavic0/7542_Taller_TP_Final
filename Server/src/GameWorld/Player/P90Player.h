@@ -3,15 +3,17 @@
 #include "Player.h"
 #include "Event.h"
 #include "P90.h"
+#include "Configuration.h"
 
 class P90Player : public Player {
-public:
-    P90Player(std::pair<int16_t, int16_t>& position,
+    public:
+        P90Player(std::pair<int16_t, int16_t>& position,
                        std::shared_ptr<Collidable> collidable);
-    void specialAtack(Event event) override;
-    ~P90Player() override;
-private:
-    void blitz();
+        void specialAtack(Event event) override;
+        ~P90Player() override;
+
+    private:
+        void blitz();
 };
 
 

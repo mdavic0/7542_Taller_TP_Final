@@ -4,7 +4,7 @@
 
 IDFPlayer::IDFPlayer(std::pair<int16_t, int16_t>& position,
                      std::shared_ptr<Collidable> collidable) :
-    Player(TypeOperator::operator_idf, 150, 15,
+    Player(TypeOperator::operator_idf, CF::idf_health, CF::idf_velocity,
            std::make_shared<Idf>(), position, std::move(collidable)) {}
 
 void IDFPlayer::specialAtack(Event event) {

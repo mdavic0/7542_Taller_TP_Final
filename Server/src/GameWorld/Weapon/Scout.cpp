@@ -1,6 +1,8 @@
 #include "Scout.h"
 
-Scout::Scout() : Weapon(60, 1, 20) {}
+Scout::Scout() : Weapon(CF::scout_damage,
+                        CF::scout_rate,
+                        CF::scout_capacity) {}
 
 void Scout::shoot(bool right) {
     if (activated) {

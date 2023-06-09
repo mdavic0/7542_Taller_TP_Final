@@ -4,7 +4,7 @@
 
 SCOUTPlayer::SCOUTPlayer(std::pair<int16_t, int16_t>& position,
                          std::shared_ptr<Collidable> collidable) :
-    Player(TypeOperator::operator_scout, 200, 8,
+    Player(TypeOperator::operator_scout, CF::scout_health, CF::scout_velocity,
            std::make_shared<Scout>(), position, std::move(collidable)) {}
 
 void SCOUTPlayer::specialAtack(Event event) {
