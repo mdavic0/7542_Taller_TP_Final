@@ -4,6 +4,7 @@
 #include <iostream>
 #include "Launcher.h"
 #include <QApplication>
+#include "Configuration.h"
 
 int main(int argc, char *argv[]) { 
     try {
@@ -14,6 +15,7 @@ int main(int argc, char *argv[]) {
         }
         QApplication app(argc, argv);
         Launcher launcher;
+        Configuration::loadConfiguration("assets/config/config.yaml");
         launcher.show();
         return app.exec();
     } catch (const std::exception& err) {

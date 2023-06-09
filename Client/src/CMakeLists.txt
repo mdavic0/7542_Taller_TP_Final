@@ -1,7 +1,7 @@
 project(left4dead)
 
-add_subdirectory(launcher)
-add_subdirectory(sdl)
+add_subdirectory(Launcher)
+add_subdirectory(Sdl)
 
 FILE(GLOB_RECURSE myFiles *.cpp *.h)
 
