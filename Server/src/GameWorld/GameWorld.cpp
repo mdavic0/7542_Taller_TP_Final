@@ -1,8 +1,14 @@
 #include "GameWorld.h"
+#include <random>
+#include <functional>
+#include <iterator>
+#include <utility>
 
-GameWorld::GameWorld(const TypeGame& type, uint8_t map) :
-    players_amount(0), players(), type(type), map(map), collidables(), infectedId(200) {
+GameWorld::GameWorld(const TypeGame& type, int map) :
+    players_amount(0), players(), type(type), map(map),
+    collidables(), infectedId(200), obsacleId(100) {
     this->generateInfecteds();
+    this->generateObstacles();
 }
 
 
@@ -143,4 +149,38 @@ void GameWorld::generateInfecteds() {
     witch = std::make_shared<Witch>(infectedId, witch_position, witch_collidable);
     this->collidables.insert({infectedId, witch_collidable});
     this->infecteds.insert({infectedId++, witch});
+}
+
+void GameWorld::generateObstacles() {
+    // Random obstacle (can be Tire or Crater):
+    std::shared_ptr<Obstacle> newObstacle = nullptr;
+    std::pair<int16_t, int16_t> position = {100,
+                                            (WINDOW_HEIGTH / 2) + (WINDOW_HEIGTH / 3.5)};
+
+    std::shared_ptr<Collidable> collidable =  std::make_shared<Collidable>(
+            (int)obsacleId,position,50, 50);
+
+    TypeObstacle obstacle = this->generateObstacleType();
+
+    switch (obstacle) {
+        case TypeObstacle::obstacle_tire:
+            newObstacle = std::make_shared<Tire>(obsacleId, position, collidable);
+            break;
+        case TypeObstacle::obstacle_crater:
+            newObstacle = std::make_shared<Crater>(obsacleId, position, collidable);
+            break;
+        default:
+            newObstacle = std::make_shared<Tire>(obsacleId, position, collidable);
+            break;
+    }
+
+    this->collidables.insert({obsacleId, collidable});
+    this->obstacles.insert({obsacleId++, newObstacle});
+}
+
+TypeObstacle GameWorld::generateObstacleType() {
+    std::random_device rand_dev;
+    std::mt19937 generator(rand_dev());
+    std::uniform_int_distribution<int> distr(0, 1);
+    return (TypeObstacle)distr(generator);
 }
