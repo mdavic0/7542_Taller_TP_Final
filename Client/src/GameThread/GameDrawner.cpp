@@ -47,8 +47,8 @@ void GameDrawner::run() {
 
         // Por si recibo el evento start_game
         std::shared_ptr<Snapshot> snap = nullptr;
-        std::vector<std::shared_ptr<Operator>> players;    
-        std::vector<std::shared_ptr<Enemy>> enemys;    
+        std::map<uint8_t, std::shared_ptr<Operator>> players;    
+        std::map<uint8_t, std::shared_ptr<Enemy>> enemys;    
 
         while(noReady)  {
             render.clear();
@@ -96,12 +96,12 @@ void GameDrawner::run() {
                 snap = snapshot_queue.pop();
             players.clear();
             for (auto &player : snap->getInfo()) {
-                players.push_back(std::make_shared<Operator>(player.getId(), 
-                    player.getTypeOperator(), render));
+                players[player.getId()] = std::make_shared<Operator>(player.getId(), 
+                    player.getTypeOperator(), render);
             }
             enemys.clear();
             for (uint8_t i = 0; i < 5; i++) {
-                enemys.push_back(std::make_shared<Enemy>(render, i));
+                enemys[i] = std::make_shared<Enemy>(render, i);
             }
 
             uint8_t idMap = snap->getMap();
