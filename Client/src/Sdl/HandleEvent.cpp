@@ -47,6 +47,14 @@ void EventHandler::handleKeyDownEvent(SDL_Keysym keysym) {
             event = Event::event_shoot;
             std::cout << "shooting\n";
             break;
+        case SDLK_q:
+            event = Event::event_throw_grenade;
+            std::cout << "grenade\n";
+            break;
+        case SDLK_e:
+            event = Event::event_throw_smoke;
+            std::cout << "smoke\n";
+            break;
         default:
             moveDirection = MoveTo::move_idle;
             break;
@@ -72,6 +80,12 @@ void EventHandler::handleKeyUpEvent(SDL_Keysym keysym) {
             break;
         case SDLK_SPACE:
             event = Event::event_stop_shoot;
+            break;
+        case SDLK_q:
+            event = Event::event_stop_grenade;
+            break;
+        case SDLK_e:
+            event = Event::event_stop_smoke;
             break;
         default:
             moveDirection = MoveTo::move_idle;
