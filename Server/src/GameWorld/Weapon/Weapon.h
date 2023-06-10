@@ -19,7 +19,7 @@ public:
         void activate();
         void deactivate();
         virtual void shoot(std::shared_ptr<Collidable>& player, bool right,
-                           std::map<uint8_t, std::shared_ptr<Infected>>& infecteds) = 0;
+                           std::map<int, std::shared_ptr<Infected>>& infecteds) = 0;
         virtual ~Weapon();
 };
 

@@ -12,9 +12,9 @@
 class Infected {
     private:
         TypeInfected typeInfected;
-        uint8_t id;
+        int id;
 
-        uint8_t life;
+        int8_t life;
         uint8_t velocity;
         uint8_t damage;
 
@@ -27,7 +27,7 @@ class Infected {
 
         bool alive;
     public:
-        Infected(TypeInfected typeInfected, uint8_t id, uint8_t life,
+        Infected(TypeInfected typeInfected, int id, uint8_t life,
                  uint8_t velocity, uint8_t damage,
                  std::pair<int16_t, int16_t>& position,
                  std::shared_ptr<Collidable> collidable);
@@ -42,6 +42,7 @@ class Infected {
         std::pair<int16_t, int16_t>& getPosition();
         TypeInfected& getTypeInfected();
         State& getState();
+        int& getId();
 
         virtual ~Infected() = default;
 

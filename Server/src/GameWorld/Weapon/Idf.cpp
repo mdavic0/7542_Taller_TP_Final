@@ -5,7 +5,7 @@ Idf::Idf() : Weapon(CF::idf_damage,
                     CF::idf_capacity) {}
 
 void Idf::shoot(std::shared_ptr<Collidable>& player, bool right,
-                std::map<uint8_t, std::shared_ptr<Infected>>& infecteds) {
+                std::map<int, std::shared_ptr<Infected>>& infecteds) {
     if (activated) {
         if (right) {
             //atacar a los q tan a la derecha...

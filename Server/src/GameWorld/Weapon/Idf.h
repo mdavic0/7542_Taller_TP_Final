@@ -9,7 +9,7 @@ class Idf : public Weapon {
     public:
         Idf();
         void shoot(std::shared_ptr<Collidable>& player, bool right,
-                   std::map<uint8_t, std::shared_ptr<Infected>>& infecteds) override;
+                   std::map<int, std::shared_ptr<Infected>>& infecteds) override;
 };
 
 

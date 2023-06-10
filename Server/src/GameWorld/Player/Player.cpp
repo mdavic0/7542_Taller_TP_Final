@@ -75,7 +75,7 @@ void Player::stopShootingState() {
 }
 
 void Player::applyStep(std::map<int, std::shared_ptr<Collidable>>& collidables,
-                       std::map<uint8_t, std::shared_ptr<Infected>>& infecteds) {
+                       std::map<int, std::shared_ptr<Infected>>& infecteds) {
     this->move(collidables);
     this->shoot(infecteds);
 }
@@ -108,6 +108,6 @@ void Player::move(std::map<int, std::shared_ptr<Collidable>>& collidables) {
     }
 }
 
-void Player::shoot(std::map<uint8_t, std::shared_ptr<Infected>>& infecteds) {
+void Player::shoot(std::map<int, std::shared_ptr<Infected>>& infecteds) {
     this->weapon->shoot(this->collidable, this->lookingRight, infecteds);
 }
