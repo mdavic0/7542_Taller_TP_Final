@@ -17,6 +17,10 @@
 #include "Witch.h"
 #include "Jumper.h"
 #include "Venom.h"
+#include "Obstacle.h"
+#include "Tire.h"
+#include "Crater.h"
+
 
 class GameWorld {
     private:
@@ -24,16 +28,17 @@ class GameWorld {
         std::map<uint8_t, std::shared_ptr<Player>> players;
         TypeGame type;
         uint8_t map;
-        // TODO: VECTOR DE VECTORES DE POSICIONES (EN ORDEN) DE CADA PLAYER /
-        //    MONSTRUITO ENEMIGO EN EL GAME (PARA EFECTUAR BIEN EL ATAQUE, YA QUE
-        //    ESTE VARIA DEPENDIENDO DE LA DISTANCIA / ENEMIGOS ATRAVEZADOS)
+
+        // Map collidables (can be Infecteds, other Players or Obstacles...)
         std::map<int, std::shared_ptr<Collidable>> collidables;
 
         int infectedId;
         std::map<int, std::shared_ptr<Infected>> infecteds;
 
+        uint8_t obsacleId;
+        std::map<int, std::shared_ptr<Obstacle>> obstacles;
 
-    public:
+public:
         GameWorld(const TypeGame& type, int map);
         uint8_t addPlayer(TypeOperator op);
         void deletePlayer(uint8_t id);
@@ -45,6 +50,8 @@ class GameWorld {
 
     private:
         void generateInfecteds();
+        void generateObstacles();
+        TypeObstacle generateObstacleType();
 };
 
 
