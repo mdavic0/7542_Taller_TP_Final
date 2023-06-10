@@ -9,7 +9,7 @@ ClientProtocol::ClientProtocol(Socket&& skt) :
 
 void ClientProtocol::sendCreate(const std::string& scenario, const TypeOperator& typeOperator,
     const TypeGame& typeGame) {
-    uint8_t command = 0x01;
+    uint8_t command = CREATE_CODE;
     sendAll(&command, 1);
 
     sendOperator(typeOperator);
@@ -26,7 +26,7 @@ void ClientProtocol::sendCreate(const std::string& scenario, const TypeOperator&
 }
 
 void ClientProtocol::sendJoin(const uint32_t& code, const TypeOperator& typeOperator) {
-    uint8_t command = 0x02;
+    uint8_t command = JOIN_CODE;
     sendAll(&command, 1);
 
     sendOperator(typeOperator);
@@ -36,48 +36,83 @@ void ClientProtocol::sendJoin(const uint32_t& code, const TypeOperator& typeOper
     
 }
 
-void ClientProtocol::sendMove (const MoveTo& moveTo, const uint8_t& idPlayer) {
-    uint8_t command = 0x03;
-    sendAll(&command, 1);
-
-    sendAll(&idPlayer, 1);
-
-    sendMoveTo(moveTo);
-}
-
-void ClientProtocol::sendStopMove (const MoveTo& moveTo, const uint8_t& idPlayer) {
-    uint8_t command = 0x04;
-    sendAll(&command, 1);
-
-    sendAll(&idPlayer, 1);
-
-    sendMoveTo(moveTo);
-}
-
 void ClientProtocol::sendStart() {
-    uint8_t command = 0x06;
+    uint8_t command = START_CODE;
     sendAll(&command, 1);
+}
+
+void ClientProtocol::sendMove(const MoveTo& moveTo, const uint8_t& idPlayer) {
+    uint8_t command = MOVE_CODE;
+    sendAll(&command, 1);
+
+    sendId(idPlayer);
+
+    sendMoveTo(moveTo);
+}
+
+void ClientProtocol::sendStopMove(const MoveTo& moveTo, const uint8_t& idPlayer) {
+    uint8_t command = STOP_MOVE_CODE;
+    sendAll(&command, 1);
+
+    sendId(idPlayer);
+
+    sendMoveTo(moveTo);
+}
+
+void ClientProtocol::sendSmoke(const uint8_t& idPlayer) {
+    uint8_t command = THROW_SMOKE_CODE;
+    sendAll(&command, 1);
+
+    sendId(idPlayer);
+}
+
+void ClientProtocol::sendStopSmoke(const uint8_t& idPlayer) {
+    uint8_t command = STOP_SMOKE_CODE;
+    sendAll(&command, 1);
+
+    sendId(idPlayer);
+}
+
+void ClientProtocol::sendGrenade(const uint8_t& idPlayer) {
+    uint8_t command = THROW_GRENADE_CODE;
+    sendAll(&command, 1);
+
+    sendId(idPlayer);
+}
+
+void ClientProtocol::sendStopGrenade(const uint8_t& idPlayer) {
+    uint8_t command = STOP_GRENADE_CODE;
+    sendAll(&command, 1);
+
+    sendId(idPlayer);
+}
+
+void ClientProtocol::sendBlitz(const uint8_t& idPlayer) {
+    uint8_t command = BLITZ_ATACK_CODE;
+    sendAll(&command, 1);
+
+    sendId(idPlayer);
 }
 
 void ClientProtocol::sendShoot(const uint8_t& idPlayer) {
-    uint8_t command = 0x11;
+    uint8_t command = SHOOT_CODE;
     sendAll(&command, 1);
 
-    sendAll(&idPlayer, 1);
+    sendId(idPlayer);
 }
 
 void ClientProtocol::sendStopShoot(const uint8_t& idPlayer) {
-    uint8_t command = 0x12;
+    uint8_t command = STOP_SHOOT_CODE;
     sendAll(&command, 1);
 
-    sendAll(&idPlayer, 1);
+    sendId(idPlayer);
 }
 
 void ClientProtocol::sendLeave(const uint8_t& idPlayer) {
-    uint8_t command = 0x07;
+    uint8_t command = LEAVE_CODE;
     sendAll(&command, 1);
 
-    sendAll(&idPlayer, 1);
+    sendId(idPlayer);
 }
 
 void ClientProtocol::sendOperator(const TypeOperator& typeOperator) {
@@ -104,6 +139,10 @@ void ClientProtocol::sendMoveTo(const MoveTo& moveTo) {
         idDirection = RIGHT_CODE;
     }
     sendAll(&idDirection, 1);
+}
+
+void ClientProtocol::sendId(const uint8_t& idPlayer) {
+    sendAll(&idPlayer, 1);    
 }
 
 Snapshot ClientProtocol::getCreate () {
@@ -307,12 +346,22 @@ void ClientProtocol::sendEvent(const EventDTO& eventdto) {
         sendMove(eventdto.getMoveTo(), eventdto.getIdPlayer());
     } else if (event == Event::event_stop_move) {
         sendStopMove(eventdto.getMoveTo(), eventdto.getIdPlayer());
-    } else if (event == Event::event_leave) {
-        sendLeave(eventdto.getIdPlayer());
     } else if (event == Event::event_shoot) {
         sendShoot(eventdto.getIdPlayer());
     } else if (event == Event::event_stop_shoot) {
         sendStopShoot(eventdto.getIdPlayer());
+    } else if (event == Event::event_throw_smoke) {
+        sendSmoke(eventdto.getIdPlayer());
+    } else if (event == Event::event_stop_smoke) {
+        sendStopSmoke(eventdto.getIdPlayer());
+    } else if (event == Event::event_throw_grenade) {
+        sendGrenade(eventdto.getIdPlayer());
+    } else if (event == Event::event_stop_grenade) {
+        sendStopGrenade(eventdto.getIdPlayer());
+    } else if (event == Event::event_blitz_atack) {
+        sendBlitz(eventdto.getIdPlayer());
+    } else if (event == Event::event_leave) {
+        sendLeave(eventdto.getIdPlayer());
     }
     
 }

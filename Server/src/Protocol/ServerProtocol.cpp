@@ -77,6 +77,10 @@ EventDTO ServerProtocol::getJoin() {
 
 }
 
+EventDTO ServerProtocol::getStart() {
+    return EventDTO(Event::event_start_game, 0);
+}
+
 EventDTO ServerProtocol::getMove() {
     uint8_t id;
     recvAll(&id, 1);
@@ -141,15 +145,39 @@ EventDTO ServerProtocol::getStopMove() {
     return EventDTO(Event::event_stop_move, moveTo, id);
 }
 
-EventDTO ServerProtocol::getStart() {
-    return EventDTO(Event::event_start_game, 0);
-}
-
-EventDTO ServerProtocol::getLeave() {
+EventDTO ServerProtocol::getSmoke() {
     uint8_t id;
     recvAll(&id, 1);
 
-    return EventDTO(Event::event_leave, id);
+    return EventDTO(Event::event_throw_smoke, id);
+}
+
+EventDTO ServerProtocol::getStopSmoke() {
+    uint8_t id;
+    recvAll(&id, 1);
+
+    return EventDTO(Event::event_stop_smoke, id);
+}
+
+EventDTO ServerProtocol::getGrenade() {
+    uint8_t id;
+    recvAll(&id, 1);
+
+    return EventDTO(Event::event_throw_grenade, id);
+}
+
+EventDTO ServerProtocol::getStopGrenade() {
+    uint8_t id;
+    recvAll(&id, 1);
+
+    return EventDTO(Event::event_stop_grenade, id);
+}
+
+EventDTO ServerProtocol::getBlitz() {
+    uint8_t id;
+    recvAll(&id, 1);
+
+    return EventDTO(Event::event_blitz_atack, id);
 }
 
 EventDTO ServerProtocol::getShoot() {
@@ -164,11 +192,17 @@ EventDTO ServerProtocol::getStopShoot() {
     recvAll(&id, 1);
 
     return EventDTO(Event::event_stop_shoot, id);
+}
 
+EventDTO ServerProtocol::getLeave() {
+    uint8_t id;
+    recvAll(&id, 1);
+
+    return EventDTO(Event::event_leave, id);
 }
 
 void ServerProtocol::sendCreate(const uint32_t& code, const uint8_t& idPlayer) {
-    uint8_t event = 0x01;
+    uint8_t event = CREATE_CODE;
     sendAll(&event, 1);
 
     uint32_t aux = htonl(code);
@@ -178,7 +212,7 @@ void ServerProtocol::sendCreate(const uint32_t& code, const uint8_t& idPlayer) {
 }
 
 void ServerProtocol::sendJoin(const uint8_t& ok, const uint8_t& idPlayer, const uint8_t& size) {
-    uint8_t event = 0x02;
+    uint8_t event = JOIN_CODE;
     sendAll(&event, 1);
 
     sendAll(&ok, 1);
@@ -191,7 +225,7 @@ void ServerProtocol::sendJoin(const uint8_t& ok, const uint8_t& idPlayer, const 
 
 void ServerProtocol::sendStart(const std::vector<StOperator> &playersInfo,
     const TypeGame& typeGame, const uint8_t& idMap) {
-    uint8_t event = 0x06;
+    uint8_t event = START_CODE;
     sendAll(&event, 1);
     
     sendPlayersInfo(playersInfo);
@@ -208,7 +242,7 @@ void ServerProtocol::sendStart(const std::vector<StOperator> &playersInfo,
 }
 
 void ServerProtocol::sendPlaying(const std::vector<StOperator> &playersInfo) {
-    uint8_t event = 0x05;
+    uint8_t event = PLAYING_CODE;
     sendAll(&event, 1);
 
     sendPlayersInfo(playersInfo);
@@ -279,6 +313,10 @@ EventDTO ServerProtocol::getEvent() {
     case JOIN_CODE:
         return getJoin();
         break;
+
+    case START_CODE:
+        return getStart();
+        break;
         
     case MOVE_CODE:
         return getMove();
@@ -288,12 +326,24 @@ EventDTO ServerProtocol::getEvent() {
         return getStopMove();
         break;
 
-    case START_CODE:
-        return getStart();
+    case THROW_SMOKE_CODE:
+        return getSmoke();
         break;
 
-    case LEAVE_CODE:
-        return getLeave();
+    case STOP_SMOKE_CODE:
+        return getStopSmoke();
+        break;
+
+    case THROW_GRENADE_CODE:
+        return getSmoke();
+        break;
+
+    case STOP_GRENADE_CODE:
+        return getStopSmoke();
+        break;
+
+    case BLITZ_ATACK_CODE:
+        return getBlitz();
         break;
 
     case SHOOT_CODE:
@@ -302,6 +352,10 @@ EventDTO ServerProtocol::getEvent() {
 
     case STOP_SHOOT_CODE:
         return getStopShoot();
+        break;
+
+    case LEAVE_CODE:
+        return getLeave();
         break;
 
     default:

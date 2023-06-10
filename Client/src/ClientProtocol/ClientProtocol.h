@@ -15,14 +15,20 @@ class ClientProtocol : public Protocol {
 
         void sendCreate(const std::string& scenario, const TypeOperator& typeOperator, const TypeGame& typeGame);
         void sendJoin(const uint32_t& code, const TypeOperator& typeOperator);
+        void sendStart();
         void sendMove(const MoveTo& moveTo, const uint8_t& idPlayer);
         void sendStopMove(const MoveTo& moveTo, const uint8_t& idPlayer);
-        void sendStart();
+        void sendSmoke(const uint8_t& idPlayer);
+        void sendStopSmoke(const uint8_t& idPlayer);
+        void sendGrenade(const uint8_t& idPlayer);
+        void sendStopGrenade(const uint8_t& idPlayer);
+        void sendBlitz(const uint8_t& idPlayer);
         void sendShoot(const uint8_t& idPlayer);
         void sendStopShoot(const uint8_t& idPlayer);
         void sendLeave(const uint8_t& idPlayer);
         void sendOperator(const TypeOperator& typeOperator);
         void sendMoveTo(const MoveTo& moveTo);
+        void sendId(const uint8_t& idPlayer);
 
         Snapshot getCreate();
         Snapshot getJoin();
