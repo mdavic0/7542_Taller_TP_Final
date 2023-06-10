@@ -32,16 +32,16 @@ class Player {
         void stopMovementDirection(MoveTo direction);
         void setShootingState();
         void stopShootingState();
-        void applyStep(std::map<int, std::shared_ptr<Collidable>>& collidables,
-                       std::map<int, std::shared_ptr<Infected>>& infecteds);
+        void applyStep(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables,
+                       std::map<uint8_t, std::shared_ptr<Infected>>& infecteds);
         std::pair<int16_t, int16_t>& getPosition();
         TypeOperator& getTypeOperator();
         State& getState();
         uint8_t& getHealth();
         virtual ~Player() = default;
     private:
-        void move(std::map<int, std::shared_ptr<Collidable>>& collidables);
-        void shoot(std::map<int, std::shared_ptr<Infected>>& infecteds);
+        void move(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables);
+        void shoot(std::map<uint8_t, std::shared_ptr<Infected>>& infecteds);
         virtual void specialAtack(Event event) = 0;
 };
 

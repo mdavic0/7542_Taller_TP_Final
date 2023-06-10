@@ -6,7 +6,7 @@ P90::P90() : Weapon(CF::p90_damage,
 
 #include <iostream>
 void P90::shoot(std::shared_ptr<Collidable>& player, bool right,
-                std::map<int, std::shared_ptr<Infected>>& infecteds) {
+                std::map<uint8_t, std::shared_ptr<Infected>>& infecteds) {
     if (activated) {
         if (right) {
             //atacar a los q tan a la derecha...

@@ -2,7 +2,7 @@
 
 #include <utility>
 
-Infected::Infected(TypeInfected typeInfected, int id, uint8_t life, uint8_t velocity, uint8_t damage,
+Infected::Infected(TypeInfected typeInfected, uint8_t id, uint8_t life, uint8_t velocity, uint8_t damage,
                    std::pair<int16_t, int16_t> &position,
                    std::shared_ptr<Collidable> collidable) : typeInfected(typeInfected), id(id), life(life),
                    velocity(velocity), damage(damage), state(State::idle),
@@ -56,7 +56,7 @@ void Infected::stopMovementDirection(MoveTo direction) {
     }
 }
 
-void Infected::move(std::map<int, std::shared_ptr<Collidable>> &collidables) {
+void Infected::move(std::map<uint8_t, std::shared_ptr<Collidable>> &collidables) {
     if (not this->collidable->collidesWith(collidables)) {
         this->position.first += movement_direction.first + movement_direction.first * (velocity / 10);
         this->position.second += movement_direction.second + movement_direction.second * (velocity / 10);
@@ -73,7 +73,7 @@ void Infected::atack() {
 
 }
 
-void Infected::applyStep(std::map<int, std::shared_ptr<Collidable>> &collidables) {
+void Infected::applyStep(std::map<uint8_t, std::shared_ptr<Collidable>> &collidables) {
     this->move(collidables);
     this->atack();
 }
@@ -108,7 +108,7 @@ State &Infected::getState() {
     return this->state;
 }
 
-int &Infected::getId() {
+uint8_t &Infected::getId() {
     return this->id;
 }
 

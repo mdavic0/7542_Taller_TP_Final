@@ -27,14 +27,14 @@ class GameWorld {
         // TODO: VECTOR DE VECTORES DE POSICIONES (EN ORDEN) DE CADA PLAYER /
         //    MONSTRUITO ENEMIGO EN EL GAME (PARA EFECTUAR BIEN EL ATAQUE, YA QUE
         //    ESTE VARIA DEPENDIENDO DE LA DISTANCIA / ENEMIGOS ATRAVEZADOS)
-        std::map<int, std::shared_ptr<Collidable>> collidables;
+        std::map<uint8_t, std::shared_ptr<Collidable>> collidables;
 
-        int infectedId;
-        std::map<int, std::shared_ptr<Infected>> infecteds;
+        uint8_t infectedId;
+        std::map<uint8_t, std::shared_ptr<Infected>> infecteds;
 
 
     public:
-        GameWorld(const TypeGame& type, int map);
+        GameWorld(const TypeGame& type, uint8_t map);
         uint8_t addPlayer(TypeOperator op);
         void deletePlayer(uint8_t id);
 

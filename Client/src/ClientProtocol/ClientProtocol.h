@@ -34,6 +34,8 @@ class ClientProtocol : public Protocol {
         Snapshot getJoin();
         Snapshot getStart();
         Snapshot getPlaying();
+        std::vector<StOperator> getPlayers();
+        std::vector<EnemyDto> getEnemies();
     public:
         /*
         * Constructor que llama al constructor del padre

@@ -9,7 +9,7 @@ class P90 : public Weapon {
     public:
         P90();
         void shoot(std::shared_ptr<Collidable>& player, bool right,
-                   std::map<int, std::shared_ptr<Infected>>& infecteds) override;
+                   std::map<uint8_t, std::shared_ptr<Infected>>& infecteds) override;
 };
 
 

@@ -223,12 +223,13 @@ void ServerProtocol::sendJoin(const uint8_t& ok, const uint8_t& idPlayer, const 
     }
 }
 
-void ServerProtocol::sendStart(const std::vector<StOperator> &playersInfo,
+void ServerProtocol::sendStart(const std::vector<StOperator> &playersInfo, const std::vector<EnemyDto> &enemiesInfo,
     const TypeGame& typeGame, const uint8_t& idMap) {
     uint8_t event = START_CODE;
     sendAll(&event, 1);
     
     sendPlayersInfo(playersInfo);
+    sendEnemiesInfo(enemiesInfo);
     
     uint8_t idGame;
     if (typeGame == TypeGame::game_survival) {
@@ -241,11 +242,12 @@ void ServerProtocol::sendStart(const std::vector<StOperator> &playersInfo,
     sendAll(&idMap, 1);
 }
 
-void ServerProtocol::sendPlaying(const std::vector<StOperator> &playersInfo) {
+void ServerProtocol::sendPlaying(const std::vector<StOperator> &playersInfo, const std::vector<EnemyDto> &enemiesInfo) {
     uint8_t event = PLAYING_CODE;
     sendAll(&event, 1);
 
     sendPlayersInfo(playersInfo);
+    sendEnemiesInfo(enemiesInfo);
 }
 
 
@@ -258,6 +260,25 @@ void ServerProtocol::sendOperator(const TypeOperator& typeOperator) {
         sendAll(&op, 1);
     } else if (typeOperator == TypeOperator::operator_scout) {
         uint8_t op = SCOUT_CODE;
+        sendAll(&op, 1);        
+    }
+}
+
+void ServerProtocol::sendOperator(const TypeInfected& typeInfected) {
+    if(typeInfected == TypeInfected::infected_zombie){
+        uint8_t op = INFECTED_ZOMBIE;
+        sendAll(&op, 1);
+    } else if (typeInfected == TypeInfected::infected_jumper) {
+        uint8_t op = INFECTED_JUMPER;
+        sendAll(&op, 1);
+    } else if (typeInfected == TypeInfected::infected_witch) {
+        uint8_t op = INFECTED_WITCH;
+        sendAll(&op, 1);        
+    } else if (typeInfected == TypeInfected::infected_spear) {
+        uint8_t op = INFECTED_SPEAR;
+        sendAll(&op, 1);        
+    } else if (typeInfected == TypeInfected::infected_venom) {
+        uint8_t op = INFECTED_VENOM;
         sendAll(&op, 1);        
     }
 }
@@ -278,6 +299,9 @@ void ServerProtocol::sendState(const State& state) {
     } else if (state == State::hability) {
         uint8_t aux = STATE_HABILITY;
         sendAll(&aux, 1);       
+    } else if (state == State::recharge) {
+        uint8_t aux = STATE_RECHARGE;
+        sendAll(&aux, 1);       
     }
 }
 
@@ -290,7 +314,21 @@ void ServerProtocol::sendPlayersInfo(const std::vector<StOperator> &playersInfo)
         sendOperator(it->getTypeOperator());
         sendState(it->getState());
         sendPosition(it->getPosition().first, it->getPosition().second); // x = it->second.first, y = it->second.second
+        uint8_t health = it->getHealth();
+        sendAll(&health, 1);
   }
+}
+
+void ServerProtocol::sendEnemiesInfo(const std::vector<EnemyDto> &enemiesInfo) {
+    uint8_t count = enemiesInfo.size();
+    sendAll(&count, 1);
+    for (auto it = enemiesInfo.begin(); it != enemiesInfo.end(); ++it) {
+        uint8_t id = it->getId();
+        sendAll(&id, 1);
+        sendOperator(it->getTypeInfected());
+        sendState(it->getState());
+        sendPosition(it->getPosition().first, it->getPosition().second); // x = it->second.first, y = it->second.second
+  }   
 }
 
 void ServerProtocol::sendPosition(const uint16_t& x, const uint16_t& y) {
@@ -372,9 +410,9 @@ void ServerProtocol::sendSnapshot(const Snapshot &snapshot) {
     } else if (event == Event::event_join) {
         sendJoin(snapshot.getOk(), snapshot.getIdPlayer(), snapshot.getSize());
     } else if (event == Event::event_start_game) {
-        sendStart(snapshot.getInfo(), snapshot.getTypeGame(), snapshot.getMap());
+        sendStart(snapshot.getInfo(), snapshot.getEnemies(), snapshot.getTypeGame(), snapshot.getMap());
     } else {
-        sendPlaying(snapshot.getInfo());
+        sendPlaying(snapshot.getInfo(), snapshot.getEnemies());
     }
 }
 

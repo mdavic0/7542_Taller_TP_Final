@@ -172,72 +172,9 @@ Snapshot ClientProtocol::getJoin () {
 }
 
 Snapshot ClientProtocol::getStart () {
-    uint8_t playersCount;
-    recvAll(&playersCount, 1);
-
-    std::vector<StOperator> list;
-    uint8_t idPlayer;
-
-    uint8_t idOperator;
-    TypeOperator type = TypeOperator::operator_idle;
-
-    uint8_t idState;
-    State state = State::idle;
-
-    int16_t x;
-    int16_t y;
-
-    for (uint8_t i = 0; i < playersCount; i++) {
-        recvAll(&idPlayer, 1);
-
-        recvAll(&idOperator, 1);
-        switch (idOperator) {
-        case IDF_CODE:
-            type = TypeOperator::operator_idf;
-            break;
-        
-        case P90_CODE:
-            type = TypeOperator::operator_p90;
-            break;
-        
-        case SCOUT_CODE:
-            type = TypeOperator::operator_scout;
-            break;
-        
-        default:
-            break;
-        }
-
-        recvAll(&idState, 1);
-        switch (idState) {
-            case STATE_IDLE:
-                state = State::idle;
-                break;
-            case STATE_MOVING:
-                state = State::moving;
-                break;
-            case STATE_ATACK:
-                state = State::atack;
-                break;
-            case STATE_INJURE:
-                state = State::injure;
-                break;
-            case STATE_HABILITY:
-                state = State::hability;
-                break;  
-            default:
-                break;
-        }
-
-        recvAll(&x, 2);
-        x = ntohs(x);
-        // std::cout << "X " << (int)x << std::endl;
-        recvAll(&y, 2);
-        y = ntohs(y);
-        // std::cout << "Y " << (int)y << std::endl;
-        list.push_back(StOperator(idPlayer, type, state, {x, y}, 100));
-    }
-
+    std::vector<StOperator> players = getPlayers();
+    std::vector<EnemyDto> enemies = getEnemies();
+    
     uint8_t idGame;
     recvAll(&idGame, 1);
     TypeGame game = TypeGame::game_idle;
@@ -257,14 +194,18 @@ Snapshot ClientProtocol::getStart () {
     
     uint8_t idMap;
     recvAll(&idMap, 1);
-    return Snapshot(list, game, idMap);
+    return Snapshot(players, enemies, game, idMap);
 }
 
 Snapshot ClientProtocol::getPlaying () {
+    return Snapshot(getPlayers(), getEnemies());
+}
+
+std::vector<StOperator> ClientProtocol::getPlayers() {
     uint8_t playersCount;
     recvAll(&playersCount, 1);
 
-    std::vector<StOperator> list;
+    std::vector<StOperator> vector;
     uint8_t idPlayer;
 
     uint8_t idOperator;
@@ -316,6 +257,10 @@ Snapshot ClientProtocol::getPlaying () {
             case STATE_HABILITY:
                 state = State::hability;
                 break;
+
+            case STATE_RECHARGE:
+                state = State::recharge;
+                break;
             
             default:
                 break;
@@ -327,10 +272,96 @@ Snapshot ClientProtocol::getPlaying () {
         recvAll(&y, 2);
         y = ntohs(y);
         // std::cout << "Y " << (int)y << std::endl;
-        list.push_back(StOperator(idPlayer, type, state, {x, y}, 100));
+
+        uint8_t health;
+        recvAll(&health, 1);
+        vector.push_back(StOperator(idPlayer, type, state, {x, y}, health));
     }
 
-    return Snapshot(list);
+    return vector;
+}
+
+std::vector<EnemyDto> ClientProtocol::getEnemies() {
+    uint8_t count;
+    recvAll(&count, 1);
+
+    std::vector<EnemyDto> vector;
+    uint8_t id;
+
+    uint8_t idType;
+    TypeInfected type = TypeInfected::infected_zombie;
+
+    uint8_t idState;
+    State state = State::idle;
+
+    int16_t x;
+    int16_t y;
+
+    for (uint8_t i = 0; i < count; i++) {
+        recvAll(&id, 1);
+
+        recvAll(&idType, 1);
+        switch (idType) {
+
+        case INFECTED_JUMPER:
+            type = TypeInfected::infected_jumper;
+            break;
+        
+        case INFECTED_WITCH:
+            type = TypeInfected::infected_witch;
+            break;
+        
+        case INFECTED_SPEAR:
+            type = TypeInfected::infected_spear;
+            break;
+        
+        case INFECTED_VENOM:
+            type = TypeInfected::infected_venom;
+            break;
+        
+        default:
+            break;
+        }
+
+        recvAll(&idState, 1);
+        switch (idState) {
+            case STATE_IDLE:
+                state = State::idle;
+                break;
+            case STATE_MOVING:
+                state = State::moving;
+                break;
+            case STATE_ATACK:
+                state = State::atack;
+                break;
+            
+            case STATE_INJURE:
+                state = State::injure;
+                break;
+
+            case STATE_HABILITY:
+                state = State::hability;
+                break;
+
+            case STATE_RECHARGE:
+                state = State::recharge;
+                break;
+            
+            default:
+                break;
+        }
+        
+        recvAll(&x, 2);
+        x = ntohs(x);
+        // std::cout << "X " << (int)x << std::endl;
+        recvAll(&y, 2);
+        y = ntohs(y);
+        // std::cout << "Y " << (int)y << std::endl;
+
+        vector.push_back(EnemyDto(id, type, state, {x, y}));
+    }
+
+    return vector;
 }
 
 void ClientProtocol::sendEvent(const EventDTO& eventdto) {

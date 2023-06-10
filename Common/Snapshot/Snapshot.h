@@ -4,6 +4,7 @@
 #include "Event.h"
 #include "OperatorDto.h"
 #include "TypeGame.h"
+#include "EnemyDto.h"
 #include <utility>
 #include <string>
 #include <vector>
@@ -11,6 +12,7 @@
 class Snapshot {
     Event event;
     std::vector<StOperator> playersInfo;
+    std::vector<EnemyDto> enemies;
     TypeOperator typeOperator;
     TypeGame typeGame;
     uint32_t code;
@@ -25,9 +27,10 @@ public:
     // JOIN
     explicit Snapshot(const Event& event, const uint8_t& ok, const uint8_t& idPlayer, const uint8_t& size);
     // START
-    explicit Snapshot(const std::vector<StOperator>& playersInfo, const TypeGame& typeGame, const uint8_t& idMap);
+    explicit Snapshot(const std::vector<StOperator>& playersInfo, const std::vector<EnemyDto>& enemies,
+                      const TypeGame& typeGame, const uint8_t& idMap);
     // PLAYING
-    explicit Snapshot(const std::vector<StOperator>& playersInfo);
+    explicit Snapshot(const std::vector<StOperator>& playersInfo, const std::vector<EnemyDto>& enemies);
 
     Event getEvent() const;
 
@@ -46,6 +49,8 @@ public:
     uint8_t getMap() const;
 
     std::vector<StOperator> getInfo() const;
+
+    std::vector<EnemyDto> getEnemies() const;
 
     /*
      * No queremos permitir que alguien haga copias

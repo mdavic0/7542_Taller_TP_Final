@@ -29,11 +29,14 @@ class ServerProtocol : Protocol {
         EventDTO getLeave();
         void sendCreate(const uint32_t& code, const uint8_t& idPlayer);
         void sendJoin(const uint8_t& ok, const uint8_t& idPlayer, const uint8_t& size);
-        void sendStart(const std::vector<StOperator> &playersInfo, const TypeGame& typeGame, const uint8_t& idMap);
-        void sendPlaying(const std::vector<StOperator> &playersInfo);
+        void sendStart(const std::vector<StOperator> &playersInfo, const std::vector<EnemyDto> &enemiesInfo,
+                const TypeGame& typeGame, const uint8_t& idMap);
+        void sendPlaying(const std::vector<StOperator> &playersInfo, const std::vector<EnemyDto> &enemiesInfo);
         void sendOperator(const TypeOperator& typeOperator);
+        void sendOperator(const TypeInfected& typeInfected);
         void sendState(const State& state);
         void sendPlayersInfo(const std::vector<StOperator> &playersInfo);
+        void sendEnemiesInfo(const std::vector<EnemyDto> &enemiesInfo);
         void sendPosition(const uint16_t& x, const uint16_t& y);
 
     public:
