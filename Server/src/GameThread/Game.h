@@ -21,7 +21,7 @@ class Game : public Thread {
         const std::string name;
         std::mutex mutex;
         Queue<std::shared_ptr<EventDTO>> unprocessed_events;
-        std::list<Queue<std::shared_ptr<Snapshot>>*> client_snapshot_queues;
+        std::map<uint8_t, Queue<std::shared_ptr<Snapshot>>*> client_snapshot_queues;
         std::atomic<bool> talking;
         std::atomic<bool> alive;
         GameWorld gameWorld;

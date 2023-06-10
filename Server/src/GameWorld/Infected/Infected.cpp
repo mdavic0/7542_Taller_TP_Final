@@ -56,7 +56,7 @@ void Infected::stopMovementDirection(MoveTo direction) {
     }
 }
 
-void Infected::move(std::map<int, std::shared_ptr<Collidable>> &collidables) {
+void Infected::move(std::map<uint8_t, std::shared_ptr<Collidable>> &collidables) {
     if (not this->collidable->collidesWith(collidables)) {
         this->position.first += movement_direction.first + movement_direction.first * (velocity / 10);
         this->position.second += movement_direction.second + movement_direction.second * (velocity / 10);
@@ -73,7 +73,7 @@ void Infected::atack() {
 
 }
 
-void Infected::applyStep(std::map<int, std::shared_ptr<Collidable>> &collidables) {
+void Infected::applyStep(std::map<uint8_t, std::shared_ptr<Collidable>> &collidables) {
     this->move(collidables);
     this->atack();
 }
@@ -82,9 +82,12 @@ std::shared_ptr<Collidable> &Infected::getCollidable() {
     return this->collidable;
 }
 
+#include <iostream>
 void Infected::applyDamage(const int &amount) {
     this->life -= amount;
+    std::cout << "Soy un infectado, Me la re dieron! Vida: " << std::to_string(life) << "\n";
     if (this->life <= 0) {
+        std::cout << "UHH ME RE MATARON LPM!\n";
         this->alive = false;
     }
 }
@@ -103,5 +106,9 @@ TypeInfected &Infected::getTypeInfected() {
 
 State &Infected::getState() {
     return this->state;
+}
+
+uint8_t &Infected::getId() {
+    return this->id;
 }
 

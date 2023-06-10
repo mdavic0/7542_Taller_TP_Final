@@ -77,6 +77,10 @@ EventDTO ServerProtocol::getJoin() {
 
 }
 
+EventDTO ServerProtocol::getStart() {
+    return EventDTO(Event::event_start_game, 0);
+}
+
 EventDTO ServerProtocol::getMove() {
     uint8_t id;
     recvAll(&id, 1);
@@ -141,19 +145,64 @@ EventDTO ServerProtocol::getStopMove() {
     return EventDTO(Event::event_stop_move, moveTo, id);
 }
 
-EventDTO ServerProtocol::getStart() {
-    return EventDTO(Event::event_start_game);
+EventDTO ServerProtocol::getSmoke() {
+    uint8_t id;
+    recvAll(&id, 1);
+
+    return EventDTO(Event::event_throw_smoke, id);
+}
+
+EventDTO ServerProtocol::getStopSmoke() {
+    uint8_t id;
+    recvAll(&id, 1);
+
+    return EventDTO(Event::event_stop_smoke, id);
+}
+
+EventDTO ServerProtocol::getGrenade() {
+    uint8_t id;
+    recvAll(&id, 1);
+
+    return EventDTO(Event::event_throw_grenade, id);
+}
+
+EventDTO ServerProtocol::getStopGrenade() {
+    uint8_t id;
+    recvAll(&id, 1);
+
+    return EventDTO(Event::event_stop_grenade, id);
+}
+
+EventDTO ServerProtocol::getBlitz() {
+    uint8_t id;
+    recvAll(&id, 1);
+
+    return EventDTO(Event::event_blitz_atack, id);
+}
+
+EventDTO ServerProtocol::getShoot() {
+    uint8_t id;
+    recvAll(&id, 1);
+
+    return EventDTO(Event::event_shoot, id);
+}
+
+EventDTO ServerProtocol::getStopShoot() {
+    uint8_t id;
+    recvAll(&id, 1);
+
+    return EventDTO(Event::event_stop_shoot, id);
 }
 
 EventDTO ServerProtocol::getLeave() {
     uint8_t id;
     recvAll(&id, 1);
 
-    return EventDTO(id);
+    return EventDTO(Event::event_leave, id);
 }
 
 void ServerProtocol::sendCreate(const uint32_t& code, const uint8_t& idPlayer) {
-    uint8_t event = 0x01;
+    uint8_t event = CREATE_CODE;
     sendAll(&event, 1);
 
     uint32_t aux = htonl(code);
@@ -163,7 +212,7 @@ void ServerProtocol::sendCreate(const uint32_t& code, const uint8_t& idPlayer) {
 }
 
 void ServerProtocol::sendJoin(const uint8_t& ok, const uint8_t& idPlayer, const uint8_t& size) {
-    uint8_t event = 0x02;
+    uint8_t event = JOIN_CODE;
     sendAll(&event, 1);
 
     sendAll(&ok, 1);
@@ -174,12 +223,13 @@ void ServerProtocol::sendJoin(const uint8_t& ok, const uint8_t& idPlayer, const 
     }
 }
 
-void ServerProtocol::sendStart(const std::map<uint8_t, StOperator> &playersInfo,
+void ServerProtocol::sendStart(const std::vector<StOperator> &playersInfo, const std::vector<EnemyDto> &enemiesInfo,
     const TypeGame& typeGame, const uint8_t& idMap) {
-    uint8_t event = 0x06;
+    uint8_t event = START_CODE;
     sendAll(&event, 1);
     
     sendPlayersInfo(playersInfo);
+    sendEnemiesInfo(enemiesInfo);
     
     uint8_t idGame;
     if (typeGame == TypeGame::game_survival) {
@@ -192,11 +242,12 @@ void ServerProtocol::sendStart(const std::map<uint8_t, StOperator> &playersInfo,
     sendAll(&idMap, 1);
 }
 
-void ServerProtocol::sendPlaying(const std::map<uint8_t, StOperator> &playersInfo) {
-    uint8_t event = 0x05;
+void ServerProtocol::sendPlaying(const std::vector<StOperator> &playersInfo, const std::vector<EnemyDto> &enemiesInfo) {
+    uint8_t event = PLAYING_CODE;
     sendAll(&event, 1);
 
     sendPlayersInfo(playersInfo);
+    sendEnemiesInfo(enemiesInfo);
 }
 
 
@@ -209,6 +260,25 @@ void ServerProtocol::sendOperator(const TypeOperator& typeOperator) {
         sendAll(&op, 1);
     } else if (typeOperator == TypeOperator::operator_scout) {
         uint8_t op = SCOUT_CODE;
+        sendAll(&op, 1);        
+    }
+}
+
+void ServerProtocol::sendOperator(const TypeInfected& typeInfected) {
+    if(typeInfected == TypeInfected::infected_zombie){
+        uint8_t op = INFECTED_ZOMBIE;
+        sendAll(&op, 1);
+    } else if (typeInfected == TypeInfected::infected_jumper) {
+        uint8_t op = INFECTED_JUMPER;
+        sendAll(&op, 1);
+    } else if (typeInfected == TypeInfected::infected_witch) {
+        uint8_t op = INFECTED_WITCH;
+        sendAll(&op, 1);        
+    } else if (typeInfected == TypeInfected::infected_spear) {
+        uint8_t op = INFECTED_SPEAR;
+        sendAll(&op, 1);        
+    } else if (typeInfected == TypeInfected::infected_venom) {
+        uint8_t op = INFECTED_VENOM;
         sendAll(&op, 1);        
     }
 }
@@ -229,18 +299,36 @@ void ServerProtocol::sendState(const State& state) {
     } else if (state == State::hability) {
         uint8_t aux = STATE_HABILITY;
         sendAll(&aux, 1);       
+    } else if (state == State::recharge) {
+        uint8_t aux = STATE_RECHARGE;
+        sendAll(&aux, 1);       
     }
 }
 
-void ServerProtocol::sendPlayersInfo(const std::map<uint8_t, StOperator> &playersInfo) {
+void ServerProtocol::sendPlayersInfo(const std::vector<StOperator> &playersInfo) {
     uint8_t playersCount = playersInfo.size();
     sendAll(&playersCount, 1);
     for (auto it = playersInfo.begin(); it != playersInfo.end(); ++it) {
-        sendAll(&it->first, 1);
-        sendOperator(it->second.getTypeOperator());
-        sendState(it->second.getState());
-        sendPosition(it->second.getPosition().first, it->second.getPosition().second); // x = it->second.first, y = it->second.second
+        uint8_t id = it->getId();
+        sendAll(&id, 1);
+        sendOperator(it->getTypeOperator());
+        sendState(it->getState());
+        sendPosition(it->getPosition().first, it->getPosition().second); // x = it->second.first, y = it->second.second
+        uint8_t health = it->getHealth();
+        sendAll(&health, 1);
   }
+}
+
+void ServerProtocol::sendEnemiesInfo(const std::vector<EnemyDto> &enemiesInfo) {
+    uint8_t count = enemiesInfo.size();
+    sendAll(&count, 1);
+    for (auto it = enemiesInfo.begin(); it != enemiesInfo.end(); ++it) {
+        uint8_t id = it->getId();
+        sendAll(&id, 1);
+        sendOperator(it->getTypeInfected());
+        sendState(it->getState());
+        sendPosition(it->getPosition().first, it->getPosition().second); // x = it->second.first, y = it->second.second
+  }   
 }
 
 void ServerProtocol::sendPosition(const uint16_t& x, const uint16_t& y) {
@@ -263,6 +351,10 @@ EventDTO ServerProtocol::getEvent() {
     case JOIN_CODE:
         return getJoin();
         break;
+
+    case START_CODE:
+        return getStart();
+        break;
         
     case MOVE_CODE:
         return getMove();
@@ -272,8 +364,32 @@ EventDTO ServerProtocol::getEvent() {
         return getStopMove();
         break;
 
-    case START_CODE:
-        return getStart();
+    case THROW_SMOKE_CODE:
+        return getSmoke();
+        break;
+
+    case STOP_SMOKE_CODE:
+        return getStopSmoke();
+        break;
+
+    case THROW_GRENADE_CODE:
+        return getSmoke();
+        break;
+
+    case STOP_GRENADE_CODE:
+        return getStopSmoke();
+        break;
+
+    case BLITZ_ATACK_CODE:
+        return getBlitz();
+        break;
+
+    case SHOOT_CODE:
+        return getShoot();
+        break;
+
+    case STOP_SHOOT_CODE:
+        return getStopShoot();
         break;
 
     case LEAVE_CODE:
@@ -284,7 +400,7 @@ EventDTO ServerProtocol::getEvent() {
         break;
     }
 
-    return EventDTO(Event::event_invalid);
+    return EventDTO(Event::event_invalid, 0);
 }
 
 void ServerProtocol::sendSnapshot(const Snapshot &snapshot) {
@@ -294,9 +410,9 @@ void ServerProtocol::sendSnapshot(const Snapshot &snapshot) {
     } else if (event == Event::event_join) {
         sendJoin(snapshot.getOk(), snapshot.getIdPlayer(), snapshot.getSize());
     } else if (event == Event::event_start_game) {
-        sendStart(snapshot.getInfo(), snapshot.getTypeGame(), snapshot.getMap());
+        sendStart(snapshot.getInfo(), snapshot.getEnemies(), snapshot.getTypeGame(), snapshot.getMap());
     } else {
-        sendPlaying(snapshot.getInfo());
+        sendPlaying(snapshot.getInfo(), snapshot.getEnemies());
     }
 }
 

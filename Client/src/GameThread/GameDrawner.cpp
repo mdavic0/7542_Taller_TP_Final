@@ -47,8 +47,8 @@ void GameDrawner::run() {
 
         // Por si recibo el evento start_game
         std::shared_ptr<Snapshot> snap = nullptr;
-        std::map<uint8_t,std::shared_ptr<Operator>> players;    
-        std::map<uint8_t,std::shared_ptr<Enemy>> enemys;    
+        std::map<uint8_t, std::shared_ptr<Operator>> players;    
+        std::map<uint8_t, std::shared_ptr<Enemy>> enemys;    
 
         while(noReady)  {
             render.clear();
@@ -63,8 +63,8 @@ void GameDrawner::run() {
                             noReady = false;
                             game = false;
                             client_events.push(
-                                    std::make_shared<EventDTO>(
-                                        idPlayer));
+                                    std::make_shared<EventDTO>(Event::event_leave
+                                        , idPlayer));
                         }
                         break;
                     case SDL_KEYDOWN:
@@ -72,7 +72,7 @@ void GameDrawner::run() {
                             if (menu == CREATE_MENU) {
                                 client_events.push(
                                     std::make_shared<EventDTO>(
-                                        Event::event_start_game));
+                                        Event::event_start_game, 0));
                                 noReady = false;
                             }
                         }
@@ -94,13 +94,15 @@ void GameDrawner::run() {
             // mandar configuarcion una sola vez
             if (menu == CREATE_MENU)
                 snap = snapshot_queue.pop();
+            players.clear();
             for (auto &player : snap->getInfo()) {
-                StOperator st = player.second;
-                players[st.getId()] = std::make_shared<Operator>(st.getId(), 
-                    st.getTypeOperator(), render);
+                players[player.getId()] = std::make_shared<Operator>(player.getId(), 
+                    player.getTypeOperator(), render);
             }
-            for (uint8_t i = 0; i < 5; i++) {
-                enemys[i] = std::make_shared<Enemy>(render, i);
+            enemys.clear();
+            for (auto &infected : snap->getEnemies()) {
+                enemys[infected.getId()] = std::make_shared<Enemy>(render,
+                                            infected.getTypeInfected());
             }
 
             uint8_t idMap = snap->getMap();

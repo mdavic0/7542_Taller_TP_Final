@@ -76,6 +76,8 @@ void Operator::chargeTexture(Renderer& renderer) {
                                                 path + "/Shot_1.png", false);
     textures["Recharge"] = std::make_unique<Texture>(renderer,
                                                 path + "/Recharge.png", false);
+    textures["Grenade"] = std::make_unique<Texture>(renderer,
+                                                path + "/Grenade.png", false);
 }
 
 void Operator::setState(State state) {
@@ -93,6 +95,8 @@ int Operator::setNumFrames(State state) {
             return this->textures["Shot"]->frames();
         case State::recharge:
             return this->textures["Recharge"]->frames();
+        case State::hability:
+            return this->textures["Grenade"]->frames();
         default:
             return 0;
     }
@@ -111,6 +115,9 @@ void Operator::render() {
             break;
         case State::recharge:
             renderAnimation(100, textures["Recharge"]->getTexture());
+            break;
+        case State::hability:
+            renderAnimation(100, textures["Grenade"]->getTexture());
             break;
         default:
             break;

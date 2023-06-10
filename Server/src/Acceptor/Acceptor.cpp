@@ -45,6 +45,7 @@ void Acceptor::run() {
             break;
         }
     }
+
     alive = false;
 }
 

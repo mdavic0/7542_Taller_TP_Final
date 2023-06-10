@@ -4,16 +4,16 @@
 #include "RendererSdl.h"
 #include "TextureSdl.h"
 #include "State.h"
+#include "TypeInfected.h"
 #include <map>
 #include <memory>
 
 class Enemy {
     private:
-        int health;
         Renderer& renderEnemy;
         std::map<std::string, std::unique_ptr<Texture>> textures;
         std::pair<int16_t, int16_t> position;
-        uint8_t type;
+        TypeInfected type;
         State stateEnemy;
         SDL_RendererFlip flipType;
         int numFrames;
@@ -23,10 +23,9 @@ class Enemy {
         void renderAnimation(int speed, SDL_Texture* texture);
 
     public:
-        Enemy(Renderer& render, uint8_t type);
+        Enemy(Renderer& render, TypeInfected type);
         ~Enemy();
-        void update(std::pair<int16_t, int16_t> pos, State state,
-                    int health);
+        void update(std::pair<int16_t, int16_t> pos, State state);
         void render();
 };
 

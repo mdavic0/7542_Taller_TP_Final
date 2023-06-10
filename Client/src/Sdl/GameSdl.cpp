@@ -32,7 +32,7 @@ bool comparePosition(const std::pair<uint8_t, std::shared_ptr<Operator>>& a,
 void GameSdl::render() {
     this->map.render();
     this->hud.render(soldiers[idPlayer]->getHealth(), 0);
-    std::vector<std::pair<uint8_t, std::shared_ptr<Operator>>> vec(
+    std::vector<std::pair<uint8_t,std::shared_ptr<Operator>>> vec(
         soldiers.begin(), soldiers.end());
     std::sort(vec.begin(), vec.end(), comparePosition);
     for (const auto &soldier : vec)
@@ -43,13 +43,12 @@ void GameSdl::render() {
 
 void GameSdl::update() {
     std::shared_ptr<Snapshot> snap = snapshotQueue.pop();
-    std::map<uint8_t, StOperator> players = snap->getInfo();
-    for (auto &player : players)
-        soldiers[player.second.getId()]->update(player.second.getPosition(),
-                                                player.second.getState(),
-                                                player.second.getHealth());
-    for (size_t i = 0; i < enemys.size(); i++)
-        enemys[(uint8_t)i]->update({600, 500 + i*10}, State::idle, 100);
+    for (auto &player : snap->getInfo())
+        soldiers[player.getId()]->update(player.getPosition(),
+                                                player.getState(),
+                                                player.getHealth());
+    for (auto &infected : snap->getEnemies())
+        enemys[infected.getId()]->update(infected.getPosition(), infected.getState());
 }
 
 void GameSdl::handleEvents() {
