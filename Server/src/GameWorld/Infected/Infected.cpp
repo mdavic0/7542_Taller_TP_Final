@@ -2,7 +2,7 @@
 
 #include <utility>
 
-Infected::Infected(TypeInfected typeInfected, uint8_t id, uint8_t life, uint8_t velocity, uint8_t damage,
+Infected::Infected(TypeInfected typeInfected, int id, uint8_t life, uint8_t velocity, uint8_t damage,
                    std::pair<int16_t, int16_t> &position,
                    std::shared_ptr<Collidable> collidable) : typeInfected(typeInfected), id(id), life(life),
                    velocity(velocity), damage(damage), state(State::idle),
@@ -82,9 +82,12 @@ std::shared_ptr<Collidable> &Infected::getCollidable() {
     return this->collidable;
 }
 
+#include <iostream>
 void Infected::applyDamage(const int &amount) {
     this->life -= amount;
+    std::cout << "Soy un infectado, Me la re dieron! Vida: " << std::to_string(life) << "\n";
     if (this->life <= 0) {
+        std::cout << "UHH ME RE MATARON LPM!\n";
         this->alive = false;
     }
 }
@@ -103,5 +106,9 @@ TypeInfected &Infected::getTypeInfected() {
 
 State &Infected::getState() {
     return this->state;
+}
+
+int &Infected::getId() {
+    return this->id;
 }
 

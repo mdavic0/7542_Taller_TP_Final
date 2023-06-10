@@ -29,8 +29,8 @@ class GameWorld {
         //    ESTE VARIA DEPENDIENDO DE LA DISTANCIA / ENEMIGOS ATRAVEZADOS)
         std::map<int, std::shared_ptr<Collidable>> collidables;
 
-        uint8_t infectedId;
-        std::map<uint8_t, std::shared_ptr<Infected>> infecteds;
+        int infectedId;
+        std::map<int, std::shared_ptr<Infected>> infecteds;
 
 
     public:

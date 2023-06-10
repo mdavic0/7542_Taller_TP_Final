@@ -53,16 +53,19 @@ void GameWorld::updateShootingState(Event event, uint8_t id) {
         players.at(id)->stopShootingState();
     }
 }
-
+#include <iostream>
 void GameWorld::simulateStep() {
     for (auto& player : players) {
         players.at(player.first)->applyStep(this->collidables, this->infecteds);
     }
 
-    for(auto& infected : infecteds) {
-        if (not infected.second->isAlive()) {
-            this->infecteds.erase(infected.first);
-            this->collidables.erase(infected.first);
+    for (auto it = infecteds.cbegin(); it != infecteds.cend(); /* no increment */){
+        if (not it->second->isAlive()) {
+            std::cout << "Murio un infectado con id: " << std::to_string(it->first) << " lo borro del mapa!\n";
+            collidables.erase(it->first);
+            infecteds.erase(it++);
+        } else {
+            ++it;
         }
     }
 }
