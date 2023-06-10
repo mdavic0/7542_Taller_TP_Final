@@ -112,7 +112,7 @@ void Game::processEvents() {
                                                   event->getIdPlayer(),
                                                   event->getMoveTo());
             } else if (event->getEvent() == Event::event_shoot
-                        or event->getEvent() == Event::event_stop_shooting) {
+                        or event->getEvent() == Event::event_stop_shoot) {
                 std::cout << "Llego un disparo\n";
                 gameWorld.updateShootingState(event->getEvent(),
                                               event->getIdPlayer());

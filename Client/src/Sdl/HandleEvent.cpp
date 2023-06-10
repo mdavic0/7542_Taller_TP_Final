@@ -14,7 +14,7 @@ void EventHandler::listen() {
             case SDL_QUIT:
                 this->running = false;
                 this->eventQueue.push(
-                    std::make_shared<EventDTO>(idPlayer));
+                    std::make_shared<EventDTO>(Event::event_leave, idPlayer));
                 break;
             case SDL_KEYDOWN:
                 handleKeyDownEvent(event.key.keysym);
@@ -71,7 +71,7 @@ void EventHandler::handleKeyUpEvent(SDL_Keysym keysym) {
             moveDirection = MoveTo::move_right;
             break;
         case SDLK_SPACE:
-            event = Event::event_stop_shooting;
+            event = Event::event_stop_shoot;
             break;
         default:
             moveDirection = MoveTo::move_idle;

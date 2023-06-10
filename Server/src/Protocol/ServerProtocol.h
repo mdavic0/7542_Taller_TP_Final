@@ -20,6 +20,8 @@ class ServerProtocol : Protocol {
         EventDTO getStopMove();
         EventDTO getStart();
         EventDTO getLeave();
+        EventDTO getShoot();
+        EventDTO getStopShoot();
         void sendCreate(const uint32_t& code, const uint8_t& idPlayer);
         void sendJoin(const uint8_t& ok, const uint8_t& idPlayer, const uint8_t& size);
         void sendStart(const std::vector<StOperator> &playersInfo, const TypeGame& typeGame, const uint8_t& idMap);

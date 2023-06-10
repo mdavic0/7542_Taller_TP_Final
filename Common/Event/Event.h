@@ -16,7 +16,7 @@ enum class Event : int8_t {
     event_throw_grenade = 0x09,
     event_blitz_atack = 0x10,
     event_shoot = 0x11,
-    event_stop_shooting = 0x12
+    event_stop_shoot = 0x12
 };
 
 #endif  // COMMON_EVENT_H_

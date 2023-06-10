@@ -142,14 +142,29 @@ EventDTO ServerProtocol::getStopMove() {
 }
 
 EventDTO ServerProtocol::getStart() {
-    return EventDTO(Event::event_start_game);
+    return EventDTO(Event::event_start_game, 0);
 }
 
 EventDTO ServerProtocol::getLeave() {
     uint8_t id;
     recvAll(&id, 1);
 
-    return EventDTO(id);
+    return EventDTO(Event::event_leave, id);
+}
+
+EventDTO ServerProtocol::getShoot() {
+    uint8_t id;
+    recvAll(&id, 1);
+
+    return EventDTO(Event::event_shoot, id);
+}
+
+EventDTO ServerProtocol::getStopShoot() {
+    uint8_t id;
+    recvAll(&id, 1);
+
+    return EventDTO(Event::event_stop_shoot, id);
+
 }
 
 void ServerProtocol::sendCreate(const uint32_t& code, const uint8_t& idPlayer) {
@@ -281,11 +296,19 @@ EventDTO ServerProtocol::getEvent() {
         return getLeave();
         break;
 
+    case SHOOT_CODE:
+        return getShoot();
+        break;
+
+    case STOP_SHOOT_CODE:
+        return getStopShoot();
+        break;
+
     default:
         break;
     }
 
-    return EventDTO(Event::event_invalid);
+    return EventDTO(Event::event_invalid, 0);
 }
 
 void ServerProtocol::sendSnapshot(const Snapshot &snapshot) {

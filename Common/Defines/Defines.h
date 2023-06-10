@@ -26,6 +26,11 @@
 #define PLAYING_CODE 0x05
 #define START_CODE 0x06
 #define LEAVE_CODE 0x07
+#define SMOKE_THROW_CODE 0x08
+#define GRENADE_THROW_CODE 0x09
+#define BLITZ_ATACK_CODE 0x10
+#define SHOOT_CODE 0x11
+#define STOP_SHOOT_CODE 0x12
 
 #define IDF_CODE 0x01
 #define P90_CODE 0x02

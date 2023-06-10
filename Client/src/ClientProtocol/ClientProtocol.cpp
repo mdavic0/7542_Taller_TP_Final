@@ -59,6 +59,20 @@ void ClientProtocol::sendStart() {
     sendAll(&command, 1);
 }
 
+void ClientProtocol::sendShoot(const uint8_t& idPlayer) {
+    uint8_t command = 0x11;
+    sendAll(&command, 1);
+
+    sendAll(&idPlayer, 1);
+}
+
+void ClientProtocol::sendStopShoot(const uint8_t& idPlayer) {
+    uint8_t command = 0x12;
+    sendAll(&command, 1);
+
+    sendAll(&idPlayer, 1);
+}
+
 void ClientProtocol::sendLeave(const uint8_t& idPlayer) {
     uint8_t command = 0x07;
     sendAll(&command, 1);
@@ -295,6 +309,10 @@ void ClientProtocol::sendEvent(const EventDTO& eventdto) {
         sendStopMove(eventdto.getMoveTo(), eventdto.getIdPlayer());
     } else if (event == Event::event_leave) {
         sendLeave(eventdto.getIdPlayer());
+    } else if (event == Event::event_shoot) {
+        sendShoot(eventdto.getIdPlayer());
+    } else if (event == Event::event_stop_shoot) {
+        sendStopShoot(eventdto.getIdPlayer());
     }
     
 }

@@ -63,8 +63,8 @@ void GameDrawner::run() {
                             noReady = false;
                             game = false;
                             client_events.push(
-                                    std::make_shared<EventDTO>(
-                                        idPlayer));
+                                    std::make_shared<EventDTO>(Event::event_leave
+                                        , idPlayer));
                         }
                         break;
                     case SDL_KEYDOWN:
@@ -72,7 +72,7 @@ void GameDrawner::run() {
                             if (menu == CREATE_MENU) {
                                 client_events.push(
                                     std::make_shared<EventDTO>(
-                                        Event::event_start_game));
+                                        Event::event_start_game, 0));
                                 noReady = false;
                             }
                         }

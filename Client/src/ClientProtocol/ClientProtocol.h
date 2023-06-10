@@ -18,6 +18,8 @@ class ClientProtocol : public Protocol {
         void sendMove(const MoveTo& moveTo, const uint8_t& idPlayer);
         void sendStopMove(const MoveTo& moveTo, const uint8_t& idPlayer);
         void sendStart();
+        void sendShoot(const uint8_t& idPlayer);
+        void sendStopShoot(const uint8_t& idPlayer);
         void sendLeave(const uint8_t& idPlayer);
         void sendOperator(const TypeOperator& typeOperator);
         void sendMoveTo(const MoveTo& moveTo);
