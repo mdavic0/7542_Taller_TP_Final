@@ -23,38 +23,3 @@ std::pair<int16_t, int16_t> StOperator::getPosition() const {
 uint8_t StOperator::getHealth() const {
     return health;
 }
-
-/*
-StOperator::StOperator(StOperator&& other) {
-    this->id = other.id;
-    this->type = other.type;
-    this->state = other.state;
-    this->position = other.position;
-    this->health = other.health;
-
-    other.id = 0;
-    other.type = TypeOperator::operator_idle;
-    other.state = State::idle;
-    other.position = std::pair<uint16_t, uint16_t> {};
-    other.health = 0;
-}
-
-StOperator& StOperator::operator=(StOperator&& other) {
-    if (this == &other)
-        return *this;
-
-    this->id = other.id;
-    this->type = other.type;
-    this->state = other.state;
-    this->position = other.position;
-    this->health = other.health;
-
-    other.id = 0;
-    other.type = TypeOperator::operator_idle;
-    other.state = State::idle;
-    other.position = std::pair<uint16_t, uint16_t> {};
-    other.health = 0;
-
-    return *this;
-}
-*/

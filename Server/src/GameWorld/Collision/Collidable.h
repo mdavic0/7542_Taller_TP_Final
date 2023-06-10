@@ -6,14 +6,14 @@
 
 class Collidable {
     private:
-        int id;
+        uint8_t id;
         std::pair<int, int> topLeftCorner;
         int width;
         int height;
 
     public:
-        Collidable(int id, std::pair<int16_t, int16_t>& position, int width, int height);
-        bool collidesWith(std::map<int, std::shared_ptr<Collidable>>& collidables);
+        Collidable(uint8_t id, std::pair<int16_t, int16_t>& position, int width, int height);
+        bool collidesWith(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables);
         void updatePosition(std::pair<int16_t, int16_t>& position);
         bool isAlignedRight(std::shared_ptr<Collidable>& other);
         bool isAlignedLeft(std::shared_ptr<Collidable>& other);

@@ -1,13 +1,13 @@
 #include "Collidable.h"
 #include <iostream>
 
-Collidable::Collidable(int id, std::pair<int16_t, int16_t>& position,
+Collidable::Collidable(uint8_t id, std::pair<int16_t, int16_t>& position,
                        int width, int height) : id(id),
                        width(width) , height(height) {
     this->topLeftCorner = {(position.first - (width / 2)) , (position.second + (height / 2))};
 }
 
-bool Collidable::collidesWith(std::map<int, std::shared_ptr<Collidable>> &collidables) {
+bool Collidable::collidesWith(std::map<uint8_t, std::shared_ptr<Collidable>> &collidables) {
     for (auto& collidable : collidables) {
         if (collidable.first != this->id){
             if (this->collidesWith(collidable.second)) {

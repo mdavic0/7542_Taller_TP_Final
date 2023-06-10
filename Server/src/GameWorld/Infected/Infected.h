@@ -12,7 +12,7 @@
 class Infected {
     private:
         TypeInfected typeInfected;
-        int id;
+        uint8_t id;
 
         int8_t life;
         uint8_t velocity;
@@ -27,14 +27,14 @@ class Infected {
 
         bool alive;
     public:
-        Infected(TypeInfected typeInfected, int id, uint8_t life,
+        Infected(TypeInfected typeInfected, uint8_t id, uint8_t life,
                  uint8_t velocity, uint8_t damage,
                  std::pair<int16_t, int16_t>& position,
                  std::shared_ptr<Collidable> collidable);
 
         void setMovementDirection(MoveTo direction);
         void stopMovementDirection(MoveTo direction);
-        void applyStep(std::map<int, std::shared_ptr<Collidable>>& collidables);
+        void applyStep(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables);
         std::shared_ptr<Collidable>& getCollidable();
         void applyDamage(const int& amount);
         bool isAlive();
@@ -42,12 +42,12 @@ class Infected {
         std::pair<int16_t, int16_t>& getPosition();
         TypeInfected& getTypeInfected();
         State& getState();
-        int& getId();
+        uint8_t& getId();
 
         virtual ~Infected() = default;
 
     private:
-        void move(std::map<int, std::shared_ptr<Collidable>>& collidables);
+        void move(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables);
         void atack();
         virtual void specialAtack(Event event) = 0;
 };

@@ -74,8 +74,8 @@ void Player::stopShootingState() {
     this->weapon->deactivate();
 }
 
-void Player::applyStep(std::map<int, std::shared_ptr<Collidable>>& collidables,
-                       std::map<int, std::shared_ptr<Infected>>& infecteds) {
+void Player::applyStep(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables,
+                       std::map<uint8_t, std::shared_ptr<Infected>>& infecteds) {
     this->move(collidables);
     this->shoot(infecteds);
 }
@@ -95,7 +95,7 @@ uint8_t& Player::getHealth() {
     return this->life;
 }
 
-void Player::move(std::map<int, std::shared_ptr<Collidable>>& collidables) {
+void Player::move(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables) {
     if (not this->collidable->collidesWith(collidables)) {
         this->position.first += movement_direction.first + movement_direction.first * (velocity / 10);
         this->position.second += movement_direction.second + movement_direction.second * (velocity / 10);
@@ -108,6 +108,6 @@ void Player::move(std::map<int, std::shared_ptr<Collidable>>& collidables) {
     }
 }
 
-void Player::shoot(std::map<int, std::shared_ptr<Infected>>& infecteds) {
+void Player::shoot(std::map<uint8_t, std::shared_ptr<Infected>>& infecteds) {
     this->weapon->shoot(this->collidable, this->lookingRight, infecteds);
 }
