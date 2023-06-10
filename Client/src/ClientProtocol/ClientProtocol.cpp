@@ -118,10 +118,11 @@ Snapshot ClientProtocol::getJoin () {
     return Snapshot(Event::event_join, ok, idPlayer, size);
 }
 
-Snapshot ClientProtocol::getStart () {uint8_t playersCount;
+Snapshot ClientProtocol::getStart () {
+    uint8_t playersCount;
     recvAll(&playersCount, 1);
 
-    std::map<uint8_t, StOperator> map;
+    std::vector<StOperator> list;
     uint8_t idPlayer;
 
     uint8_t idOperator;
@@ -181,8 +182,7 @@ Snapshot ClientProtocol::getStart () {uint8_t playersCount;
         recvAll(&y, 2);
         y = ntohs(y);
         // std::cout << "Y " << (int)y << std::endl;
-        map.insert({idPlayer, StOperator(idPlayer, type, state,
-        {x, y}, 100)});
+        list.push_back(StOperator(idPlayer, type, state, {x, y}, 100));
     }
 
     uint8_t idGame;
@@ -204,14 +204,14 @@ Snapshot ClientProtocol::getStart () {uint8_t playersCount;
     
     uint8_t idMap;
     recvAll(&idMap, 1);
-    return Snapshot(map, game, idMap);
+    return Snapshot(list, game, idMap);
 }
 
 Snapshot ClientProtocol::getPlaying () {
     uint8_t playersCount;
     recvAll(&playersCount, 1);
 
-    std::map<uint8_t, StOperator> map;
+    std::vector<StOperator> list;
     uint8_t idPlayer;
 
     uint8_t idOperator;
@@ -274,11 +274,10 @@ Snapshot ClientProtocol::getPlaying () {
         recvAll(&y, 2);
         y = ntohs(y);
         // std::cout << "Y " << (int)y << std::endl;
-        map.insert({idPlayer, StOperator(idPlayer, type, state,
-        {x, y}, 100)});
+        list.push_back(StOperator(idPlayer, type, state, {x, y}, 100));
     }
 
-    return Snapshot(map);
+    return Snapshot(list);
 }
 
 void ClientProtocol::sendEvent(const EventDTO& eventdto) {

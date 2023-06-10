@@ -68,12 +68,13 @@ void GameWorld::simulateStep() {
 }
 
 std::shared_ptr<Snapshot> GameWorld::getSnapshot(bool first) {
-    std::map<uint8_t, StOperator> playersInfo;
+    std::vector<StOperator> playersInfo;
     for (auto& player : players) {
-        playersInfo.insert({player.first, StOperator(player.first,
-                                                     player.second->getTypeOperator(),
-                                                     player.second->getState(),
-        player.second->getPosition(), player.second->getHealth())});
+        playersInfo.push_back(StOperator(player.first,
+                                     player.second->getTypeOperator(),
+                                     player.second->getState(),
+                                     player.second->getPosition(), 
+                                     player.second->getHealth()));
     }
     if (first){
         return std::make_shared<Snapshot>(playersInfo, type, map);        

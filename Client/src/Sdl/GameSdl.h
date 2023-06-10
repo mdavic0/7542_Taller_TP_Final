@@ -28,8 +28,8 @@ class GameSdl {
         MapSdl map;
         bool running;
         bool& endGame;
-        std::map<uint8_t, std::shared_ptr<Operator>>& soldiers;
-        std::map<uint8_t, std::shared_ptr<Enemy>>& enemys;
+        std::vector<std::shared_ptr<Operator>>& soldiers;
+        std::vector<std::shared_ptr<Enemy>>& enemys;
         Hud hud;
         uint8_t idPlayer;
         TypeGame mode;
@@ -39,9 +39,9 @@ class GameSdl {
         GameSdl(WindowSdl& window, Renderer& renderer,
                 Queue<std::shared_ptr<Snapshot>>& snapshotQueue,
                 Queue<std::shared_ptr<EventDTO>>& eventQueue, bool& endGame,
-                std::map<uint8_t, std::shared_ptr<Operator>>& soldiers,
+                std::vector<std::shared_ptr<Operator>>& soldiers,
                 uint8_t idPlayer, uint8_t idMap, TypeGame mode, Font& font,
-                std::map<uint8_t, std::shared_ptr<Enemy>>& enemys);
+                std::vector<std::shared_ptr<Enemy>>& enemys);
         ~GameSdl();
         void update();
         void render();

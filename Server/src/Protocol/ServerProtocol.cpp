@@ -174,7 +174,7 @@ void ServerProtocol::sendJoin(const uint8_t& ok, const uint8_t& idPlayer, const 
     }
 }
 
-void ServerProtocol::sendStart(const std::map<uint8_t, StOperator> &playersInfo,
+void ServerProtocol::sendStart(const std::vector<StOperator> &playersInfo,
     const TypeGame& typeGame, const uint8_t& idMap) {
     uint8_t event = 0x06;
     sendAll(&event, 1);
@@ -192,7 +192,7 @@ void ServerProtocol::sendStart(const std::map<uint8_t, StOperator> &playersInfo,
     sendAll(&idMap, 1);
 }
 
-void ServerProtocol::sendPlaying(const std::map<uint8_t, StOperator> &playersInfo) {
+void ServerProtocol::sendPlaying(const std::vector<StOperator> &playersInfo) {
     uint8_t event = 0x05;
     sendAll(&event, 1);
 
@@ -232,14 +232,15 @@ void ServerProtocol::sendState(const State& state) {
     }
 }
 
-void ServerProtocol::sendPlayersInfo(const std::map<uint8_t, StOperator> &playersInfo) {
+void ServerProtocol::sendPlayersInfo(const std::vector<StOperator> &playersInfo) {
     uint8_t playersCount = playersInfo.size();
     sendAll(&playersCount, 1);
     for (auto it = playersInfo.begin(); it != playersInfo.end(); ++it) {
-        sendAll(&it->first, 1);
-        sendOperator(it->second.getTypeOperator());
-        sendState(it->second.getState());
-        sendPosition(it->second.getPosition().first, it->second.getPosition().second); // x = it->second.first, y = it->second.second
+        uint8_t id = it->getId();
+        sendAll(&id, 1);
+        sendOperator(it->getTypeOperator());
+        sendState(it->getState());
+        sendPosition(it->getPosition().first, it->getPosition().second); // x = it->second.first, y = it->second.second
   }
 }
 

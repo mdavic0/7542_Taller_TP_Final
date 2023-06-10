@@ -22,11 +22,11 @@ class ServerProtocol : Protocol {
         EventDTO getLeave();
         void sendCreate(const uint32_t& code, const uint8_t& idPlayer);
         void sendJoin(const uint8_t& ok, const uint8_t& idPlayer, const uint8_t& size);
-        void sendStart(const std::map<uint8_t, StOperator> &playersInfo, const TypeGame& typeGame, const uint8_t& idMap);
-        void sendPlaying(const std::map<uint8_t, StOperator> &playersInfo);
+        void sendStart(const std::vector<StOperator> &playersInfo, const TypeGame& typeGame, const uint8_t& idMap);
+        void sendPlaying(const std::vector<StOperator> &playersInfo);
         void sendOperator(const TypeOperator& typeOperator);
         void sendState(const State& state);
-        void sendPlayersInfo(const std::map<uint8_t, StOperator> &playersInfo);
+        void sendPlayersInfo(const std::vector<StOperator> &playersInfo);
         void sendPosition(const uint16_t& x, const uint16_t& y);
 
     public:

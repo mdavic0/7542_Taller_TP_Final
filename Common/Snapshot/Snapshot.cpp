@@ -9,11 +9,11 @@ Snapshot::Snapshot(const Event& event, const uint8_t& ok, const uint8_t& idPlaye
     event(event), ok(ok), idPlayer(idPlayer), code(0), size(size),
     typeOperator(TypeOperator::operator_idle), idMap(0), typeGame(TypeGame::game_idle) {}
 
-Snapshot::Snapshot(const std::map<uint8_t, StOperator> &playersInfo, const TypeGame& typeGame, const uint8_t& idMap) :
+Snapshot::Snapshot(const std::vector<StOperator> &playersInfo, const TypeGame& typeGame, const uint8_t& idMap) :
     event(Event::event_start_game), playersInfo(playersInfo), typeOperator(TypeOperator::operator_idle),
     code(0), ok(0), idPlayer(0), size(0), idMap(idMap), typeGame(typeGame) {}
 
-Snapshot::Snapshot(const std::map<uint8_t, StOperator> &playersInfo) :
+Snapshot::Snapshot(const std::vector<StOperator> &playersInfo) :
     event(Event::event_playing), playersInfo(playersInfo), typeOperator(TypeOperator::operator_idle), 
     code(0), ok(0), idPlayer(0), size(0), idMap(0), typeGame(TypeGame::game_idle) {}
 
@@ -50,7 +50,7 @@ uint8_t Snapshot::getMap() const {
     return idMap;
 }
 
-std::map<uint8_t, StOperator> Snapshot::getInfo() const {
+std::vector<StOperator> Snapshot::getInfo() const {
     return playersInfo;
 }
 
@@ -68,7 +68,7 @@ Snapshot::Snapshot(Snapshot&& other) {
     other.ok = 0;
     other.size = 0;
     other.idMap = 0;
-    other.playersInfo = std::map<uint8_t, StOperator> {};
+    other.playersInfo = std::vector<StOperator> {};
 }
 
 Snapshot& Snapshot::operator=(Snapshot&& other) {
@@ -88,7 +88,7 @@ Snapshot& Snapshot::operator=(Snapshot&& other) {
     other.ok = 0;
     other.size = 0;
     other.idMap = 0;
-    other.playersInfo = std::map<uint8_t, StOperator> {};
+    other.playersInfo = std::vector< StOperator> {};
 
     return *this;
 }

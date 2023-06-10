@@ -46,7 +46,6 @@ void Acceptor::run() {
         }
     }
 
-    std::cout << "acceptor died\n";
     alive = false;
 }
 
@@ -61,7 +60,6 @@ bool Acceptor::ended() {
 }
 
 Acceptor::~Acceptor() {
-    std::cout << "acceptor deleted\n";
     waitClients();
     join();
 }
