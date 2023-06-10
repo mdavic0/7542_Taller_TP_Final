@@ -100,8 +100,9 @@ void GameDrawner::run() {
                     player.getTypeOperator(), render);
             }
             enemys.clear();
-            for (uint8_t i = 0; i < 5; i++) {
-                enemys[i] = std::make_shared<Enemy>(render, i);
+            for (auto &infected : snap->getEnemies()) {
+                enemys[infected.getId()] = std::make_shared<Enemy>(render,
+                                            infected.getTypeInfected());
             }
 
             uint8_t idMap = snap->getMap();

@@ -67,6 +67,7 @@ Snapshot::Snapshot(Snapshot&& other) {
     this->size = other.size;
     this->idMap = other.idMap;
     this->playersInfo = other.playersInfo;
+    this->enemies = other.enemies;
 
     other.event = Event::event_invalid;
     other.code = 0;
@@ -74,6 +75,7 @@ Snapshot::Snapshot(Snapshot&& other) {
     other.size = 0;
     other.idMap = 0;
     other.playersInfo = std::vector<StOperator> {};
+    other.enemies = std::vector<EnemyDto> {};
 }
 
 Snapshot& Snapshot::operator=(Snapshot&& other) {
@@ -87,13 +89,15 @@ Snapshot& Snapshot::operator=(Snapshot&& other) {
     this->size = other.size;
     this->idMap = other.idMap;
     this->playersInfo = other.playersInfo;
+    this->enemies = other.enemies;
 
     other.event = Event::event_invalid;
     other.code = 0;
     other.ok = 0;
     other.size = 0;
     other.idMap = 0;
-    other.playersInfo = std::vector< StOperator> {};
+    other.playersInfo = std::vector<StOperator> {};
+    other.enemies = std::vector<EnemyDto> {};
 
     return *this;
 }

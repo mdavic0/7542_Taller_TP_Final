@@ -1,7 +1,7 @@
 #include "Enemy.h"
 #include "Defines.h"
 
-Enemy::Enemy(Renderer &render, uint8_t type) : renderEnemy(render), health(0),
+Enemy::Enemy(Renderer &render, TypeInfected type) : renderEnemy(render),
     position({0, 0}), type(type), flipType(SDL_FLIP_NONE) {
     this->chargeTextures();
 }
@@ -17,15 +17,13 @@ void Enemy::chargeTextures() {
                                                 path + "/Attack_1.png", false);
 }
 
-void Enemy::update(std::pair<int16_t, int16_t> pos, State state,
-                    int health) {
+void Enemy::update(std::pair<int16_t, int16_t> pos, State state) {
     this->setState(state);
     if (pos.first < position.first)
         this->flipType = SDL_FLIP_HORIZONTAL;
     else if (pos.first > position.first)
         this->flipType = SDL_FLIP_NONE;
     this->position = pos;
-    this->health = health;
 }
 
 void Enemy::setState(State state) {
@@ -65,12 +63,15 @@ void Enemy::render() {
 void Enemy::renderAnimation(int speed, SDL_Texture* texture) {
     int speedAnimation = static_cast<int>((SDL_GetTicks() / speed) % numFrames);
     SDL_Rect rectInit, rectFinal;
-    if (type == 0 || type == 1 || type == 2) {
+    if (type == TypeInfected::infected_zombie ||
+        type == TypeInfected::infected_jumper ||
+        type == TypeInfected::infected_witch) {
         rectInit = {   (speedAnimation * (SIZE_FRAME_ENEMY)), 0,
                                 SIZE_FRAME_ENEMY, SIZE_FRAME_ENEMY};
         rectFinal = {  position.first, position.second,
                                 SIZE_FRAME_ENEMY, SIZE_FRAME_ENEMY};
-    } else if (type == 3 || type == 4 ) {
+    } else if (type == TypeInfected::infected_spear ||
+                type == TypeInfected::infected_venom) {
         rectInit = {   (speedAnimation * (SIZE_FRAME)), 0,
                                 SIZE_FRAME, SIZE_FRAME};
         rectFinal = {  position.first, position.second,
