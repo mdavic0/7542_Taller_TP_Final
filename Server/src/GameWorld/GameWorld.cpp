@@ -4,7 +4,7 @@
 #include <iterator>
 #include <utility>
 
-GameWorld::GameWorld(const TypeGame& type, int map) :
+GameWorld::GameWorld(const TypeGame& type, uint8_t map) :
     players_amount(0), players(), type(type), map(map),
     collidables(), infectedId(200), obsacleId(100) {
     this->generateInfecteds();

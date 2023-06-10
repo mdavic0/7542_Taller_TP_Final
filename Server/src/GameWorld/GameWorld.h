@@ -37,7 +37,7 @@ class GameWorld {
         std::map<uint8_t, std::shared_ptr<Infected>> infecteds;
 
         uint8_t obsacleId;
-        std::map<int, std::shared_ptr<Obstacle>> obstacles;
+        std::map<uint8_t, std::shared_ptr<Obstacle>> obstacles;
 
     public:
         GameWorld(const TypeGame& type, uint8_t map);
