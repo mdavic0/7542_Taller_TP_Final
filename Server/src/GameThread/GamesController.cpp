@@ -37,6 +37,7 @@ void GamesController::startGame(const uint32_t& code){
 
 GamesController::~GamesController() {
   for (auto it = games.begin(); it != games.end(); ++it) {
+    it->second->stop();
     delete it->second;
   }
 }

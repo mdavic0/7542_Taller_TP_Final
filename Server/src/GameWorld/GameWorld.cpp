@@ -35,6 +35,7 @@ uint8_t GameWorld::addPlayer(TypeOperator op) {
 
 void GameWorld::deletePlayer(uint8_t id) {
     this->players.erase(id);
+    this->collidables.erase(id);
 }
 
 void GameWorld::updateMovementDirection(Event event, uint8_t id, MoveTo direction) {

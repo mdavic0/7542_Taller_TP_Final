@@ -204,7 +204,6 @@ Snapshot ClientProtocol::getStart () {uint8_t playersCount;
     
     uint8_t idMap;
     recvAll(&idMap, 1);
-    
     return Snapshot(map, game, idMap);
 }
 

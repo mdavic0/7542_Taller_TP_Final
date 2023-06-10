@@ -9,7 +9,7 @@
 class Weapon {
     private:
     uint8_t rate;
-        uint8_t capacity;
+    uint8_t capacity;
 protected:
     bool activated;
     uint8_t damage;

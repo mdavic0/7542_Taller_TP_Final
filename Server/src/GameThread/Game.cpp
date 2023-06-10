@@ -13,7 +13,9 @@ Game::Game(const uint32_t id, std::string name, const TypeGame& type) :
 
 void Game::run() {
     try {
-        gameLoop();
+        while(talking) {
+            gameLoop();
+        }
     } catch(std::exception& e) {
         // hacer algo
     }
@@ -22,6 +24,7 @@ void Game::run() {
 
 void Game::stop() {
     talking = false;
+    alive = false;
 }
 
 bool Game::ended() {
@@ -31,9 +34,9 @@ bool Game::ended() {
 Queue<std::shared_ptr<EventDTO>>* Game::createGame(Queue<std::shared_ptr<Snapshot>> *q,
                                                    const TypeOperator& op) {
     std::lock_guard<std::mutex> locker(mutex);
-    client_snapshot_queues.push_back(q);
     this->generateMapType();
     uint8_t idPlayer = gameWorld.addPlayer(op);
+    client_snapshot_queues.insert({idPlayer, q});
     q->push(std::make_shared<Snapshot> (Event::event_create, id, idPlayer));
     return &this->unprocessed_events;
 }
@@ -42,12 +45,12 @@ Queue<std::shared_ptr<EventDTO>>* Game::joinGame(Queue<std::shared_ptr<Snapshot>
                                                  const TypeOperator& op) {
     if (not started) {                   
         std::lock_guard<std::mutex> locker(mutex);
-        client_snapshot_queues.push_back(q);
         uint8_t idPlayer = gameWorld.addPlayer(op);
+        client_snapshot_queues.insert({idPlayer, q});
         std::cout << (int)idPlayer << std::endl;
         // Notify all clients that a new player joined
         for (auto &clientQueue : client_snapshot_queues) {
-            clientQueue->push(std::make_shared<Snapshot>(Event::event_join,
+            clientQueue.second->push(std::make_shared<Snapshot>(Event::event_join,
                                                         (uint8_t)0x00,
                                                         idPlayer, client_snapshot_queues.size()));
         }
@@ -83,7 +86,7 @@ void Game::gameLoop() {
         // para poder lanzar una grandada, que los jugadores se muevan,
         // todos los eventos que tienen que ver con el tiempo.
 
-        std::shared_ptr<Snapshot> snapshot = gameWorld.getSnapshot(false);
+        std::shared_ptr<Snapshot> snapshot = gameWorld.getSnapshot(true);
         // broadcastSnapshot() # acá recien se agarra el snapshot y se lo pushea
         // a los hilos sender. Un snapshot por gameloop. Si hacen uno por evento,
         // saturan la red sin sentido
@@ -115,8 +118,9 @@ void Game::processEvents() {
                                               event->getIdPlayer());
             } else if (event->getEvent() == Event::event_leave) {
                 std::cout << "se desconecto cliente\n";
+                std::lock_guard<std::mutex> l(mutex);
                 gameWorld.deletePlayer(event->getIdPlayer());
-                // falta eliminar al player de la queue
+                client_snapshot_queues.erase(event->getIdPlayer());
             }
             iterations++;
         }
@@ -128,7 +132,7 @@ void Game::processEvents() {
 void Game::broadcastSnapshot(std::shared_ptr<Snapshot> snapshot) {
     std::lock_guard<std::mutex> l(mutex);
     for (auto const& i : this->client_snapshot_queues) {
-        i->push(snapshot);
+        i.second->push(snapshot);
     }
 }
 
