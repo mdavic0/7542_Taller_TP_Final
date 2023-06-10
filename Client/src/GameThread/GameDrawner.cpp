@@ -48,7 +48,7 @@ void GameDrawner::run() {
         // Por si recibo el evento start_game
         std::shared_ptr<Snapshot> snap = nullptr;
         std::map<uint8_t, std::shared_ptr<Operator>> players;    
-        std::map<uint8_t, std::shared_ptr<Enemy>> enemys;    
+        std::map<uint8_t, std::shared_ptr<Enemy>> enemies;    
 
         while(noReady)  {
             render.clear();
@@ -99,9 +99,9 @@ void GameDrawner::run() {
                 players[player.getId()] = std::make_shared<Operator>(player.getId(), 
                     player.getTypeOperator(), render);
             }
-            enemys.clear();
+            enemies.clear();
             for (auto &infected : snap->getEnemies()) {
-                enemys[infected.getId()] = std::make_shared<Enemy>(render,
+                enemies[infected.getId()] = std::make_shared<Enemy>(render,
                                             infected.getTypeInfected());
             }
 
@@ -111,7 +111,7 @@ void GameDrawner::run() {
 
             GameSdl gameSdl(window, render, snapshot_queue, client_events,
                             endGame, players, idPlayer, idMap, mode, font,
-                            enemys);
+                            enemies);
 
             while (gameSdl.isRunning()) {
                 uint32_t frameInit = SDL_GetTicks();

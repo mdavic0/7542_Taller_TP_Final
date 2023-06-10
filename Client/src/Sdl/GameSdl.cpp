@@ -9,12 +9,12 @@ GameSdl::GameSdl(WindowSdl& window, Renderer& renderer,
     Queue<std::shared_ptr<EventDTO>>& eventQueue,
     bool& endGame, std::map<uint8_t, std::shared_ptr<Operator>>& soldiers,
     uint8_t idPlayer, uint8_t idMap, TypeGame mode, Font& font,
-    std::map<uint8_t, std::shared_ptr<Enemy>>& enemys) :
+    std::map<uint8_t, std::shared_ptr<Enemy>>& enemies) :
     window(window), renderer(renderer), snapshotQueue(snapshotQueue),
     eventQueue(eventQueue), endGame(endGame), events(eventQueue, idPlayer),
     map(idMap, this->renderer), soldiers(soldiers),
     hud(soldiers[idPlayer]->getType(), renderer, font),
-    idPlayer(idPlayer), mode(mode), font(font), enemys(enemys) {
+    idPlayer(idPlayer), mode(mode), font(font), enemies(enemies) {
 }
 
 bool GameSdl::isRunning() {
@@ -37,7 +37,7 @@ void GameSdl::render() {
     std::sort(vec.begin(), vec.end(), comparePosition);
     for (const auto &soldier : vec)
         soldier.second->render();
-    for (const auto &enemy : enemys)
+    for (const auto &enemy : enemies)
         enemy.second->render();
 }
 
@@ -48,7 +48,7 @@ void GameSdl::update() {
                                                 player.getState(),
                                                 player.getHealth());
     for (auto &infected : snap->getEnemies())
-        enemys[infected.getId()]->update(infected.getPosition(), infected.getState());
+        enemies[infected.getId()]->update(infected.getPosition(), infected.getState());
 }
 
 void GameSdl::handleEvents() {
