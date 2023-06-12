@@ -21,6 +21,7 @@
 #include "Tire.h"
 #include "Crater.h"
 #include "InfectedFactory.h"
+#include "RespawnController.h"
 
 class GameWorld {
     private:
@@ -39,6 +40,7 @@ class GameWorld {
         std::map<uint8_t, std::shared_ptr<Obstacle>> obstacles;
 
         InfectedFactory infectedFactory;
+        RespawnController RC;
 
     public:
         GameWorld(const TypeGame& type, uint8_t map);

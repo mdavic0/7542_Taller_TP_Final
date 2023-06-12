@@ -7,7 +7,7 @@
 GameWorld::GameWorld(const TypeGame& type, uint8_t map) :
     players_amount(INITIAL_PLAYERS_AMOUNT), players(), type(type), map(map),
     collidables(), infectedId(INITIAL_INFECTED_ID), obsacleId(INITIAL_OBSTACLE_ID),
-    infectedFactory() {
+    infectedFactory(), RC() {
     this->generateInfecteds();
     this->generateObstacles();
 }
@@ -15,8 +15,7 @@ GameWorld::GameWorld(const TypeGame& type, uint8_t map) :
 
 uint8_t GameWorld::addPlayer(TypeOperator op) {
     std::shared_ptr<Player> newPlayer = nullptr;
-    std::pair<int16_t, int16_t> position = {(WINDOW_WIDTH / 2) + SIZE_SPRITE_X * players_amount,
-                                              (WINDOW_HEIGTH / 2) + (WINDOW_HEIGTH / 3.5)};
+    std::pair<int16_t, int16_t> position = RC.getPlayerRespawnPosition();
 
     std::shared_ptr<Collidable> collidable =  std::make_shared<Collidable>(
             players_amount,position,20, 20);
@@ -111,12 +110,14 @@ void GameWorld::generateInfecteds() {
             //  new infecteds and increment difficulty)
             this->infecteds = infectedFactory.generateInfecteds(TypeDifficulty::difficulty_easy,
                                                                 infectedId,
-                                                                collidables);
+                                                                collidables,
+                                                                RC);
             break;
         case TypeGame::game_clear_zone:
             this->infecteds = infectedFactory.generateInfecteds(TypeDifficulty::difficulty_easy,
                                                                 infectedId,
-                                                                collidables);
+                                                                collidables,
+                                                                RC);
             break;
         default:
             break;
@@ -127,8 +128,7 @@ void GameWorld::generateInfecteds() {
 void GameWorld::generateObstacles() {
     // Random obstacle (can be Tire or Crater):
     std::shared_ptr<Obstacle> newObstacle = nullptr;
-    std::pair<int16_t, int16_t> position = {100,
-                                            (WINDOW_HEIGTH / 2) + (WINDOW_HEIGTH / 3.5)};
+    std::pair<int16_t, int16_t> position = RC.getObstacleRespawnPosition();
 
     std::shared_ptr<Collidable> collidable =  std::make_shared<Collidable>(
             (int)obsacleId,position,50, 50);
