@@ -25,8 +25,9 @@ class Operator {
         int health;
         void chargeTexture(Renderer& renderer);
         void renderAnimation(int speed, SDL_Texture* texture);
-        void setState(State state);
+        void renderDead(int speed, SDL_Texture* texture);
         int setNumFrames(State state);
+        bool animationDeadFinish;
     public:
         Operator(uint8_t id, TypeOperator op, Renderer& renderer);
         ~Operator();     
@@ -34,6 +35,7 @@ class Operator {
         void update(std::pair<int16_t, int16_t> pos, State state,
                     int health);
         TypeOperator getType();
+        void setState(State state);
         uint8_t getId();
         uint8_t getHealth();
         int16_t getPosY();

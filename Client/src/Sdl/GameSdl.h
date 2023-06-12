@@ -26,7 +26,6 @@ class GameSdl {
         Queue<std::shared_ptr<Snapshot>>& snapshotQueue;
         Queue<std::shared_ptr<EventDTO>>& eventQueue;
         MapSdl map;
-        bool running;
         bool& endGame;
         std::map<uint8_t, std::shared_ptr<Operator>>& soldiers;
         std::map<uint8_t, std::shared_ptr<Enemy>>& enemies;

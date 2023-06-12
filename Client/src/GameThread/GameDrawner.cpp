@@ -106,9 +106,8 @@ void GameDrawner::run() {
             }
 
             uint8_t idMap = snap->getMap();
-            std::cout << "map " << (int)idMap << std::endl;
             TypeGame mode = snap->getTypeGame();
-
+            
             GameSdl gameSdl(window, render, snapshot_queue, client_events,
                             endGame, players, idPlayer, idMap, mode, font,
                             enemies);

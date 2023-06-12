@@ -45,7 +45,6 @@ void EventHandler::handleKeyDownEvent(SDL_Keysym keysym) {
             break;
         case SDLK_SPACE:
             event = Event::event_shoot;
-            std::cout << "shooting\n";
             break;
         case SDLK_q:
             event = Event::event_throw_grenade;
