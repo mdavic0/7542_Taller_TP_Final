@@ -38,6 +38,7 @@ class GameWorld {
 
         uint8_t obsacleId;
         std::map<uint8_t, std::shared_ptr<Obstacle>> obstacles;
+        bool ended;
 
     public:
         GameWorld(const TypeGame& type, uint8_t map);
@@ -48,6 +49,8 @@ class GameWorld {
         void updateShootingState(Event event, uint8_t id);
         void simulateStep();
         std::shared_ptr<Snapshot> getSnapshot(bool first);
+        std::shared_ptr<Snapshot> getStats();
+        bool isEnded();
 
     private:
         void generateInfecteds();

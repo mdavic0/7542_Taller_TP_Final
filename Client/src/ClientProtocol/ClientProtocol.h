@@ -34,6 +34,8 @@ class ClientProtocol : public Protocol {
         Snapshot getJoin();
         Snapshot getStart();
         Snapshot getPlaying();
+        Snapshot getEnd();
+        Snapshot getStats();
         std::vector<StOperator> getPlayers();
         std::vector<EnemyDto> getEnemies();
         std::vector<ObstacleDto> getObstacles();

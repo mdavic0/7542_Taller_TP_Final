@@ -32,6 +32,8 @@ class ServerProtocol : Protocol {
         void sendStart(const std::vector<StOperator> &playersInfo, const std::vector<EnemyDto> &enemiesInfo,
                 const std::vector<ObstacleDto> &obstaclesInfo, const TypeGame& typeGame, const uint8_t& idMap);
         void sendPlaying(const std::vector<StOperator> &playersInfo, const std::vector<EnemyDto> &enemiesInfo);
+        void sendEnd();
+        void sendStats(const uint32_t& time, const uint16_t& shots, const uint8_t& kills);
         void sendTypeOperator(const TypeOperator& typeOperator);
         void sendTypeInfected(const TypeInfected& typeInfected);
         void sendTypeObstacle(const TypeObstacle& typeObstacle);

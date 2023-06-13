@@ -33,6 +33,8 @@
 #define SHOOT_CODE 0x12
 #define STOP_SHOOT_CODE 0x13
 #define LEAVE_CODE 0x14
+#define END_CODE 0x15
+#define STATS_CODE 0x16
 
 #define IDF_CODE 0x01
 #define P90_CODE 0x02

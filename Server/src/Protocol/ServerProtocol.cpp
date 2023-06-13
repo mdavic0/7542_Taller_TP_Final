@@ -251,6 +251,23 @@ void ServerProtocol::sendPlaying(const std::vector<StOperator> &playersInfo, con
     sendEnemiesInfo(enemiesInfo);
 }
 
+void ServerProtocol::sendEnd() {
+    uint8_t event = END_CODE;
+    sendAll(&event, 1);
+}
+
+void ServerProtocol::sendStats(const uint32_t& time, const uint16_t& shots, const uint8_t& kills) {
+    uint8_t event = STATS_CODE;
+    sendAll(&event, 1);
+
+    uint16_t aux_time = htonl(time);
+    sendAll(&aux_time, 4);
+
+    uint16_t aux_shots = htons(shots);
+    sendAll(&aux_shots, 2);
+
+    sendAll(&kills, 1);
+}
 
 void ServerProtocol::sendTypeOperator(const TypeOperator& typeOperator) {
     if(typeOperator == TypeOperator::operator_idf){
@@ -436,8 +453,12 @@ void ServerProtocol::sendSnapshot(const Snapshot &snapshot) {
         sendJoin(snapshot.getOk(), snapshot.getIdPlayer(), snapshot.getSize());
     } else if (event == Event::event_start_game) {
         sendStart(snapshot.getInfo(), snapshot.getEnemies(), snapshot.getObstacles(), snapshot.getTypeGame(), snapshot.getMap());
-    } else {
+    } else if (event == Event::event_playing) {
         sendPlaying(snapshot.getInfo(), snapshot.getEnemies());
+    } else if (event == Event::event_end) {
+        sendEnd();
+    } else if (event == Event::event_stats) {
+        sendStats(snapshot.getTime(), snapshot.getShots(), snapshot.getKills());
     }
 }
 

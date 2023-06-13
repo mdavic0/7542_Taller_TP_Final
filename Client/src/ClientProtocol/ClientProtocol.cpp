@@ -202,6 +202,25 @@ Snapshot ClientProtocol::getPlaying () {
     return Snapshot(getPlayers(), getEnemies());
 }
 
+Snapshot ClientProtocol::getEnd() {
+    return Snapshot(Event::event_end);
+}
+
+Snapshot ClientProtocol::getStats() {
+    uint16_t time;
+    sendAll(&time, 4);
+    time = ntohl(time);
+
+    uint16_t shots;
+    sendAll(&shots, 2);
+    shots = ntohs(shots);
+
+    uint8_t kills;
+    sendAll(&kills, 1);
+
+    return Snapshot(time, shots, kills);
+}
+
 std::vector<StOperator> ClientProtocol::getPlayers() {
     uint8_t playersCount;
     recvAll(&playersCount, 1);
@@ -467,8 +486,16 @@ Snapshot ClientProtocol::getSnapshot() {
         return getPlaying();
         break;
 
+    case END_CODE:
+        return getEnd();
+        break;
+
+    case STATS_CODE:
+        return getStats();
+        break;
+
     default:
         break;
     }
-    return Snapshot(Event::event_invalid, (uint8_t)0, 0, 0);
+    return Snapshot(Event::event_invalid);
 }
