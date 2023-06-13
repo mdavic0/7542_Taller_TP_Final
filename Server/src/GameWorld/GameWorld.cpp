@@ -12,7 +12,7 @@ GameWorld::GameWorld(const TypeGame& type, uint8_t map) :
     this->generateObstacles();
 }
 
-
+// TODO: PLAYER FACTORY
 uint8_t GameWorld::addPlayer(TypeOperator op) {
     std::shared_ptr<Player> newPlayer = nullptr;
     std::pair<int16_t, int16_t> position = RC.getPlayerRespawnPosition();
@@ -63,6 +63,10 @@ void GameWorld::updateShootingState(Event event, uint8_t id) {
 void GameWorld::simulateStep() {
     for (auto& player : players) {
         players.at(player.first)->applyStep(this->collidables, this->infecteds);
+    }
+
+    for (auto& infected : infecteds) {
+        infecteds.at(infected.first)->applyStep(this->collidables, this->players);
     }
 
     for (auto it = infecteds.cbegin(); it != infecteds.cend(); /* no increment */){

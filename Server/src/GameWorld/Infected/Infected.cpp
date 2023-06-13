@@ -1,5 +1,5 @@
 #include "Infected.h"
-
+#include "Defines.h"
 #include <utility>
 
 Infected::Infected(TypeInfected typeInfected, uint8_t id, uint8_t life, uint8_t velocity, uint8_t damage,
@@ -69,13 +69,18 @@ void Infected::move(std::map<uint8_t, std::shared_ptr<Collidable>> &collidables)
     }
 }
 
-void Infected::atack() {
-
+void Infected::atack(std::map<uint8_t, std::shared_ptr<Player>>& players) {
+    for (auto& player : players) {
+        if (player.second->getCollidable()->isCloseTo(this->collidable, CLOSE_DISTANCE)) {
+            player.second->applyDamage(this->damage);
+        }
+    }
 }
 
-void Infected::applyStep(std::map<uint8_t, std::shared_ptr<Collidable>> &collidables) {
+void Infected::applyStep(std::map<uint8_t, std::shared_ptr<Collidable>> &collidables,
+                         std::map<uint8_t, std::shared_ptr<Player>>& players) {
     this->move(collidables);
-    this->atack();
+    this->atack(players);
 }
 
 std::shared_ptr<Collidable> &Infected::getCollidable() {
