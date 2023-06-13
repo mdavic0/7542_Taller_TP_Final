@@ -38,6 +38,7 @@ class Player {
         TypeOperator& getTypeOperator();
         State& getState();
         uint8_t& getHealth();
+        uint8_t& getMunition();
         virtual ~Player() = default;
     private:
         void move(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables);

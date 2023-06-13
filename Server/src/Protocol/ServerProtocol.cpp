@@ -316,6 +316,8 @@ void ServerProtocol::sendPlayersInfo(const std::vector<StOperator> &playersInfo)
         sendPosition(it->getPosition().first, it->getPosition().second); // x = it->second.first, y = it->second.second
         uint8_t health = it->getHealth();
         sendAll(&health, 1);
+        uint8_t munition = it->getMunition();
+        sendAll(&munition, 1);
   }
 }
 

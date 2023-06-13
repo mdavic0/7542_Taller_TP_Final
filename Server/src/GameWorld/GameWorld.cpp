@@ -83,7 +83,8 @@ std::shared_ptr<Snapshot> GameWorld::getSnapshot(bool first) {
                                      player.second->getTypeOperator(),
                                      player.second->getState(),
                                      player.second->getPosition(), 
-                                     player.second->getHealth()));
+                                     player.second->getHealth(),
+                                     player.second->getMunition()));
     }
     
     std::vector<EnemyDto> enemies;

@@ -275,7 +275,11 @@ std::vector<StOperator> ClientProtocol::getPlayers() {
 
         uint8_t health;
         recvAll(&health, 1);
-        vector.push_back(StOperator(idPlayer, type, state, {x, y}, health));
+
+        uint8_t munition;
+        recvAll(&munition, 1);
+
+        vector.push_back(StOperator(idPlayer, type, state, {x, y}, health, munition));
     }
 
     return vector;
