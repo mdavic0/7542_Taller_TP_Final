@@ -15,6 +15,7 @@
 #include "TypeGame.h"
 #include "Font.h"
 #include "Enemy.h"
+#include "Camera.h"
 #include <memory>
 #include <map>
 
@@ -26,7 +27,6 @@ class GameSdl {
         Queue<std::shared_ptr<Snapshot>>& snapshotQueue;
         Queue<std::shared_ptr<EventDTO>>& eventQueue;
         MapSdl map;
-        bool running;
         bool& endGame;
         std::map<uint8_t, std::shared_ptr<Operator>>& soldiers;
         std::map<uint8_t, std::shared_ptr<Enemy>>& enemies;
@@ -34,6 +34,7 @@ class GameSdl {
         uint8_t idPlayer;
         TypeGame mode;
         Font& font;
+        Camera camera;
 
     public:
         GameSdl(WindowSdl& window, Renderer& renderer,

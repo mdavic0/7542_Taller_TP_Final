@@ -1,9 +1,9 @@
 #include "RendererSdl.h"
 #include "SdlException.h"
 
-Renderer::Renderer(SDL_Window* window, int index, uint32_t flags) :
+Renderer::Renderer(WindowSdl& window, int index, uint32_t flags) :
     render(nullptr) {
-    this->render = SDL_CreateRenderer(window, index, flags);
+    this->render = SDL_CreateRenderer(window.getWindow(), index, flags);
     if (!this->render)
         throw SdlException("Failed to create rendering context");
 }
@@ -13,6 +13,20 @@ Renderer::~Renderer() {
         SDL_DestroyRenderer(this->render);
         this->render = nullptr;
     }
+}
+
+Renderer::Renderer(Renderer&& other) noexcept : render(other.render) {
+    other.render = nullptr;
+}
+
+Renderer& Renderer::operator=(Renderer&& other) noexcept {
+    if (&other == this)
+        return *this;
+    if (render != nullptr)
+        SDL_DestroyRenderer(render);
+    render = other.render;
+    other.render = nullptr;
+    return *this;
 }
 
 void Renderer::clear() {
@@ -26,6 +40,11 @@ void Renderer::present() {
 void Renderer::copy(SDL_Texture* texture, SDL_Rect& rectInit, 
     SDL_Rect& rectFinal) {
     if (SDL_RenderCopy(this->render, texture, &rectInit, &rectFinal) != 0)
+        throw SdlException("Failed RenderCopy");
+}
+
+void Renderer::copyMap(SDL_Texture* texture, SDL_Rect& rectInit) {
+    if (SDL_RenderCopy(this->render, texture, &rectInit, nullptr) != 0)
         throw SdlException("Failed RenderCopy");
 }
 

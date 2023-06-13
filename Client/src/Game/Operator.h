@@ -19,14 +19,15 @@ class Operator {
         std::pair<int16_t, int16_t> position;
         std::map<std::string, std::unique_ptr<Texture>> textures;
         State stateOperator;
-        Renderer renderPlayer;
+        Renderer& renderPlayer;
         SDL_RendererFlip flipType;
         int numFrames;
         int health;
         void chargeTexture(Renderer& renderer);
-        void renderAnimation(int speed, SDL_Texture* texture);
-        void setState(State state);
+        void renderAnimation(int speed, SDL_Texture* texture, SDL_Rect camera);
+        void renderDead(int speed, SDL_Texture* texture, SDL_Rect camera);
         int setNumFrames(State state);
+        bool animationDeadFinish;
     public:
         Operator(uint8_t id, TypeOperator op, Renderer& renderer);
         ~Operator();     
@@ -34,10 +35,14 @@ class Operator {
         void update(std::pair<int16_t, int16_t> pos, State state,
                     int health);
         TypeOperator getType();
+        void setState(State state);
         uint8_t getId();
         uint8_t getHealth();
+        int16_t getPosX();
         int16_t getPosY();
-        void render();
+        std::pair<int16_t, int16_t> getPosition();
+        void render(SDL_Rect camera);
+        bool isDead();
 };
 
 #endif

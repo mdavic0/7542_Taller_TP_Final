@@ -68,6 +68,7 @@ Snapshot::Snapshot(Snapshot&& other) {
     this->idMap = other.idMap;
     this->playersInfo = other.playersInfo;
     this->enemies = other.enemies;
+    this->typeGame = other.typeGame;
 
     other.event = Event::event_invalid;
     other.code = 0;
@@ -90,6 +91,7 @@ Snapshot& Snapshot::operator=(Snapshot&& other) {
     this->idMap = other.idMap;
     this->playersInfo = other.playersInfo;
     this->enemies = other.enemies;
+    this->typeGame = other.typeGame;
 
     other.event = Event::event_invalid;
     other.code = 0;

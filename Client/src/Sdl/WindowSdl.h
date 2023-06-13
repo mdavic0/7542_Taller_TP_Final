@@ -6,20 +6,19 @@
 
 class WindowSdl {
     private:
-        std::string title;
-        int x;
-        int y;
-        int height;
-        int width;
-        uint32_t flags;
         SDL_Window* window;
     public:
         WindowSdl(const std::string& title, int x, int y, int h, int w,
                     uint32_t flags);
         ~WindowSdl();
+        WindowSdl(SDL_Window* window);
+        WindowSdl(WindowSdl&& other) noexcept;
+        WindowSdl& operator=(WindowSdl&& other) noexcept;
         WindowSdl(const WindowSdl& other) = delete;
         WindowSdl& operator=(const WindowSdl& other) = delete; 
         SDL_Window* getWindow();
+        int getWidth();
+        int getHeight();
 };
 
 #endif

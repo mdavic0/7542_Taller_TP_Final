@@ -20,13 +20,13 @@ class Enemy {
         void chargeTextures();
         void setState(State state);
         int setNumFrames(State state);
-        void renderAnimation(int speed, SDL_Texture* texture);
+        void renderAnimation(int speed, SDL_Texture* texture, SDL_Rect camera);
 
     public:
         Enemy(Renderer& render, TypeInfected type);
         ~Enemy();
         void update(std::pair<int16_t, int16_t> pos, State state);
-        void render();
+        void render(SDL_Rect camera);
 };
 
 #endif

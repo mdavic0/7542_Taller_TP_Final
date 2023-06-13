@@ -20,12 +20,12 @@ CreateView::CreateView(QWidget* parent) : QWidget(parent),
     layoutName->addWidget(&lineName);
 
     // Selector de modo de Juego
-    clearZone.setObjectName("clearZone");
-    clearZone.setChecked(true);
     survival.setObjectName("survival");
     survival.setChecked(false);
-    modeSelect.addButton(&clearZone, 0x01);
-    modeSelect.addButton(&survival, 0x02);
+    clearZone.setObjectName("clearZone");
+    clearZone.setChecked(true);
+    modeSelect.addButton(&survival, 0x01);
+    modeSelect.addButton(&clearZone, 0x02);
 
     QHBoxLayout* layoutMode = new QHBoxLayout;
     layoutMode->addWidget(&clearZone);

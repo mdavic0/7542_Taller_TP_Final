@@ -47,7 +47,6 @@ Queue<std::shared_ptr<EventDTO>>* Game::joinGame(Queue<std::shared_ptr<Snapshot>
         std::lock_guard<std::mutex> locker(mutex);
         uint8_t idPlayer = gameWorld.addPlayer(op);
         client_snapshot_queues.insert({idPlayer, q});
-        std::cout << (int)idPlayer << std::endl;
         // Notify all clients that a new player joined
         for (auto &clientQueue : client_snapshot_queues) {
             clientQueue.second->push(std::make_shared<Snapshot>(Event::event_join,
@@ -113,11 +112,9 @@ void Game::processEvents() {
                                                   event->getMoveTo());
             } else if (event->getEvent() == Event::event_shoot
                         or event->getEvent() == Event::event_stop_shoot) {
-                std::cout << "Llego un disparo\n";
                 gameWorld.updateShootingState(event->getEvent(),
                                               event->getIdPlayer());
             } else if (event->getEvent() == Event::event_leave) {
-                std::cout << "se desconecto cliente\n";
                 std::lock_guard<std::mutex> l(mutex);
                 gameWorld.deletePlayer(event->getIdPlayer());
                 client_snapshot_queues.erase(event->getIdPlayer());
