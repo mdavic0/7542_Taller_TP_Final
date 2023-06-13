@@ -85,7 +85,7 @@ void Game::gameLoop() {
         // para poder lanzar una grandada, que los jugadores se muevan,
         // todos los eventos que tienen que ver con el tiempo.
 
-        std::shared_ptr<Snapshot> snapshot = gameWorld.getSnapshot(true);
+        std::shared_ptr<Snapshot> snapshot = gameWorld.getSnapshot(false);
         // broadcastSnapshot() # acá recien se agarra el snapshot y se lo pushea
         // a los hilos sender. Un snapshot por gameloop. Si hacen uno por evento,
         // saturan la red sin sentido

@@ -207,16 +207,16 @@ Snapshot ClientProtocol::getEnd() {
 }
 
 Snapshot ClientProtocol::getStats() {
-    uint16_t time;
-    sendAll(&time, 4);
+    uint32_t time;
+    recvAll(&time, 4);
     time = ntohl(time);
 
     uint16_t shots;
-    sendAll(&shots, 2);
+    recvAll(&shots, 2);
     shots = ntohs(shots);
 
     uint8_t kills;
-    sendAll(&kills, 1);
+    recvAll(&kills, 1);
 
     return Snapshot(time, shots, kills);
 }

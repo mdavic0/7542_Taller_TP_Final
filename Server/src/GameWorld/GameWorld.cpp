@@ -7,7 +7,7 @@
 GameWorld::GameWorld(const TypeGame& type, uint8_t map) :
     players_amount(INITIAL_PLAYERS_AMOUNT), players(), type(type), map(map),
     collidables(), infectedId(INITIAL_INFECTED_ID), obsacleId(INITIAL_OBSTACLE_ID),
-    infectedFactory(), RC() {
+    infectedFactory(), RC(), ended(false) {
     this->generateInfecteds();
     this->generateObstacles();
 }
@@ -66,12 +66,13 @@ void GameWorld::simulateStep() {
             players.at(player.first)->applyStep(this->collidables, this->infecteds);
         }
 
-    for (auto it = infecteds.cbegin(); it != infecteds.cend(); /* no increment */){
-        if (not it->second->isAlive()) {
-            collidables.erase(it->first);
-            infecteds.erase(it++);
-        } else {
-            ++it;
+        for (auto it = infecteds.cbegin(); it != infecteds.cend(); /* no increment */){
+            if (not it->second->isAlive()) {
+                collidables.erase(it->first);
+                infecteds.erase(it++);
+            } else {
+                ++it;
+            }
         }
     }
 }
@@ -97,7 +98,6 @@ std::shared_ptr<Snapshot> GameWorld::getSnapshot(bool first) {
         }
 
         if (first){
-
             std::vector<ObstacleDto> obsts;
             for (auto& ob : obstacles) {
                 obsts.push_back(ObstacleDto(ob.first,
