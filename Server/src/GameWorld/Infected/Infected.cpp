@@ -85,9 +85,7 @@ std::shared_ptr<Collidable> &Infected::getCollidable() {
 #include <iostream>
 void Infected::applyDamage(const int &amount) {
     this->life -= amount;
-    std::cout << "Soy un infectado, Me la re dieron! Vida: " << std::to_string(life) << "\n";
     if (this->life <= 0) {
-        std::cout << "UHH ME RE MATARON LPM!\n";
         this->alive = false;
     }
 }

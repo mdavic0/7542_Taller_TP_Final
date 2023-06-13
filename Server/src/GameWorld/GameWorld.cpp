@@ -67,7 +67,6 @@ void GameWorld::simulateStep() {
 
     for (auto it = infecteds.cbegin(); it != infecteds.cend(); /* no increment */){
         if (not it->second->isAlive()) {
-            std::cout << "Murio un infectado con id: " << std::to_string(it->first) << " lo borro del mapa!\n";
             collidables.erase(it->first);
             infecteds.erase(it++);
         } else {
