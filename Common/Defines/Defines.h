@@ -2,8 +2,8 @@
 #define COMMON_DEFINES_H_
 
 #define PATH "assets/config/config.yaml"
-#define WINDOW_WIDTH 1024
-#define WINDOW_HEIGTH 768
+#define WINDOW_WIDTH 1920
+#define WINDOW_HEIGTH 1080
 
 #define FRAME_RATE 60
 #define SIZE_QUEUE 256

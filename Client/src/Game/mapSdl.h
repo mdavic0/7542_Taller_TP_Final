@@ -18,7 +18,7 @@ class MapSdl {
     public:
         MapSdl(uint8_t id, Renderer& renderer, WindowSdl& window);
         ~MapSdl();
-        void render();
+        void render(SDL_Rect camera);
 };
 
 #endif

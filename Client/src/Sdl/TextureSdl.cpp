@@ -2,9 +2,9 @@
 #include "Defines.h"
 #include "SdlException.h"
 
-Texture::Texture(Renderer& renderer, const std::string& file, bool resize) :
+Texture::Texture(Renderer& renderer, const std::string& file) :
     textureRender(renderer), texture(nullptr) {
-    this->loadTexture(file, resize);    
+    this->loadTexture(file);    
 }
 
 Texture::Texture(Renderer& renderer, SDL_Surface* surface) :
@@ -33,32 +33,16 @@ Texture::Texture(Renderer& renderer, const std::string& file, SDL_Color c) :
     SDL_FreeSurface(surface);
 }
 
-void Texture::loadTexture(const std::string& file, bool resize) {
+void Texture::loadTexture(const std::string& file) {
     this->freeTexture();
     SDL_Surface* surface = IMG_Load(file.c_str());
     if (!surface)
         throw SdlException("Error charge text");
-    SDL_Surface* resized = nullptr;
-    if (resize) {
-        resized = SDL_CreateRGBSurface(0, WINDOW_WIDTH, WINDOW_HEIGTH,
-                                                surface->format->BitsPerPixel,
-                                                surface->format->Rmask,
-                                                surface->format->Gmask,
-                                                surface->format->Bmask,
-                                                surface->format->Amask);
-        SDL_BlitScaled(surface, nullptr, resized, nullptr);
-    }
-
     SDL_Renderer* render = this->textureRender.get();
-    if (resize)
-        this->texture = SDL_CreateTextureFromSurface(render, resized);
-    else
-        this->texture = SDL_CreateTextureFromSurface(render, surface);
+    this->texture = SDL_CreateTextureFromSurface(render, surface);
     if (!texture)
         throw SdlException("Error create texture");
     SDL_FreeSurface(surface);
-    if (resize)
-        SDL_FreeSurface(resized);
 }
 
 int Texture::frames() {

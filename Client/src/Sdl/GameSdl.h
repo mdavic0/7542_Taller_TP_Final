@@ -15,6 +15,7 @@
 #include "TypeGame.h"
 #include "Font.h"
 #include "Enemy.h"
+#include "Camera.h"
 #include <memory>
 #include <map>
 
@@ -33,6 +34,7 @@ class GameSdl {
         uint8_t idPlayer;
         TypeGame mode;
         Font& font;
+        Camera camera;
 
     public:
         GameSdl(WindowSdl& window, Renderer& renderer,
