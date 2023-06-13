@@ -19,7 +19,7 @@ class Operator {
         std::pair<int16_t, int16_t> position;
         std::map<std::string, std::unique_ptr<Texture>> textures;
         State stateOperator;
-        Renderer renderPlayer;
+        Renderer& renderPlayer;
         SDL_RendererFlip flipType;
         int numFrames;
         int health;

@@ -33,9 +33,9 @@ void GameDrawner::run() {
                             SDL_WINDOWPOS_CENTERED,
                             WINDOW_HEIGTH,
                             WINDOW_WIDTH,
-                            SDL_WINDOW_SHOWN);
+                            SDL_WINDOW_RESIZABLE);
 
-        Renderer render(window.getWindow(), -1, SDL_RENDERER_ACCELERATED);
+        Renderer render(window, -1, SDL_RENDERER_ACCELERATED);
 
         Font font("assets/font/Futurot.ttf", 20);
         font.setHinting();
@@ -53,9 +53,9 @@ void GameDrawner::run() {
         while(noReady)  {
             render.clear();
             if (menu == JOIN_MENU)
-                this->renderText(text1, text2, render, font);
+                this->renderText(text1, text2, render, font, window);
             else if (menu == CREATE_MENU)
-                this->renderText(text1, text3, render, font);
+                this->renderText(text1, text3, render, font, window);
             SDL_Event event;
             while (SDL_PollEvent(&event)) {
                 switch (event.type) {
@@ -137,25 +137,25 @@ void GameDrawner::run() {
 }
 
 void GameDrawner::renderText(const std::string& text1, const std::string& text2,
-    Renderer& render, Font& font) {
+    Renderer& render, Font& font, WindowSdl& window) {
     SDL_Color color = {255, 255, 255, 255};
     int w, h, w2, h2, w3, h3;
     font.getSizeFont(text1, &w, &h);
     Texture textureFont(render, font.RenderText_Solid(text1, color));
-    SDL_Rect final = {  (WINDOW_WIDTH - w) / 2,
-                        (WINDOW_HEIGTH - h) / 2,
+    SDL_Rect final = {  (window.getWidth() - w) / 2,
+                        (window.getHeight() - h) / 2,
                         w,
                         h};
     font.getSizeFont(text2, &w2, &h2);
     Texture textureFont2(render,font.RenderText_Solid(text2, color));
-    SDL_Rect final2 = { ((WINDOW_WIDTH - w2) / 2),
-                        ((WINDOW_HEIGTH - h) / 2) + h2 + 10,
+    SDL_Rect final2 = { ((window.getWidth() - w2) / 2),
+                        ((window.getHeight() - h) / 2) + h2 + 10,
                         w2,
                         h2};
     font.getSizeFont(text2, &w3, &h3);
     std::string text3 = "Connected Players: " + std::to_string(numPlayers);
     Texture textureFontPlayer(render, font.RenderText_Solid(text3, color));
-    SDL_Rect final3 = {(WINDOW_WIDTH - w3 - 30), 15, w3, h3};
+    SDL_Rect final3 = {(window.getWidth() - w3 - 30), 15, w3, h3};
     render.copyFont(textureFontPlayer.getTexture(), final3);
     render.copyFont(textureFont.getTexture(), final);
     render.copyFont(textureFont2.getTexture(), final2);

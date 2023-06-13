@@ -13,7 +13,7 @@ GameSdl::GameSdl(WindowSdl& window, Renderer& renderer,
     std::map<uint8_t, std::shared_ptr<Enemy>>& enemies) :
     window(window), renderer(renderer), snapshotQueue(snapshotQueue),
     eventQueue(eventQueue), endGame(endGame), events(eventQueue, idPlayer),
-    map(idMap, this->renderer), soldiers(soldiers),
+    map(idMap, this->renderer, this->window), soldiers(soldiers),
     hud(soldiers[idPlayer]->getType(), mode, renderer, font),
     idPlayer(idPlayer), mode(mode), font(font), enemies(enemies) {
 }
@@ -68,12 +68,10 @@ void GameSdl::update() {
     // Eliminio enemigo muerto
     auto iterator = enemies.begin();
     while (iterator != enemies.end()) {
-        if (mapIds.find(iterator->first) == mapIds.end()) {
-            std::cout << "elimino enemigo\n";
+        if (mapIds.find(iterator->first) == mapIds.end())
             iterator = enemies.erase(iterator);
-        } else {
+        else
             ++iterator;
-        }
     }
 }
 
