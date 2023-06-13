@@ -96,7 +96,14 @@ std::shared_ptr<Snapshot> GameWorld::getSnapshot(bool first) {
     }
 
     if (first){
-        return std::make_shared<Snapshot>(playersInfo, enemies, type, map);        
+
+        std::vector<ObstacleDto> obsts;
+        for (auto& ob : obstacles) {
+            obsts.push_back(ObstacleDto(ob.first,
+                                         ob.second->getTypeObstacle(),
+                                         ob.second->getPosition()));
+        }
+        return std::make_shared<Snapshot>(playersInfo, enemies, obsts, type, map);        
     }
     return std::make_shared<Snapshot>(playersInfo, enemies);
 }

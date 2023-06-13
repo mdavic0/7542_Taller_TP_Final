@@ -17,6 +17,8 @@ class Obstacle {
                  std::shared_ptr<Collidable> collidable);
         void updatePosition(std::pair<int16_t, int16_t>& newPosition,
                             std::map<uint8_t, std::shared_ptr<Collidable>>& collidables);
+        std::pair<int16_t, int16_t>& getPosition();
+        TypeObstacle& getTypeObstacle();
         virtual ~Obstacle() = default;
 
     private:

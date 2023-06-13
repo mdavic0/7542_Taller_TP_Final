@@ -59,4 +59,7 @@
 #define INFECTED_SPEAR 0x03
 #define INFECTED_VENOM 0x04
 
+#define OBSTACLE_TIRE 0x00
+#define OBSTACLE_CRATER 0x01
+
 #endif

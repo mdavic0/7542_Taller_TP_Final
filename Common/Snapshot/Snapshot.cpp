@@ -10,9 +10,9 @@ Snapshot::Snapshot(const Event& event, const uint8_t& ok, const uint8_t& idPlaye
     typeOperator(TypeOperator::operator_idle), idMap(0), typeGame(TypeGame::game_idle) {}
 
 Snapshot::Snapshot(const std::vector<StOperator> &playersInfo, const std::vector<EnemyDto>& enemies,
-    const TypeGame& typeGame, const uint8_t& idMap) :
+    const std::vector<ObstacleDto>& obstacles, const TypeGame& typeGame, const uint8_t& idMap) :
     event(Event::event_start_game), playersInfo(playersInfo), typeOperator(TypeOperator::operator_idle),
-    code(0), ok(0), idPlayer(0), size(0), idMap(idMap), typeGame(typeGame), enemies(enemies) {}
+    code(0), ok(0), idPlayer(0), size(0), idMap(idMap), typeGame(typeGame), enemies(enemies), obstacles(obstacles) {}
 
 Snapshot::Snapshot(const std::vector<StOperator> &playersInfo, const std::vector<EnemyDto>& enemies) :
     event(Event::event_playing), playersInfo(playersInfo), typeOperator(TypeOperator::operator_idle), 
@@ -59,6 +59,10 @@ std::vector<EnemyDto> Snapshot::getEnemies() const {
     return enemies;
 }
 
+std::vector<ObstacleDto> Snapshot::getObstacles() const {
+    return obstacles;
+}
+
 Snapshot::Snapshot(Snapshot&& other) {
     this->event = other.event;
     this->typeOperator = other.typeOperator;
@@ -68,6 +72,7 @@ Snapshot::Snapshot(Snapshot&& other) {
     this->idMap = other.idMap;
     this->playersInfo = other.playersInfo;
     this->enemies = other.enemies;
+    this->obstacles = other.obstacles;
 
     other.event = Event::event_invalid;
     other.code = 0;
@@ -76,6 +81,7 @@ Snapshot::Snapshot(Snapshot&& other) {
     other.idMap = 0;
     other.playersInfo = std::vector<StOperator> {};
     other.enemies = std::vector<EnemyDto> {};
+    other.obstacles = std::vector<ObstacleDto> {};
 }
 
 Snapshot& Snapshot::operator=(Snapshot&& other) {
@@ -90,6 +96,7 @@ Snapshot& Snapshot::operator=(Snapshot&& other) {
     this->idMap = other.idMap;
     this->playersInfo = other.playersInfo;
     this->enemies = other.enemies;
+    this->obstacles = other.obstacles;
 
     other.event = Event::event_invalid;
     other.code = 0;
@@ -98,6 +105,7 @@ Snapshot& Snapshot::operator=(Snapshot&& other) {
     other.idMap = 0;
     other.playersInfo = std::vector<StOperator> {};
     other.enemies = std::vector<EnemyDto> {};
+    other.obstacles = std::vector<ObstacleDto> {};
 
     return *this;
 }

@@ -21,3 +21,11 @@ void Obstacle::move(std::pair<int16_t, int16_t> &newPosition,
         this->collidable->updatePosition(oldPosition);
     }
 }
+
+std::pair<int16_t, int16_t>& Obstacle::getPosition() {
+    return position;
+}
+
+TypeObstacle& Obstacle::getTypeObstacle() {
+    return typeObstacle;
+}
