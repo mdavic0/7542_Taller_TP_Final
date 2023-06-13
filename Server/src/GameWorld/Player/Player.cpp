@@ -95,6 +95,10 @@ uint8_t& Player::getHealth() {
     return this->life;
 }
 
+uint8_t& Player::getMunition() {
+    return weapon->getMunition();
+}
+
 void Player::move(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables) {
     if (not this->collidable->collidesWith(collidables)) {
         this->position.first += movement_direction.first + movement_direction.first * (velocity / 10);

@@ -61,9 +61,10 @@ void GameWorld::updateShootingState(Event event, uint8_t id) {
 }
 #include <iostream>
 void GameWorld::simulateStep() {
-    for (auto& player : players) {
-        players.at(player.first)->applyStep(this->collidables, this->infecteds);
-    }
+    if(!ended) {
+        for (auto& player : players) {
+            players.at(player.first)->applyStep(this->collidables, this->infecteds);
+        }
 
     for (auto it = infecteds.cbegin(); it != infecteds.cend(); /* no increment */){
         if (not it->second->isAlive()) {
@@ -76,29 +77,43 @@ void GameWorld::simulateStep() {
 }
 
 std::shared_ptr<Snapshot> GameWorld::getSnapshot(bool first) {
-    std::vector<StOperator> playersInfo;
-    for (auto& player : players) {
-        playersInfo.push_back(StOperator(player.first,
-                                     player.second->getTypeOperator(),
-                                     player.second->getState(),
-                                     player.second->getPosition(), 
-                                     player.second->getHealth()));
-    }
-    
-    std::vector<EnemyDto> enemies;
-    for (auto& enemy : infecteds) {
-        enemies.push_back(EnemyDto(enemy.first,
-                                     enemy.second->getTypeInfected(),
-                                     enemy.second->getState(),
-                                     enemy.second->getPosition()));
-    }
+    if(!ended) {
+        std::vector<StOperator> playersInfo;
+        for (auto& player : players) {
+            playersInfo.push_back(StOperator(player.first,
+                                         player.second->getTypeOperator(),
+                                         player.second->getState(),
+                                         player.second->getPosition(), 
+                                         player.second->getHealth(),
+                                         player.second->getMunition()));
+        }
+        
+        std::vector<EnemyDto> enemies;
+        for (auto& enemy : infecteds) {
+            enemies.push_back(EnemyDto(enemy.first,
+                                         enemy.second->getTypeInfected(),
+                                         enemy.second->getState(),
+                                         enemy.second->getPosition()));
+        }
 
-    if (first){
-        return std::make_shared<Snapshot>(playersInfo, enemies, type, map);        
+        if (first){
+
+            std::vector<ObstacleDto> obsts;
+            for (auto& ob : obstacles) {
+                obsts.push_back(ObstacleDto(ob.first,
+                                             ob.second->getTypeObstacle(),
+                                             ob.second->getPosition()));
+            }
+            return std::make_shared<Snapshot>(playersInfo, enemies, obsts, type, map);        
+        }
+        return std::make_shared<Snapshot>(playersInfo, enemies);
     }
-    return std::make_shared<Snapshot>(playersInfo, enemies);
+    return std::make_shared<Snapshot>(Event::event_end);
 }
 
+std::shared_ptr<Snapshot> GameWorld::getStats() {
+    return std::make_shared<Snapshot>(10000, 1000, infectedId);
+}
 
 void GameWorld::generateInfecteds() {
     switch (this->type) {
@@ -155,4 +170,8 @@ TypeObstacle GameWorld::generateObstacleType() {
     std::mt19937 generator(rand_dev());
     std::uniform_int_distribution<int> distr(0, 1);
     return (TypeObstacle)distr(generator);
+}
+
+bool GameWorld::isEnded() {
+    return ended;
 }

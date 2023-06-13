@@ -96,6 +96,11 @@ void Game::gameLoop() {
         int t_delta = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
         // duration<double>(t_delta)
         std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 20 - t_delta));
+        
+        if(gameWorld.isEnded()){
+            broadcastSnapshot(gameWorld.getStats());
+            stop();
+        }
     }
 }
 

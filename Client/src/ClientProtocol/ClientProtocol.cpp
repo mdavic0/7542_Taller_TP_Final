@@ -174,7 +174,8 @@ Snapshot ClientProtocol::getJoin () {
 Snapshot ClientProtocol::getStart () {
     std::vector<StOperator> players = getPlayers();
     std::vector<EnemyDto> enemies = getEnemies();
-    
+    std::vector<ObstacleDto> obstacles = getObstacles();    
+
     uint8_t idGame;
     recvAll(&idGame, 1);
     TypeGame game = TypeGame::game_idle;
@@ -194,11 +195,30 @@ Snapshot ClientProtocol::getStart () {
     
     uint8_t idMap;
     recvAll(&idMap, 1);
-    return Snapshot(players, enemies, game, idMap);
+    return Snapshot(players, enemies, obstacles, game, idMap);
 }
 
 Snapshot ClientProtocol::getPlaying () {
     return Snapshot(getPlayers(), getEnemies());
+}
+
+Snapshot ClientProtocol::getEnd() {
+    return Snapshot(Event::event_end);
+}
+
+Snapshot ClientProtocol::getStats() {
+    uint16_t time;
+    sendAll(&time, 4);
+    time = ntohl(time);
+
+    uint16_t shots;
+    sendAll(&shots, 2);
+    shots = ntohs(shots);
+
+    uint8_t kills;
+    sendAll(&kills, 1);
+
+    return Snapshot(time, shots, kills);
 }
 
 std::vector<StOperator> ClientProtocol::getPlayers() {
@@ -275,7 +295,11 @@ std::vector<StOperator> ClientProtocol::getPlayers() {
 
         uint8_t health;
         recvAll(&health, 1);
-        vector.push_back(StOperator(idPlayer, type, state, {x, y}, health));
+
+        uint8_t munition;
+        recvAll(&munition, 1);
+
+        vector.push_back(StOperator(idPlayer, type, state, {x, y}, health, munition));
     }
 
     return vector;
@@ -364,6 +388,50 @@ std::vector<EnemyDto> ClientProtocol::getEnemies() {
     return vector;
 }
 
+std::vector<ObstacleDto> ClientProtocol::getObstacles() {
+    uint8_t count;
+    recvAll(&count, 1);
+
+    std::vector<ObstacleDto> vector;
+    uint8_t id;
+
+    uint8_t idType;
+    TypeObstacle type = TypeObstacle::obstacle_tire;
+
+    int16_t x;
+    int16_t y;
+
+    for (uint8_t i = 0; i < count; i++) {
+        recvAll(&id, 1);
+
+        recvAll(&idType, 1);
+        switch (idType) {
+
+        case OBSTACLE_TIRE:
+            type = TypeObstacle::obstacle_tire;
+            break;
+        
+        case OBSTACLE_CRATER:
+            type = TypeObstacle::obstacle_crater;
+            break;
+        
+        default:
+            break;
+        }
+
+        recvAll(&x, 2);
+        x = ntohs(x);
+        // std::cout << "X " << (int)x << std::endl;
+        recvAll(&y, 2);
+        y = ntohs(y);
+        // std::cout << "Y " << (int)y << std::endl;
+
+        vector.push_back(ObstacleDto(id, type, {x, y}));
+    }
+
+    return vector;
+}
+
 void ClientProtocol::sendEvent(const EventDTO& eventdto) {
     Event event = eventdto.getEvent();
 
@@ -418,8 +486,16 @@ Snapshot ClientProtocol::getSnapshot() {
         return getPlaying();
         break;
 
+    case END_CODE:
+        return getEnd();
+        break;
+
+    case STATS_CODE:
+        return getStats();
+        break;
+
     default:
         break;
     }
-    return Snapshot(Event::event_invalid, (uint8_t)0, 0, 0);
+    return Snapshot(Event::event_invalid);
 }
