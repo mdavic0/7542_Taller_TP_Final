@@ -1,5 +1,5 @@
 #ifndef COMMON_DEFINES_H_
-#define COMMONO_DEFINES_H_
+#define COMMON_DEFINES_H_
 
 #define PATH "assets/config/config.yaml"
 #define WINDOW_WIDTH 1024
@@ -58,5 +58,11 @@
 #define INFECTED_WITCH 0x02
 #define INFECTED_SPEAR 0x03
 #define INFECTED_VENOM 0x04
+
+// Server
+#define INITIAL_PLAYERS_AMOUNT 0x00
+#define INITIAL_PLAYER_ID 0x00
+#define INITIAL_INFECTED_ID 50
+#define INITIAL_OBSTACLE_ID 240
 
 #endif

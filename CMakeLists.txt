@@ -67,6 +67,7 @@ include_directories(${PROJECT_SOURCE_DIR}/Server/src/GameWorld/Collision)
 include_directories(${PROJECT_SOURCE_DIR}/Server/src/GameWorld/Infected)
 include_directories(${PROJECT_SOURCE_DIR}/Server/src/GameWorld/Obstacle)
 include_directories(${PROJECT_SOURCE_DIR}/Server/src/GameWorld/Player)
+include_directories(${PROJECT_SOURCE_DIR}/Server/src/GameWorld/RespawnController)
 include_directories(${PROJECT_SOURCE_DIR}/Server/src/GameWorld/Weapon)
 
 
