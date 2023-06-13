@@ -3,6 +3,7 @@
 
 #include "RendererSdl.h"
 #include "TextureSdl.h"
+#include "WindowSdl.h"
 #include <map>
 #include <string>
 #include <memory>
@@ -11,10 +12,11 @@ class MapSdl {
     private:
         uint8_t mapId;
         Renderer& renderMap;
+        WindowSdl& windowMap;
         std::map<std::string, std::shared_ptr<Texture>> textures;
         void chargeTexture(Renderer& renderer);
     public:
-        MapSdl(uint8_t id, Renderer& renderer);
+        MapSdl(uint8_t id, Renderer& renderer, WindowSdl& window);
         ~MapSdl();
         void render();
 };

@@ -3,6 +3,8 @@
 #include <QVBoxLayout>
 #include <QGroupBox>
 #include <QFile>
+#include <QIntValidator>
+#include <QMessageBox>
 
 JoinView::JoinView(QWidget* parent) : QWidget(parent),
 	codeGame("Codigo de la partida", this), lineCode(this),
@@ -107,8 +109,17 @@ void JoinView::viewScout() {
 }
 
 void JoinView::onJoinClicked() {
-    Q_EMIT joinClicked(this->lineCode.text().toInt(),
+	bool isNumber;
+	QString number = lineCode.text();
+	number.toInt(&isNumber);
+	if (isNumber)
+    	Q_EMIT joinClicked(this->lineCode.text().toInt(),
 						this->operatorSelect.checkedId());
+	else
+		QMessageBox::information(this, "Error", 
+                    "Ingrese un codigo valido",
+                    QMessageBox::Close);
+	lineCode.clear();
 }
 
 void JoinView::onBackClicked() {

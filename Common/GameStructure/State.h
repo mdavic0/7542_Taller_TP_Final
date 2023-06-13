@@ -10,6 +10,7 @@ enum class State : uint8_t {
     injure = 0x03,
     hability = 0x04,
     recharge = 0x05,
+    dead = 0x06
 };
 
 #endif

@@ -2,9 +2,10 @@
 #include "Defines.h"
 #include <iostream>
 
-Operator::Operator(uint8_t id, TypeOperator op, Renderer& renderer) : id(id), operatorId(op),
-    position({0, 0}), renderPlayer(renderer), stateOperator(State::idle),
-    numFrames(0), flipType(SDL_FLIP_NONE), health(0) {
+Operator::Operator(uint8_t id, TypeOperator op, Renderer& renderer) : id(id),
+    operatorId(op), position({0, 0}), renderPlayer(renderer),
+    stateOperator(State::idle), numFrames(0), flipType(SDL_FLIP_NONE),
+    health(0), animationDeadFinish(false) {
     this->chargeTexture(renderer);
     this->setState(State::idle);
 }
@@ -78,6 +79,8 @@ void Operator::chargeTexture(Renderer& renderer) {
                                                 path + "/Recharge.png", false);
     textures["Grenade"] = std::make_unique<Texture>(renderer,
                                                 path + "/Grenade.png", false);
+    textures["Dead"] = std::make_unique<Texture>(renderer,
+                                                path + "/Dead.png", false);
 }
 
 void Operator::setState(State state) {
@@ -97,6 +100,8 @@ int Operator::setNumFrames(State state) {
             return this->textures["Recharge"]->frames();
         case State::hability:
             return this->textures["Grenade"]->frames();
+        case State::dead:
+            return this->textures["Dead"]->frames();
         default:
             return 0;
     }
@@ -119,6 +124,9 @@ void Operator::render() {
         case State::hability:
             renderAnimation(100, textures["Grenade"]->getTexture());
             break;
+        case State::dead:
+            renderDead(100, textures["Dead"]->getTexture());
+            break;
         default:
             break;
     }
@@ -126,7 +134,27 @@ void Operator::render() {
 
 void Operator::renderAnimation(int speed, SDL_Texture* texture) {
     int speedAnimation = static_cast<int>((SDL_GetTicks() / speed) % numFrames);
-    SDL_Rect rectInit = {   (speedAnimation * (SIZE_FRAME)),
+    SDL_Rect rectInit = {   speedAnimation * SIZE_FRAME,
+                            0,
+                            SIZE_FRAME,
+                            SIZE_FRAME};
+    SDL_Rect rectFinal = {  position.first,
+                            position.second,
+                            SIZE_FRAME,
+                            SIZE_FRAME};
+    this->renderPlayer.copy(texture, rectInit, rectFinal, this->flipType);
+}
+
+void Operator::renderDead(int speed, SDL_Texture* texture) {
+    int speedAnimation;
+    if (!animationDeadFinish) {
+        speedAnimation = static_cast<int>((SDL_GetTicks() / speed) % numFrames);
+        if (speedAnimation == (numFrames - 1))
+            animationDeadFinish = true;
+    } else {
+        speedAnimation = numFrames - 1;
+    }
+    SDL_Rect rectInit = {   speedAnimation * SIZE_FRAME,
                             0,
                             SIZE_FRAME,
                             SIZE_FRAME};
