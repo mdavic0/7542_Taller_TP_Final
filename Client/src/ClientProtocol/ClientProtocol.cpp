@@ -199,7 +199,10 @@ Snapshot ClientProtocol::getStart () {
 }
 
 Snapshot ClientProtocol::getPlaying () {
-    return Snapshot(getPlayers(), getEnemies());
+    std::vector<StOperator> players = getPlayers();
+    std::vector<EnemyDto> enemies = getEnemies();
+
+    return Snapshot(players, enemies);
 }
 
 Snapshot ClientProtocol::getEnd() {

@@ -92,9 +92,8 @@ void GameDrawner::run() {
         
         if (game) {
             // mandar configuarcion una sola vez
-            if (menu == CREATE_MENU)
-                snap = snapshot_queue.pop();
-            std::cout << "inicio juego\n";
+            //if (menu == CREATE_MENU)
+            //    snap = snapshot_queue.pop();
             players.clear();
             for (auto &player : snap->getInfo()) {
                 players[player.getId()] = std::make_shared<Operator>(player.getId(), 
@@ -105,7 +104,6 @@ void GameDrawner::run() {
                 enemies[infected.getId()] = std::make_shared<Enemy>(render,
                                             infected.getTypeInfected());
             }
-            std::cout << "cargo juego\n";
 
             uint8_t idMap = snap->getMap();
             TypeGame mode = snap->getTypeGame();
@@ -114,7 +112,6 @@ void GameDrawner::run() {
                             endGame, players, idPlayer, idMap, mode, font,
                             enemies);
             
-            std::cout << "cargo game\n";
             while (gameSdl.isRunning()) {
                 uint32_t frameInit = SDL_GetTicks();
 
