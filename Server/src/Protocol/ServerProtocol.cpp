@@ -445,20 +445,20 @@ EventDTO ServerProtocol::getEvent() {
     return EventDTO(Event::event_invalid, 0);
 }
 
-void ServerProtocol::sendSnapshot(const Snapshot &snapshot) {
-    Event event = snapshot.getEvent();
+void ServerProtocol::sendSnapshot(std::shared_ptr<Snapshot>& snapshot) {
+    Event event = snapshot->getEvent();
     if (event == Event::event_create) {
-        sendCreate(snapshot.getCode(), snapshot.getIdPlayer());
+        sendCreate(snapshot->getCode(), snapshot->getIdPlayer());
     } else if (event == Event::event_join) {
-        sendJoin(snapshot.getOk(), snapshot.getIdPlayer(), snapshot.getSize());
+        sendJoin(snapshot->getOk(), snapshot->getIdPlayer(), snapshot->getSize());
     } else if (event == Event::event_start_game) {
-        sendStart(snapshot.getInfo(), snapshot.getEnemies(), snapshot.getObstacles(), snapshot.getTypeGame(), snapshot.getMap());
+        sendStart(snapshot->getInfo(), snapshot->getEnemies(), snapshot->getObstacles(), snapshot->getTypeGame(), snapshot->getMap());
     } else if (event == Event::event_playing) {
-        sendPlaying(snapshot.getInfo(), snapshot.getEnemies());
+        sendPlaying(snapshot->getInfo(), snapshot->getEnemies());
     } else if (event == Event::event_end) {
         sendEnd();
     } else if (event == Event::event_stats) {
-        sendStats(snapshot.getTime(), snapshot.getShots(), snapshot.getKills());
+        sendStats(snapshot->getTime(), snapshot->getShots(), snapshot->getKills());
     }
 }
 

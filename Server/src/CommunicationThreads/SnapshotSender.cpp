@@ -9,7 +9,7 @@ void SnapshotSender::run() {
     while (talking) {
         try {
             std::shared_ptr<Snapshot> response = snapshot_queue.pop();
-            protocol.sendSnapshot(*response);
+            protocol.sendSnapshot(response);
             // delete response;
         } catch (const ClosedQueue&) {
             break;

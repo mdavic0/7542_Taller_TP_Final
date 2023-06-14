@@ -3,6 +3,7 @@
 
 #include <string>
 #include <sstream>
+#include <memory>
 #include "Protocol.h"
 #include "EventDTO.h"
 #include "Snapshot.h"
@@ -52,8 +53,7 @@ class ServerProtocol : Protocol {
 
         EventDTO getEvent();
 
-        void sendSnapshot(
-            const Snapshot &snapshot);
+        void sendSnapshot(std::shared_ptr<Snapshot>& snapshot);
 
         /*
          * No queremos permitir que alguien haga copias
