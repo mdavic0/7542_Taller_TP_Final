@@ -22,7 +22,7 @@ void MapSdl::render(SDL_Rect camera) {
     for (int i = 0; i < repet; ++i ) {
         int xPos = i * window.getWidth() - offsetX;
         rectFinal.x = xPos;
-        this->renderMap.copyFont(textures["ruins"]->getTexture(), rectFinal);
+        this->renderMap.copy(textures["ruins"]->getTexture(), rectInit, rectFinal);
         this->renderMap.copy(textures["house3"]->getTexture(), rectInit, rectFinal);
         this->renderMap.copy(textures["house2"]->getTexture(), rectInit, rectFinal);
         this->renderMap.copy(textures["house1"]->getTexture(), rectInit, rectFinal);

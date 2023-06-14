@@ -92,8 +92,8 @@ void GameDrawner::run() {
         
         if (game) {
             // mandar configuarcion una sola vez
-            //if (menu == CREATE_MENU)
-            //    snap = snapshot_queue.pop();
+            if (menu == CREATE_MENU)
+               snap = snapshot_queue.pop();
             players.clear();
             for (auto &player : snap->getInfo()) {
                 players[player.getId()] = std::make_shared<Operator>(player.getId(), 
