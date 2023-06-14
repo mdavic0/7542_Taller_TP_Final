@@ -2,24 +2,33 @@
 #include "Defines.h"
 
 MapSdl::MapSdl(uint8_t id, Renderer& renderer, WindowSdl& window) : mapId(id),
-    renderMap(renderer), windowMap(window), textures({}) {
+    renderMap(renderer), window(window), textures({}), repetitions(0) {
     this->chargeTexture(renderer);
+    // repetitions =  WINDOW_WIDTH / window.getWidth() + 1;
 }
 
 MapSdl::~MapSdl() {
 }
 
 void MapSdl::render(SDL_Rect camera) {
-    SDL_Rect rectInit = camera;
-    SDL_Rect rectFinal = {0,0, windowMap.getWidth(), windowMap.getHeight()};
+
+    SDL_Rect rectInit =  {0, 0, camera.w, camera.h};
+    SDL_Rect rectFinal = {0, 0, window.getWidth(), window.getHeight()};
     this->renderMap.copy(textures["sky"]->getTexture(), rectInit, rectFinal);
-    this->renderMap.copy(textures["sun"]->getTexture(), rectInit, rectFinal);
-    this->renderMap.copy(textures["ruins"]->getTexture(), rectInit, rectFinal);
-    this->renderMap.copy(textures["house3"]->getTexture(), rectInit, rectFinal);
-    this->renderMap.copy(textures["house2"]->getTexture(), rectInit, rectFinal);
-    this->renderMap.copy(textures["house1"]->getTexture(), rectInit, rectFinal);
-    this->renderMap.copy(textures["fence"]->getTexture(), rectInit,rectFinal);
-    this->renderMap.copy(textures["road"]->getTexture(), rectInit, rectFinal);
+    this->renderMap.copy(textures["sun"]->getTexture(), rectInit, rectFinal); 
+
+    int offsetX = camera.x % window.getWidth(); 
+    int repet = WINDOW_WIDTH / 1920;
+    for (int i = 0; i < repet; ++i ) {
+        int xPos = i * window.getWidth() - offsetX;
+        rectFinal.x = xPos;
+        this->renderMap.copyFont(textures["ruins"]->getTexture(), rectFinal);
+        this->renderMap.copy(textures["house3"]->getTexture(), rectInit, rectFinal);
+        this->renderMap.copy(textures["house2"]->getTexture(), rectInit, rectFinal);
+        this->renderMap.copy(textures["house1"]->getTexture(), rectInit, rectFinal);
+        this->renderMap.copy(textures["fence"]->getTexture(), rectInit, rectFinal);
+        this->renderMap.copy(textures["road"]->getTexture(), rectInit, rectFinal);
+    }
 }
 
 void MapSdl::chargeTexture(Renderer& renderer) {
