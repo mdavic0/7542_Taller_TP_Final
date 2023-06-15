@@ -5,6 +5,7 @@
 #include "TypeGame.h"
 #include "RendererSdl.h"
 #include "TextureSdl.h"
+#include "WindowSdl.h"
 #include "Font.h"
 #include <map>
 #include <memory>
@@ -19,6 +20,7 @@ class Hud {
         uint8_t munitionInit;
         Font& fontHud;
         uint8_t enemiesDeath;
+        WindowSdl& window;
         void loadTextures();
         void renderBg();
         void renderHealthBar();
@@ -31,7 +33,7 @@ class Hud {
         void renderTextMode(size_t size);
 
     public:
-        Hud(TypeOperator type, TypeGame game, Renderer& render, Font& font);
+        Hud(TypeOperator type, TypeGame game, Renderer& render, Font& font, WindowSdl& window);
         ~Hud();
         void render(uint8_t healthPlayer, int numBullet, size_t size);
 };

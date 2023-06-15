@@ -47,3 +47,17 @@ int WindowSdl::getWidth() {
     SDL_GetWindowSize(this->window, &w, nullptr);
     return w;
 }
+
+void WindowSdl::adjustedRect(SDL_Rect& rect, int w, int h) {
+    int width = getWidth();
+    int height = getHeight();
+    float scaleX = static_cast<float>(width / rect.w);
+    float scaleY = static_cast<float>(height / rect.h);
+
+    // int scale = std::min(scaleX, scaleY);
+
+    rect.x = static_cast<int>(rect.x * scaleX);
+    rect.y = static_cast<int>(rect.y * scaleY);
+    rect.w = static_cast<int>(rect.w * scaleX);
+    // rect.h = static_cast<int>(scaleY * rect.h);
+}

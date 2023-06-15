@@ -428,7 +428,7 @@ std::vector<ObstacleDto> ClientProtocol::getObstacles() {
         recvAll(&y, 2);
         y = ntohs(y);
         // std::cout << "Y " << (int)y << std::endl;
-
+        std::cout << "x: " << x << " y: " << y << std::endl; 
         vector.push_back(ObstacleDto(id, type, {x, y}));
     }
 

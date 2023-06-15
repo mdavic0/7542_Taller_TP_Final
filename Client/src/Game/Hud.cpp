@@ -2,9 +2,10 @@
 #include "Configuration.h"
 #include <iostream>
 
-Hud::Hud(TypeOperator type, TypeGame game, Renderer& render, Font& font) :
-    type(type), gameType(game), renderHud(render), healthInit(0),
-    munitionInit(0), enemiesDeath(0), fontHud(font) {
+Hud::Hud(TypeOperator type, TypeGame game, Renderer& render, Font& font,
+    WindowSdl& window) : type(type), gameType(game), renderHud(render),
+    healthInit(0), munitionInit(0), enemiesDeath(0), fontHud(font),
+    window(window) {
     this->loadTextures();
     switch (type) {
         case TypeOperator::operator_idf:
@@ -66,6 +67,8 @@ void Hud::render(uint8_t healthPlayer, int numBullet, size_t size) {
 void Hud::renderBg() {
     SDL_Rect rectInit = { 0, 0, 512, 256};
     SDL_Rect rectFinal = { 0, 0, 512 * 9 / 5, 256};
+    // window.adjustedRect(rectInit, 512, 256);
+    // window.adjustedRect(rectFinal, 512, 256);
     this->renderHud.copy(texturesHud["healthbg1"]->getTexture(), rectInit,
                         rectFinal);
     this->renderHud.copy(texturesHud["healthbg2"]->getTexture(), rectInit,
@@ -92,9 +95,7 @@ void Hud::renderHealthIcon() {
 
 void Hud::renderHealthFill(uint8_t healthPlayer) {
     SDL_Rect rectInit = { 0, 0, 448, 64};
-    SDL_Rect rectFinal = { 68, 65,
-                            448 * healthPlayer / healthInit,
-                            64};
+    SDL_Rect rectFinal = { 68, 65, 448 * healthPlayer / healthInit, 64};
     this->renderHud.copy(texturesHud["bar-fill"]->getTexture(), rectInit,
                         rectFinal);
 }
