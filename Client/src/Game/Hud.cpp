@@ -83,8 +83,8 @@ void Hud::renderHealthIcon() {
 }
 
 void Hud::renderHealthFill(uint8_t healthPlayer) {
-    SDL_Rect rectInit = { 0, 0, 410, 21};
-    SDL_Rect rectFinal = { 83, 81, 410 * healthPlayer / healthInit, 25};
+    SDL_Rect rectInit = { 0, 0, 410 * healthPlayer / healthInit, 21};
+    SDL_Rect rectFinal = { 82, 84, 412 * healthPlayer / healthInit, 25};
     window.adjustedRect(rectFinal, 448, 64);
     this->renderHud.copy(texturesHud["bar-fill"]->getTexture(), rectInit,
                         rectFinal);
