@@ -41,7 +41,7 @@ class Player {
         TypeOperator& getTypeOperator();
         State& getState();
 
-        uint8_t& getHealth();
+        int8_t& getHealth();
         uint8_t& getMunition();
         std::shared_ptr<Collidable>& getCollidable();
         void applyDamage(const int& amount);

@@ -32,8 +32,8 @@ void GameDrawner::run() {
         WindowSdl window(   "Left 4 Dead",
                             SDL_WINDOWPOS_CENTERED,
                             SDL_WINDOWPOS_CENTERED,
-                            WINDOW_HEIGTH,
-                            WINDOW_WIDTH,
+                            1024,
+                            768,
                             SDL_WINDOW_RESIZABLE);
 
         Renderer render(window, -1, SDL_RENDERER_ACCELERATED);
