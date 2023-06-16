@@ -5,7 +5,7 @@
 Operator::Operator(uint8_t id, TypeOperator op, Renderer& renderer) : id(id),
     operatorId(op), position({0, 0}), renderPlayer(renderer),
     stateOperator(State::idle), numFrames(0), flipType(SDL_FLIP_NONE),
-    health(0), animationDeadFinish(false) {
+    health(0), animationDeadFinish(false), munition(0) {
     this->chargeTexture(renderer);
     this->setState(State::idle);
 }
@@ -40,7 +40,7 @@ void Operator::updateMove(MoveTo direction) {
 }
 
 void Operator::update(std::pair<int16_t, int16_t> pos, State state,
-    int health) {
+    int health, uint8_t munition) {
     this->setState(state);
     if (pos.first < position.first)
         this->flipType = SDL_FLIP_HORIZONTAL;
@@ -70,6 +70,10 @@ int16_t Operator::getPosY() {
     return this->position.second;
 }
 
+uint8_t Operator::getMunition() {
+    return this->munition;
+}
+
 bool Operator::isDead() {
     return stateOperator == State::dead; 
 }
@@ -84,6 +88,7 @@ void Operator::chargeTexture(Renderer& renderer) {
     textures["Idle"] = std::make_unique<Texture>(renderer, path + "/Idle.png");
     textures["Run"] = std::make_unique<Texture>(renderer, path + "/Run.png");
     textures["Shot"] = std::make_unique<Texture>(renderer, path + "/Shot_1.png");
+    textures["Hurt"] = std::make_unique<Texture>(renderer, path + "/Hurt.png");
     textures["Recharge"] = std::make_unique<Texture>(renderer, path + "/Recharge.png");
     textures["Grenade"] = std::make_unique<Texture>(renderer, path + "/Grenade.png");
     textures["Dead"] = std::make_unique<Texture>(renderer, path + "/Dead.png");
@@ -102,6 +107,8 @@ int Operator::setNumFrames(State state) {
             return this->textures["Run"]->frames();
         case State::atack:
             return this->textures["Shot"]->frames();
+        case State::injure:
+            return this->textures["Hurt"]->frames();
         case State::recharge:
             return this->textures["Recharge"]->frames();
         case State::hability:
@@ -123,6 +130,9 @@ void Operator::render(SDL_Rect camera) {
             break;
         case State::atack:
             renderAnimation(100, textures["Shot"]->getTexture(), camera);
+            break;
+        case State::injure:
+            renderAnimation(100, textures["Hurt"]->getTexture(), camera);
             break;
         case State::recharge:
             renderAnimation(100, textures["Recharge"]->getTexture(), camera);
