@@ -1,5 +1,6 @@
 #include "GameSdl.h"
 #include "Defines.h"
+#include "Operator.h"
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -10,12 +11,14 @@ GameSdl::GameSdl(WindowSdl& window, Renderer& renderer,
     Queue<std::shared_ptr<EventDTO>>& eventQueue,
     bool& endGame, std::map<uint8_t, std::shared_ptr<Operator>>& soldiers,
     uint8_t idPlayer, uint8_t idMap, TypeGame mode, Font& font,
-    std::map<uint8_t, std::shared_ptr<Enemy>>& enemies) :
+    std::map<uint8_t, std::shared_ptr<Enemy>>& enemies,
+    std::map<uint8_t, std::shared_ptr<Obstacles>>& obstacles) :
     window(window), renderer(renderer), snapshotQueue(snapshotQueue),
     eventQueue(eventQueue), endGame(endGame), events(eventQueue, idPlayer),
     map(idMap, this->renderer, this->window), soldiers(soldiers),
-    hud(soldiers[idPlayer]->getType(), mode, renderer, font),
-    idPlayer(idPlayer), mode(mode), font(font), enemies(enemies) {
+    hud(soldiers[idPlayer]->getType(), mode, renderer, font, window),
+    idPlayer(idPlayer), mode(mode), font(font), enemies(enemies),
+    camera(window), obstacles(obstacles) {
 }
 
 bool GameSdl::isRunning() {
@@ -23,7 +26,11 @@ bool GameSdl::isRunning() {
 }
 
 void GameSdl::render() {
-    this->map.render();
+    this->map.render(camera.getRect());
+    
+    for (const auto &obstacle: obstacles)
+        obstacle.second->render(camera.getRect());
+
     this->hud.render(soldiers[idPlayer]->getHealth(), 0, enemies.size());
     std::vector<std::pair<uint8_t,std::shared_ptr<Operator>>> vec(
         soldiers.begin(), soldiers.end());
@@ -31,12 +38,13 @@ void GameSdl::render() {
         return a.second->getPosY() < b.second->getPosY();
     });
     for (const auto &soldier : vec)
-        soldier.second->render();
+        soldier.second->render(camera.getRect());
     for (const auto &enemy : enemies)
-        enemy.second->render();
+        enemy.second->render(camera.getRect());
 }
 
 void GameSdl::update() {
+    camera.update(soldiers[idPlayer]->getPosition());
     std::shared_ptr<Snapshot> snap = snapshotQueue.pop();
     for (auto &player : snap->getInfo()) {
         soldiers[player.getId()]->update(player.getPosition(),

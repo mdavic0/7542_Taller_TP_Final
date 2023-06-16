@@ -2,13 +2,13 @@
 #include "Defines.h"
 #include "SdlException.h"
 
-Texture::Texture(Renderer& renderer, const std::string& file, bool resize) :
-    textureRender(renderer), texture(nullptr) {
-    this->loadTexture(file, resize);    
+Texture::Texture(Renderer& renderer, const std::string& file) :
+    texture(nullptr) {
+    this->loadTexture(file, renderer);    
 }
 
 Texture::Texture(Renderer& renderer, SDL_Surface* surface) :
-    textureRender(renderer), texture(nullptr) {
+    texture(nullptr) {
     this->texture = SDL_CreateTextureFromSurface(renderer.get(), surface);
     if (!texture)
         throw SdlException("Failed to create texture font");
@@ -16,7 +16,7 @@ Texture::Texture(Renderer& renderer, SDL_Surface* surface) :
 }
 
 Texture::Texture(Renderer& renderer, const std::string& file, SDL_Color c) :
-    textureRender(renderer), texture(nullptr) {
+    texture(nullptr) {
     this->freeTexture();
     SDL_Surface* surface = IMG_Load(file.c_str());
     if (!surface)
@@ -25,7 +25,7 @@ Texture::Texture(Renderer& renderer, const std::string& file, SDL_Color c) :
         throw SdlException("Failed set Alpha texture ");
     if (SDL_SetSurfaceColorMod(surface, c.r, c.g, c.b) != 0)
         throw SdlException("Failed set color ");
-    this->texture = SDL_CreateTextureFromSurface(textureRender.get(), surface);
+    this->texture = SDL_CreateTextureFromSurface(renderer.get(), surface);
     if (!texture)
         throw SdlException("Error create texture");
     if (SDL_SetTextureAlphaMod(this->texture, c.a) != 0)
@@ -33,32 +33,15 @@ Texture::Texture(Renderer& renderer, const std::string& file, SDL_Color c) :
     SDL_FreeSurface(surface);
 }
 
-void Texture::loadTexture(const std::string& file, bool resize) {
+void Texture::loadTexture(const std::string& file, Renderer& render) {
     this->freeTexture();
     SDL_Surface* surface = IMG_Load(file.c_str());
     if (!surface)
         throw SdlException("Error charge text");
-    SDL_Surface* resized = nullptr;
-    if (resize) {
-        resized = SDL_CreateRGBSurface(0, WINDOW_WIDTH, WINDOW_HEIGTH,
-                                                surface->format->BitsPerPixel,
-                                                surface->format->Rmask,
-                                                surface->format->Gmask,
-                                                surface->format->Bmask,
-                                                surface->format->Amask);
-        SDL_BlitScaled(surface, nullptr, resized, nullptr);
-    }
-
-    SDL_Renderer* render = this->textureRender.get();
-    if (resize)
-        this->texture = SDL_CreateTextureFromSurface(render, resized);
-    else
-        this->texture = SDL_CreateTextureFromSurface(render, surface);
+    this->texture = SDL_CreateTextureFromSurface(render.get(), surface);
     if (!texture)
         throw SdlException("Error create texture");
     SDL_FreeSurface(surface);
-    if (resize)
-        SDL_FreeSurface(resized);
 }
 
 int Texture::frames() {
@@ -77,6 +60,20 @@ void Texture::freeTexture() {
         SDL_DestroyTexture(this->texture);
         this->texture= nullptr;
     }
+}
+
+Texture::Texture(Texture&& other) noexcept : texture(other.texture) {
+    other.texture = nullptr;
+}
+
+Texture& Texture::operator=(Texture&& other) noexcept {
+    if (&other == this)
+        return *this;
+    if (texture != nullptr)
+        SDL_DestroyTexture(texture);
+    texture = other.texture;
+    other.texture = nullptr;
+    return *this;
 }
 
 Texture::~Texture() {

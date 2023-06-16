@@ -40,9 +40,12 @@ class Player {
         std::pair<int16_t, int16_t>& getPosition();
         TypeOperator& getTypeOperator();
         State& getState();
-        int8_t& getHealth();
+
+        uint8_t& getHealth();
+        uint8_t& getMunition();
         std::shared_ptr<Collidable>& getCollidable();
         void applyDamage(const int& amount);
+
         virtual ~Player() = default;
     private:
         void move(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables);

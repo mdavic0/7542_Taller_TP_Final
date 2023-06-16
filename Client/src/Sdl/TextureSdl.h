@@ -9,15 +9,18 @@
 
 class Texture {
     private:
-        Renderer& textureRender;
         SDL_Texture* texture;
-        void loadTexture(const std::string& file, bool resize);
+        void loadTexture(const std::string& file, Renderer& render);
         void freeTexture();
     public:
-        Texture(Renderer& renderer, const std::string& file, bool resize);
+        Texture(Renderer& renderer, const std::string& file);
         Texture(Renderer& renderer, const std::string& file, SDL_Color c);
         Texture(Renderer& renderer, SDL_Surface* surface);
         ~Texture();
+        Texture(Texture&& other) noexcept;
+        Texture& operator=(Texture&& other) noexcept;
+        Texture(const Texture& other) = delete;
+        Texture& operator=(const Texture& other) = delete;
         SDL_Texture* getTexture();
         int frames();
 };

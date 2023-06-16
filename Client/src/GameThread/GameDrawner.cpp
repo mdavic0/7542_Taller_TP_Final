@@ -11,6 +11,7 @@
 #include "Font.h"
 #include "Operator.h"
 #include "Enemy.h"
+#include "Obstacles.h"
 #include <map>
 
 GameDrawner::GameDrawner(Queue<std::shared_ptr<Snapshot>> &snapshot_queue,
@@ -49,6 +50,7 @@ void GameDrawner::run() {
         std::shared_ptr<Snapshot> snap = nullptr;
         std::map<uint8_t, std::shared_ptr<Operator>> players;    
         std::map<uint8_t, std::shared_ptr<Enemy>> enemies;    
+        std::map<uint8_t, std::shared_ptr<Obstacles>> obstacles;    
 
         while(noReady)  {
             render.clear();
@@ -93,7 +95,7 @@ void GameDrawner::run() {
         if (game) {
             // mandar configuarcion una sola vez
             if (menu == CREATE_MENU)
-                snap = snapshot_queue.pop();
+               snap = snapshot_queue.pop();
             players.clear();
             for (auto &player : snap->getInfo()) {
                 players[player.getId()] = std::make_shared<Operator>(player.getId(), 
@@ -105,13 +107,23 @@ void GameDrawner::run() {
                                             infected.getTypeInfected());
             }
 
+            obstacles.clear();
+            for (auto &obstacle : snap->getObstacles()) {
+                obstacles[obstacle.getId()] =
+                    std::make_shared<Obstacles>(obstacle.getTypeObstacle(), render,
+                                                obstacle.getPosition());
+                    std::cout << "obstacle: " << (int)obstacle.getTypeObstacle() << std::endl;
+                    std::cout << "obstacle position x: " << (int)obstacle.getPosition().first << std::endl;
+                    std::cout << "obstacle position y: " << (int)obstacle.getPosition().second << std::endl;
+            }
+
             uint8_t idMap = snap->getMap();
             TypeGame mode = snap->getTypeGame();
             
             GameSdl gameSdl(window, render, snapshot_queue, client_events,
                             endGame, players, idPlayer, idMap, mode, font,
-                            enemies);
-
+                            enemies, obstacles);
+            
             while (gameSdl.isRunning()) {
                 uint32_t frameInit = SDL_GetTicks();
 

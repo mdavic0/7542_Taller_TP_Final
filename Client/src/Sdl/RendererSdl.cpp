@@ -43,6 +43,11 @@ void Renderer::copy(SDL_Texture* texture, SDL_Rect& rectInit,
         throw SdlException("Failed RenderCopy");
 }
 
+void Renderer::copyMap(SDL_Texture* texture, SDL_Rect& rectInit) {
+    if (SDL_RenderCopy(this->render, texture, &rectInit, nullptr) != 0)
+        throw SdlException("Failed RenderCopy");
+}
+
 void Renderer::copyFont(SDL_Texture* texture, SDL_Rect& rectFinal) {
     if (SDL_RenderCopy(this->render, texture, nullptr, &rectFinal) != 0)
         throw SdlException("Failed RenderCopy Font");

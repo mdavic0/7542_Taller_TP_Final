@@ -2,8 +2,8 @@
 #define COMMON_DEFINES_H_
 
 #define PATH "assets/config/config.yaml"
-#define WINDOW_WIDTH 1024
-#define WINDOW_HEIGTH 768
+#define WINDOW_WIDTH 1920 * 2
+#define WINDOW_HEIGTH 1080
 
 #define FRAME_RATE 60
 #define SIZE_QUEUE 256
@@ -33,6 +33,8 @@
 #define SHOOT_CODE 0x12
 #define STOP_SHOOT_CODE 0x13
 #define LEAVE_CODE 0x14
+#define END_CODE 0x15
+#define STATS_CODE 0x16
 
 #define IDF_CODE 0x01
 #define P90_CODE 0x02
@@ -64,6 +66,11 @@
 #define INITIAL_PLAYER_ID 0x00
 #define INITIAL_INFECTED_ID 50
 #define INITIAL_OBSTACLE_ID 240
+
+#define OBSTACLE_TIRE 0x00
+#define OBSTACLE_CRATER 0x01
+
 #define CLOSE_DISTANCE 50
+
 
 #endif

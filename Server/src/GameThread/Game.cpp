@@ -47,7 +47,6 @@ Queue<std::shared_ptr<EventDTO>>* Game::joinGame(Queue<std::shared_ptr<Snapshot>
         std::lock_guard<std::mutex> locker(mutex);
         uint8_t idPlayer = gameWorld.addPlayer(op);
         client_snapshot_queues.insert({idPlayer, q});
-        std::cout << (int)idPlayer << std::endl;
         // Notify all clients that a new player joined
         for (auto &clientQueue : client_snapshot_queues) {
             clientQueue.second->push(std::make_shared<Snapshot>(Event::event_join,
@@ -86,7 +85,7 @@ void Game::gameLoop() {
         // para poder lanzar una grandada, que los jugadores se muevan,
         // todos los eventos que tienen que ver con el tiempo.
 
-        std::shared_ptr<Snapshot> snapshot = gameWorld.getSnapshot(true);
+        std::shared_ptr<Snapshot> snapshot = gameWorld.getSnapshot(false);
         // broadcastSnapshot() # acá recien se agarra el snapshot y se lo pushea
         // a los hilos sender. Un snapshot por gameloop. Si hacen uno por evento,
         // saturan la red sin sentido
@@ -97,6 +96,11 @@ void Game::gameLoop() {
         int t_delta = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
         // duration<double>(t_delta)
         std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 20 - t_delta));
+        
+        if(gameWorld.isEnded()){
+            broadcastSnapshot(gameWorld.getStats());
+            stop();
+        }
     }
 }
 
@@ -113,11 +117,9 @@ void Game::processEvents() {
                                                   event->getMoveTo());
             } else if (event->getEvent() == Event::event_shoot
                         or event->getEvent() == Event::event_stop_shoot) {
-                std::cout << "Llego un disparo\n";
                 gameWorld.updateShootingState(event->getEvent(),
                                               event->getIdPlayer());
             } else if (event->getEvent() == Event::event_leave) {
-                std::cout << "se desconecto cliente\n";
                 std::lock_guard<std::mutex> l(mutex);
                 gameWorld.deletePlayer(event->getIdPlayer());
                 client_snapshot_queues.erase(event->getIdPlayer());

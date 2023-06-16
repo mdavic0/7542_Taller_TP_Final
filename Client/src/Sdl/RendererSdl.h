@@ -19,6 +19,7 @@ class Renderer {
         void present();
         void copy(SDL_Texture* texture, SDL_Rect& rectInit, 
                     SDL_Rect& rectFinal);
+        void copyMap(SDL_Texture* texture, SDL_Rect& rectInit);
         void copyFont(SDL_Texture* texture, SDL_Rect& rectFinal);
         void copy(SDL_Texture* texture, SDL_Rect& rectInit, 
                     SDL_Rect& rectFinal, const SDL_RendererFlip& flipType);
