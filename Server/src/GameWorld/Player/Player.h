@@ -11,11 +11,14 @@
 #include "Collidable.h"
 #include "Infected.h"
 
+class Infected;
+class Weapon;
+
 class Player {
     private:
         TypeOperator typeOperator;
         State state;
-        uint8_t life;
+        int8_t life;
         uint8_t fell_down;
         std::pair<int16_t, int16_t> position;
         std::pair<int16_t, int16_t> movement_direction;
@@ -37,8 +40,12 @@ class Player {
         std::pair<int16_t, int16_t>& getPosition();
         TypeOperator& getTypeOperator();
         State& getState();
+
         uint8_t& getHealth();
         uint8_t& getMunition();
+        std::shared_ptr<Collidable>& getCollidable();
+        void applyDamage(const int& amount);
+
         virtual ~Player() = default;
     private:
         void move(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables);

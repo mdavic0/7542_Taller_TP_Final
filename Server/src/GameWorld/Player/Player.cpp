@@ -56,7 +56,8 @@ void Player::stopMovementDirection(MoveTo direction) {
         default:
             break;
     }
-    if (this->movement_direction.first == 0 and
+    if (this->state != State::injure and
+        this->movement_direction.first == 0 and
         this->movement_direction.second == 0) {
         this->state = State::idle;
     }
@@ -91,12 +92,16 @@ TypeOperator& Player::getTypeOperator() {
 State& Player::getState() {
     return this->state;
 }
-uint8_t& Player::getHealth() {
+int8_t& Player::getHealth() {
     return this->life;
 }
 
+
 uint8_t& Player::getMunition() {
     return weapon->getMunition();
+
+std::shared_ptr<Collidable> &Player::getCollidable() {
+    return this->collidable;
 }
 
 void Player::move(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables) {
@@ -114,4 +119,16 @@ void Player::move(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables) {
 
 void Player::shoot(std::map<uint8_t, std::shared_ptr<Infected>>& infecteds) {
     this->weapon->shoot(this->collidable, this->lookingRight, infecteds);
+}
+
+#include <iostream>
+void Player::applyDamage(const int &amount) {
+    this->life -= amount;
+    std::cout << "Soy un Player, Me la re dieron! Vida: " << std::to_string(life) << "\n";
+    if (this->life <= 0) {
+        std::cout << "UHH ME RE MATARON LPM!\n";
+        this->fell_down++;
+        this->movement_direction = {0, 0};
+        this->state = State::injure;
+    }
 }

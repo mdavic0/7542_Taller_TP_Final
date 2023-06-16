@@ -6,6 +6,8 @@
 #include <memory>
 #include "Infected.h"
 
+class Infected;
+
 class Weapon {
     private:
     uint8_t rate;
