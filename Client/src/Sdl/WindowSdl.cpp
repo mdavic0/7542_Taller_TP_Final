@@ -51,13 +51,21 @@ int WindowSdl::getWidth() {
 void WindowSdl::adjustedRect(SDL_Rect& rect, int w, int h) {
     int width = getWidth();
     int height = getHeight();
-    float scaleX = static_cast<float>(width / rect.w);
-    float scaleY = static_cast<float>(height / rect.h);
+    float aspectRatio = static_cast<float>(rect.w) / static_cast<float>(rect.h);
+    float scaleFactorX = static_cast<float>(width) / static_cast<float>(1440); // Resolucion a la que fue estandarizado
+    float scaleFactorY = static_cast<float>(height) / static_cast<float>(900); // Resolucion a la que fue estandarizado
 
-    // int scale = std::min(scaleX, scaleY);
+    int newWidth = static_cast<int>(rect.w * scaleFactorX); 
+    int newHeight = static_cast<int>(newWidth / aspectRatio);
+    int newX = static_cast<int>(rect.x * scaleFactorX);
+    int newY = static_cast<int>(rect.y * scaleFactorY);
 
-    rect.x = static_cast<int>(rect.x * scaleX);
-    rect.y = static_cast<int>(rect.y * scaleY);
-    rect.w = static_cast<int>(rect.w * scaleX);
-    // rect.h = static_cast<int>(scaleY * rect.h);
+    // int oX = static_cast<int>((newX + rect.x) / 2);
+    // int oY = static_cast<int>((newY + rect.y) / 2);
+
+    rect.x = newX;
+    rect.y = newY;
+    rect.w = newWidth;
+    rect.h = newHeight;
+
 }

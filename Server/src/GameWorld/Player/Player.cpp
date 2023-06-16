@@ -97,7 +97,6 @@ int8_t& Player::getHealth() {
     return this->life;
 }
 
-
 uint8_t& Player::getMunition() {
     return weapon->getMunition();
 }

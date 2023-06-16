@@ -31,7 +31,9 @@ void GameSdl::render() {
     for (const auto &obstacle: obstacles)
         obstacle.second->render(camera.getRect());
 
-    this->hud.render(soldiers[idPlayer]->getHealth(), 0, enemies.size());
+    this->hud.render(soldiers[idPlayer]->getHealth(),
+                    soldiers[idPlayer]->getMunition(),
+                    enemies.size());
     std::vector<std::pair<uint8_t,std::shared_ptr<Operator>>> vec(
         soldiers.begin(), soldiers.end());
     std::sort(vec.begin(), vec.end(), [](const auto& a, const auto&b) {
@@ -49,7 +51,8 @@ void GameSdl::update() {
     for (auto &player : snap->getInfo()) {
         soldiers[player.getId()]->update(player.getPosition(),
                                             player.getState(),
-                                            player.getHealth());
+                                            player.getHealth(),
+                                            player.getMunition());
     }
 
     // Si no se actualizaron todos significa que alguno se desconecto
