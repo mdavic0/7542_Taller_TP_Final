@@ -39,6 +39,10 @@ bool Collidable::isOnRight(std::shared_ptr<Collidable> &other) {
     return (topLeftCorner.first + width) < other->topLeftCorner.first;
 }
 
+bool Collidable::isDown(std::shared_ptr<Collidable> &other) {
+    return (topLeftCorner.second + height) < other->topLeftCorner.second;
+}
+
 bool Collidable::overlapVerticalAxis(std::shared_ptr<Collidable> &other) {
     if (this->topLeftCorner.second < other->topLeftCorner.second + other->height &&
         this->topLeftCorner.second + this->height > other->topLeftCorner.second) {

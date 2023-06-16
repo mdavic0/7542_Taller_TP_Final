@@ -7,7 +7,7 @@ Infected::Infected(TypeInfected typeInfected, uint8_t id, uint8_t life, uint8_t 
                    std::shared_ptr<Collidable> collidable) : typeInfected(typeInfected), id(id), life(life),
                    velocity(velocity), damage(damage), state(State::idle),
                    position(position), movement_direction(0,0),
-                   collidable(std::move(collidable)), alive(true) {}
+                   collidable(std::move(collidable)), alive(true), target(nullptr) {}
 
 void Infected::setMovementDirection(MoveTo direction) {
     switch (direction) {
@@ -69,18 +69,21 @@ void Infected::move(std::map<uint8_t, std::shared_ptr<Collidable>> &collidables)
     }
 }
 
-void Infected::atack(std::map<uint8_t, std::shared_ptr<Player>>& players) {
-    for (auto& player : players) {
-        if (player.second->getCollidable()->isCloseTo(this->collidable, CLOSE_DISTANCE)) {
-            player.second->applyDamage(this->damage);
-        }
+void Infected::atack() {
+    if (this->target and
+        this->target->getCollidable()->
+        isCloseTo(this->collidable, CLOSE_DISTANCE)) {
+        this->stopMovementDirection();
+        this->state = State::atack;
+        this->target->applyDamage(this->damage);
     }
 }
 
 void Infected::applyStep(std::map<uint8_t, std::shared_ptr<Collidable>> &collidables,
                          std::map<uint8_t, std::shared_ptr<Player>>& players) {
+    this->setTarget(players);
     this->move(collidables);
-    this->atack(players);
+    this->atack();
 }
 
 std::shared_ptr<Collidable> &Infected::getCollidable() {
@@ -113,5 +116,48 @@ State &Infected::getState() {
 
 uint8_t &Infected::getId() {
     return this->id;
+}
+
+bool Infected::isIntoHostilRange(std::shared_ptr<Player> player) {
+    if (player->getCollidable()->
+        isCloseTo(this->collidable, HOSTILE_RANGE)) {
+        return true;
+    }
+    return false;
+}
+
+void Infected::setTarget(std::map<uint8_t, std::shared_ptr<Player>> &players) {
+    for (auto& player : players) {
+        if (isIntoHostilRange(player.second)) {
+            this->target = player.second;
+            // each infected has only one target player a time
+            break;
+        } else {
+            this->target = nullptr;
+        }
+    }
+    if (this->target != nullptr) {
+        this->setMovementDirection();
+    } else {
+        this->stopMovementDirection();
+    }
+}
+
+void Infected::setMovementDirection() {
+    if (this->collidable->isDown(this->target->getCollidable())) {
+        this->setMovementDirection(MoveTo::move_down);
+    } else {
+        this->setMovementDirection(MoveTo::move_up);
+    }
+
+    if (this->collidable->isOnRight(this->target->getCollidable())) {
+        this->setMovementDirection(MoveTo::move_right);
+    } else {
+        this->setMovementDirection(MoveTo::move_left);
+    }
+}
+
+void Infected::stopMovementDirection() {
+    this->movement_direction = {0 , 0};
 }
 

@@ -71,6 +71,6 @@
 #define OBSTACLE_CRATER 0x01
 
 #define CLOSE_DISTANCE 50
-
+#define HOSTILE_RANGE 200
 
 #endif
