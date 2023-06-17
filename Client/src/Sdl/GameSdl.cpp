@@ -34,7 +34,17 @@ void GameSdl::render() {
     this->hud.render(soldiers[idPlayer]->getHealth(),
                     soldiers[idPlayer]->getMunition(),
                     enemies.size());
-
+    
+    // reordeno los enemigos antes de renderizar
+    std::vector<std::pair<uint8_t,std::shared_ptr<Enemy>>> vecEnemies(
+        enemies.begin(), enemies.end());
+    std::sort(vecEnemies.begin(), vecEnemies.end(),
+        [](const auto& a, const auto&b) {
+            return a.second->getPosY() < b.second->getPosY();
+    });
+    for (const auto &enemy : vecEnemies)
+        enemy.second->render(camera.getRect());
+    
     // reordeno los operadores antes de renderizar
     std::vector<std::pair<uint8_t,std::shared_ptr<Operator>>> vecSoldiers(
         soldiers.begin(), soldiers.end());
@@ -44,15 +54,6 @@ void GameSdl::render() {
     });
     for (const auto &soldier : vecSoldiers)
         soldier.second->render(camera.getRect());
-    
-    // reordeno los enemigos antes de renderizar
-    std::vector<std::pair<uint8_t,std::shared_ptr<Enemy>>> vecEnemies(
-        enemies.begin(), enemies.end());
-    std::sort(vecEnemies.begin(), vecEnemies.end(), [](const auto& a, const auto&b) {
-        return a.second->getPosY() < b.second->getPosY();
-    });
-    for (const auto &enemy : vecEnemies)
-        enemy.second->render(camera.getRect());
 }
 
 void GameSdl::update() {

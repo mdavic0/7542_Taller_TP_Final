@@ -154,9 +154,9 @@ void Operator::render(SDL_Rect camera) {
 void Operator::renderIconInjure(int speed, SDL_Texture* texture, SDL_Rect camera) {
     SDL_Rect rectInit = { 0, 0, SIZE_FRAME, SIZE_FRAME};
     SDL_Rect rectFinal = {  (position.first + SIZE_FRAME / 3) - camera.x,
-                            (position.second + SIZE_FRAME / 4) - camera.y,
-                            SIZE_FRAME / 4,
-                            SIZE_FRAME / 4};
+                            (position.second + SIZE_FRAME / 6) - camera.y,
+                            SIZE_FRAME / 3,
+                            SIZE_FRAME / 3};
     Texture bg(this->renderPlayer, "assets/images/sdl/hud/healthbg.png");
     this->renderPlayer.copy(bg.getTexture(), rectInit, rectFinal);
     this->renderPlayer.copy(texture, rectInit, rectFinal);

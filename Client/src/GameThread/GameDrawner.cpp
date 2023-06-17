@@ -112,9 +112,9 @@ void GameDrawner::run() {
                 obstacles[obstacle.getId()] =
                     std::make_shared<Obstacles>(obstacle.getTypeObstacle(), render,
                                                 obstacle.getPosition());
-                    std::cout << "obstacle: " << (int)obstacle.getTypeObstacle() << std::endl;
-                    std::cout << "obstacle position x: " << (int)obstacle.getPosition().first << std::endl;
-                    std::cout << "obstacle position y: " << (int)obstacle.getPosition().second << std::endl;
+                    // std::cout << "obstacle: " << (int)obstacle.getTypeObstacle() << std::endl;
+                    // std::cout << "obstacle position x: " << (int)obstacle.getPosition().first << std::endl;
+                    // std::cout << "obstacle position y: " << (int)obstacle.getPosition().second << std::endl;
             }
 
             uint8_t idMap = snap->getMap();

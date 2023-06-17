@@ -61,7 +61,7 @@ void Hud::render(uint8_t healthPlayer, int numBullet, size_t size) {
 void Hud::renderBg() {
     SDL_Rect rectInit = { 0, 0, 309, 188};
     SDL_Rect rectFinal = { 5, 30, 309 * 19 / 10, 188};
-    window.adjustedRect(rectFinal, 309, 188);
+    window.adjustedRect(rectFinal);
     this->renderHud.copy(texturesHud["healthbg"]->getTexture(), rectInit,
                         rectFinal);
 }
@@ -69,7 +69,7 @@ void Hud::renderBg() {
 void Hud::renderHealthBar() {
     SDL_Rect rectInit = { 0, 0, 448, 64};
     SDL_Rect rectFinal = { 68, 65, 448, 64};
-    window.adjustedRect(rectFinal, 448, 64);
+    window.adjustedRect(rectFinal);
     this->renderHud.copy(texturesHud["bar-bg"]->getTexture(), rectInit,
                         rectFinal);
 }
@@ -77,7 +77,7 @@ void Hud::renderHealthBar() {
 void Hud::renderHealthIcon() {
     SDL_Rect rectInit = { 0, 0, 64, 64};
     SDL_Rect rectFinal = { 32, 72, 64 * 7 / 10, 64 * 7 / 10};
-    window.adjustedRect(rectFinal, 64, 64);
+    window.adjustedRect(rectFinal);
     this->renderHud.copy(texturesHud["health-icon"]->getTexture(), rectInit,
                         rectFinal);
 }
@@ -85,7 +85,7 @@ void Hud::renderHealthIcon() {
 void Hud::renderHealthFill(uint8_t healthPlayer) {
     SDL_Rect rectInit = { 0, 0, 410 * healthPlayer / healthInit, 21};
     SDL_Rect rectFinal = { 82, 84, 412 * healthPlayer / healthInit, 25};
-    window.adjustedRect(rectFinal, 448, 64);
+    window.adjustedRect(rectFinal);
     this->renderHud.copy(texturesHud["bar-fill"]->getTexture(), rectInit,
                         rectFinal);
 }
@@ -93,7 +93,7 @@ void Hud::renderHealthFill(uint8_t healthPlayer) {
 void Hud::renderIconWeapon() {
     SDL_Rect rectInit = { 0, 0, 512, 128};
     SDL_Rect rectFinal = { 68, 110, 512 * 1 / 4, 128 * 1 / 4};
-    window.adjustedRect(rectFinal, 512, 128);
+    window.adjustedRect(rectFinal);
     if (type == TypeOperator::operator_scout)
         this->renderHud.copy(texturesHud["hunting"]->getTexture(), rectInit,
                             rectFinal, SDL_FLIP_HORIZONTAL);
@@ -106,7 +106,7 @@ void Hud::renderIconWeapon() {
 void Hud::renderIconBullet() {
     SDL_Rect rectInit;
     SDL_Rect rectFinal = { 240, 110, 32, 32};
-    // window.adjustedRect(rectFinal, 32, 32);
+    window.adjustedRect(rectFinal);
     if (type == TypeOperator::operator_scout){
         rectInit = {0, 0, 64, 64};
         this->renderHud.copy(texturesHud["bullet-hunting"]->getTexture(),
@@ -127,13 +127,14 @@ void Hud::renderNumBullet(int numBullet) {
     this->fontHud.getSizeFont(text, &w, &h);
     Texture textureFont(renderHud, fontHud.RenderText_Solid(text, color));
     SDL_Rect final = { 180, 120, w, h};
+    window.adjustedRect(final);
     this->renderHud.copyFont(textureFont.getTexture(), final);
 }
 
 void Hud::renderBgMode() {
     SDL_Rect rectInit = { 0, 0, 309, 188};
-    SDL_Rect rectFinal = {window.getWidth() - rectFinal.w, 30, 309 * 11 / 10, 188};
-    window.adjustedRect(rectFinal, 309, 188);
+    SDL_Rect rectFinal = {1100, 30, 309 * 11 / 10, 188};
+    window.adjustedRect(rectFinal);
     this->renderHud.copy(texturesHud["healthbg"]->getTexture(), rectInit,
                         rectFinal);
 }
@@ -149,7 +150,8 @@ void Hud::renderTextMode(size_t size) {
         text = "Enemigos eliminados";
     this->fontHud.getSizeFont(text, &w, &h);
     Texture textureFont(renderHud, fontHud.RenderText_Solid(text, color));
-    SDL_Rect rectFinal = {window.getWidth() - w - 55, 80 + h, w, h};
+    SDL_Rect rectFinal = {1120, 80 + h, w, h};
+    window.adjustedRect(rectFinal);
     this->renderHud.copyFont(textureFont.getTexture(), rectFinal);
 }
 
