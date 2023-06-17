@@ -27,6 +27,7 @@ class Enemy {
         ~Enemy();
         void update(std::pair<int16_t, int16_t> pos, State state);
         void render(SDL_Rect camera);
+        int16_t getPosY();
 };
 
 #endif

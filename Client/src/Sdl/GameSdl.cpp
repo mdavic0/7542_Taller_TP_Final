@@ -34,55 +34,69 @@ void GameSdl::render() {
     this->hud.render(soldiers[idPlayer]->getHealth(),
                     soldiers[idPlayer]->getMunition(),
                     enemies.size());
-    std::vector<std::pair<uint8_t,std::shared_ptr<Operator>>> vec(
+
+    // reordeno los operadores antes de renderizar
+    std::vector<std::pair<uint8_t,std::shared_ptr<Operator>>> vecSoldiers(
         soldiers.begin(), soldiers.end());
-    std::sort(vec.begin(), vec.end(), [](const auto& a, const auto&b) {
+    std::sort(vecSoldiers.begin(), vecSoldiers.end(), 
+        [](const auto& a, const auto&b) {
+            return a.second->getPosY() < b.second->getPosY();
+    });
+    for (const auto &soldier : vecSoldiers)
+        soldier.second->render(camera.getRect());
+    
+    // reordeno los enemigos antes de renderizar
+    std::vector<std::pair<uint8_t,std::shared_ptr<Enemy>>> vecEnemies(
+        enemies.begin(), enemies.end());
+    std::sort(vecEnemies.begin(), vecEnemies.end(), [](const auto& a, const auto&b) {
         return a.second->getPosY() < b.second->getPosY();
     });
-    for (const auto &soldier : vec)
-        soldier.second->render(camera.getRect());
-    for (const auto &enemy : enemies)
+    for (const auto &enemy : vecEnemies)
         enemy.second->render(camera.getRect());
 }
 
 void GameSdl::update() {
-    camera.update(soldiers[idPlayer]->getPosition());
     std::shared_ptr<Snapshot> snap = snapshotQueue.pop();
-    for (auto &player : snap->getInfo()) {
-        soldiers[player.getId()]->update(player.getPosition(),
-                                            player.getState(),
-                                            player.getHealth(),
-                                            player.getMunition());
-    }
-
-    // Si no se actualizaron todos significa que alguno se desconecto
-    if (soldiers.size() > snap->getInfo().size()) {
-        for (auto &player : soldiers) {
-            bool found = false;
-            for (const auto& stOperator : snap->getInfo())
-                if (player.first == stOperator.getId()) {
-                    found = true;
-                    break;
-                }
-            if (!found)
-                player.second->setState(State::dead);
+    if (snap->getEvent() != Event::event_end) {
+        for (auto &player : snap->getInfo()) {
+            soldiers[player.getId()]->update(player.getPosition(),
+                                                player.getState(),
+                                                player.getHealth(),
+                                                player.getMunition());
         }
-    }
+        camera.update(soldiers[idPlayer]->getPosition());
 
-    std::unordered_set<uint8_t> mapIds;
-    for (auto &infected : snap->getEnemies()) {
-        mapIds.insert(infected.getId());
-        enemies[infected.getId()]->update(infected.getPosition(),
-                                            infected.getState());
-    }
+        // Si no se actualizaron todos significa que alguno se desconecto
+        if (soldiers.size() > snap->getInfo().size()) {
+            for (auto &player : soldiers) {
+                bool found = false;
+                for (const auto& stOperator : snap->getInfo())
+                    if (player.first == stOperator.getId()) {
+                        found = true;
+                        break;
+                    }
+                if (!found)
+                    player.second->setState(State::dead);
+            }
+        }
 
-    // Eliminio enemigo muerto
-    auto iterator = enemies.begin();
-    while (iterator != enemies.end()) {
-        if (mapIds.find(iterator->first) == mapIds.end())
-            iterator = enemies.erase(iterator);
-        else
-            ++iterator;
+        std::unordered_set<uint8_t> mapIds;
+        for (auto &infected : snap->getEnemies()) {
+            mapIds.insert(infected.getId());
+            enemies[infected.getId()]->update(infected.getPosition(),
+                                                infected.getState());
+        }
+
+        // Eliminio enemigo muerto
+        auto iterator = enemies.begin();
+        while (iterator != enemies.end()) {
+            if (mapIds.find(iterator->first) == mapIds.end())
+                iterator = enemies.erase(iterator);
+            else
+                ++iterator;
+        }
+    } else {
+        this->endGame = true;
     }
 }
 

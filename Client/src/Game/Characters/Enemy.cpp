@@ -31,6 +31,10 @@ void Enemy::setState(State state) {
     this->stateEnemy = state;
 }
 
+int16_t Enemy::getPosY() {
+    return this->position.second;
+}
+
 int Enemy::setNumFrames(State state) {
     switch (state) {
         case State::idle:

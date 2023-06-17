@@ -92,6 +92,8 @@ void Operator::chargeTexture(Renderer& renderer) {
     textures["Recharge"] = std::make_unique<Texture>(renderer, path + "/Recharge.png");
     textures["Grenade"] = std::make_unique<Texture>(renderer, path + "/Grenade.png");
     textures["Dead"] = std::make_unique<Texture>(renderer, path + "/Dead.png");
+    std::string icon = "assets/images/sdl/hud/icon_reviving.png";
+    textures["iconHurt"] = std::make_unique<Texture>(renderer, icon);
 }
 
 void Operator::setState(State state) {
@@ -132,6 +134,7 @@ void Operator::render(SDL_Rect camera) {
             renderAnimation(100, textures["Shot"]->getTexture(), camera);
             break;
         case State::injure:
+            renderIconInjure(100, textures["iconHurt"]->getTexture(), camera);
             renderAnimation(100, textures["Hurt"]->getTexture(), camera);
             break;
         case State::recharge:
@@ -148,16 +151,23 @@ void Operator::render(SDL_Rect camera) {
     }
 }
 
+void Operator::renderIconInjure(int speed, SDL_Texture* texture, SDL_Rect camera) {
+    SDL_Rect rectInit = { 0, 0, SIZE_FRAME, SIZE_FRAME};
+    SDL_Rect rectFinal = {  (position.first + SIZE_FRAME / 3) - camera.x,
+                            (position.second + SIZE_FRAME / 4) - camera.y,
+                            SIZE_FRAME / 4,
+                            SIZE_FRAME / 4};
+    Texture bg(this->renderPlayer, "assets/images/sdl/hud/healthbg.png");
+    this->renderPlayer.copy(bg.getTexture(), rectInit, rectFinal);
+    this->renderPlayer.copy(texture, rectInit, rectFinal);
+}
+
 void Operator::renderAnimation(int speed, SDL_Texture* texture, SDL_Rect camera) {
     int speedAnimation = static_cast<int>((SDL_GetTicks() / speed) % numFrames);
-    SDL_Rect rectInit = {   speedAnimation * SIZE_FRAME,
-                            0,
-                            SIZE_FRAME,
-                            SIZE_FRAME};
-    SDL_Rect rectFinal = {  position.first - camera.x,
-                            position.second - camera.y, // - cam.getPosY()) * cam.getScaleY(),
-                            SIZE_FRAME,
-                            SIZE_FRAME};
+    SDL_Rect rectInit = {   speedAnimation * SIZE_FRAME, 0,
+                            SIZE_FRAME, SIZE_FRAME};
+    SDL_Rect rectFinal = {  position.first - camera.x, position.second - camera.y,
+                            SIZE_FRAME, SIZE_FRAME};
     this->renderPlayer.copy(texture, rectInit, rectFinal, this->flipType);
 }
 
@@ -170,14 +180,10 @@ void Operator::renderDead(int speed, SDL_Texture* texture, SDL_Rect camera) {
     } else {
         speedAnimation = numFrames - 1;
     }
-    SDL_Rect rectInit = {   speedAnimation * SIZE_FRAME,
-                            0,
-                            SIZE_FRAME,
-                            SIZE_FRAME};
-    SDL_Rect rectFinal = {  position.first - camera.x,
-                            position.second - camera.y,
-                            SIZE_FRAME,
-                            SIZE_FRAME};
+    SDL_Rect rectInit = {   speedAnimation * SIZE_FRAME, 0,
+                            SIZE_FRAME, SIZE_FRAME};
+    SDL_Rect rectFinal = {  position.first - camera.x, position.second - camera.y,
+                            SIZE_FRAME, SIZE_FRAME};
     this->renderPlayer.copy(texture, rectInit, rectFinal, this->flipType);
 }
 

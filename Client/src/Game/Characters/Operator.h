@@ -26,6 +26,7 @@ class Operator {
         void chargeTexture(Renderer& renderer);
         void renderAnimation(int speed, SDL_Texture* texture, SDL_Rect camera);
         void renderDead(int speed, SDL_Texture* texture, SDL_Rect camera);
+        void renderIconInjure(int speed, SDL_Texture* texture, SDL_Rect camera);
         int setNumFrames(State state);
         bool animationDeadFinish;
         uint8_t munition;
