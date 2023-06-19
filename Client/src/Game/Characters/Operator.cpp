@@ -125,26 +125,31 @@ int Operator::setNumFrames(State state) {
 void Operator::render(SDL_Rect camera) {
     switch (stateOperator) {
         case State::idle:
-            renderAnimation(SPEED_IDLE, textures["Idle"]->getTexture(), camera);
+            renderAnimation(SPEED_IDLE, textures["Idle"]->getTexture(),
+                            camera);
             break;
         case State::moving:
             renderAnimation(SPEED_RUN, textures["Run"]->getTexture(), camera);
             break;
         case State::atack:
-            renderAnimation(100, textures["Shot"]->getTexture(), camera);
+            renderAnimation(SPEED_ATACK, textures["Shot"]->getTexture(),
+                            camera);
             break;
         case State::injure:
-            renderIconInjure(100, textures["iconHurt"]->getTexture(), camera);
-            renderAnimation(100, textures["Hurt"]->getTexture(), camera);
+            renderIconInjure(0, textures["iconHurt"]->getTexture(), camera);
+            renderAnimation(SPEED_INJURE, textures["Hurt"]->getTexture(),
+                            camera);
             break;
         case State::recharge:
-            renderAnimation(100, textures["Recharge"]->getTexture(), camera);
+            renderAnimation(SPEED_RECHARGE, textures["Recharge"]->getTexture(),
+                            camera);
             break;
         case State::hability:
-            renderAnimation(100, textures["Grenade"]->getTexture(), camera);
+            renderAnimation(SPEED_SKILL, textures["Grenade"]->getTexture(),
+                            camera);
             break;
         case State::dead:
-            renderDead(100, textures["Dead"]->getTexture(),camera);
+            renderDead(SPEED_DEAD, textures["Dead"]->getTexture(),camera);
             break;
         default:
             break;

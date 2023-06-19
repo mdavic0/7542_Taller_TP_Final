@@ -1,5 +1,6 @@
 #include "Hud.h"
 #include "Configuration.h"
+#include "Defines.h"
 #include <iostream>
 
 Hud::Hud(TypeOperator type, TypeGame game, Renderer& render, Font& font,
@@ -27,9 +28,8 @@ Hud::Hud(TypeOperator type, TypeGame game, Renderer& render, Font& font,
 
 void Hud::loadTextures() {
     std::string path = "assets/images/sdl/hud/";
-    SDL_Color c = {0, 0, 0, 255};
     texturesHud["healthbg"] = std::make_unique<Texture>(
-                                    renderHud, path + "healthbg.png",c);
+                                    renderHud, path + "healthbg.png");
     texturesHud["bar-bg"] = std::make_unique<Texture>(
                                     renderHud, path + "bar_bg.png");
     texturesHud["bar-fill"] = std::make_unique<Texture>(
@@ -59,40 +59,42 @@ void Hud::render(uint8_t healthPlayer, int numBullet, size_t size) {
 }
 
 void Hud::renderBg() {
-    SDL_Rect rectInit = { 0, 0, 309, 188};
-    SDL_Rect rectFinal = { 5, 30, 309 * 19 / 10, 188};
+    SDL_Rect rectInit = { 0, 0, SPRITE_BG_W, SPRITE_BG_H};
+    SDL_Rect rectFinal = { 5, 30, SPRITE_BG_W * 19 / 10, SPRITE_BG_H};
     window.adjustedRect(rectFinal);
     this->renderHud.copy(texturesHud["healthbg"]->getTexture(), rectInit,
                         rectFinal);
 }
 
 void Hud::renderHealthBar() {
-    SDL_Rect rectInit = { 0, 0, 448, 64};
-    SDL_Rect rectFinal = { 68, 65, 448, 64};
+    SDL_Rect rectInit = { 0, 0, HEALTH_BG_W, SIZE_SPRITE_64};
+    SDL_Rect rectFinal = { 68, 65, HEALTH_BG_W, SIZE_SPRITE_64};
     window.adjustedRect(rectFinal);
     this->renderHud.copy(texturesHud["bar-bg"]->getTexture(), rectInit,
                         rectFinal);
 }
 
 void Hud::renderHealthIcon() {
-    SDL_Rect rectInit = { 0, 0, 64, 64};
-    SDL_Rect rectFinal = { 32, 72, 64 * 7 / 10, 64 * 7 / 10};
+    SDL_Rect rectInit = { 0, 0, SIZE_SPRITE_64, SIZE_SPRITE_64};
+    SDL_Rect rectFinal = { 32, 72, SIZE_SPRITE_64 * 7 / 10, SIZE_SPRITE_64 * 7 / 10};
     window.adjustedRect(rectFinal);
     this->renderHud.copy(texturesHud["health-icon"]->getTexture(), rectInit,
                         rectFinal);
 }
 
 void Hud::renderHealthFill(uint8_t healthPlayer) {
-    SDL_Rect rectInit = { 0, 0, 410 * healthPlayer / healthInit, 21};
-    SDL_Rect rectFinal = { 82, 84, 412 * healthPlayer / healthInit, 25};
+    SDL_Rect rectInit = { 0, 0,
+                    HEALTH_FILL_W * healthPlayer / healthInit, HEALTH_FILL_H};
+    SDL_Rect rectFinal = { 82, 84,
+                    HEALTH_FILL_W * healthPlayer / healthInit, HEALTH_FILL_H};
     window.adjustedRect(rectFinal);
     this->renderHud.copy(texturesHud["bar-fill"]->getTexture(), rectInit,
                         rectFinal);
 }
 
 void Hud::renderIconWeapon() {
-    SDL_Rect rectInit = { 0, 0, 512, 128};
-    SDL_Rect rectFinal = { 68, 110, 512 * 1 / 4, 128 * 1 / 4};
+    SDL_Rect rectInit = { 0, 0, 512, SIZE_FRAME};
+    SDL_Rect rectFinal = { 68, 110, 512 * 1 / 4, SIZE_FRAME * 1 / 4};
     window.adjustedRect(rectFinal);
     if (type == TypeOperator::operator_scout)
         this->renderHud.copy(texturesHud["hunting"]->getTexture(), rectInit,
@@ -105,22 +107,22 @@ void Hud::renderIconWeapon() {
 
 void Hud::renderIconBullet() {
     SDL_Rect rectInit;
-    SDL_Rect rectFinal = { 240, 110, 32, 32};
+    SDL_Rect rectFinal = { 240, 110, SIZE_SPRITE_32, SIZE_SPRITE_32};
     window.adjustedRect(rectFinal);
     if (type == TypeOperator::operator_scout){
-        rectInit = {0, 0, 64, 64};
+        rectInit = {0, 0, SIZE_SPRITE_64, SIZE_SPRITE_64};
         this->renderHud.copy(texturesHud["bullet-hunting"]->getTexture(),
                         rectInit, rectFinal);
     } else if (type == TypeOperator::operator_idf || 
             type == TypeOperator::operator_p90) {
-        rectInit = {0, 0, 32, 32};
+        rectInit = {0, 0, SIZE_SPRITE_32, SIZE_SPRITE_32};
         this->renderHud.copy(texturesHud["bullet-rifle"]->getTexture(),
                             rectInit, rectFinal);
     }
 }
 
 void Hud::renderNumBullet(int numBullet) {
-    SDL_Color color = {255, 255, 255, 255};
+    SDL_Color color = COLOR_WHITE;
     int w, h;
     std::string text = std::to_string(numBullet) + "I" + 
                         std::to_string(munitionInit);
@@ -132,22 +134,22 @@ void Hud::renderNumBullet(int numBullet) {
 }
 
 void Hud::renderBgMode() {
-    SDL_Rect rectInit = { 0, 0, 309, 188};
-    SDL_Rect rectFinal = {1100, 30, 309 * 11 / 10, 188};
+    SDL_Rect rectInit = { 0, 0, SPRITE_BG_W, SPRITE_BG_H};
+    SDL_Rect rectFinal = {1100, 30, SPRITE_BG_W * 11 / 10, SPRITE_BG_H};
     window.adjustedRect(rectFinal);
     this->renderHud.copy(texturesHud["healthbg"]->getTexture(), rectInit,
                         rectFinal);
 }
 
 void Hud::renderTextMode(size_t size) {
-    SDL_Color color = { 255, 255, 255, 255};
+    SDL_Color color = COLOR_WHITE;
     int w, h; // w2, h2;
     std::string text = " ";
     std::string text2 = std::to_string(size);
     if (gameType == TypeGame::game_clear_zone)
-        text = "Enemigos restantes: " + text2;
+        text = "Remaining enemies: " + text2;
     else if (gameType == TypeGame::game_survival)
-        text = "Enemigos eliminados";
+        text = "Enemies eliminated";
     this->fontHud.getSizeFont(text, &w, &h);
     Texture textureFont(renderHud, fontHud.RenderText_Solid(text, color));
     SDL_Rect rectFinal = {1120, 80 + h, w, h};

@@ -1,5 +1,6 @@
 #include "WindowSdl.h"
 #include "SdlException.h"
+#include "Defines.h"
 
 WindowSdl::WindowSdl(const std::string& title, int x, int y, int h, int w,
     uint32_t flags) : window(nullptr) {
@@ -50,14 +51,17 @@ int WindowSdl::getWidth() {
 
 void WindowSdl::adjustedRect(SDL_Rect& rect) {
     int width = getWidth();
-
-    float aspectRatio = static_cast<float>(rect.w) / static_cast<float>(rect.h);
-    float scaleFactorX = static_cast<float>(width) / static_cast<float>(1440); // Resolucion a la que fue estandarizado
+    float aspectRatio =
+        static_cast<float>(rect.w) / static_cast<float>(rect.h);
+    // Resolucion WIDTH_SCREEN_INIT a la que fue estandarizado para escalar
+    float scaleFactorX =
+        static_cast<float>(width) / static_cast<float>(WIDTH_SCREEN_INIT); 
 
     int newWidth = static_cast<int>(rect.w * scaleFactorX); 
     int newHeight = static_cast<int>(newWidth / aspectRatio);
 
-    float positionRatio = static_cast<float>(rect.x) / static_cast<float>(rect.y);
+    float positionRatio =
+        static_cast<float>(rect.x) / static_cast<float>(rect.y);
     int newX = static_cast<int>(rect.x * scaleFactorX);
     int newY = static_cast<int>(newX / positionRatio);
 
@@ -65,5 +69,4 @@ void WindowSdl::adjustedRect(SDL_Rect& rect) {
     rect.y = newY;
     rect.w = newWidth;
     rect.h = newHeight;
-
 }

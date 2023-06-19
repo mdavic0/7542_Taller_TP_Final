@@ -15,7 +15,6 @@ class MapSdl {
         WindowSdl& window;
         std::map<std::string, std::shared_ptr<Texture>> textures;
         void chargeTexture(Renderer& renderer);
-        int repetitions;
     public:
         MapSdl(uint8_t id, Renderer& renderer, WindowSdl& window);
         ~MapSdl();

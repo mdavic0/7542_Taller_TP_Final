@@ -39,6 +39,7 @@ void GameDrawner::run() {
         Renderer render(window, -1, SDL_RENDERER_ACCELERATED);
 
         Font font("assets/font/Futurot.ttf", 20);
+        
         font.setHinting();
         std::string text1 = "Waiting for other players";
         std::string text2 = "Waiting for Ready";

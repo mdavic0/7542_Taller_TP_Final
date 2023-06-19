@@ -2,9 +2,8 @@
 #include "Defines.h"
 
 MapSdl::MapSdl(uint8_t id, Renderer& renderer, WindowSdl& window) : mapId(id),
-    renderMap(renderer), window(window), textures({}), repetitions(0) {
+    renderMap(renderer), window(window), textures({}) {
     this->chargeTexture(renderer);
-    // repetitions =  WINDOW_WIDTH / window.getWidth() + 1;
 }
 
 MapSdl::~MapSdl() {
@@ -18,7 +17,7 @@ void MapSdl::render(SDL_Rect camera) {
     this->renderMap.copy(textures["sun"]->getTexture(), rectInit, rectFinal); 
 
     int offsetX = camera.x % window.getWidth(); 
-    int repet = WINDOW_WIDTH / 1920;
+    int repet = MAP_WIDTH / SIZE_SPRITE_MAP_X;
     for (int i = 0; i < repet; ++i ) {
         int xPos = i * window.getWidth() - offsetX;
         rectFinal.x = xPos;

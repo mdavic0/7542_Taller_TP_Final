@@ -15,10 +15,10 @@ void Camera::update(std::pair<int16_t, int16_t> posPlayer) {
         posCamera.first = 0;
     if (posCamera.second < 0)
         posCamera.second = 0;
-    if (posCamera.first > WINDOW_WIDTH - window.getWidth())
-        posCamera.first = WINDOW_WIDTH - window.getWidth();
-    if (posCamera.second > WINDOW_HEIGTH - window.getHeight())
-        posCamera.second = WINDOW_HEIGTH - window.getHeight();
+    if (posCamera.first > MAP_WIDTH - window.getWidth())
+        posCamera.first = MAP_WIDTH - window.getWidth();
+    if (posCamera.second > MAP_HEIGTH - window.getHeight())
+        posCamera.second = MAP_HEIGTH - window.getHeight();
 }
 
 int16_t Camera::getPosX() {
@@ -30,11 +30,11 @@ int16_t Camera::getPosY() {
 }
 
 int16_t Camera::getScaleY() {
-    return this->window.getHeight() / WINDOW_HEIGTH;
+    return this->window.getHeight() / MAP_HEIGTH;
 }
 
 int16_t Camera::getScaleX() {
-    return this->window.getHeight() / WINDOW_WIDTH;
+    return this->window.getHeight() / MAP_WIDTH;
 }
 
 SDL_Rect Camera::getRect() {
