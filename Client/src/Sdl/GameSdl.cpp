@@ -101,6 +101,15 @@ void GameSdl::update() {
     }
 }
 
+std::pair<int16_t, int16_t> GameSdl::calculateMassCenter() {
+    std::pair<int16_t, int16_t> massCenter;
+    for (const auto& soldier : soldiers){
+        massCenter.first += soldier.second->getPosX();
+        massCenter.second += soldier.second->getPosY();
+    }
+    return massCenter;
+}
+
 void GameSdl::handleEvents() {
     this->events.listen();
 }

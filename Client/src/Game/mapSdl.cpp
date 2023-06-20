@@ -40,7 +40,4 @@ void MapSdl::chargeTexture(Renderer& renderer) {
     textures["house1"] = std::make_unique<Texture>(renderer, path + "/houses1.png");
     textures["fence"] = std::make_unique<Texture>(renderer, path + "/fence.png");
     textures["road"] = std::make_unique<Texture>(renderer, path + "/road.png");
-    // textures["crater1"] = new Texture(renderer, path + "/crater1.png", true);
-    // textures["crater2"] = new Texture(renderer, path + "/crater2.png", true);
-    // textures["crater3"] = new Texture(renderer, path + "/crater3.png", true);
 }

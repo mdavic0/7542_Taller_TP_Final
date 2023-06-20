@@ -37,6 +37,7 @@ class GameSdl {
         TypeGame mode;
         Font& font;
         Camera camera;
+        std::pair<int16_t, int16_t> calculateMassCenter();
 
     public:
         GameSdl(WindowSdl& window, Renderer& renderer,
