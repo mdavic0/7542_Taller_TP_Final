@@ -31,6 +31,10 @@ void Enemy::setState(State state) {
     this->stateEnemy = state;
 }
 
+int16_t Enemy::getPosY() {
+    return this->position.second;
+}
+
 int Enemy::setNumFrames(State state) {
     switch (state) {
         case State::idle:
@@ -47,13 +51,15 @@ int Enemy::setNumFrames(State state) {
 void Enemy::render(SDL_Rect camera) {
     switch (stateEnemy) {
         case State::idle:
-            renderAnimation(SPEED_IDLE, textures["Idle"]->getTexture(), camera);
+            renderAnimation(SPEED_IDLE, textures["Idle"]->getTexture(),
+                            camera);
             break;
         case State::moving:
             renderAnimation(SPEED_RUN, textures["Run"]->getTexture(), camera);
             break;
         case State::atack:
-            renderAnimation(100, textures["Attack"]->getTexture(), camera);
+            renderAnimation(SPEED_ATACK, textures["Attack"]->getTexture(),
+                            camera);
             break;
         default:
             break;

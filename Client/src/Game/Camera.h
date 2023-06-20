@@ -10,7 +10,7 @@
 class Camera {
     private:
         std::pair<int16_t, int16_t> posCamera;
-        WindowSdl& windowCamera;
+        WindowSdl& window;
     public:
         explicit Camera(WindowSdl& window);
         ~Camera();

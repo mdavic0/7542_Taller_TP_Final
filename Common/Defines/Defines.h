@@ -2,8 +2,8 @@
 #define COMMON_DEFINES_H_
 
 #define PATH "assets/config/config.yaml"
-#define WINDOW_WIDTH 1920
-#define WINDOW_HEIGTH 1080
+#define MAP_WIDTH 1920 * 2
+#define MAP_HEIGTH 1080
 
 #define FRAME_RATE 60
 #define SIZE_QUEUE 256
@@ -16,9 +16,26 @@
 #define SIZE_FRAME_ENEMY 96
 #define SIZE_SPRITE_X 64
 #define SIZE_SPRITE_Y 68
+#define SIZE_SPRITE_MAP_X 1920
+#define SIZE_SPRITE_MAP_Y 1080
 #define SPEED_IDLE 150
-#define SPEED_RUN 100
+#define SPEED_RUN 120
+#define SPEED_ATACK 125
+#define SPEED_INJURE 110
+#define SPEED_RECHARGE 140
+#define SPEED_SKILL 190
+#define SPEED_DEAD 120
+#define COLOR_WHITE {255, 255, 255, 255}
+#define SIZE_SPRITE_64 64
+#define SIZE_SPRITE_32 32
+#define SPRITE_BG_W 309
+#define SPRITE_BG_H 188
+#define HEALTH_BG_W 448
+#define HEALTH_FILL_W 412
+#define HEALTH_FILL_H 25
+#define WIDTH_SCREEN_INIT 1440
 
+// Protocol Code
 #define CREATE_CODE 0x01
 #define JOIN_CODE 0x02
 #define START_CODE 0x03
@@ -33,6 +50,8 @@
 #define SHOOT_CODE 0x12
 #define STOP_SHOOT_CODE 0x13
 #define LEAVE_CODE 0x14
+#define END_CODE 0x15
+#define STATS_CODE 0x16
 
 #define IDF_CODE 0x01
 #define P90_CODE 0x02
@@ -64,5 +83,11 @@
 #define INITIAL_PLAYER_ID 0x00
 #define INITIAL_INFECTED_ID 50
 #define INITIAL_OBSTACLE_ID 240
+
+#define OBSTACLE_TIRE 0x00
+#define OBSTACLE_CRATER 0x01
+
+#define CLOSE_DISTANCE 50
+#define HOSTILE_RANGE 200
 
 #endif

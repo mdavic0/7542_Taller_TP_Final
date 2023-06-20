@@ -18,6 +18,34 @@ template <typename T>
 class ServerProtocol : Protocol<T> {
     private:
     
+        /*EventDTO getCreate();
+        EventDTO getJoin();
+        EventDTO getStart();
+        EventDTO getMove();
+        EventDTO getStopMove();
+        EventDTO getSmoke();
+        EventDTO getStopSmoke();
+        EventDTO getGrenade();
+        EventDTO getStopGrenade();
+        EventDTO getBlitz();
+        EventDTO getShoot();
+        EventDTO getStopShoot();
+        EventDTO getLeave();
+        void sendCreate(const uint32_t& code, const uint8_t& idPlayer);
+        void sendJoin(const uint8_t& ok, const uint8_t& idPlayer, const uint8_t& size);
+        void sendStart(const std::vector<StOperator> &playersInfo, const std::vector<EnemyDto> &enemiesInfo,
+                const std::vector<ObstacleDto> &obstaclesInfo, const TypeGame& typeGame, const uint8_t& idMap);
+        void sendPlaying(const std::vector<StOperator> &playersInfo, const std::vector<EnemyDto> &enemiesInfo);
+        void sendEnd();
+        void sendStats(const uint32_t& time, const uint16_t& shots, const uint8_t& kills);
+        void sendTypeOperator(const TypeOperator& typeOperator);
+        void sendTypeInfected(const TypeInfected& typeInfected);
+        void sendTypeObstacle(const TypeObstacle& typeObstacle);
+        void sendState(const State& state);
+        void sendPlayersInfo(const std::vector<StOperator> &playersInfo);
+        void sendEnemiesInfo(const std::vector<EnemyDto> &enemiesInfo);
+        void sendObstaclesInfo(const std::vector<ObstacleDto> &obstaclesInfo);
+        void sendPosition(const uint16_t& x, const uint16_t& y);*/
 EventDTO getCreate(std::shared_ptr<T> skt) {
     uint8_t idOperator;
     this->recvAll(&idOperator, 1, skt);
@@ -429,7 +457,7 @@ void sendPosition(const uint16_t& x, const uint16_t& y, std::shared_ptr<T> skt) 
 }
 
         void sendSnapshot(
-            const Snapshot &snapshot, std::shared_ptr<T> skt) {
+            std::shared_ptr<Snapshot>& snapshot, std::shared_ptr<T> skt) {
     Event event = snapshot.getEvent();
     if (event == Event::event_create) {
         sendCreate(snapshot.getCode(), snapshot.getIdPlayer(), skt);

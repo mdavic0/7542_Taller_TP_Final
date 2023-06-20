@@ -26,20 +26,23 @@ class Operator {
         void chargeTexture(Renderer& renderer);
         void renderAnimation(int speed, SDL_Texture* texture, SDL_Rect camera);
         void renderDead(int speed, SDL_Texture* texture, SDL_Rect camera);
+        void renderIconInjure(int speed, SDL_Texture* texture, SDL_Rect camera);
         int setNumFrames(State state);
         bool animationDeadFinish;
+        uint8_t munition;
     public:
         Operator(uint8_t id, TypeOperator op, Renderer& renderer);
         ~Operator();     
         void updateMove(MoveTo direction);
         void update(std::pair<int16_t, int16_t> pos, State state,
-                    int health);
+                    int health, uint8_t munition);
         TypeOperator getType();
         void setState(State state);
         uint8_t getId();
         uint8_t getHealth();
         int16_t getPosX();
         int16_t getPosY();
+        uint8_t getMunition();
         std::pair<int16_t, int16_t> getPosition();
         void render(SDL_Rect camera);
         bool isDead();

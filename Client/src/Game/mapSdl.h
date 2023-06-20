@@ -12,7 +12,7 @@ class MapSdl {
     private:
         uint8_t mapId;
         Renderer& renderMap;
-        WindowSdl& windowMap;
+        WindowSdl& window;
         std::map<std::string, std::shared_ptr<Texture>> textures;
         void chargeTexture(Renderer& renderer);
     public:

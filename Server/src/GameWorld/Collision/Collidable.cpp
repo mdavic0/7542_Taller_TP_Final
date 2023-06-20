@@ -1,9 +1,10 @@
 #include "Collidable.h"
 #include <iostream>
+#include <cmath>
 
 Collidable::Collidable(uint8_t id, std::pair<int16_t, int16_t>& position,
                        int width, int height) : id(id),
-                       width(width) , height(height) {
+                       width(width) , height(height), position(position) {
     this->topLeftCorner = {(position.first - (width / 2)) , (position.second + (height / 2))};
 }
 
@@ -29,12 +30,17 @@ bool Collidable::collidesWith(std::shared_ptr<Collidable>& other) {
    return false;
 }
 
-void Collidable::updatePosition(std::pair<int16_t, int16_t> &position) {
+void Collidable::updatePosition(std::pair<int16_t, int16_t> &pos) {
+    this->position = pos;
     this->topLeftCorner = {(position.first - (width / 2.0)) , (position.second + (height / 2.0))};
 }
 
 bool Collidable::isOnRight(std::shared_ptr<Collidable> &other) {
     return (topLeftCorner.first + width) < other->topLeftCorner.first;
+}
+
+bool Collidable::isDown(std::shared_ptr<Collidable> &other) {
+    return (topLeftCorner.second + height) < other->topLeftCorner.second;
 }
 
 bool Collidable::overlapVerticalAxis(std::shared_ptr<Collidable> &other) {
@@ -59,4 +65,13 @@ bool Collidable::isAlignedRight(std::shared_ptr<Collidable> &other) {
 
 bool Collidable::isAlignedLeft(std::shared_ptr<Collidable> &other) {
     return (not this->isOnRight(other) and (this->overlapVerticalAxis(other)));
+}
+
+bool Collidable::isCloseTo(std::shared_ptr<Collidable> &other, float closeDistance) {
+    return (this->distance(other->position) < closeDistance);
+}
+
+float Collidable::distance(std::pair<int16_t, int16_t>& otherPos) {
+    return sqrt(pow(otherPos.first - position.first, 2) +
+        pow(otherPos.second - position.second, 2) * 1.0);
 }

@@ -225,12 +225,13 @@ void ServerProtocol::sendJoin(const uint8_t& ok, const uint8_t& idPlayer,
 }
 
 void ServerProtocol::sendStart(const std::vector<StOperator> &playersInfo, const std::vector<EnemyDto> &enemiesInfo,
-    const TypeGame& typeGame, const uint8_t& idMap, Socket *skt) {
+    const std::vector<ObstacleDto> &obstaclesInfo, const TypeGame& typeGame, const uint8_t& idMap, Socket *skt) {
     uint8_t event = START_CODE;
     sendAll(&event, 1, skt);
     
     sendPlayersInfo(playersInfo, skt);
     sendEnemiesInfo(enemiesInfo, skt);
+    sendObstaclesInfo(obstaclesInfo, skt);
     
     uint8_t idGame;
     if (typeGame == TypeGame::game_survival) {
@@ -252,8 +253,25 @@ void ServerProtocol::sendPlaying(const std::vector<StOperator> &playersInfo,
     sendEnemiesInfo(enemiesInfo, skt);
 }
 
+void ServerProtocol::sendEnd() {
+    uint8_t event = END_CODE;
+    sendAll(&event, 1);
+}
 
-void ServerProtocol::sendOperator(const TypeOperator& typeOperator, Socket *skt) {
+void ServerProtocol::sendStats(const uint32_t& time, const uint16_t& shots, const uint8_t& kills) {
+    uint8_t event = STATS_CODE;
+    sendAll(&event, 1);
+
+    uint16_t aux_time = htonl(time);
+    sendAll(&aux_time, 4);
+
+    uint16_t aux_shots = htons(shots);
+    sendAll(&aux_shots, 2);
+
+    sendAll(&kills, 1, skt);
+}
+
+void ServerProtocol::sendTypeOperator(const TypeOperator& typeOperator, Socket *skt) {
     if(typeOperator == TypeOperator::operator_idf){
         uint8_t op = IDF_CODE;
         sendAll(&op, 1, skt);
@@ -266,6 +284,33 @@ void ServerProtocol::sendOperator(const TypeOperator& typeOperator, Socket *skt)
     }
 }
 
+void ServerProtocol::sendTypeInfected(const TypeInfected& typeInfected, Socket *skt) {
+    if(typeInfected == TypeInfected::infected_zombie){
+        uint8_t inf = INFECTED_ZOMBIE;
+        sendAll(&inf, 1, skt);
+    } else if (typeInfected == TypeInfected::infected_jumper) {
+        uint8_t inf = INFECTED_JUMPER;
+        sendAll(&inf, 1, skt);
+    } else if (typeInfected == TypeInfected::infected_witch) {
+        uint8_t inf = INFECTED_WITCH;
+        sendAll(&inf, 1), skt;        
+    } else if (typeInfected == TypeInfected::infected_spear) {
+        uint8_t inf = INFECTED_SPEAR;
+        sendAll(&inf, 1, skt);        
+    } else if (typeInfected == TypeInfected::infected_venom) {
+        uint8_t inf = INFECTED_VENOM;
+        sendAll(&inf, 1, skt);        
+    }
+}
+
+void ServerProtocol::sendTypeObstacle(const TypeObstacle& typeObstacle, Socket *skt) {
+    if(typeObstacle == TypeObstacle::obstacle_tire){
+        uint8_t ob = OBSTACLE_TIRE;
+        sendAll(&ob, 1, skt);
+    } else if (typeObstacle == TypeObstacle::obstacle_crater) {
+        uint8_t ob = OBSTACLE_CRATER;
+        sendAll(&ob, 1, skt);
+        
 void ServerProtocol::sendOperator(const TypeInfected& typeInfected, Socket *skt) {
     if(typeInfected == TypeInfected::infected_zombie){
         uint8_t op = INFECTED_ZOMBIE;
@@ -281,7 +326,7 @@ void ServerProtocol::sendOperator(const TypeInfected& typeInfected, Socket *skt)
         sendAll(&op, 1, skt);        
     } else if (typeInfected == TypeInfected::infected_venom) {
         uint8_t op = INFECTED_VENOM;
-        sendAll(&op, 1, skt);        
+        sendAll(&op, 1, skt);
     }
 }
 
@@ -313,11 +358,13 @@ void ServerProtocol::sendPlayersInfo(const std::vector<StOperator> &playersInfo,
     for (auto it = playersInfo.begin(); it != playersInfo.end(); ++it) {
         uint8_t id = it->getId();
         sendAll(&id, 1, skt);
-        sendOperator(it->getTypeOperator(), skt);
+        sendTypeOperator(it->getTypeOperator(), skt);
         sendState(it->getState(), skt);
         sendPosition(it->getPosition().first, it->getPosition().second, skt); // x = it->second.first, y = it->second.second
         uint8_t health = it->getHealth();
         sendAll(&health, 1, skt);
+        uint8_t munition = it->getMunition();
+        sendAll(&munition, 1, skt);
   }
 }
 
@@ -327,11 +374,23 @@ void ServerProtocol::sendEnemiesInfo(const std::vector<EnemyDto> &enemiesInfo, S
     for (auto it = enemiesInfo.begin(); it != enemiesInfo.end(); ++it) {
         uint8_t id = it->getId();
         sendAll(&id, 1, skt);
-        sendOperator(it->getTypeInfected(), skt);
+        sendTypeInfected(it->getTypeInfected(), skt);
         sendState(it->getState(), skt);
         sendPosition(it->getPosition().first, it->getPosition().second, skt); // x = it->second.first, y = it->second.second
   }   
 }
+
+
+void ServerProtocol::sendObstaclesInfo(const std::vector<ObstacleDto> &obstaclesInfo, Socket *skt) {
+    uint8_t count = obstaclesInfo.size();
+    sendAll(&count, 1, skt);
+    for (auto it = obstaclesInfo.begin(); it != obstaclesInfo.end(); ++it) {
+        uint8_t id = it->getId();
+        sendAll(&id, 1, skt);
+        sendTypeObstacle(it->getTypeObstacle(), skt);
+        sendPosition(it->getPosition().first, it->getPosition().second, skt); // x = it->second.first, y = it->second.second
+  }
+}   
 
 void ServerProtocol::sendPosition(const uint16_t& x, const uint16_t& y, Socket *skt) {
     uint16_t xAux = htons(x);
@@ -405,17 +464,20 @@ EventDTO ServerProtocol::getEvent(Socket *skt) {
     return EventDTO(Event::event_invalid, 0);
 }
 
-void ServerProtocol::sendSnapshot(const Snapshot &snapshot, Socket *skt) {
-    Event event = snapshot.getEvent();
+void ServerProtocol::sendSnapshot(std::shared_ptr<Snapshot>& snapshot, Socket *skt) {
+    Event event = snapshot->getEvent();
     if (event == Event::event_create) {
-        sendCreate(snapshot.getCode(), snapshot.getIdPlayer(), skt);
+        sendCreate(snapshot->getCode(), snapshot->getIdPlayer(), skt);
     } else if (event == Event::event_join) {
-        sendJoin(snapshot.getOk(), snapshot.getIdPlayer(), snapshot.getSize(), skt);
+        sendJoin(snapshot->getOk(), snapshot->getIdPlayer(), snapshot->getSize(), skt);
     } else if (event == Event::event_start_game) {
-        sendStart(snapshot.getInfo(), snapshot.getEnemies(), snapshot.getTypeGame(),
-            snapshot.getMap(), skt);
-    } else {
-        sendPlaying(snapshot.getInfo(), snapshot.getEnemies(), skt);
+        sendStart(snapshot->getInfo(), snapshot->getEnemies(), snapshot->getObstacles(), snapshot->getTypeGame(), snapshot->getMap(), skt);
+    } else if (event == Event::event_playing) {
+        sendPlaying(snapshot->getInfo(), snapshot->getEnemies(), skt);
+    } else if (event == Event::event_end) {
+        sendEnd(skt);
+    } else if (event == Event::event_stats) {
+        sendStats(snapshot->getTime(), snapshot->getShots(), snapshot->getKills(), skt);
     }
 }
 

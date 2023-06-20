@@ -85,7 +85,7 @@ void Game::gameLoop() {
         // para poder lanzar una grandada, que los jugadores se muevan,
         // todos los eventos que tienen que ver con el tiempo.
 
-        std::shared_ptr<Snapshot> snapshot = gameWorld.getSnapshot(true);
+        std::shared_ptr<Snapshot> snapshot = gameWorld.getSnapshot(false);
         // broadcastSnapshot() # acá recien se agarra el snapshot y se lo pushea
         // a los hilos sender. Un snapshot por gameloop. Si hacen uno por evento,
         // saturan la red sin sentido
@@ -96,6 +96,11 @@ void Game::gameLoop() {
         int t_delta = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
         // duration<double>(t_delta)
         std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 20 - t_delta));
+        
+        if(gameWorld.isEnded()){
+            broadcastSnapshot(gameWorld.getStats());
+            stop();
+        }
     }
 }
 

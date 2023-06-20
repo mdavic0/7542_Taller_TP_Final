@@ -14,7 +14,7 @@
 #include <QDebug>
 #include <QMessageBox>
 
-Launcher::Launcher(QWidget* parent): QWidget(parent),
+Launcher::Launcher(QWidget* parent) : QWidget(parent),
     initView(), connectView(), menuView(), createView(), joinView(),
     socket(std::nullopt), clientProtocol() {
     this->initWidget();
@@ -46,7 +46,6 @@ Launcher::Launcher(QWidget* parent): QWidget(parent),
     // Unirse a partida
     connect(&joinView, &JoinView::joinClicked, this, &Launcher::sendJoinMatch);
     connect(&joinView, &JoinView::backClicked, this, &Launcher::goToMenu);
-
 
     QLayout *layout = new QVBoxLayout;
     layout->setMargin(0);

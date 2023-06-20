@@ -20,3 +20,7 @@ void Weapon::activate() {
 void Weapon::deactivate() {
     this->activated = false;
 }
+
+uint8_t& Weapon::getMunition() {
+    return munition;
+}

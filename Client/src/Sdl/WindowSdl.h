@@ -19,6 +19,7 @@ class WindowSdl {
         SDL_Window* getWindow();
         int getWidth();
         int getHeight();
+        void adjustedRect(SDL_Rect& rect);
 };
 
 #endif
