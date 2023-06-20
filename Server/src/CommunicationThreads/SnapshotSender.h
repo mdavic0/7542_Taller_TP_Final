@@ -4,6 +4,7 @@
 #include "Thread.h"
 #include "Queue.h"
 #include "ServerProtocol.h"
+#include "Socket.h"
 #include <atomic>
 #include <map>
 #include <memory>
@@ -14,7 +15,8 @@
  */
 class SnapshotSender : public Thread {
     private:
-        ServerProtocol& protocol;
+        Socket *skt;
+        ServerProtocol<Socket> protocol;
         Queue<std::shared_ptr<Snapshot>>& snapshot_queue;
         std::atomic<bool> talking;
         std::atomic<bool> alive;
@@ -26,7 +28,7 @@ class SnapshotSender : public Thread {
          * Además, recibe una queue por referencia, de la cual obtendrá
          * las respuestas que debe enviar.
          */
-        explicit SnapshotSender(ServerProtocol& protocol,
+        explicit SnapshotSender(Socket *skt,
                                 Queue<std::shared_ptr<Snapshot>>& snapshot_queue);
 
         /*

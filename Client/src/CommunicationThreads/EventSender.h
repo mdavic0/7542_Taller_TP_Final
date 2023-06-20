@@ -3,13 +3,15 @@
 #include "Thread.h"
 #include "Queue.h"
 #include "ClientProtocol.h"
+#include "Socket.h"
 #include <atomic>
 #include <memory>
 
 class EventSender : public Thread  {
 private:
+    Socket *skt;
     Queue<std::shared_ptr<EventDTO>>& sdl_events;
-    ClientProtocol& protocol;
+    ClientProtocol<Socket> protocol;
     std::atomic<bool> talking;
     std::atomic<bool> alive;
     bool& endGame;
@@ -21,7 +23,7 @@ public:
     * las respuestas que debe enviar.
     */
     EventSender(Queue<std::shared_ptr<EventDTO>>& sdl_events,
-                ClientProtocol& protocol,
+                Socket *skt,
                 bool& endGame);
 
     /*

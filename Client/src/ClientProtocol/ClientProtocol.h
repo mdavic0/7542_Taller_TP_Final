@@ -183,8 +183,8 @@ Snapshot getJoin (T *skt) {
 }
 
 Snapshot getStart (T *skt) {
-    std::vector<StOperator> players = getPlayers();
-    std::vector<EnemyDto> enemies = getEnemies();
+    std::vector<StOperator> players = getPlayers(skt);
+    std::vector<EnemyDto> enemies = getEnemies(skt);
     
     uint8_t idGame;
     this->recvAll(&idGame, 1, skt);

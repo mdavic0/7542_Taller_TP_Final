@@ -70,7 +70,7 @@ include_directories(${PROJECT_SOURCE_DIR}/Server/src/GameWorld/Player)
 include_directories(${PROJECT_SOURCE_DIR}/Server/src/GameWorld/RespawnController)
 include_directories(${PROJECT_SOURCE_DIR}/Server/src/GameWorld/Weapon)
 
-#add_subdirectory("Server/src")
+add_subdirectory("Server/src")
 
 # CLIENT
 include_directories(${PROJECT_SOURCE_DIR}/Client/src)
@@ -81,7 +81,7 @@ include_directories(${PROJECT_SOURCE_DIR}/Client/src/GameThread)
 include_directories(${PROJECT_SOURCE_DIR}/Client/src/Launcher)
 include_directories(${PROJECT_SOURCE_DIR}/Client/src/Sdl)
 
-#add_subdirectory("Client/src")
+add_subdirectory("Client/src")
 
 # TESTS
 include_directories(${PROJECT_SOURCE_DIR}/Testing/src)
@@ -101,11 +101,11 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 
 #EJECUTABLES
-#add_executable(server "Server/main.cpp")
-#target_link_libraries(server server_classes common_classes yaml-cpp)
+add_executable(server "Server/main.cpp")
+target_link_libraries(server server_classes common_classes yaml-cpp)
 
-#add_executable(client "Client/main.cpp")
-#target_link_libraries(client client_classes common_classes SDL2 SDL2_image SDL2_ttf yaml-cpp)
+add_executable(client "Client/main.cpp")
+target_link_libraries(client client_classes common_classes SDL2 SDL2_image SDL2_ttf yaml-cpp)
 
 add_executable(testprotocol "Testing/testprotocol.cpp" )
 target_link_libraries(testprotocol common_classes mock_classes)

@@ -1,15 +1,15 @@
 #include "SnapshotReceiver.h"
 #include "Liberror.h"
 
-SnapshotReceiver::SnapshotReceiver(ClientProtocol &protocol,
+SnapshotReceiver::SnapshotReceiver(Socket *skt,
                                    Queue<std::shared_ptr<Snapshot>> &snapshots, bool& endGame) :
-        protocol(protocol), snapshot_queue(snapshots), talking(true), alive(true), endGame(endGame) {
+        skt(skt), snapshot_queue(snapshots), talking(true), alive(true), endGame(endGame) {
 }
 
 void SnapshotReceiver::run() {
     while (talking) {
         try {
-            snapshot_queue.push(std::make_shared<Snapshot>(protocol.getSnapshot()));
+            snapshot_queue.push(std::make_shared<Snapshot>(protocol.getSnapshot(skt)));
         } catch (const LibError &exc) {
             talking = false;
             snapshot_queue.close();

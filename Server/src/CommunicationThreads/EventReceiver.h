@@ -15,7 +15,8 @@
  */
 class EventReceiver : public Thread {
     private:
-        ServerProtocol protocol;
+        Socket skt;
+        ServerProtocol<Socket> protocol;
         Queue<std::shared_ptr<EventDTO>>* event_queue;
         Queue<std::shared_ptr<Snapshot>> snapshot_queue;
         SnapshotSender sender;

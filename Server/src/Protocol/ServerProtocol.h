@@ -3,6 +3,9 @@
 
 #include <string>
 #include <sstream>
+#include <arpa/inet.h>
+#include <vector>
+#include <utility>
 #include "Protocol.h"
 #include "EventDTO.h"
 #include "Snapshot.h"
