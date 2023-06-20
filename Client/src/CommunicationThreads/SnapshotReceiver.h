@@ -4,18 +4,20 @@
 #include "Queue.h"
 #include "ClientProtocol.h"
 #include "Snapshot.h"
+#include "Socket.h"
 #include <atomic>
 #include <memory>
 
 class SnapshotReceiver : public Thread {
 private:
-    ClientProtocol& protocol;
+    std::shared_ptr<Socket> skt;
+    ClientProtocol<Socket> protocol;
     Queue<std::shared_ptr<Snapshot>>& snapshot_queue;
     std::atomic<bool> talking;
     std::atomic<bool> alive;
     bool& endGame;
 public:
-    SnapshotReceiver(ClientProtocol& protocol,
+    SnapshotReceiver(std::shared_ptr<Socket> skt,
                      Queue<std::shared_ptr<Snapshot>>& snapshots, bool& endGame);
 
     /*

@@ -1,7 +1,9 @@
 #include <gtest/gtest.h>
 #include "ClientProtocol.h"
 #include "ServerProtocol.h"
-#include "Socket.h"
+#include "SimulatedSocket.h"
+
+
 
 // Demonstrate some basic assertions.
 TEST(HelloTest, BasicAssertions) {
@@ -10,34 +12,31 @@ TEST(HelloTest, BasicAssertions) {
   // Expect equality.
   EXPECT_EQ(7 * 6, 42);
 }
-/*
 TEST(ClientToServer, SendCreate) {
-  MockSocket skt;
-  ClientProtocol client(skt);
-  ServerProtocol server(skt);
-  EventDTO event(Event::event_create, MoveTo::move_not, "", 0);
-  client.sendEvent(event);
-  EXPECT_EQ(Event::event_create, server.getEvent().getEvent());
+  std::shared_ptr<SimulatedSocket> skt = std::make_shared<SimulatedSocket>();
+  ClientProtocol<SimulatedSocket> client;
+  ServerProtocol<SimulatedSocket> server;
+  EventDTO event("SALA", TypeGame(SURVIVAL_CODE), TypeOperator(SCOUT_CODE));
+  client.sendEvent(event, skt);
+  EventDTO recvEvent = server.getEvent(skt);
+  EXPECT_EQ(Event::event_create, recvEvent.getEvent());
+  EXPECT_EQ(TypeGame::game_survival, recvEvent.getTypeGame());
+  EXPECT_EQ(TypeOperator::operator_scout, recvEvent.getTypeOperator());
+  EXPECT_EQ("SALA", recvEvent.getStr());
 }
 
 TEST(ClientToServer, SendJoin) {
-  MockSocket skt;
-  ClientProtocol client(skt);
-  ServerProtocol server(skt);
-  EventDTO event(Event::event_join, MoveTo::move_not, "", 11);
-  client.sendEvent(event);
-  EXPECT_EQ(Event::event_join, server.getEvent().getEvent());
+  std::shared_ptr<SimulatedSocket> skt = std::make_shared<SimulatedSocket>();
+  ClientProtocol<SimulatedSocket> client;
+  ServerProtocol<SimulatedSocket> server;
+  EventDTO event(22, TypeOperator(IDF_CODE));
+  client.sendEvent(event, skt);
+  EventDTO recvEvent = server.getEvent(skt);
+  EXPECT_EQ(Event::event_join, recvEvent.getEvent());
+  EXPECT_EQ(22, recvEvent.getN());
+  EXPECT_EQ(TypeOperator::operator_idf, recvEvent.getTypeOperator());
 }
 
-TEST(ClientToServer, SendJoinCorrectCode) {
-  MockSocket skt;
-  ClientProtocol client(skt);
-  ServerProtocol server(skt);
-  EventDTO event(Event::event_join, MoveTo::move_not, "", 11);
-  client.sendEvent(event);
-  EXPECT_EQ(11, server.getEvent().getN());
-}
-*/
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();

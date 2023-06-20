@@ -2,9 +2,9 @@
 #include <utility>
 #include "Liberror.h"
 
-EventReceiver::EventReceiver(Socket&& skt, GamesController& controller) :
-    protocol(std::move(skt)), event_queue(),
-    snapshot_queue(1000), sender(protocol, snapshot_queue),
+EventReceiver::EventReceiver(std::shared_ptr<Socket> skt, GamesController& controller) :
+    skt(skt), protocol(), event_queue(),
+    snapshot_queue(1000), sender(this->skt, snapshot_queue),
     controller(controller), game_code(0), talking(true), alive(true) {
 }
 
@@ -12,7 +12,7 @@ void EventReceiver::run() {
     sender.start();
     while (talking) {
         try {
-            std::shared_ptr<EventDTO> eventDto = std::make_shared<EventDTO>(protocol.getEvent());
+            std::shared_ptr<EventDTO> eventDto = std::make_shared<EventDTO>(protocol.getEvent(skt));
             Event event = eventDto->getEvent();
             if (event == Event::event_create) {
                 this->event_queue = controller.create(eventDto,
