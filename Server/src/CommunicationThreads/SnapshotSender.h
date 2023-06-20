@@ -15,7 +15,7 @@
  */
 class SnapshotSender : public Thread {
     private:
-        Socket *skt;
+        std::shared_ptr<Socket> skt;
         ServerProtocol<Socket> protocol;
         Queue<std::shared_ptr<Snapshot>>& snapshot_queue;
         std::atomic<bool> talking;
@@ -28,7 +28,7 @@ class SnapshotSender : public Thread {
          * Además, recibe una queue por referencia, de la cual obtendrá
          * las respuestas que debe enviar.
          */
-        explicit SnapshotSender(Socket *skt,
+        explicit SnapshotSender(std::shared_ptr<Socket> skt,
                                 Queue<std::shared_ptr<Snapshot>>& snapshot_queue);
 
         /*

@@ -27,7 +27,7 @@ class Launcher : public QWidget {
         MenuView menuView;
         CreateView createView;
         JoinView joinView;
-        std::optional<Socket> socket;
+        std::optional<std::shared_ptr<Socket>> socket;
         ClientProtocol<Socket> clientProtocol;
         void initWidget();
         void initFont();

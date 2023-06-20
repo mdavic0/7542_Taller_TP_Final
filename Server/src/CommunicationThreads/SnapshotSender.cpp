@@ -1,7 +1,7 @@
 #include "SnapshotSender.h"
 #include "Liberror.h"
 
-SnapshotSender::SnapshotSender(Socket *skt,
+SnapshotSender::SnapshotSender(std::shared_ptr<Socket> skt,
                                Queue<std::shared_ptr<Snapshot>>& q) :
     skt(skt), snapshot_queue(q), talking(true), alive(true) {}
 

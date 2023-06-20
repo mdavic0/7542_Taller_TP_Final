@@ -9,7 +9,7 @@
 
 class EventSender : public Thread  {
 private:
-    Socket *skt;
+    std::shared_ptr<Socket> skt;
     Queue<std::shared_ptr<EventDTO>>& sdl_events;
     ClientProtocol<Socket> protocol;
     std::atomic<bool> talking;
@@ -23,7 +23,7 @@ public:
     * las respuestas que debe enviar.
     */
     EventSender(Queue<std::shared_ptr<EventDTO>>& sdl_events,
-                Socket *skt,
+                std::shared_ptr<Socket> skt,
                 bool& endGame);
 
     /*

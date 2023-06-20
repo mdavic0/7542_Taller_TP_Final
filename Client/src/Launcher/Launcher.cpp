@@ -95,7 +95,7 @@ void Launcher::goToJoin() {
 
 void Launcher::createProtocol(const QString& ip, const QString& port) {
     try {
-        this->socket = Socket(ip.toStdString().c_str(), port.toStdString().c_str());
+        this->socket = std::make_shared<Socket>(ip.toStdString().c_str(), port.toStdString().c_str());
         mainWidget.setCurrentIndex(2);
     } catch (std::exception &exc){
         QMessageBox::information(this, "Error", 
@@ -108,8 +108,8 @@ void Launcher::sendCreateMatch(const QString& name, int mode,
         int operatorSelect) {
     std::string nameMatch = name.toStdString();
     EventDTO eventCreate(nameMatch, TypeGame(mode), TypeOperator(operatorSelect));
-    clientProtocol.sendEvent(eventCreate, &this->socket.value());
-    Snapshot receive = clientProtocol.getSnapshot(&this->socket.value());
+    clientProtocol.sendEvent(eventCreate, this->socket.value());
+    Snapshot receive = clientProtocol.getSnapshot(this->socket.value());
     if (receive.getCode() >= 0) {
         std::string message = "Partida creada con codigo: " + 
             std::to_string(receive.getCode());
@@ -128,8 +128,8 @@ void Launcher::sendCreateMatch(const QString& name, int mode,
 
 void Launcher::sendJoinMatch(int code, int operatorSelect) {
     EventDTO eventCreate(code, TypeOperator(operatorSelect));
-    clientProtocol.sendEvent(eventCreate, &this->socket.value());
-    Snapshot receive = clientProtocol.getSnapshot(&this->socket.value());
+    clientProtocol.sendEvent(eventCreate, this->socket.value());
+    Snapshot receive = clientProtocol.getSnapshot(this->socket.value());
      if (receive.getOk() == 0) {
         QMessageBox::information(this, "Exito", "Union Exitosa",
             QMessageBox::Close);
@@ -150,9 +150,9 @@ void Launcher::initGame(int menu, uint8_t idPlayer, uint8_t numPlayers) {
     Queue<std::shared_ptr<EventDTO>> eventQueue(SIZE_QUEUE);
     GameDrawner gameDrawner(snapshotQueue, eventQueue, endGame, menu, idPlayer,
                             numPlayers);
-    SnapshotReceiver snapshotReceiver(&socket.value(), snapshotQueue,
+    SnapshotReceiver snapshotReceiver(socket.value(), snapshotQueue,
                                         endGame);
-    EventSender eventSender(eventQueue, &socket.value(), endGame);
+    EventSender eventSender(eventQueue, socket.value(), endGame);
     eventSender.start();
     snapshotReceiver.start();
     gameDrawner.start();

@@ -10,14 +10,14 @@
 
 class SnapshotReceiver : public Thread {
 private:
-    Socket *skt;
+    std::shared_ptr<Socket> skt;
     ClientProtocol<Socket> protocol;
     Queue<std::shared_ptr<Snapshot>>& snapshot_queue;
     std::atomic<bool> talking;
     std::atomic<bool> alive;
     bool& endGame;
 public:
-    SnapshotReceiver(Socket *skt,
+    SnapshotReceiver(std::shared_ptr<Socket> skt,
                      Queue<std::shared_ptr<Snapshot>>& snapshots, bool& endGame);
 
     /*

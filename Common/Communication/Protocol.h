@@ -27,7 +27,7 @@ class Protocol{
         void sendAll(
             const void *data,
             unsigned int sz,
-            T *skt) {
+            std::shared_ptr<T> skt) {
     bool was_closed = false;
     bool sokcet_ret = skt->sendall(data, sz, &was_closed);
 
@@ -43,7 +43,7 @@ class Protocol{
         void recvAll(
             void *data,
             unsigned int sz,
-            T *skt) {
+            std::shared_ptr<T> skt) {
     bool was_closed = false;
     bool sokcet_ret = skt->recvall(data, sz, &was_closed);
 
@@ -56,7 +56,7 @@ class Protocol{
           * Método privado para enviar strings por medio del T.
           */
         void sendString(const std::string& str,
-            T *skt) {
+            std::shared_ptr<T> skt) {
     uint16_t len = htons(str.size());
     sendAll(&len, 2, skt);
     sendAll(str.c_str(), str.size(), skt);
@@ -68,7 +68,7 @@ class Protocol{
            * Método privado para recibir strings
            */
         std::string recvString(
-            T *skt) {
+            std::shared_ptr<T> skt) {
     uint16_t len;
     recvAll(&len, 2, skt);
     len = ntohs(len);

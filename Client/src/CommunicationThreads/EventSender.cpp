@@ -2,7 +2,7 @@
 #include "Liberror.h"
 
 EventSender::EventSender(Queue<std::shared_ptr<EventDTO>> &sdl_events,
-                         Socket *skt, bool& endGame) :
+                         std::shared_ptr<Socket> skt, bool& endGame) :
         sdl_events(sdl_events), skt(skt), talking(true), alive(true),
         endGame(endGame) {
 }

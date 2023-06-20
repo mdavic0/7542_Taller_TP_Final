@@ -35,8 +35,8 @@ void Acceptor::waitClients() {
 void Acceptor::run() {
     while (talking) {
         try {
-            Socket peer = skt.accept();
-            EventReceiver *reader = new EventReceiver(std::move(peer), controller);
+            std::shared_ptr<Socket> peer = std::make_shared<Socket>(skt.accept());
+            EventReceiver *reader = new EventReceiver(peer, controller);
             reader->start();
             readers.push_back(reader);   //  Agrego cliente
             endedClients();

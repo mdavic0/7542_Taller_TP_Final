@@ -13,12 +13,12 @@ TEST(HelloTest, BasicAssertions) {
   EXPECT_EQ(7 * 6, 42);
 }
 TEST(ClientToServer, SendCreate) {
-  SimulatedSocket skt;
+  std::shared_ptr<SimulatedSocket> skt = std::make_shared<SimulatedSocket>();
   ClientProtocol<SimulatedSocket> client;
   ServerProtocol<SimulatedSocket> server;
   EventDTO event("SALA", TypeGame(SURVIVAL_CODE), TypeOperator(SCOUT_CODE));
-  client.sendEvent(event, &skt);
-  EventDTO recvEvent = server.getEvent(&skt);
+  client.sendEvent(event, skt);
+  EventDTO recvEvent = server.getEvent(skt);
   EXPECT_EQ(Event::event_create, recvEvent.getEvent());
   EXPECT_EQ(TypeGame::game_survival, recvEvent.getTypeGame());
   EXPECT_EQ(TypeOperator::operator_scout, recvEvent.getTypeOperator());
@@ -26,12 +26,12 @@ TEST(ClientToServer, SendCreate) {
 }
 
 TEST(ClientToServer, SendJoin) {
-  SimulatedSocket skt;
+  std::shared_ptr<SimulatedSocket> skt = std::make_shared<SimulatedSocket>();
   ClientProtocol<SimulatedSocket> client;
   ServerProtocol<SimulatedSocket> server;
   EventDTO event(22, TypeOperator(IDF_CODE));
-  client.sendEvent(event, &skt);
-  EventDTO recvEvent = server.getEvent(&skt);
+  client.sendEvent(event, skt);
+  EventDTO recvEvent = server.getEvent(skt);
   EXPECT_EQ(Event::event_join, recvEvent.getEvent());
   EXPECT_EQ(22, recvEvent.getN());
   EXPECT_EQ(TypeOperator::operator_idf, recvEvent.getTypeOperator());

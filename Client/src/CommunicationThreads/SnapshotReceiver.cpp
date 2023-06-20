@@ -1,7 +1,7 @@
 #include "SnapshotReceiver.h"
 #include "Liberror.h"
 
-SnapshotReceiver::SnapshotReceiver(Socket *skt,
+SnapshotReceiver::SnapshotReceiver(std::shared_ptr<Socket> skt,
                                    Queue<std::shared_ptr<Snapshot>> &snapshots, bool& endGame) :
         skt(skt), snapshot_queue(snapshots), talking(true), alive(true), endGame(endGame) {
 }

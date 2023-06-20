@@ -18,7 +18,7 @@ template <typename T>
 class ServerProtocol : Protocol<T> {
     private:
     
-EventDTO getCreate(T *skt) {
+EventDTO getCreate(std::shared_ptr<T> skt) {
     uint8_t idOperator;
     this->recvAll(&idOperator, 1, skt);
     TypeOperator op = TypeOperator::operator_idle;
@@ -60,7 +60,7 @@ EventDTO getCreate(T *skt) {
     return EventDTO(this->recvString(skt), game, op);
 }
 
-EventDTO getJoin(T *skt) {
+EventDTO getJoin(std::shared_ptr<T> skt) {
     uint8_t idOperator;
     this->recvAll(&idOperator, 1, skt);
     std::cout << "op " << (int)idOperator << std::endl;
@@ -94,11 +94,11 @@ EventDTO getJoin(T *skt) {
 
 }
 
-EventDTO getStart(T *skt) {
+EventDTO getStart(std::shared_ptr<T> skt) {
     return EventDTO(Event::event_start_game, 0);
 }
 
-EventDTO getMove(T *skt) {
+EventDTO getMove(std::shared_ptr<T> skt) {
     uint8_t id;
     this->recvAll(&id, 1, skt);
 
@@ -130,7 +130,7 @@ EventDTO getMove(T *skt) {
     return EventDTO(Event::event_move, moveTo, id);
 }
 
-EventDTO getStopMove(T *skt) {
+EventDTO getStopMove(std::shared_ptr<T> skt) {
     uint8_t id;
     this->recvAll(&id, 1, skt);
 
@@ -162,63 +162,63 @@ EventDTO getStopMove(T *skt) {
     return EventDTO(Event::event_stop_move, moveTo, id);
 }
 
-EventDTO getSmoke(T *skt) {
+EventDTO getSmoke(std::shared_ptr<T> skt) {
     uint8_t id;
     this->recvAll(&id, 1, skt);
 
     return EventDTO(Event::event_throw_smoke, id);
 }
 
-EventDTO getStopSmoke(T *skt) {
+EventDTO getStopSmoke(std::shared_ptr<T> skt) {
     uint8_t id;
     this->recvAll(&id, 1, skt);
 
     return EventDTO(Event::event_stop_smoke, id);
 }
 
-EventDTO getGrenade(T *skt) {
+EventDTO getGrenade(std::shared_ptr<T> skt) {
     uint8_t id;
     this->recvAll(&id, 1, skt);
 
     return EventDTO(Event::event_throw_grenade, id);
 }
 
-EventDTO getStopGrenade(T *skt) {
+EventDTO getStopGrenade(std::shared_ptr<T> skt) {
     uint8_t id;
     this->recvAll(&id, 1, skt);
 
     return EventDTO(Event::event_stop_grenade, id);
 }
 
-EventDTO getBlitz(T *skt) {
+EventDTO getBlitz(std::shared_ptr<T> skt) {
     uint8_t id;
     this->recvAll(&id, 1, skt);
 
     return EventDTO(Event::event_blitz_atack, id);
 }
 
-EventDTO getShoot(T *skt) {
+EventDTO getShoot(std::shared_ptr<T> skt) {
     uint8_t id;
     this->recvAll(&id, 1, skt);
 
     return EventDTO(Event::event_shoot, id);
 }
 
-EventDTO getStopShoot(T *skt) {
+EventDTO getStopShoot(std::shared_ptr<T> skt) {
     uint8_t id;
     this->recvAll(&id, 1, skt);
 
     return EventDTO(Event::event_stop_shoot, id);
 }
 
-EventDTO getLeave(T *skt) {
+EventDTO getLeave(std::shared_ptr<T> skt) {
     uint8_t id;
     this->recvAll(&id, 1, skt);
 
     return EventDTO(Event::event_leave, id);
 }
 
-void sendCreate(const uint32_t& code, const uint8_t& idPlayer, T *skt) {
+void sendCreate(const uint32_t& code, const uint8_t& idPlayer, std::shared_ptr<T> skt) {
     uint8_t event = CREATE_CODE;
     this->sendAll(&event, 1, skt);
 
@@ -229,7 +229,7 @@ void sendCreate(const uint32_t& code, const uint8_t& idPlayer, T *skt) {
 }
 
 void sendJoin(const uint8_t& ok, const uint8_t& idPlayer,
-    const uint8_t& size, T *skt) {
+    const uint8_t& size, std::shared_ptr<T> skt) {
     uint8_t event = JOIN_CODE;
     this->sendAll(&event, 1, skt);
 
@@ -242,7 +242,7 @@ void sendJoin(const uint8_t& ok, const uint8_t& idPlayer,
 }
 
 void sendStart(const std::vector<StOperator> &playersInfo, const std::vector<EnemyDto> &enemiesInfo,
-    const TypeGame& typeGame, const uint8_t& idMap, T *skt) {
+    const TypeGame& typeGame, const uint8_t& idMap, std::shared_ptr<T> skt) {
     uint8_t event = START_CODE;
     this->sendAll(&event, 1, skt);
     
@@ -261,7 +261,7 @@ void sendStart(const std::vector<StOperator> &playersInfo, const std::vector<Ene
 }
 
 void sendPlaying(const std::vector<StOperator> &playersInfo,
-    const std::vector<EnemyDto> &enemiesInfo, T *skt) {
+    const std::vector<EnemyDto> &enemiesInfo, std::shared_ptr<T> skt) {
     uint8_t event = PLAYING_CODE;
     this->sendAll(&event, 1, skt);
 
@@ -270,7 +270,7 @@ void sendPlaying(const std::vector<StOperator> &playersInfo,
 }
 
 
-void sendOperator(const TypeOperator& typeOperator, T *skt) {
+void sendOperator(const TypeOperator& typeOperator, std::shared_ptr<T> skt) {
     if(typeOperator == TypeOperator::operator_idf){
         uint8_t op = IDF_CODE;
         this->sendAll(&op, 1, skt);
@@ -283,7 +283,7 @@ void sendOperator(const TypeOperator& typeOperator, T *skt) {
     }
 }
 
-void sendOperator(const TypeInfected& typeInfected, T *skt) {
+void sendOperator(const TypeInfected& typeInfected, std::shared_ptr<T> skt) {
     if(typeInfected == TypeInfected::infected_zombie){
         uint8_t op = INFECTED_ZOMBIE;
         this->sendAll(&op, 1, skt);
@@ -302,7 +302,7 @@ void sendOperator(const TypeInfected& typeInfected, T *skt) {
     }
 }
 
-void sendState(const State& state, T *skt) {
+void sendState(const State& state, std::shared_ptr<T> skt) {
     if(state == State::idle){
         uint8_t aux = STATE_IDLE;
         this->sendAll(&aux, 1, skt);
@@ -324,7 +324,7 @@ void sendState(const State& state, T *skt) {
     }
 }
 
-void sendPlayersInfo(const std::vector<StOperator> &playersInfo, T *skt) {
+void sendPlayersInfo(const std::vector<StOperator> &playersInfo, std::shared_ptr<T> skt) {
     uint8_t playersCount = playersInfo.size();
     this->sendAll(&playersCount, 1, skt);
     for (auto it = playersInfo.begin(); it != playersInfo.end(); ++it) {
@@ -338,7 +338,7 @@ void sendPlayersInfo(const std::vector<StOperator> &playersInfo, T *skt) {
   }
 }
 
-void sendEnemiesInfo(const std::vector<EnemyDto> &enemiesInfo, T *skt) {
+void sendEnemiesInfo(const std::vector<EnemyDto> &enemiesInfo, std::shared_ptr<T> skt) {
     uint8_t count = enemiesInfo.size();
     this->sendAll(&count, 1, skt);
     for (auto it = enemiesInfo.begin(); it != enemiesInfo.end(); ++it) {
@@ -350,7 +350,7 @@ void sendEnemiesInfo(const std::vector<EnemyDto> &enemiesInfo, T *skt) {
   }   
 }
 
-void sendPosition(const uint16_t& x, const uint16_t& y, T *skt) {
+void sendPosition(const uint16_t& x, const uint16_t& y, std::shared_ptr<T> skt) {
     uint16_t xAux = htons(x);
     this->sendAll(&xAux, 2, skt);
 
@@ -364,7 +364,7 @@ void sendPosition(const uint16_t& x, const uint16_t& y, T *skt) {
         * */
         explicit ServerProtocol() {}
 
-        EventDTO getEvent(T *skt) {
+        EventDTO getEvent(std::shared_ptr<T> skt) {
     uint8_t event;
     this->recvAll(&event, 1, skt);
 
@@ -429,7 +429,7 @@ void sendPosition(const uint16_t& x, const uint16_t& y, T *skt) {
 }
 
         void sendSnapshot(
-            const Snapshot &snapshot, T *skt) {
+            const Snapshot &snapshot, std::shared_ptr<T> skt) {
     Event event = snapshot.getEvent();
     if (event == Event::event_create) {
         sendCreate(snapshot.getCode(), snapshot.getIdPlayer(), skt);

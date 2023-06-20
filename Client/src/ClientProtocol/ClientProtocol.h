@@ -19,7 +19,7 @@ class ClientProtocol : public Protocol<T> {
     private:
 
 void sendCreate(const std::string& scenario, const TypeOperator& typeOperator,
-    const TypeGame& typeGame, T *skt) {
+    const TypeGame& typeGame, std::shared_ptr<T> skt) {
     uint8_t command = CREATE_CODE;
     this->sendAll(&command, 1, skt);
 
@@ -36,7 +36,7 @@ void sendCreate(const std::string& scenario, const TypeOperator& typeOperator,
     this->sendString(scenario, skt);
 }
 
-void sendJoin(const uint32_t& code, const TypeOperator& typeOperator, T *skt) {
+void sendJoin(const uint32_t& code, const TypeOperator& typeOperator, std::shared_ptr<T> skt) {
     uint8_t command = JOIN_CODE;
     this->sendAll(&command, 1, skt);
 
@@ -47,12 +47,12 @@ void sendJoin(const uint32_t& code, const TypeOperator& typeOperator, T *skt) {
     
 }
 
-void sendStart(T *skt) {
+void sendStart(std::shared_ptr<T> skt) {
     uint8_t command = START_CODE;
     this->sendAll(&command, 1, skt);
 }
 
-void sendMove(const MoveTo& moveTo, const uint8_t& idPlayer, T *skt) {
+void sendMove(const MoveTo& moveTo, const uint8_t& idPlayer, std::shared_ptr<T> skt) {
     uint8_t command = MOVE_CODE;
     this->sendAll(&command, 1, skt);
 
@@ -61,7 +61,7 @@ void sendMove(const MoveTo& moveTo, const uint8_t& idPlayer, T *skt) {
     sendMoveTo(moveTo, skt);
 }
 
-void sendStopMove(const MoveTo& moveTo, const uint8_t& idPlayer, T *skt) {
+void sendStopMove(const MoveTo& moveTo, const uint8_t& idPlayer, std::shared_ptr<T> skt) {
     uint8_t command = STOP_MOVE_CODE;
     this->sendAll(&command, 1, skt);
 
@@ -70,63 +70,63 @@ void sendStopMove(const MoveTo& moveTo, const uint8_t& idPlayer, T *skt) {
     sendMoveTo(moveTo, skt);
 }
 
-void sendSmoke(const uint8_t& idPlayer, T *skt) {
+void sendSmoke(const uint8_t& idPlayer, std::shared_ptr<T> skt) {
     uint8_t command = THROW_SMOKE_CODE;
     this->sendAll(&command, 1, skt);
 
     sendId(idPlayer, skt);
 }
 
-void sendStopSmoke(const uint8_t& idPlayer, T *skt) {
+void sendStopSmoke(const uint8_t& idPlayer, std::shared_ptr<T> skt) {
     uint8_t command = STOP_SMOKE_CODE;
     this->sendAll(&command, 1, skt);
 
     sendId(idPlayer, skt);
 }
 
-void sendGrenade(const uint8_t& idPlayer, T *skt) {
+void sendGrenade(const uint8_t& idPlayer, std::shared_ptr<T> skt) {
     uint8_t command = THROW_GRENADE_CODE;
     this->sendAll(&command, 1, skt);
 
     sendId(idPlayer, skt);
 }
 
-void sendStopGrenade(const uint8_t& idPlayer, T *skt) {
+void sendStopGrenade(const uint8_t& idPlayer, std::shared_ptr<T> skt) {
     uint8_t command = STOP_GRENADE_CODE;
     this->sendAll(&command, 1, skt);
 
     sendId(idPlayer, skt);
 }
 
-void sendBlitz(const uint8_t& idPlayer, T *skt) {
+void sendBlitz(const uint8_t& idPlayer, std::shared_ptr<T> skt) {
     uint8_t command = BLITZ_ATACK_CODE;
     this->sendAll(&command, 1, skt);
 
     sendId(idPlayer, skt);
 }
 
-void sendShoot(const uint8_t& idPlayer, T *skt) {
+void sendShoot(const uint8_t& idPlayer, std::shared_ptr<T> skt) {
     uint8_t command = SHOOT_CODE;
     this->sendAll(&command, 1, skt);
 
     sendId(idPlayer, skt);
 }
 
-void sendStopShoot(const uint8_t& idPlayer, T *skt) {
+void sendStopShoot(const uint8_t& idPlayer, std::shared_ptr<T> skt) {
     uint8_t command = STOP_SHOOT_CODE;
     this->sendAll(&command, 1, skt);
 
     sendId(idPlayer, skt);
 }
 
-void sendLeave(const uint8_t& idPlayer, T *skt) {
+void sendLeave(const uint8_t& idPlayer, std::shared_ptr<T> skt) {
     uint8_t command = LEAVE_CODE;
     this->sendAll(&command, 1, skt);
 
     sendId(idPlayer, skt);
 }
 
-void sendOperator(const TypeOperator& typeOperator, T *skt) {
+void sendOperator(const TypeOperator& typeOperator, std::shared_ptr<T> skt) {
     uint8_t op;
     if(typeOperator == TypeOperator::operator_idf){
         op = IDF_CODE;
@@ -138,7 +138,7 @@ void sendOperator(const TypeOperator& typeOperator, T *skt) {
     this->sendAll(&op, 1, skt);
 }
 
-void sendMoveTo(const MoveTo& moveTo, T *skt) {
+void sendMoveTo(const MoveTo& moveTo, std::shared_ptr<T> skt) {
     uint8_t idDirection;
     if (moveTo == MoveTo::move_down) {
         idDirection = DOWN_CODE;
@@ -152,11 +152,11 @@ void sendMoveTo(const MoveTo& moveTo, T *skt) {
     this->sendAll(&idDirection, 1, skt);
 }
 
-void sendId(const uint8_t& idPlayer, T *skt) {
+void sendId(const uint8_t& idPlayer, std::shared_ptr<T> skt) {
     this->sendAll(&idPlayer, 1, skt);    
 }
 
-Snapshot getCreate (T *skt) {
+Snapshot getCreate (std::shared_ptr<T> skt) {
     uint32_t code;
     this->recvAll(&code, 4, skt);
     code = ntohl(code);
@@ -167,7 +167,7 @@ Snapshot getCreate (T *skt) {
     return Snapshot(Event::event_create, code, idPlayer);
 }
 
-Snapshot getJoin (T *skt) {
+Snapshot getJoin (std::shared_ptr<T> skt) {
     uint8_t ok;
     this->recvAll(&ok, 1, skt);
 
@@ -182,7 +182,7 @@ Snapshot getJoin (T *skt) {
     return Snapshot(Event::event_join, ok, idPlayer, size);
 }
 
-Snapshot getStart (T *skt) {
+Snapshot getStart (std::shared_ptr<T> skt) {
     std::vector<StOperator> players = getPlayers(skt);
     std::vector<EnemyDto> enemies = getEnemies(skt);
     
@@ -208,11 +208,11 @@ Snapshot getStart (T *skt) {
     return Snapshot(players, enemies, game, idMap);
 }
 
-Snapshot getPlaying (T *skt) {
+Snapshot getPlaying (std::shared_ptr<T> skt) {
     return Snapshot(getPlayers(skt), getEnemies(skt));
 }
 
-std::vector<StOperator> getPlayers(T *skt) {
+std::vector<StOperator> getPlayers(std::shared_ptr<T> skt) {
     uint8_t playersCount;
     this->recvAll(&playersCount, 1, skt);
 
@@ -292,7 +292,7 @@ std::vector<StOperator> getPlayers(T *skt) {
     return vector;
 }
 
-std::vector<EnemyDto> getEnemies(T *skt) {
+std::vector<EnemyDto> getEnemies(std::shared_ptr<T> skt) {
     uint8_t count;
     this->recvAll(&count, 1, skt);
 
@@ -384,7 +384,7 @@ std::vector<EnemyDto> getEnemies(T *skt) {
         /*
          * Método generico para indicar al servidor que sucedio un evento.
          */
-        void sendEvent(const EventDTO& eventdto, T *skt) {
+        void sendEvent(const EventDTO& eventdto, std::shared_ptr<T> skt) {
     Event event = eventdto.getEvent();
 
     if (event == Event::event_create) {
@@ -421,7 +421,7 @@ std::vector<EnemyDto> getEnemies(T *skt) {
         /*
          * Método generico recibir un snapshot del servidor.
          */
-        Snapshot getSnapshot(T *skt) {
+        Snapshot getSnapshot(std::shared_ptr<T> skt) {
     uint8_t event;
     this->recvAll(&event, 1, skt);
 
