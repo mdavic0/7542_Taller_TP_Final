@@ -65,7 +65,7 @@ void GameSdl::update() {
                                                 player.getHealth(),
                                                 player.getMunition());
         }
-        camera.update(soldiers[idPlayer]->getPosition());
+        camera.update(calculateMassCenter());
 
         // Si no se actualizaron todos significa que alguno se desconecto
         if (soldiers.size() > snap->getInfo().size()) {
@@ -107,6 +107,8 @@ std::pair<int16_t, int16_t> GameSdl::calculateMassCenter() {
         massCenter.first += soldier.second->getPosX();
         massCenter.second += soldier.second->getPosY();
     }
+    massCenter.first = massCenter.first / soldiers.size();
+    massCenter.second = massCenter.second / soldiers.size();
     return massCenter;
 }
 
