@@ -1,15 +1,15 @@
 #include "SnapshotSender.h"
 #include "Liberror.h"
 
-SnapshotSender::SnapshotSender(ServerProtocol& protocol,
+SnapshotSender::SnapshotSender(std::shared_ptr<Socket> skt,
                                Queue<std::shared_ptr<Snapshot>>& q) :
-    protocol(protocol), snapshot_queue(q), talking(true), alive(true) {}
+    skt(skt), snapshot_queue(q), talking(true), alive(true) {}
 
 void SnapshotSender::run() {
     while (talking) {
         try {
             std::shared_ptr<Snapshot> response = snapshot_queue.pop();
-            protocol.sendSnapshot(*response);
+            protocol.sendSnapshot(*response, skt);
             // delete response;
         } catch (const ClosedQueue&) {
             break;

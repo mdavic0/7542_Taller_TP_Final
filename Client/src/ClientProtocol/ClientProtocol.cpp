@@ -1,18 +1,17 @@
-#include "ClientProtocol.h"
+/*#include "ClientProtocol.h"
 #include <arpa/inet.h>
 #include <vector>
 #include <utility>
 #include <iostream>
 
-ClientProtocol::ClientProtocol(Socket&& skt) :
-    Protocol(std::move(skt)) {}
+ClientProtocol::ClientProtocol() {}
 
 void ClientProtocol::sendCreate(const std::string& scenario, const TypeOperator& typeOperator,
-    const TypeGame& typeGame) {
+    const TypeGame& typeGame, Socket *skt) {
     uint8_t command = CREATE_CODE;
-    sendAll(&command, 1);
+    sendAll(&command, 1, skt);
 
-    sendOperator(typeOperator);
+    sendOperator(typeOperator, skt);
 
     uint8_t idGame;
     if (typeGame == TypeGame::game_survival) {
@@ -20,102 +19,102 @@ void ClientProtocol::sendCreate(const std::string& scenario, const TypeOperator&
     } else if (typeGame == TypeGame::game_clear_zone) {
         idGame = CLEAR_ZONE_CODE;
     }
-    sendAll(&idGame, 1);
+    sendAll(&idGame, 1, skt);
 
-    sendString(scenario);
+    sendString(scenario, skt);
 }
 
-void ClientProtocol::sendJoin(const uint32_t& code, const TypeOperator& typeOperator) {
+void ClientProtocol::sendJoin(const uint32_t& code, const TypeOperator& typeOperator, Socket *skt) {
     uint8_t command = JOIN_CODE;
-    sendAll(&command, 1);
+    sendAll(&command, 1, skt);
 
-    sendOperator(typeOperator);
+    sendOperator(typeOperator, skt);
     
     uint32_t codeAux = htonl(code);
-    sendAll(&codeAux, 4);
+    sendAll(&codeAux, 4, skt);
     
 }
 
-void ClientProtocol::sendStart() {
+void ClientProtocol::sendStart(Socket *skt) {
     uint8_t command = START_CODE;
-    sendAll(&command, 1);
+    sendAll(&command, 1, skt);
 }
 
-void ClientProtocol::sendMove(const MoveTo& moveTo, const uint8_t& idPlayer) {
+void ClientProtocol::sendMove(const MoveTo& moveTo, const uint8_t& idPlayer, Socket *skt) {
     uint8_t command = MOVE_CODE;
-    sendAll(&command, 1);
+    sendAll(&command, 1, skt);
 
-    sendId(idPlayer);
+    sendId(idPlayer, skt);
 
-    sendMoveTo(moveTo);
+    sendMoveTo(moveTo, skt);
 }
 
-void ClientProtocol::sendStopMove(const MoveTo& moveTo, const uint8_t& idPlayer) {
+void ClientProtocol::sendStopMove(const MoveTo& moveTo, const uint8_t& idPlayer, Socket *skt) {
     uint8_t command = STOP_MOVE_CODE;
-    sendAll(&command, 1);
+    sendAll(&command, 1, skt);
 
-    sendId(idPlayer);
+    sendId(idPlayer, skt);
 
-    sendMoveTo(moveTo);
+    sendMoveTo(moveTo, skt);
 }
 
-void ClientProtocol::sendSmoke(const uint8_t& idPlayer) {
+void ClientProtocol::sendSmoke(const uint8_t& idPlayer, Socket *skt) {
     uint8_t command = THROW_SMOKE_CODE;
-    sendAll(&command, 1);
+    sendAll(&command, 1, skt);
 
-    sendId(idPlayer);
+    sendId(idPlayer, skt);
 }
 
-void ClientProtocol::sendStopSmoke(const uint8_t& idPlayer) {
+void ClientProtocol::sendStopSmoke(const uint8_t& idPlayer, Socket *skt) {
     uint8_t command = STOP_SMOKE_CODE;
-    sendAll(&command, 1);
+    sendAll(&command, 1, skt);
 
-    sendId(idPlayer);
+    sendId(idPlayer, skt);
 }
 
-void ClientProtocol::sendGrenade(const uint8_t& idPlayer) {
+void ClientProtocol::sendGrenade(const uint8_t& idPlayer, Socket *skt) {
     uint8_t command = THROW_GRENADE_CODE;
-    sendAll(&command, 1);
+    sendAll(&command, 1, skt);
 
-    sendId(idPlayer);
+    sendId(idPlayer, skt);
 }
 
-void ClientProtocol::sendStopGrenade(const uint8_t& idPlayer) {
+void ClientProtocol::sendStopGrenade(const uint8_t& idPlayer, Socket *skt) {
     uint8_t command = STOP_GRENADE_CODE;
-    sendAll(&command, 1);
+    sendAll(&command, 1, skt);
 
-    sendId(idPlayer);
+    sendId(idPlayer, skt);
 }
 
-void ClientProtocol::sendBlitz(const uint8_t& idPlayer) {
+void ClientProtocol::sendBlitz(const uint8_t& idPlayer, Socket *skt) {
     uint8_t command = BLITZ_ATACK_CODE;
-    sendAll(&command, 1);
+    sendAll(&command, 1, skt);
 
-    sendId(idPlayer);
+    sendId(idPlayer, skt);
 }
 
-void ClientProtocol::sendShoot(const uint8_t& idPlayer) {
+void ClientProtocol::sendShoot(const uint8_t& idPlayer, Socket *skt) {
     uint8_t command = SHOOT_CODE;
-    sendAll(&command, 1);
+    sendAll(&command, 1, skt);
 
-    sendId(idPlayer);
+    sendId(idPlayer, skt);
 }
 
-void ClientProtocol::sendStopShoot(const uint8_t& idPlayer) {
+void ClientProtocol::sendStopShoot(const uint8_t& idPlayer, Socket *skt) {
     uint8_t command = STOP_SHOOT_CODE;
-    sendAll(&command, 1);
+    sendAll(&command, 1, skt);
 
-    sendId(idPlayer);
+    sendId(idPlayer, skt);
 }
 
-void ClientProtocol::sendLeave(const uint8_t& idPlayer) {
+void ClientProtocol::sendLeave(const uint8_t& idPlayer, Socket *skt) {
     uint8_t command = LEAVE_CODE;
-    sendAll(&command, 1);
+    sendAll(&command, 1, skt);
 
-    sendId(idPlayer);
+    sendId(idPlayer, skt);
 }
 
-void ClientProtocol::sendOperator(const TypeOperator& typeOperator) {
+void ClientProtocol::sendOperator(const TypeOperator& typeOperator, Socket *skt) {
     uint8_t op;
     if(typeOperator == TypeOperator::operator_idf){
         op = IDF_CODE;
@@ -124,10 +123,10 @@ void ClientProtocol::sendOperator(const TypeOperator& typeOperator) {
     } else if (typeOperator == TypeOperator::operator_scout) {
         op = SCOUT_CODE;
     }
-    sendAll(&op, 1);
+    sendAll(&op, 1, skt);
 }
 
-void ClientProtocol::sendMoveTo(const MoveTo& moveTo) {
+void ClientProtocol::sendMoveTo(const MoveTo& moveTo, Socket *skt) {
     uint8_t idDirection;
     if (moveTo == MoveTo::move_down) {
         idDirection = DOWN_CODE;
@@ -138,45 +137,45 @@ void ClientProtocol::sendMoveTo(const MoveTo& moveTo) {
     } else if (moveTo == MoveTo::move_right) {
         idDirection = RIGHT_CODE;
     }
-    sendAll(&idDirection, 1);
+    sendAll(&idDirection, 1, skt);
 }
 
-void ClientProtocol::sendId(const uint8_t& idPlayer) {
-    sendAll(&idPlayer, 1);    
+void ClientProtocol::sendId(const uint8_t& idPlayer, Socket *skt) {
+    sendAll(&idPlayer, 1, skt);    
 }
 
-Snapshot ClientProtocol::getCreate () {
+Snapshot ClientProtocol::getCreate (Socket *skt) {
     uint32_t code;
-    recvAll(&code, 4);
+    recvAll(&code, 4, skt);
     code = ntohl(code);
 
     uint8_t idPlayer;
-    recvAll(&idPlayer, 1);
+    recvAll(&idPlayer, 1, skt);
 
     return Snapshot(Event::event_create, code, idPlayer);
 }
 
-Snapshot ClientProtocol::getJoin () {
+Snapshot ClientProtocol::getJoin (Socket *skt) {
     uint8_t ok;
-    recvAll(&ok, 1);
+    recvAll(&ok, 1, skt);
 
     uint8_t idPlayer = 0;
     uint8_t size = 0;
 
     if (ok == 0) {
-        recvAll(&idPlayer, 1);
-        recvAll(&size, 1);
+        recvAll(&idPlayer, 1, skt);
+        recvAll(&size, 1, skt);
     }
 
     return Snapshot(Event::event_join, ok, idPlayer, size);
 }
 
-Snapshot ClientProtocol::getStart () {
+Snapshot ClientProtocol::getStart (Socket *skt) {
     std::vector<StOperator> players = getPlayers();
     std::vector<EnemyDto> enemies = getEnemies();
     
     uint8_t idGame;
-    recvAll(&idGame, 1);
+    recvAll(&idGame, 1, skt);
     TypeGame game = TypeGame::game_idle;
 
     switch (idGame) {
@@ -193,17 +192,17 @@ Snapshot ClientProtocol::getStart () {
     }
     
     uint8_t idMap;
-    recvAll(&idMap, 1);
+    recvAll(&idMap, 1, skt);
     return Snapshot(players, enemies, game, idMap);
 }
 
-Snapshot ClientProtocol::getPlaying () {
-    return Snapshot(getPlayers(), getEnemies());
+Snapshot ClientProtocol::getPlaying (Socket *skt) {
+    return Snapshot(getPlayers(skt), getEnemies(skt));
 }
 
-std::vector<StOperator> ClientProtocol::getPlayers() {
+std::vector<StOperator> ClientProtocol::getPlayers(Socket *skt) {
     uint8_t playersCount;
-    recvAll(&playersCount, 1);
+    recvAll(&playersCount, 1, skt);
 
     std::vector<StOperator> vector;
     uint8_t idPlayer;
@@ -218,9 +217,9 @@ std::vector<StOperator> ClientProtocol::getPlayers() {
     int16_t y;
 
     for (uint8_t i = 0; i < playersCount; i++) {
-        recvAll(&idPlayer, 1);
+        recvAll(&idPlayer, 1, skt);
 
-        recvAll(&idOperator, 1);
+        recvAll(&idOperator, 1, skt);
         switch (idOperator) {
         case IDF_CODE:
             type = TypeOperator::operator_idf;
@@ -238,7 +237,7 @@ std::vector<StOperator> ClientProtocol::getPlayers() {
             break;
         }
 
-        recvAll(&idState, 1);
+        recvAll(&idState, 1, skt);
         switch (idState) {
             case STATE_IDLE:
                 state = State::idle;
@@ -266,24 +265,24 @@ std::vector<StOperator> ClientProtocol::getPlayers() {
                 break;
         }
 
-        recvAll(&x, 2);
+        recvAll(&x, 2, skt);
         x = ntohs(x);
         // std::cout << "X " << (int)x << std::endl;
-        recvAll(&y, 2);
+        recvAll(&y, 2, skt);
         y = ntohs(y);
         // std::cout << "Y " << (int)y << std::endl;
 
         uint8_t health;
-        recvAll(&health, 1);
+        recvAll(&health, 1, skt);
         vector.push_back(StOperator(idPlayer, type, state, {x, y}, health));
     }
 
     return vector;
 }
 
-std::vector<EnemyDto> ClientProtocol::getEnemies() {
+std::vector<EnemyDto> ClientProtocol::getEnemies(Socket *skt) {
     uint8_t count;
-    recvAll(&count, 1);
+    recvAll(&count, 1, skt);
 
     std::vector<EnemyDto> vector;
     uint8_t id;
@@ -298,9 +297,9 @@ std::vector<EnemyDto> ClientProtocol::getEnemies() {
     int16_t y;
 
     for (uint8_t i = 0; i < count; i++) {
-        recvAll(&id, 1);
+        recvAll(&id, 1, skt);
 
-        recvAll(&idType, 1);
+        recvAll(&idType, 1, skt);
         switch (idType) {
 
         case INFECTED_JUMPER:
@@ -323,7 +322,7 @@ std::vector<EnemyDto> ClientProtocol::getEnemies() {
             break;
         }
 
-        recvAll(&idState, 1);
+        recvAll(&idState, 1, skt);
         switch (idState) {
             case STATE_IDLE:
                 state = State::idle;
@@ -351,10 +350,10 @@ std::vector<EnemyDto> ClientProtocol::getEnemies() {
                 break;
         }
         
-        recvAll(&x, 2);
+        recvAll(&x, 2, skt);
         x = ntohs(x);
         // std::cout << "X " << (int)x << std::endl;
-        recvAll(&y, 2);
+        recvAll(&y, 2, skt);
         y = ntohs(y);
         // std::cout << "Y " << (int)y << std::endl;
 
@@ -364,58 +363,58 @@ std::vector<EnemyDto> ClientProtocol::getEnemies() {
     return vector;
 }
 
-void ClientProtocol::sendEvent(const EventDTO& eventdto) {
+void ClientProtocol::sendEvent(const EventDTO& eventdto, Socket *skt) {
     Event event = eventdto.getEvent();
 
     if (event == Event::event_create) {
-        sendCreate(eventdto.getStr(), eventdto.getTypeOperator(), eventdto.getTypeGame());
+        sendCreate(eventdto.getStr(), eventdto.getTypeOperator(), eventdto.getTypeGame(), skt);
     } else if (event == Event::event_join) {
-        sendJoin(eventdto.getN(), eventdto.getTypeOperator());
+        sendJoin(eventdto.getN(), eventdto.getTypeOperator(), skt);
     } else if (event == Event::event_start_game) {
-        sendStart();
+        sendStart(skt);
     } else if (event == Event::event_move) {
-        sendMove(eventdto.getMoveTo(), eventdto.getIdPlayer());
+        sendMove(eventdto.getMoveTo(), eventdto.getIdPlayer(), skt);
     } else if (event == Event::event_stop_move) {
-        sendStopMove(eventdto.getMoveTo(), eventdto.getIdPlayer());
+        sendStopMove(eventdto.getMoveTo(), eventdto.getIdPlayer(), skt);
     } else if (event == Event::event_shoot) {
-        sendShoot(eventdto.getIdPlayer());
+        sendShoot(eventdto.getIdPlayer(), skt);
     } else if (event == Event::event_stop_shoot) {
-        sendStopShoot(eventdto.getIdPlayer());
+        sendStopShoot(eventdto.getIdPlayer(), skt);
     } else if (event == Event::event_throw_smoke) {
-        sendSmoke(eventdto.getIdPlayer());
+        sendSmoke(eventdto.getIdPlayer(), skt);
     } else if (event == Event::event_stop_smoke) {
-        sendStopSmoke(eventdto.getIdPlayer());
+        sendStopSmoke(eventdto.getIdPlayer(), skt);
     } else if (event == Event::event_throw_grenade) {
-        sendGrenade(eventdto.getIdPlayer());
+        sendGrenade(eventdto.getIdPlayer(), skt);
     } else if (event == Event::event_stop_grenade) {
-        sendStopGrenade(eventdto.getIdPlayer());
+        sendStopGrenade(eventdto.getIdPlayer(), skt);
     } else if (event == Event::event_blitz_atack) {
-        sendBlitz(eventdto.getIdPlayer());
+        sendBlitz(eventdto.getIdPlayer(), skt);
     } else if (event == Event::event_leave) {
-        sendLeave(eventdto.getIdPlayer());
+        sendLeave(eventdto.getIdPlayer(), skt);
     }
     
 }
 
-Snapshot ClientProtocol::getSnapshot() {
+Snapshot ClientProtocol::getSnapshot(Socket *skt) {
     uint8_t event;
-    recvAll(&event, 1);
+    recvAll(&event, 1, skt);
 
     switch (event) {
     case CREATE_CODE:
-        return getCreate();
+        return getCreate(skt);
         break;
 
     case JOIN_CODE:
-        return getJoin();
+        return getJoin(skt);
         break;
 
     case START_CODE:
-        return getStart();
+        return getStart(skt);
         break;
 
     case PLAYING_CODE:
-        return getPlaying();
+        return getPlaying(skt);
         break;
 
     default:
@@ -423,3 +422,4 @@ Snapshot ClientProtocol::getSnapshot() {
     }
     return Snapshot(Event::event_invalid, (uint8_t)0, 0, 0);
 }
+*/

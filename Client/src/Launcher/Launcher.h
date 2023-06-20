@@ -27,7 +27,8 @@ class Launcher : public QWidget {
         MenuView menuView;
         CreateView createView;
         JoinView joinView;
-        std::optional<ClientProtocol> clientProtocol;
+        std::optional<std::shared_ptr<Socket>> socket;
+        ClientProtocol<Socket> clientProtocol;
         void initWidget();
         void initFont();
         void initGame(int menu, uint8_t idPlayer, uint8_t numPlayers);

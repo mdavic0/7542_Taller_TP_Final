@@ -15,7 +15,8 @@
  */
 class EventReceiver : public Thread {
     private:
-        ServerProtocol protocol;
+        std::shared_ptr<Socket> skt;
+        ServerProtocol<Socket> protocol;
         Queue<std::shared_ptr<EventDTO>>* event_queue;
         Queue<std::shared_ptr<Snapshot>> snapshot_queue;
         SnapshotSender sender;
@@ -29,7 +30,7 @@ class EventReceiver : public Thread {
          * Constructor que recibe el protocolo y la queue de eventos
          * por referencia.
          */
-        explicit EventReceiver(Socket&& skt, GamesController& controller);
+        explicit EventReceiver(std::shared_ptr<Socket> skt, GamesController& controller);
 
         /*
          * Método que devuelve true cuando el hilo termino de ejecutarse.
