@@ -9,9 +9,7 @@
 #include "SdlException.h"
 #include "Configuration.h"
 #include "Font.h"
-#include "Operator.h"
-#include "Enemy.h"
-#include "Obstacles.h"
+#include "Lobby.h"
 #include <map>
 
 GameDrawner::GameDrawner(Queue<std::shared_ptr<Snapshot>> &snapshot_queue,
@@ -39,95 +37,18 @@ void GameDrawner::run() {
         Renderer render(window, -1, SDL_RENDERER_ACCELERATED);
 
         Font font("assets/font/Futurot.ttf", 20);
-        
         font.setHinting();
-        std::string text1 = "Waiting for other players";
-        std::string text2 = "Waiting for Ready";
-        std::string text3 = "Press enter for play";
-        bool noReady = true;
-        bool game = true;
-
-        // Por si recibo el evento start_game
-        std::shared_ptr<Snapshot> snap = nullptr;
-        std::map<uint8_t, std::shared_ptr<Operator>> players;    
-        std::map<uint8_t, std::shared_ptr<Enemy>> enemies;    
-        std::map<uint8_t, std::shared_ptr<Obstacles>> obstacles;    
-
-        while(noReady)  {
-            render.clear();
-            if (menu == JOIN_MENU)
-                this->renderText(text1, text2, render, font, window);
-            else if (menu == CREATE_MENU)
-                this->renderText(text1, text3, render, font, window);
-            SDL_Event event;
-            while (SDL_PollEvent(&event)) {
-                switch (event.type) {
-                    case SDL_QUIT: {
-                            noReady = false;
-                            game = false;
-                            client_events.push(
-                                    std::make_shared<EventDTO>(Event::event_leave
-                                        , idPlayer));
-                        }
-                        break;
-                    case SDL_KEYDOWN:
-                        if (event.key.keysym.sym == SDLK_RETURN) {
-                            if (menu == CREATE_MENU) {
-                                client_events.push(
-                                    std::make_shared<EventDTO>(
-                                        Event::event_start_game, 0));
-                                noReady = false;
-                            }
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-            render.present();
-            snapshot_queue.try_pop(snap);
-            if (snap != nullptr && snap->getEvent() == Event::event_join)
-                numPlayers = snap->getSize();
-            else if (snap != nullptr && snap->getEvent() == Event::event_start_game)
-                noReady = false;
-            SDL_Delay(1000 / 40);
-        }
+        bool initGame = true;
         
-        if (game) {
-            // mandar configuarcion una sola vez
-            if (menu == CREATE_MENU)
-               snap = snapshot_queue.pop();
-            players.clear();
-            for (auto &player : snap->getInfo()) {
-                players[player.getId()] = std::make_shared<Operator>(player.getId(), 
-                    player.getTypeOperator(), render);
-            }
-            //std::cout << "PLAYERS OK " << std::endl;
-
-            enemies.clear();
-            for (auto &infected : snap->getEnemies()) {
-                enemies[infected.getId()] = std::make_shared<Enemy>(render,
-                                            infected.getTypeInfected());
-            }
-            //std::cout << "ENEMIES OK " << std::endl;
-
-            obstacles.clear();
-            for (auto &obstacle : snap->getObstacles()) {
-                obstacles[obstacle.getId()] =
-                    std::make_shared<Obstacles>(obstacle.getTypeObstacle(), render,
-                                                obstacle.getPosition());
-                    // std::cout << "obstacle: " << (int)obstacle.getTypeObstacle() << std::endl;
-                    // std::cout << "obstacle position x: " << (int)obstacle.getPosition().first << std::endl;
-                    // std::cout << "obstacle position y: " << (int)obstacle.getPosition().second << std::endl;
-            }
-            //std::cout << "OBSTACLES OK " << std::endl;
-
-            uint8_t idMap = snap->getMap();
-            TypeGame mode = snap->getTypeGame();
+        Lobby lobby(window, render, font, snapshot_queue, client_events, menu,
+                    initGame, idPlayer, numPlayers);
+        lobby.initLobby();
+        
+        if (initGame) {
+            ConfigGame config(lobby.getConfigSnap(), render);
             
             GameSdl gameSdl(window, render, snapshot_queue, client_events,
-                            endGame, players, idPlayer, idMap, mode, font,
-                            enemies, obstacles);
+                            endGame, idPlayer, font, config);
             
             while (gameSdl.isRunning()) {
                 uint32_t frameInit = SDL_GetTicks();
@@ -151,31 +72,6 @@ void GameDrawner::run() {
     } catch (const SdlException &exc) {
         std::cerr << "Launcher: " << exc.what() << std::endl;
     } 
-}
-
-void GameDrawner::renderText(const std::string& text1, const std::string& text2,
-    Renderer& render, Font& font, WindowSdl& window) {
-    SDL_Color color = {255, 255, 255, 255};
-    int w, h, w2, h2, w3, h3;
-    font.getSizeFont(text1, &w, &h);
-    Texture textureFont(render, font.RenderText_Solid(text1, color));
-    SDL_Rect final = {  (window.getWidth() - w) / 2,
-                        (window.getHeight() - h) / 2,
-                        w,
-                        h};
-    font.getSizeFont(text2, &w2, &h2);
-    Texture textureFont2(render,font.RenderText_Solid(text2, color));
-    SDL_Rect final2 = { ((window.getWidth() - w2) / 2),
-                        ((window.getHeight() - h) / 2) + h2 + 10,
-                        w2,
-                        h2};
-    font.getSizeFont(text2, &w3, &h3);
-    std::string text3 = "Connected Players: " + std::to_string(numPlayers);
-    Texture textureFontPlayer(render, font.RenderText_Solid(text3, color));
-    SDL_Rect final3 = {(window.getWidth() - w3 - 30), 15, w3, h3};
-    render.copyFont(textureFontPlayer.getTexture(), final3);
-    render.copyFont(textureFont.getTexture(), final);
-    render.copyFont(textureFont2.getTexture(), final2);
 }
 
 void GameDrawner::stop() {

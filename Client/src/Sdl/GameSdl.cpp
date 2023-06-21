@@ -9,16 +9,14 @@
 GameSdl::GameSdl(WindowSdl& window, Renderer& renderer,
     Queue<std::shared_ptr<Snapshot>>& snapshotQueue,
     Queue<std::shared_ptr<EventDTO>>& eventQueue,
-    bool& endGame, std::map<uint8_t, std::shared_ptr<Operator>>& soldiers,
-    uint8_t idPlayer, uint8_t idMap, TypeGame mode, Font& font,
-    std::map<uint8_t, std::shared_ptr<Enemy>>& enemies,
-    std::map<uint8_t, std::shared_ptr<Obstacles>>& obstacles) :
+    bool& endGame, uint8_t idPlayer, Font& font, ConfigGame& config) :
     window(window), renderer(renderer), snapshotQueue(snapshotQueue),
     eventQueue(eventQueue), endGame(endGame), events(eventQueue, idPlayer),
-    map(idMap, this->renderer, this->window), soldiers(soldiers),
-    hud(soldiers[idPlayer]->getType(), mode, renderer, font, window),
-    idPlayer(idPlayer), mode(mode), font(font), enemies(enemies),
-    camera(window), obstacles(obstacles) {
+    map(config.getIdMap(), this->renderer, this->window),
+    soldiers(config.getPlayers()),
+    hud(soldiers[idPlayer]->getType(), config.getMode(), renderer, font, window),
+    idPlayer(idPlayer), mode(config.getMode()), font(font),
+    enemies(config.getEnemies()), camera(window), obstacles(config.getObstacles()) {
 }
 
 bool GameSdl::isRunning() {
@@ -59,20 +57,20 @@ void GameSdl::render() {
 void GameSdl::update() {
     std::shared_ptr<Snapshot> snap = snapshotQueue.pop();
     if (snap->getEvent() != Event::event_end) {
-        for (auto &player : snap->getInfo()) {
-            soldiers[player.getId()]->update(player.getPosition(),
-                                                player.getState(),
-                                                player.getHealth(),
-                                                player.getMunition());
-        }
-        camera.update(calculateMassCenter());
+        // for (auto &player : snap->getInfo()) {
+        // }
 
-        // Si no se actualizaron todos significa que alguno se desconecto
-        if (soldiers.size() > snap->getInfo().size()) {
+        // Actualizo todos los clientes si no actualizo a uno significa
+        // que alguno se desconecto
+        if (soldiers.size() >= snap->getInfo().size()) {
             for (auto &player : soldiers) {
                 bool found = false;
                 for (const auto& stOperator : snap->getInfo())
                     if (player.first == stOperator.getId()) {
+                        player.second->update(stOperator.getPosition(),
+                                                stOperator.getState(),
+                                                stOperator.getHealth(),
+                                                stOperator.getMunition());
                         found = true;
                         break;
                     }
@@ -80,6 +78,7 @@ void GameSdl::update() {
                     player.second->setState(State::dead);
             }
         }
+        camera.update(calculateMassCenter());
 
         std::unordered_set<uint8_t> mapIds;
         for (auto &infected : snap->getEnemies()) {
@@ -103,12 +102,16 @@ void GameSdl::update() {
 
 std::pair<int16_t, int16_t> GameSdl::calculateMassCenter() {
     std::pair<int16_t, int16_t> massCenter;
-    for (const auto& soldier : soldiers){
-        massCenter.first += soldier.second->getPosX();
-        massCenter.second += soldier.second->getPosY();
+    size_t soldiersLive = 0;
+    for (const auto& soldier : soldiers) {
+        if (soldier.second->getState() != State::dead) {
+            massCenter.first += soldier.second->getPosX();
+            massCenter.second += soldier.second->getPosY();
+            soldiersLive++;
+        }
     }
-    massCenter.first = massCenter.first / soldiers.size();
-    massCenter.second = massCenter.second / soldiers.size();
+    massCenter.first = massCenter.first / soldiersLive;
+    massCenter.second = massCenter.second / soldiersLive;
     return massCenter;
 }
 
