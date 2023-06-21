@@ -7,34 +7,17 @@
 GameWorld::GameWorld(const TypeGame& type) :
     players_amount(INITIAL_PLAYERS_AMOUNT), players(), type(type), map(this->generateMapType()),
     collidables(), infectedId(INITIAL_INFECTED_ID), obsacleId(INITIAL_OBSTACLE_ID),
-    infectedFactory(), RC(), ended(false), obstacleFactory() {
+    infectedFactory(), RC(), ended(false), obstacleFactory(), playerFactory() {
     this->generateInfecteds();
     this->generateObstacles();
 }
 
-// TODO: PLAYER FACTORY
 uint8_t GameWorld::addPlayer(TypeOperator op) {
-    std::shared_ptr<Player> newPlayer = nullptr;
-    std::pair<int16_t, int16_t> position = RC.getPlayerRespawnPosition();
+    std::shared_ptr<Player> newPlayer = playerFactory.getPlayer(op,
+                                                                players_amount,
+                                                                collidables,
+                                                                RC);
 
-    std::shared_ptr<Collidable> collidable =  std::make_shared<Collidable>(
-            players_amount,position,20, 20);
-
-    switch (op) {
-        case TypeOperator::operator_idf:
-            newPlayer = std::make_shared<IDFPlayer>(position, collidable);
-            break;
-        case TypeOperator::operator_scout:
-            newPlayer = std::make_shared<SCOUTPlayer>(position, collidable);
-            break;
-        case TypeOperator::operator_p90:
-            newPlayer = std::make_shared<P90Player>(position, collidable);
-            break;
-        default:
-            newPlayer = std::make_shared<IDFPlayer>(position, collidable);
-            break;
-    }
-    this->collidables.insert({players_amount, collidable});
     this->players.insert({players_amount, newPlayer});
     return players_amount++;
 }

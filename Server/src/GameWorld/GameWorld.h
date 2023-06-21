@@ -24,7 +24,7 @@
 #include "InfectedFactory.h"
 #include "RespawnController.h"
 #include "ObstacleFactory.h"
-
+#include "PlayerFactory.h"
 
 class GameWorld {
     private:
@@ -47,6 +47,8 @@ class GameWorld {
         RespawnController RC;
 
         ObstacleFactory obstacleFactory;
+
+        PlayerFactory playerFactory;
 
     public:
         GameWorld(const TypeGame& type);

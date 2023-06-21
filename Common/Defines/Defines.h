@@ -97,4 +97,7 @@
 #define CRATER_WIDTH 60
 #define CRATER_HEIGHT 60
 
+#define PLAYER_WIDTH 20
+#define PLAYER_HEIGHT 20
+
 #endif
