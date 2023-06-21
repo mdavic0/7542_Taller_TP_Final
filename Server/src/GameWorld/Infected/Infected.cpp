@@ -81,16 +81,15 @@ void Infected::atack() {
 
 void Infected::applyStep(std::map<uint8_t, std::shared_ptr<Collidable>> &collidables,
                          std::map<uint8_t, std::shared_ptr<Player>>& players) {
-    this->setTarget(players);
-    this->move(collidables);
-    this->atack();
+    //this->setTarget(players);
+    //this->move(collidables);
+    //this->atack();
 }
 
 std::shared_ptr<Collidable> &Infected::getCollidable() {
     return this->collidable;
 }
 
-#include <iostream>
 void Infected::applyDamage(const int &amount) {
     this->life -= amount;
     if (this->life <= 0) {
@@ -127,18 +126,23 @@ bool Infected::isIntoHostilRange(std::shared_ptr<Player> player) {
 }
 
 void Infected::setTarget(std::map<uint8_t, std::shared_ptr<Player>> &players) {
+    if (this->target != nullptr) {
+        this->setMovementDirection();
+        return;
+    }
+
     for (auto& player : players) {
         if (isIntoHostilRange(player.second)) {
             this->target = player.second;
+            this->setMovementDirection();
             // each infected has only one target player a time
             break;
         } else {
             this->target = nullptr;
         }
     }
-    if (this->target != nullptr) {
-        this->setMovementDirection();
-    } else {
+
+    if (this->target == nullptr) {
         this->stopMovementDirection();
     }
 }
@@ -159,5 +163,6 @@ void Infected::setMovementDirection() {
 
 void Infected::stopMovementDirection() {
     this->movement_direction = {0 , 0};
+    this->state = State::idle;
 }
 

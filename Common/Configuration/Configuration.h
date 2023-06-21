@@ -77,6 +77,38 @@ class Configuration {
         static int venom_health;
         static int venom_velocity;
 
+        /*********************************
+         * Game Difficulty
+         *******************************/
+        // Easy
+        static int zombie_amount_easy;
+        static int jumper_amount_easy;
+        static int witch_amount_easy;
+        static int spear_amount_easy;
+        static int venom_amount_easy;
+
+        // Normal
+        static int zombie_amount_normal;
+        static int jumper_amount_normal;
+        static int witch_amount_normal;
+        static int spear_amount_normal;
+        static int venom_amount_normal;
+
+        // Hard
+        static int zombie_amount_hard;
+        static int jumper_amount_hard;
+        static int witch_amount_hard;
+        static int spear_amount_hard;
+        static int venom_amount_hard;
+
+        // God
+        static int zombie_amount_god;
+        static int jumper_amount_god;
+        static int witch_amount_god;
+        static int spear_amount_god;
+        static int venom_amount_god;
+
+
         Configuration();
         ~Configuration();
         static void loadConfiguration(const std::string& filename);

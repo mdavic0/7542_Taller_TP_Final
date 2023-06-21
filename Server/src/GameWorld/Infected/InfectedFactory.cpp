@@ -24,16 +24,35 @@ InfectedFactory::generateEasyInfecteds(uint8_t &infectedId,
                                        RespawnController& RC) {
     std::map<uint8_t, std::shared_ptr<Infected>> infecteds;
 
-    infecteds.insert({infectedId, createZombie(infectedId, collidables,RC)});
-    infectedId++;
-    infecteds.insert({infectedId, createSpear(infectedId, collidables,RC)});
-    infectedId++;
-    infecteds.insert({infectedId, createVenom(infectedId, collidables,RC)});
-    infectedId++;
-    infecteds.insert({infectedId, createJumper(infectedId, collidables,RC)});
-    infectedId++;
-    infecteds.insert({infectedId, createWitch(infectedId, collidables,RC)});
-    infectedId++;
+    // Zombies
+    for (int i = 0; i < CF::zombie_amount_easy; i++) {
+        infecteds.insert({infectedId, createZombie(infectedId, collidables,RC)});
+        infectedId++;
+    }
+
+    // Spears
+    for (int i = 0; i < CF::spear_amount_easy; i++) {
+        infecteds.insert({infectedId, createSpear(infectedId, collidables, RC)});
+        infectedId++;
+    }
+
+    // Venoms
+    for (int i = 0; i < CF::venom_amount_easy; i++) {
+        infecteds.insert({infectedId, createVenom(infectedId, collidables, RC)});
+        infectedId++;
+    }
+
+    // Jumpers
+    for (int i = 0; i < CF::jumper_amount_easy; i++) {
+        infecteds.insert({infectedId, createJumper(infectedId, collidables, RC)});
+        infectedId++;
+    }
+
+    // Witches
+    for (int i = 0; i < CF::witch_amount_easy; i++) {
+        infecteds.insert({infectedId, createWitch(infectedId, collidables, RC)});
+        infectedId++;
+    }
 
     return infecteds;
 }
@@ -44,16 +63,35 @@ InfectedFactory::generateNormalInfecteds(uint8_t &infectedId,
                                          RespawnController& RC) {
     std::map<uint8_t, std::shared_ptr<Infected>> infecteds;
 
-    infecteds.insert({infectedId, createZombie(infectedId, collidables,RC)});
-    infectedId++;
-    infecteds.insert({infectedId, createSpear(infectedId, collidables,RC)});
-    infectedId++;
-    infecteds.insert({infectedId, createVenom(infectedId, collidables,RC)});
-    infectedId++;
-    infecteds.insert({infectedId, createJumper(infectedId, collidables,RC)});
-    infectedId++;
-    infecteds.insert({infectedId, createWitch(infectedId, collidables,RC)});
-    infectedId++;
+    // Zombies
+    for (int i = 0; i < CF::zombie_amount_normal; i++) {
+        infecteds.insert({infectedId, createZombie(infectedId, collidables,RC)});
+        infectedId++;
+    }
+
+    // Spears
+    for (int i = 0; i < CF::spear_amount_normal; i++) {
+        infecteds.insert({infectedId, createSpear(infectedId, collidables, RC)});
+        infectedId++;
+    }
+
+    // Venoms
+    for (int i = 0; i < CF::venom_amount_normal; i++) {
+        infecteds.insert({infectedId, createVenom(infectedId, collidables, RC)});
+        infectedId++;
+    }
+
+    // Jumpers
+    for (int i = 0; i < CF::jumper_amount_normal; i++) {
+        infecteds.insert({infectedId, createJumper(infectedId, collidables, RC)});
+        infectedId++;
+    }
+
+    // Witches
+    for (int i = 0; i < CF::witch_amount_normal; i++) {
+        infecteds.insert({infectedId, createWitch(infectedId, collidables, RC)});
+        infectedId++;
+    }
 
     return infecteds;
 }
@@ -64,16 +102,35 @@ InfectedFactory::generateHardInfecteds(uint8_t &infectedId,
                                        RespawnController& RC) {
     std::map<uint8_t, std::shared_ptr<Infected>> infecteds;
 
-    infecteds.insert({infectedId, createZombie(infectedId, collidables,RC)});
-    infectedId++;
-    infecteds.insert({infectedId, createSpear(infectedId, collidables,RC)});
-    infectedId++;
-    infecteds.insert({infectedId, createVenom(infectedId, collidables,RC)});
-    infectedId++;
-    infecteds.insert({infectedId, createJumper(infectedId, collidables,RC)});
-    infectedId++;
-    infecteds.insert({infectedId, createWitch(infectedId, collidables,RC)});
-    infectedId++;
+    // Zombies
+    for (int i = 0; i < CF::zombie_amount_hard; i++) {
+        infecteds.insert({infectedId, createZombie(infectedId, collidables,RC)});
+        infectedId++;
+    }
+
+    // Spears
+    for (int i = 0; i < CF::spear_amount_hard; i++) {
+        infecteds.insert({infectedId, createSpear(infectedId, collidables, RC)});
+        infectedId++;
+    }
+
+    // Venoms
+    for (int i = 0; i < CF::venom_amount_hard; i++) {
+        infecteds.insert({infectedId, createVenom(infectedId, collidables, RC)});
+        infectedId++;
+    }
+
+    // Jumpers
+    for (int i = 0; i < CF::jumper_amount_hard; i++) {
+        infecteds.insert({infectedId, createJumper(infectedId, collidables, RC)});
+        infectedId++;
+    }
+
+    // Witches
+    for (int i = 0; i < CF::witch_amount_hard; i++) {
+        infecteds.insert({infectedId, createWitch(infectedId, collidables, RC)});
+        infectedId++;
+    }
 
     return infecteds;
 }
@@ -84,16 +141,35 @@ InfectedFactory::generateGodInfecteds(uint8_t &infectedId,
                                       RespawnController& RC) {
     std::map<uint8_t, std::shared_ptr<Infected>> infecteds;
 
-    infecteds.insert({infectedId, createZombie(infectedId, collidables,RC)});
-    infectedId++;
-    infecteds.insert({infectedId, createSpear(infectedId, collidables,RC)});
-    infectedId++;
-    infecteds.insert({infectedId, createVenom(infectedId, collidables,RC)});
-    infectedId++;
-    infecteds.insert({infectedId, createJumper(infectedId, collidables,RC)});
-    infectedId++;
-    infecteds.insert({infectedId, createWitch(infectedId, collidables,RC)});
-    infectedId++;
+    // Zombies
+    for (int i = 0; i < CF::zombie_amount_god; i++) {
+        infecteds.insert({infectedId, createZombie(infectedId, collidables,RC)});
+        infectedId++;
+    }
+
+    // Spears
+    for (int i = 0; i < CF::spear_amount_god; i++) {
+        infecteds.insert({infectedId, createSpear(infectedId, collidables, RC)});
+        infectedId++;
+    }
+
+    // Venoms
+    for (int i = 0; i < CF::venom_amount_god; i++) {
+        infecteds.insert({infectedId, createVenom(infectedId, collidables, RC)});
+        infectedId++;
+    }
+
+    // Jumpers
+    for (int i = 0; i < CF::jumper_amount_god; i++) {
+        infecteds.insert({infectedId, createJumper(infectedId, collidables, RC)});
+        infectedId++;
+    }
+
+    // Witches
+    for (int i = 0; i < CF::witch_amount_god; i++) {
+        infecteds.insert({infectedId, createWitch(infectedId, collidables, RC)});
+        infectedId++;
+    }
 
     return infecteds;
 }

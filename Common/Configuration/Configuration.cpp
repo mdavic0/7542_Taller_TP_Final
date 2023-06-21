@@ -68,6 +68,37 @@ int CF::venom_damage = CF::file["venom_damage"].as<int>();
 int CF::venom_health = CF::file["venom_health"].as<int>();
 int CF::venom_velocity = CF::file["venom_velocity"].as<int>();
 
+/*********************************
+ * Game Difficulty
+ *******************************/
+// Easy
+int CF::zombie_amount_easy = CF::file["zombie_amount_easy"].as<int>();
+int CF::jumper_amount_easy = CF::file["jumper_amount_easy"].as<int>();
+int CF::witch_amount_easy = CF::file["witch_amount_easy"].as<int>();
+int CF::spear_amount_easy = CF::file["spear_amount_easy"].as<int>();
+int CF::venom_amount_easy = CF::file["venom_amount_easy"].as<int>();
+
+// Normal
+int CF::zombie_amount_normal = CF::file["zombie_amount_normal"].as<int>();
+int CF::jumper_amount_normal = CF::file["jumper_amount_normal"].as<int>();
+int CF::witch_amount_normal = CF::file["witch_amount_normal"].as<int>();
+int CF::spear_amount_normal = CF::file["spear_amount_normal"].as<int>();
+int CF::venom_amount_normal = CF::file["venom_amount_normal"].as<int>();
+
+// Hard
+int CF::zombie_amount_hard = CF::file["zombie_amount_hard"].as<int>();
+int CF::jumper_amount_hard = CF::file["jumper_amount_hard"].as<int>();
+int CF::witch_amount_hard = CF::file["witch_amount_hard"].as<int>();
+int CF::spear_amount_hard = CF::file["spear_amount_hard"].as<int>();
+int CF::venom_amount_hard = CF::file["venom_amount_hard"].as<int>();
+
+// God
+int CF::zombie_amount_god = CF::file["zombie_amount_god"].as<int>();
+int CF::jumper_amount_god = CF::file["jumper_amount_god"].as<int>();
+int CF::witch_amount_god = CF::file["witch_amount_god"].as<int>();
+int CF::spear_amount_god = CF::file["spear_amount_god"].as<int>();
+int CF::venom_amount_god = CF::file["venom_amount_god"].as<int>();
+
 Configuration::Configuration() {
 }
 
@@ -135,7 +166,37 @@ void Configuration::loadConfiguration(const std::string& filename) {
     venom_damage = file["venom_damage"].as<int>();
     venom_health = file["venom_health"].as<int>();
     venom_velocity = file["venom_velocity"].as<int>();
+
+    /*********************************
+    * Game Difficulty
+    *******************************/
+    // Easy
+    zombie_amount_easy = file["zombie_amount_easy"].as<int>();
+    jumper_amount_easy = file["jumper_amount_easy"].as<int>();
+    witch_amount_easy = file["witch_amount_easy"].as<int>();
+    spear_amount_easy = file["spear_amount_easy"].as<int>();
+    venom_amount_easy = file["venom_amount_easy"].as<int>();
+
+    // Normal
+    zombie_amount_normal = file["zombie_amount_normal"].as<int>();
+    jumper_amount_normal = file["jumper_amount_normal"].as<int>();
+    witch_amount_normal = file["witch_amount_normal"].as<int>();
+    spear_amount_normal = file["spear_amount_normal"].as<int>();
+    venom_amount_normal = file["venom_amount_normal"].as<int>();
+
+    // Hard
+    zombie_amount_hard = file["zombie_amount_hard"].as<int>();
+    jumper_amount_hard = file["jumper_amount_hard"].as<int>();
+    witch_amount_hard = file["witch_amount_hard"].as<int>();
+    spear_amount_hard = file["spear_amount_hard"].as<int>();
+    venom_amount_hard = file["venom_amount_hard"].as<int>();
+
+    // God
+    zombie_amount_god = file["zombie_amount_god"].as<int>();
+    jumper_amount_god = file["jumper_amount_god"].as<int>();
+    witch_amount_god = file["witch_amount_god"].as<int>();
+    spear_amount_god = file["spear_amount_god"].as<int>();
+    venom_amount_god = file["venom_amount_god"].as<int>();
 }
 
-Configuration::~Configuration() {
-}
+Configuration::~Configuration() = default;

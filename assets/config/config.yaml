@@ -62,3 +62,34 @@ spear_velocity: 20
 venom_damage: 25
 venom_health: 180
 venom_velocity: 20
+
+####################################################
+# Game Difficulty
+####################################################
+# Easy
+zombie_amount_easy: 10
+jumper_amount_easy: 3
+witch_amount_easy: 2
+spear_amount_easy: 4
+venom_amount_easy: 2
+
+# Normal
+zombie_amount_normal: 20
+jumper_amount_normal: 6
+witch_amount_normal: 4
+spear_amount_normal: 7
+venom_amount_normal: 5
+
+# Hard
+zombie_amount_hard: 30
+jumper_amount_hard: 10
+witch_amount_hard: 6
+spear_amount_hard: 11
+venom_amount_hard: 9
+
+# God
+zombie_amount_god: 50
+jumper_amount_god: 20
+witch_amount_god: 10
+spear_amount_god: 15
+venom_amount_god: 15

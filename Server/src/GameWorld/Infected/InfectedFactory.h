@@ -11,6 +11,8 @@
 #include "Venom.h"
 #include "TypeDifficulty.h"
 #include "RespawnController.h"
+#include "Configuration.h"
+
 
 class InfectedFactory {
     public:
