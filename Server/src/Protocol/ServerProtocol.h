@@ -17,35 +17,7 @@
 template <typename T>
 class ServerProtocol : Protocol<T> {
     private:
-    
-        /*EventDTO getCreate();
-        EventDTO getJoin();
-        EventDTO getStart();
-        EventDTO getMove();
-        EventDTO getStopMove();
-        EventDTO getSmoke();
-        EventDTO getStopSmoke();
-        EventDTO getGrenade();
-        EventDTO getStopGrenade();
-        EventDTO getBlitz();
-        EventDTO getShoot();
-        EventDTO getStopShoot();
-        EventDTO getLeave();
-        void sendCreate(const uint32_t& code, const uint8_t& idPlayer);
-        void sendJoin(const uint8_t& ok, const uint8_t& idPlayer, const uint8_t& size);
-        void sendStart(const std::vector<StOperator> &playersInfo, const std::vector<EnemyDto> &enemiesInfo,
-                const std::vector<ObstacleDto> &obstaclesInfo, const TypeGame& typeGame, const uint8_t& idMap);
-        void sendPlaying(const std::vector<StOperator> &playersInfo, const std::vector<EnemyDto> &enemiesInfo);
-        void sendEnd();
-        void sendStats(const uint32_t& time, const uint16_t& shots, const uint8_t& kills);
-        void sendTypeOperator(const TypeOperator& typeOperator);
-        void sendTypeInfected(const TypeInfected& typeInfected);
-        void sendTypeObstacle(const TypeObstacle& typeObstacle);
-        void sendState(const State& state);
-        void sendPlayersInfo(const std::vector<StOperator> &playersInfo);
-        void sendEnemiesInfo(const std::vector<EnemyDto> &enemiesInfo);
-        void sendObstaclesInfo(const std::vector<ObstacleDto> &obstaclesInfo);
-        void sendPosition(const uint16_t& x, const uint16_t& y);*/
+
 EventDTO getCreate(std::shared_ptr<T> skt) {
     uint8_t idOperator;
     this->recvAll(&idOperator, 1, skt);
@@ -91,7 +63,6 @@ EventDTO getCreate(std::shared_ptr<T> skt) {
 EventDTO getJoin(std::shared_ptr<T> skt) {
     uint8_t idOperator;
     this->recvAll(&idOperator, 1, skt);
-    std::cout << "op " << (int)idOperator << std::endl;
     TypeOperator op = TypeOperator::operator_idle;
 
     switch (idOperator) {
@@ -113,11 +84,8 @@ EventDTO getJoin(std::shared_ptr<T> skt) {
 
     uint32_t code;
     this->recvAll(&code, 4, skt);
-    
-    std::cout << "code 1 " << code << std::endl;
     code = ntohl(code);
-    std::cout << "code 2 " << code << std::endl;
-
+  
     return EventDTO(code, op);
 
 }
@@ -270,12 +238,13 @@ void sendJoin(const uint8_t& ok, const uint8_t& idPlayer,
 }
 
 void sendStart(const std::vector<StOperator> &playersInfo, const std::vector<EnemyDto> &enemiesInfo,
-    const TypeGame& typeGame, const uint8_t& idMap, std::shared_ptr<T> skt) {
+    const std::vector<ObstacleDto> &obstaclesInfo, const TypeGame& typeGame, const uint8_t& idMap, std::shared_ptr<T> skt) {
     uint8_t event = START_CODE;
     this->sendAll(&event, 1, skt);
     
     sendPlayersInfo(playersInfo, skt);
     sendEnemiesInfo(enemiesInfo, skt);
+    sendObstaclesInfo(obstaclesInfo, skt);
     
     uint8_t idGame;
     if (typeGame == TypeGame::game_survival) {
@@ -297,8 +266,25 @@ void sendPlaying(const std::vector<StOperator> &playersInfo,
     sendEnemiesInfo(enemiesInfo, skt);
 }
 
+void sendEnd(std::shared_ptr<T> skt) {
+    uint8_t event = END_CODE;
+    this->sendAll(&event, 1, skt);
+}
 
-void sendOperator(const TypeOperator& typeOperator, std::shared_ptr<T> skt) {
+void sendStats(const uint32_t& time, const uint16_t& shots, const uint8_t& kills, std::shared_ptr<T> skt) {
+    uint8_t event = STATS_CODE;
+    this->sendAll(&event, 1, skt);
+
+    uint16_t aux_time = htonl(time);
+    this->sendAll(&aux_time, 4, skt);
+
+    uint16_t aux_shots = htons(shots);
+    this->sendAll(&aux_shots, 2, skt);
+
+    this->sendAll(&kills, 1, skt);
+}
+
+void sendTypeOperator(const TypeOperator& typeOperator, std::shared_ptr<T> skt) {
     if(typeOperator == TypeOperator::operator_idf){
         uint8_t op = IDF_CODE;
         this->sendAll(&op, 1, skt);
@@ -311,6 +297,35 @@ void sendOperator(const TypeOperator& typeOperator, std::shared_ptr<T> skt) {
     }
 }
 
+void sendTypeInfected(const TypeInfected& typeInfected, std::shared_ptr<T> skt) {
+    if(typeInfected == TypeInfected::infected_zombie){
+        uint8_t inf = INFECTED_ZOMBIE;
+        this->sendAll(&inf, 1, skt);
+    } else if (typeInfected == TypeInfected::infected_jumper) {
+        uint8_t inf = INFECTED_JUMPER;
+        this->sendAll(&inf, 1, skt);
+    } else if (typeInfected == TypeInfected::infected_witch) {
+        uint8_t inf = INFECTED_WITCH;
+        this->sendAll(&inf, 1, skt);        
+    } else if (typeInfected == TypeInfected::infected_spear) {
+        uint8_t inf = INFECTED_SPEAR;
+        this->sendAll(&inf, 1, skt);        
+    } else if (typeInfected == TypeInfected::infected_venom) {
+        uint8_t inf = INFECTED_VENOM;
+        this->sendAll(&inf, 1, skt);        
+    }
+}
+
+void sendTypeObstacle(const TypeObstacle& typeObstacle, std::shared_ptr<T> skt) {
+    if(typeObstacle == TypeObstacle::obstacle_tire){
+        uint8_t ob = OBSTACLE_TIRE;
+        this->sendAll(&ob, 1, skt);
+    } else if (typeObstacle == TypeObstacle::obstacle_crater) {
+        uint8_t ob = OBSTACLE_CRATER;
+        this->sendAll(&ob, 1, skt);
+    }
+}
+        
 void sendOperator(const TypeInfected& typeInfected, std::shared_ptr<T> skt) {
     if(typeInfected == TypeInfected::infected_zombie){
         uint8_t op = INFECTED_ZOMBIE;
@@ -326,7 +341,7 @@ void sendOperator(const TypeInfected& typeInfected, std::shared_ptr<T> skt) {
         this->sendAll(&op, 1, skt);        
     } else if (typeInfected == TypeInfected::infected_venom) {
         uint8_t op = INFECTED_VENOM;
-        this->sendAll(&op, 1, skt);        
+        this->sendAll(&op, 1, skt);
     }
 }
 
@@ -358,11 +373,13 @@ void sendPlayersInfo(const std::vector<StOperator> &playersInfo, std::shared_ptr
     for (auto it = playersInfo.begin(); it != playersInfo.end(); ++it) {
         uint8_t id = it->getId();
         this->sendAll(&id, 1, skt);
-        sendOperator(it->getTypeOperator(), skt);
+        sendTypeOperator(it->getTypeOperator(), skt);
         sendState(it->getState(), skt);
         sendPosition(it->getPosition().first, it->getPosition().second, skt); // x = it->second.first, y = it->second.second
         uint8_t health = it->getHealth();
         this->sendAll(&health, 1, skt);
+        uint8_t munition = it->getMunition();
+        this->sendAll(&munition, 1, skt);
   }
 }
 
@@ -372,11 +389,23 @@ void sendEnemiesInfo(const std::vector<EnemyDto> &enemiesInfo, std::shared_ptr<T
     for (auto it = enemiesInfo.begin(); it != enemiesInfo.end(); ++it) {
         uint8_t id = it->getId();
         this->sendAll(&id, 1, skt);
-        sendOperator(it->getTypeInfected(), skt);
+        sendTypeInfected(it->getTypeInfected(), skt);
         sendState(it->getState(), skt);
         sendPosition(it->getPosition().first, it->getPosition().second, skt); // x = it->second.first, y = it->second.second
   }   
 }
+
+
+void sendObstaclesInfo(const std::vector<ObstacleDto> &obstaclesInfo, std::shared_ptr<T> skt) {
+    uint8_t count = obstaclesInfo.size();
+    this->sendAll(&count, 1, skt);
+    for (auto it = obstaclesInfo.begin(); it != obstaclesInfo.end(); ++it) {
+        uint8_t id = it->getId();
+        this->sendAll(&id, 1, skt);
+        sendTypeObstacle(it->getTypeObstacle(), skt);
+        sendPosition(it->getPosition().first, it->getPosition().second, skt); // x = it->second.first, y = it->second.second
+  }
+}   
 
 void sendPosition(const uint16_t& x, const uint16_t& y, std::shared_ptr<T> skt) {
     uint16_t xAux = htons(x);
@@ -392,7 +421,7 @@ void sendPosition(const uint16_t& x, const uint16_t& y, std::shared_ptr<T> skt) 
         * */
         explicit ServerProtocol() {}
 
-        EventDTO getEvent(std::shared_ptr<T> skt) {
+EventDTO getEvent(std::shared_ptr<T> skt) {
     uint8_t event;
     this->recvAll(&event, 1, skt);
 
@@ -456,18 +485,20 @@ void sendPosition(const uint16_t& x, const uint16_t& y, std::shared_ptr<T> skt) 
     return EventDTO(Event::event_invalid, 0);
 }
 
-        void sendSnapshot(
-            std::shared_ptr<Snapshot>& snapshot, std::shared_ptr<T> skt) {
-    Event event = snapshot.getEvent();
+void sendSnapshot(std::shared_ptr<Snapshot>& snapshot, std::shared_ptr<T> skt) {
+    Event event = snapshot->getEvent();
     if (event == Event::event_create) {
-        sendCreate(snapshot.getCode(), snapshot.getIdPlayer(), skt);
+        sendCreate(snapshot->getCode(), snapshot->getIdPlayer(), skt);
     } else if (event == Event::event_join) {
-        sendJoin(snapshot.getOk(), snapshot.getIdPlayer(), snapshot.getSize(), skt);
+        sendJoin(snapshot->getOk(), snapshot->getIdPlayer(), snapshot->getSize(), skt);
     } else if (event == Event::event_start_game) {
-        sendStart(snapshot.getInfo(), snapshot.getEnemies(), snapshot.getTypeGame(),
-            snapshot.getMap(), skt);
-    } else {
-        sendPlaying(snapshot.getInfo(), snapshot.getEnemies(), skt);
+        sendStart(snapshot->getInfo(), snapshot->getEnemies(), snapshot->getObstacles(), snapshot->getTypeGame(), snapshot->getMap(), skt);
+    } else if (event == Event::event_playing) {
+        sendPlaying(snapshot->getInfo(), snapshot->getEnemies(), skt);
+    } else if (event == Event::event_end) {
+        sendEnd(skt);
+    } else if (event == Event::event_stats) {
+        sendStats(snapshot->getTime(), snapshot->getShots(), snapshot->getKills(), skt);
     }
 }
 

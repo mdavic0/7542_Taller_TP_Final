@@ -3,8 +3,6 @@
 #include "ServerProtocol.h"
 #include "SimulatedSocket.h"
 
-
-
 // Demonstrate some basic assertions.
 TEST(HelloTest, BasicAssertions) {
   // Expect two strings not to be equal.
@@ -12,6 +10,7 @@ TEST(HelloTest, BasicAssertions) {
   // Expect equality.
   EXPECT_EQ(7 * 6, 42);
 }
+
 TEST(ClientToServer, SendCreate) {
   std::shared_ptr<SimulatedSocket> skt = std::make_shared<SimulatedSocket>();
   ClientProtocol<SimulatedSocket> client;
@@ -41,4 +40,3 @@ int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
-

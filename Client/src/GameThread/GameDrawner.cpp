@@ -102,11 +102,14 @@ void GameDrawner::run() {
                 players[player.getId()] = std::make_shared<Operator>(player.getId(), 
                     player.getTypeOperator(), render);
             }
+            //std::cout << "PLAYERS OK " << std::endl;
+
             enemies.clear();
             for (auto &infected : snap->getEnemies()) {
                 enemies[infected.getId()] = std::make_shared<Enemy>(render,
                                             infected.getTypeInfected());
             }
+            //std::cout << "ENEMIES OK " << std::endl;
 
             obstacles.clear();
             for (auto &obstacle : snap->getObstacles()) {
@@ -117,6 +120,7 @@ void GameDrawner::run() {
                     // std::cout << "obstacle position x: " << (int)obstacle.getPosition().first << std::endl;
                     // std::cout << "obstacle position y: " << (int)obstacle.getPosition().second << std::endl;
             }
+            //std::cout << "OBSTACLES OK " << std::endl;
 
             uint8_t idMap = snap->getMap();
             TypeGame mode = snap->getTypeGame();

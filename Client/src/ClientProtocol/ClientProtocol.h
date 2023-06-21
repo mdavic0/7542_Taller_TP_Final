@@ -17,34 +17,7 @@
 template <typename T>
 class ClientProtocol : public Protocol<T> {
     private:
-
-        /*void sendCreate(const std::string& scenario, const TypeOperator& typeOperator, const TypeGame& typeGame);
-        void sendJoin(const uint32_t& code, const TypeOperator& typeOperator);
-        void sendStart();
-        void sendMove(const MoveTo& moveTo, const uint8_t& idPlayer);
-        void sendStopMove(const MoveTo& moveTo, const uint8_t& idPlayer);
-        void sendSmoke(const uint8_t& idPlayer);
-        void sendStopSmoke(const uint8_t& idPlayer);
-        void sendGrenade(const uint8_t& idPlayer);
-        void sendStopGrenade(const uint8_t& idPlayer);
-        void sendBlitz(const uint8_t& idPlayer);
-        void sendShoot(const uint8_t& idPlayer);
-        void sendStopShoot(const uint8_t& idPlayer);
-        void sendLeave(const uint8_t& idPlayer);
-        void sendOperator(const TypeOperator& typeOperator);
-        void sendMoveTo(const MoveTo& moveTo);
-        void sendId(const uint8_t& idPlayer);
-
-        Snapshot getCreate();
-        Snapshot getJoin();
-        Snapshot getStart();
-        Snapshot getPlaying();
-        Snapshot getEnd();
-        Snapshot getStats();
-        std::vector<StOperator> getPlayers();
-        std::vector<EnemyDto> getEnemies();
-        std::vector<ObstacleDto> getObstacles();*/
-  
+ 
 void sendCreate(const std::string& scenario, const TypeOperator& typeOperator,
     const TypeGame& typeGame, std::shared_ptr<T> skt) {
     uint8_t command = CREATE_CODE;
@@ -212,7 +185,8 @@ Snapshot getJoin (std::shared_ptr<T> skt) {
 Snapshot getStart (std::shared_ptr<T> skt) {
     std::vector<StOperator> players = getPlayers(skt);
     std::vector<EnemyDto> enemies = getEnemies(skt);
-    
+    std::vector<ObstacleDto> obstacles = getObstacles(skt);    
+
     uint8_t idGame;
     this->recvAll(&idGame, 1, skt);
     TypeGame game = TypeGame::game_idle;
@@ -232,11 +206,33 @@ Snapshot getStart (std::shared_ptr<T> skt) {
     
     uint8_t idMap;
     this->recvAll(&idMap, 1, skt);
-    return Snapshot(players, enemies, game, idMap);
+    return Snapshot(players, enemies, obstacles, game, idMap);
 }
 
 Snapshot getPlaying (std::shared_ptr<T> skt) {
-    return Snapshot(getPlayers(skt), getEnemies(skt));
+    std::vector<StOperator> players = getPlayers(skt);
+    std::vector<EnemyDto> enemies = getEnemies(skt);
+
+    return Snapshot(players, enemies);
+}
+
+Snapshot getEnd(std::shared_ptr<T> skt) {
+    return Snapshot(Event::event_end);
+}
+
+Snapshot getStats(std::shared_ptr<T> skt) {
+    uint32_t time;
+    this->recvAll(&time, 4, skt);
+    time = ntohl(time);
+
+    uint16_t shots;
+    this->recvAll(&shots, 2, skt);
+    shots = ntohs(shots);
+
+    uint8_t kills;
+    this->recvAll(&kills, 1, skt);
+
+    return Snapshot(time, shots, kills);
 }
 
 std::vector<StOperator> getPlayers(std::shared_ptr<T> skt) {
@@ -313,7 +309,12 @@ std::vector<StOperator> getPlayers(std::shared_ptr<T> skt) {
 
         uint8_t health;
         this->recvAll(&health, 1, skt);
-        vector.push_back(StOperator(idPlayer, type, state, {x, y}, health));
+
+        uint8_t munition;
+        this->recvAll(&munition, 1, skt);
+
+        vector.push_back(StOperator(idPlayer, type, state, {x, y}, health, munition));
+
     }
 
     return vector;
@@ -402,16 +403,57 @@ std::vector<EnemyDto> getEnemies(std::shared_ptr<T> skt) {
     return vector;
 }
 
+std::vector<ObstacleDto> getObstacles(std::shared_ptr<T> skt) {
+    uint8_t count;
+    this->recvAll(&count, 1, skt);
+
+    std::vector<ObstacleDto> vector;
+    uint8_t id;
+
+    uint8_t idType;
+    TypeObstacle type = TypeObstacle::obstacle_tire;
+
+    int16_t x;
+    int16_t y;
+
+    for (uint8_t i = 0; i < count; i++) {
+        this->recvAll(&id, 1, skt);
+
+        this->recvAll(&idType, 1, skt);
+        switch (idType) {
+
+        case OBSTACLE_TIRE:
+            type = TypeObstacle::obstacle_tire;
+            break;
+        
+        case OBSTACLE_CRATER:
+            type = TypeObstacle::obstacle_crater;
+            break;
+        
+        default:
+            break;
+        }
+
+        this->recvAll(&x, 2, skt);
+        x = ntohs(x);
+        // std::cout << "X " << (int)x << std::endl;
+        this->recvAll(&y, 2, skt);
+        y = ntohs(y);
+        // std::cout << "Y " << (int)y << std::endl;
+        std::cout << "x: " << x << " y: " << y << std::endl; 
+        vector.push_back(ObstacleDto(id, type, {x, y}));
+    }
+
+    return vector;
+}
+
     public:
         /*
         * Constructor que llama al constructor del padre
         * */
         explicit ClientProtocol() {}
 
-        /*
-         * Método generico para indicar al servidor que sucedio un evento.
-         */
-        void sendEvent(const EventDTO& eventdto, std::shared_ptr<T> skt) {
+void sendEvent(const EventDTO& eventdto, std::shared_ptr<T> skt) {
     Event event = eventdto.getEvent();
 
     if (event == Event::event_create) {
@@ -444,11 +486,7 @@ std::vector<EnemyDto> getEnemies(std::shared_ptr<T> skt) {
     
 }
 
-        
-        /*
-         * Método generico recibir un snapshot del servidor.
-         */
-        Snapshot getSnapshot(std::shared_ptr<T> skt) {
+Snapshot getSnapshot(std::shared_ptr<T> skt) {
     uint8_t event;
     this->recvAll(&event, 1, skt);
 
@@ -469,10 +507,18 @@ std::vector<EnemyDto> getEnemies(std::shared_ptr<T> skt) {
         return getPlaying(skt);
         break;
 
+    case END_CODE:
+        return getEnd(skt);
+        break;
+
+    case STATS_CODE:
+        return getStats(skt);
+        break;
+
     default:
         break;
     }
-    return Snapshot(Event::event_invalid, (uint8_t)0, 0, 0);
+    return Snapshot(Event::event_invalid);
 }
 
         /*
