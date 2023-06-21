@@ -90,4 +90,5 @@
 #define CLOSE_DISTANCE 50
 #define HOSTILE_RANGE 200
 
+#define MAX_ITERATIONS 10
 #endif

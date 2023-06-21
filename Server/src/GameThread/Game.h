@@ -11,6 +11,8 @@
 #include "GameWorld.h"
 #include <atomic>
 #include <memory>
+#include "Command.h"
+#include "CommandFactory.h"
 
 /*
  * TDA Game
@@ -26,6 +28,7 @@ class Game : public Thread {
         std::atomic<bool> alive;
         GameWorld gameWorld;
         bool started;
+        CommandFactory commandFactory;
 
     public:
         explicit Game(const uint32_t id, std::string  name, const TypeGame& type);

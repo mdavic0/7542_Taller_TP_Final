@@ -9,7 +9,8 @@
 Game::Game(const uint32_t id, std::string name, const TypeGame& type) :
     id(id), name(std::move(name)), mutex(),
     unprocessed_events(1000), client_snapshot_queues(),
-    talking(true), alive(true), gameWorld(type, this->generateMapType()), started(false) {}
+    talking(true), alive(true), gameWorld(type, this->generateMapType()),
+    started(false), commandFactory() {}
 
 void Game::run() {
     try {
@@ -109,8 +110,15 @@ void Game::processEvents() {
     int iterations = 0;
     try {
         // try_pop es no bloqueante y devuelve false en caso de que la queue este vacia
-        while (unprocessed_events.try_pop(event) && iterations < 10) {
-            if (event->getEvent() == Event::event_move
+        while (unprocessed_events.try_pop(event) && iterations < MAX_ITERATIONS) {
+            std::unique_ptr<Command> command = commandFactory.getCommand(event);
+            command->execute(this->gameWorld);
+
+            if (event->getEvent() == Event::event_leave) {
+                std::lock_guard<std::mutex> l(mutex);
+                client_snapshot_queues.erase(event->getIdPlayer());
+            }
+            /*if (event->getEvent() == Event::event_move
                     or event->getEvent() == Event::event_stop_move) {
                 gameWorld.updateMovementDirection(event->getEvent(),
                                                   event->getIdPlayer(),
@@ -123,7 +131,7 @@ void Game::processEvents() {
                 std::lock_guard<std::mutex> l(mutex);
                 gameWorld.deletePlayer(event->getIdPlayer());
                 client_snapshot_queues.erase(event->getIdPlayer());
-            }
+            }*/
             iterations++;
         }
     } catch(ClosedQueue& e) {
