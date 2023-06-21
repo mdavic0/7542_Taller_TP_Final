@@ -32,28 +32,29 @@ bool Collidable::collidesWith(std::shared_ptr<Collidable>& other) {
 
 void Collidable::updatePosition(std::pair<int16_t, int16_t> &pos) {
     this->position = pos;
-    this->topLeftCorner = {(position.first - (width / 2.0)) , (position.second + (height / 2.0))};
+    this->topLeftCorner = {(position.first - (width / 2.0)) ,
+                           (position.second + (height / 2.0))};
 }
 
 bool Collidable::isOnRight(std::shared_ptr<Collidable> &other) {
-    return (topLeftCorner.first + width) < other->topLeftCorner.first;
+    return (topLeftCorner.first + width) <= other->topLeftCorner.first;
 }
 
 bool Collidable::isDown(std::shared_ptr<Collidable> &other) {
-    return (topLeftCorner.second + height) < other->topLeftCorner.second;
+    return (topLeftCorner.second + height) <= other->topLeftCorner.second;
 }
 
 bool Collidable::overlapVerticalAxis(std::shared_ptr<Collidable> &other) {
-    if (this->topLeftCorner.second < other->topLeftCorner.second + other->height &&
-        this->topLeftCorner.second + this->height > other->topLeftCorner.second) {
+    if (this->topLeftCorner.second <= other->topLeftCorner.second + other->height &&
+        this->topLeftCorner.second + this->height >= other->topLeftCorner.second) {
         return true;
     }
     return false;
 }
 
 bool Collidable::ovelapHorizontalAxis(std::shared_ptr<Collidable> &other) {
-    if (this->topLeftCorner.first < other->topLeftCorner.first + other->width &&
-        this->topLeftCorner.first + this->width > other->topLeftCorner.first){
+    if (this->topLeftCorner.first <= other->topLeftCorner.first + other->width &&
+        this->topLeftCorner.first + this->width >= other->topLeftCorner.first){
         return  true;
     }
     return false;
