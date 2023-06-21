@@ -34,7 +34,6 @@ bool Game::ended() {
 
 Queue<std::shared_ptr<EventDTO>>* Game::createGame(Queue<std::shared_ptr<Snapshot>> *q,
                                                    const TypeOperator& op) {
-    std::lock_guard<std::mutex> locker(mutex);
     this->generateMapType();
     uint8_t idPlayer = gameWorld.addPlayer(op);
     client_snapshot_queues.insert({idPlayer, q});
@@ -118,20 +117,7 @@ void Game::processEvents() {
                 std::lock_guard<std::mutex> l(mutex);
                 client_snapshot_queues.erase(event->getIdPlayer());
             }
-            /*if (event->getEvent() == Event::event_move
-                    or event->getEvent() == Event::event_stop_move) {
-                gameWorld.updateMovementDirection(event->getEvent(),
-                                                  event->getIdPlayer(),
-                                                  event->getMoveTo());
-            } else if (event->getEvent() == Event::event_shoot
-                        or event->getEvent() == Event::event_stop_shoot) {
-                gameWorld.updateShootingState(event->getEvent(),
-                                              event->getIdPlayer());
-            } else if (event->getEvent() == Event::event_leave) {
-                std::lock_guard<std::mutex> l(mutex);
-                gameWorld.deletePlayer(event->getIdPlayer());
-                client_snapshot_queues.erase(event->getIdPlayer());
-            }*/
+
             iterations++;
         }
     } catch(ClosedQueue& e) {
