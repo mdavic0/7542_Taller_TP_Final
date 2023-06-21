@@ -9,7 +9,7 @@
 Game::Game(const uint32_t id, std::string name, const TypeGame& type) :
     id(id), name(std::move(name)), mutex(),
     unprocessed_events(1000), client_snapshot_queues(),
-    talking(true), alive(true), gameWorld(type, this->generateMapType()),
+    talking(true), alive(true), gameWorld(type),
     started(false), commandFactory() {}
 
 void Game::run() {
@@ -34,7 +34,6 @@ bool Game::ended() {
 
 Queue<std::shared_ptr<EventDTO>>* Game::createGame(Queue<std::shared_ptr<Snapshot>> *q,
                                                    const TypeOperator& op) {
-    this->generateMapType();
     uint8_t idPlayer = gameWorld.addPlayer(op);
     client_snapshot_queues.insert({idPlayer, q});
     q->push(std::make_shared<Snapshot> (Event::event_create, id, idPlayer));
@@ -130,13 +129,6 @@ void Game::broadcastSnapshot(std::shared_ptr<Snapshot> snapshot) {
     for (auto const& i : this->client_snapshot_queues) {
         i.second->push(snapshot);
     }
-}
-
-int Game::generateMapType() {
-    std::random_device rand_dev;
-    std::mt19937 generator(rand_dev());
-    std::uniform_int_distribution<int> distr(1, 3);
-   return distr(generator);
 }
 
 Game::~Game() {

@@ -4,10 +4,10 @@
 #include <iterator>
 #include <utility>
 
-GameWorld::GameWorld(const TypeGame& type, uint8_t map) :
-    players_amount(INITIAL_PLAYERS_AMOUNT), players(), type(type), map(map),
+GameWorld::GameWorld(const TypeGame& type) :
+    players_amount(INITIAL_PLAYERS_AMOUNT), players(), type(type), map(this->generateMapType()),
     collidables(), infectedId(INITIAL_INFECTED_ID), obsacleId(INITIAL_OBSTACLE_ID),
-    infectedFactory(), RC(), ended(false) {
+    infectedFactory(), RC(), ended(false), obstacleFactory() {
     this->generateInfecteds();
     this->generateObstacles();
 }
@@ -59,7 +59,7 @@ void GameWorld::updateShootingState(Event event, uint8_t id) {
         players.at(id)->stopShootingState();
     }
 }
-#include <iostream>
+
 void GameWorld::simulateStep() {
     if(!ended) {
         for (auto& player : players) {
@@ -107,8 +107,7 @@ std::shared_ptr<Snapshot> GameWorld::getSnapshot(bool first) {
                 obsts.push_back(ObstacleDto(ob.first,
                                              ob.second->getTypeObstacle(),
                                              ob.second->getPosition()));
-                std::cout << "x: " << ob.second->getPosition().first << " y: " << ob.second->getPosition().second << std::endl; 
-            }
+                }
             return std::make_shared<Snapshot>(playersInfo, enemies, obsts, type, map);        
         }
         return std::make_shared<Snapshot>(playersInfo, enemies);
@@ -143,30 +142,12 @@ void GameWorld::generateInfecteds() {
     }
 }
 
-// TODO: IMPLEMENT ObstacleFactory
 void GameWorld::generateObstacles() {
     // Random obstacle (can be Tire or Crater):
-    std::shared_ptr<Obstacle> newObstacle = nullptr;
-    std::pair<int16_t, int16_t> position = RC.getObstacleRespawnPosition();
-
-    std::shared_ptr<Collidable> collidable =  std::make_shared<Collidable>(
-            (int)obsacleId,position,50, 50);
-
-    TypeObstacle obstacle = this->generateObstacleType();
-
-    switch (obstacle) {
-        case TypeObstacle::obstacle_tire:
-            newObstacle = std::make_shared<Tire>(obsacleId, position, collidable);
-            break;
-        case TypeObstacle::obstacle_crater:
-            newObstacle = std::make_shared<Crater>(obsacleId, position, collidable);
-            break;
-        default:
-            newObstacle = std::make_shared<Tire>(obsacleId, position, collidable);
-            break;
-    }
-
-    this->collidables.insert({obsacleId, collidable});
+    std::shared_ptr<Obstacle> newObstacle = this->obstacleFactory.getObstacle(generateObstacleType(),
+                                                                              obsacleId,
+                                                                              collidables,
+                                                                              RC);
     this->obstacles.insert({obsacleId++, newObstacle});
 }
 
@@ -179,4 +160,11 @@ TypeObstacle GameWorld::generateObstacleType() {
 
 bool GameWorld::isEnded() {
     return ended;
+}
+
+int GameWorld::generateMapType() {
+    std::random_device rand_dev;
+    std::mt19937 generator(rand_dev());
+    std::uniform_int_distribution<int> distr(1, 3);
+    return distr(generator);
 }

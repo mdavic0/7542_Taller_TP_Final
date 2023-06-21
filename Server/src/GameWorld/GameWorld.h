@@ -1,5 +1,6 @@
 #ifndef LEFT4DEAD_GAMEWORLD_H
 #define LEFT4DEAD_GAMEWORLD_H
+
 #include <map>
 #include "Player.h"
 #include "Snapshot.h"
@@ -22,6 +23,8 @@
 #include "Crater.h"
 #include "InfectedFactory.h"
 #include "RespawnController.h"
+#include "ObstacleFactory.h"
+
 
 class GameWorld {
     private:
@@ -43,8 +46,10 @@ class GameWorld {
         InfectedFactory infectedFactory;
         RespawnController RC;
 
+        ObstacleFactory obstacleFactory;
+
     public:
-        GameWorld(const TypeGame& type, uint8_t map);
+        GameWorld(const TypeGame& type);
         uint8_t addPlayer(TypeOperator op);
         void deletePlayer(uint8_t id);
 
@@ -59,6 +64,7 @@ class GameWorld {
         void generateInfecteds();
         void generateObstacles();
         TypeObstacle generateObstacleType();
+        int generateMapType();
 };
 
 

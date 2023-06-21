@@ -91,4 +91,10 @@
 #define HOSTILE_RANGE 200
 
 #define MAX_ITERATIONS 10
+
+#define TIRE_WIDTH 30
+#define TIRE_HEIGHT 50
+#define CRATER_WIDTH 60
+#define CRATER_HEIGHT 60
+
 #endif

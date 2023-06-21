@@ -75,7 +75,6 @@ class Game : public Thread {
         void gameLoop();
         void processEvents();
         void broadcastSnapshot(std::shared_ptr<Snapshot> snapshot);
-        int generateMapType();
 };
 
 #endif  // SERVER_GAME_H_
