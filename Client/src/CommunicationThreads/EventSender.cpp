@@ -12,21 +12,24 @@ void EventSender::run() {
         try {
             std::shared_ptr<EventDTO> response = sdl_events.pop();
             protocol.sendEvent(*response, skt);
-        } catch (ClosedQueue &exc) {
+        } catch (const ClosedQueue &exc) {
             talking = false;
-            //protocol.stop();
             skt->shutdown(2);
             skt->close();
         } catch (const LibError &exc) {
             talking = false;
-        } catch (...) {}
+            sdl_events.close();
+        } catch (const std::exception& exc) {
+            std::cout << "Exception occurred custom: " << exc.what() << std::endl;
+        }
     }
     alive = false;
 }
 
 void EventSender::stop() {
     talking = false;
-    sdl_events.close();
+    skt->shutdown(2);
+    skt->close();
 }
 
 bool EventSender::ended() {

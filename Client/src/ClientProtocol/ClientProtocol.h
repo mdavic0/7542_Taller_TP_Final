@@ -207,6 +207,8 @@ Snapshot getStart (std::shared_ptr<T> skt) {
     
     uint8_t idMap;
     this->recvAll(&idMap, 1, skt);
+
+    // std::cout << "map " << (int)idMap << std::endl;
     return Snapshot(players, enemies, obstacles, game, idMap);
 }
 
@@ -390,10 +392,9 @@ std::vector<EnemyDto> getEnemies(std::shared_ptr<T> skt) {
         
         this->recvAll(&x, 2, skt);
         x = ntohs(x);
-        // std::cout << "X " << (int)x << std::endl;
         this->recvAll(&y, 2, skt);
         y = ntohs(y);
-        // std::cout << "Y " << (int)y << std::endl;
+        // std::cout << "x: " << x << " y: " << y << std::endl;
 
         vector.push_back(EnemyDto(id, type, state, {x, y}));
     }
@@ -434,10 +435,9 @@ std::vector<ObstacleDto> getObstacles(std::shared_ptr<T> skt) {
 
         this->recvAll(&x, 2, skt);
         x = ntohs(x);
-        // std::cout << "X " << (int)x << std::endl;
         this->recvAll(&y, 2, skt);
         y = ntohs(y);
-        // std::cout << "Y " << (int)y << std::endl;
+
         vector.push_back(ObstacleDto(id, type, {x, y}));
     }
 

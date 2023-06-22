@@ -17,6 +17,7 @@
 #include "Enemy.h"
 #include "Camera.h"
 #include "Obstacles.h"
+#include "ConfigGame.h"
 #include <memory>
 #include <map>
 
@@ -43,10 +44,7 @@ class GameSdl {
         GameSdl(WindowSdl& window, Renderer& renderer,
                 Queue<std::shared_ptr<Snapshot>>& snapshotQueue,
                 Queue<std::shared_ptr<EventDTO>>& eventQueue, bool& endGame,
-                std::map<uint8_t, std::shared_ptr<Operator>>& soldiers,
-                uint8_t idPlayer, uint8_t idMap, TypeGame mode, Font& font,
-                std::map<uint8_t, std::shared_ptr<Enemy>>& enemies,
-                std::map<uint8_t, std::shared_ptr<Obstacles>>& obstacles);
+                uint8_t idPlayer, Font& font, ConfigGame& config);
         ~GameSdl();
         void update();
         void render();

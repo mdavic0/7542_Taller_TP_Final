@@ -83,6 +83,10 @@ std::pair<int16_t, int16_t> Operator::getPosition() {
     return this->position;
 }
 
+State Operator::getState() {
+    return this->stateOperator;
+}
+
 void Operator::chargeTexture(Renderer& renderer) {
     std::string path = 
                 "assets/images/sdl/units/" + std::to_string((int)operatorId);

@@ -94,7 +94,8 @@ void Launcher::goToJoin() {
 
 void Launcher::createProtocol(const QString& ip, const QString& port) {
     try {
-        this->socket = std::make_shared<Socket>(ip.toStdString().c_str(), port.toStdString().c_str());
+        this->socket = std::make_shared<Socket>(ip.toStdString().c_str(),
+                                                port.toStdString().c_str());
         mainWidget.setCurrentIndex(2);
     } catch (std::exception &exc){
         QMessageBox::information(this, "Error", 
@@ -105,40 +106,56 @@ void Launcher::createProtocol(const QString& ip, const QString& port) {
 
 void Launcher::sendCreateMatch(const QString& name, int mode, 
         int operatorSelect) {
-    std::string nameMatch = name.toStdString();
-    EventDTO eventCreate(nameMatch, TypeGame(mode), TypeOperator(operatorSelect));
-    clientProtocol.sendEvent(eventCreate, this->socket.value());
-    Snapshot receive = clientProtocol.getSnapshot(this->socket.value());
-    if (receive.getCode() >= 0) {
-        std::string message = "Partida creada con codigo: " + 
-            std::to_string(receive.getCode());
-        QMessageBox::information(this, "Exito", message.c_str(),
-            QMessageBox::Close);
-        this->hide();
-        this->initGame(CREATE_MENU, receive.getIdPlayer(), 1);
+    try {
+        std::string nameMatch = name.toStdString();
+        EventDTO eventCreate(nameMatch, TypeGame(mode),
+                            TypeOperator(operatorSelect));
+        clientProtocol.sendEvent(eventCreate, this->socket.value());
+        Snapshot receive = clientProtocol.getSnapshot(this->socket.value());
+        if (receive.getCode() >= 0) {
+            std::string message = "Partida creada con codigo: " + 
+                std::to_string(receive.getCode());
+            QMessageBox::information(this, "Exito", message.c_str(),
+                QMessageBox::Close);
+            this->hide();
+            this->initGame(CREATE_MENU, receive.getIdPlayer(), 1);
+            this->goToConnect();
+            this->show();
+        } else {
+            QMessageBox::information(this, "Error", 
+                        "No se pudo crear la partida",
+                        QMessageBox::Close);
+        }
+    } catch(const LibError &exc) {
         this->goToConnect();
-        this->show();
-    } else {
         QMessageBox::information(this, "Error", 
-                    "No se pudo crear la partida",
+                    "Conexion al server perdida",
                     QMessageBox::Close);
     }
 }
 
 void Launcher::sendJoinMatch(int code, int operatorSelect) {
-    EventDTO eventCreate(code, TypeOperator(operatorSelect));
-    clientProtocol.sendEvent(eventCreate, this->socket.value());
-    Snapshot receive = clientProtocol.getSnapshot(this->socket.value());
-     if (receive.getOk() == 0) {
-        QMessageBox::information(this, "Exito", "Union Exitosa",
-            QMessageBox::Close);
-        this->hide();
-        this->initGame(JOIN_MENU, receive.getIdPlayer(), receive.getSize());
+    try {
+        EventDTO eventCreate(code, TypeOperator(operatorSelect));
+        clientProtocol.sendEvent(eventCreate, this->socket.value());
+        Snapshot receive = clientProtocol.getSnapshot(this->socket.value());
+        if (receive.getOk() == 0) {
+            QMessageBox::information(this, "Exito", "Union Exitosa",
+                QMessageBox::Close);
+            this->hide();
+            this->initGame(JOIN_MENU, receive.getIdPlayer(),
+                            receive.getSize());
+            this->goToConnect();
+            this->show();
+        } else {
+            QMessageBox::information(this, "Error", 
+                        "No se puede unir a la partida",
+                        QMessageBox::Close);
+        }
+    } catch(const LibError &exc) {
         this->goToConnect();
-        this->show();
-    } else {
         QMessageBox::information(this, "Error", 
-                    "No se pudo crear la partida",
+                    "Conexion al server perdida",
                     QMessageBox::Close);
     }
 }

@@ -43,6 +43,7 @@ class Operator {
         int16_t getPosX();
         int16_t getPosY();
         uint8_t getMunition();
+        State getState();
         std::pair<int16_t, int16_t> getPosition();
         void render(SDL_Rect camera);
         bool isDead();

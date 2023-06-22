@@ -22,7 +22,7 @@ Queue<std::shared_ptr<EventDTO>>* GamesController::try_join_game(std::shared_ptr
     if (search != games.end()) {
         return search->second->joinGame(q, eventdto->getTypeOperator());
     }
-    q->push(std::make_shared<Snapshot>(Event::event_join, (uint8_t)0x01, 0));
+    q->push(std::make_shared<Snapshot>(Event::event_join, (uint8_t)0x01, 0, 0));
     return nullptr;
 }
 
