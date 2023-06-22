@@ -57,7 +57,34 @@ EventDTO getCreate(std::shared_ptr<T> skt) {
         break;
     }
 
-    return EventDTO(this->recvString(skt), game, op);
+    uint8_t idDifficulty;
+    this->recvAll(&idDifficulty, 1, skt);
+    TypeDifficulty difficulty = TypeDifficulty::difficulty_idle;
+
+    switch (idDifficulty) {
+    case DIFFICULTY_IDLE:
+        difficulty = TypeDifficulty::difficulty_idle;
+        break;
+        
+    case DIFFICULTY_EASY:
+        difficulty = TypeDifficulty::difficulty_easy;
+        break;
+        
+    case DIFFICULTY_NORMAL:
+        difficulty = TypeDifficulty::difficulty_normal;
+        break;
+        
+    case DIFFICULTY_HARD:
+        difficulty = TypeDifficulty::difficulty_hard;
+        break;
+        
+    case DIFFICULTY_GOD:
+        difficulty = TypeDifficulty::difficulty_god;
+        break;
+        
+    }
+
+    return EventDTO(this->recvString(skt), game, op, difficulty);
 }
 
 EventDTO getJoin(std::shared_ptr<T> skt) {

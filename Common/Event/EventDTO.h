@@ -5,6 +5,7 @@
 #include "Move.h"
 #include "TypeOperator.h"
 #include "TypeGame.h"
+#include "TypeDifficulty.h"
 #include <string>
 
 class EventDTO {
@@ -13,6 +14,7 @@ private:
     MoveTo moveTo;
     TypeOperator typeOperator;
     TypeGame typeGame;
+    TypeDifficulty typeDifficulty;
     std::string str;
     uint32_t n; // code join
     uint8_t idPlayer;
@@ -22,7 +24,8 @@ public:
          const std::string& str, const uint32_t& n);
 
     // Event create
-    explicit EventDTO(const std::string& name, const TypeGame& typeGame, const TypeOperator& typeOperator);
+    explicit EventDTO(const std::string& name, const TypeGame& typeGame,
+        const TypeOperator& typeOperator, const TypeDifficulty & typeDifficulty);
 
     // Event join
     explicit EventDTO(const uint32_t& code, const TypeOperator& typeOperator);
@@ -40,6 +43,8 @@ public:
     TypeOperator getTypeOperator() const;
 
     TypeGame getTypeGame() const;
+
+    TypeDifficulty getTypeDifficulty() const;
 
     std::string getStr() const;
 

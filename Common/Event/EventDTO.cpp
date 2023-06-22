@@ -1,24 +1,29 @@
 #include "EventDTO.h"
 
 EventDTO::EventDTO(Event event, MoveTo moveTo, TypeOperator typeOperator, TypeGame typeGame,
-         const std::string& str, const uint32_t& n) : event(event), moveTo(moveTo),
-    typeOperator(typeOperator), typeGame(typeGame), str(str), n(n), idPlayer(0) {}
+    const std::string& str, const uint32_t& n) : event(event), moveTo(moveTo),
+    typeOperator(typeOperator), typeGame(typeGame), str(str), n(n), idPlayer(0),
+    typeDifficulty(TypeDifficulty::difficulty_idle) {}
 
-EventDTO::EventDTO(const std::string& name, const TypeGame& typeGame, const TypeOperator& typeOperator) : 
+EventDTO::EventDTO(const std::string& name, const TypeGame& typeGame,
+    const TypeOperator& typeOperator, const TypeDifficulty & typeDifficulty) : 
     event(Event::event_create), moveTo(MoveTo::move_idle), typeOperator(typeOperator),
-    typeGame(typeGame), str(name), n(-1), idPlayer(0) {}
+    typeGame(typeGame), str(name), n(-1), idPlayer(0), typeDifficulty(typeDifficulty) {}
 
 EventDTO::EventDTO(const uint32_t& code, const TypeOperator& typeOperator) : 
     event(Event::event_join), moveTo(MoveTo::move_idle), typeOperator(typeOperator),
-    typeGame(TypeGame::game_idle), str(), n(code), idPlayer(0) {}
+    typeGame(TypeGame::game_idle), str(), n(code), idPlayer(0),
+    typeDifficulty(TypeDifficulty::difficulty_idle) {}
 
 EventDTO::EventDTO(const Event& event, const MoveTo& moveTo, const uint8_t& idPlayer) : 
     event(event), moveTo(moveTo), typeOperator(TypeOperator::operator_idle),
-    typeGame(TypeGame::game_idle), str(), n(0), idPlayer(idPlayer) {}
+    typeGame(TypeGame::game_idle), str(), n(0), idPlayer(idPlayer),
+    typeDifficulty(TypeDifficulty::difficulty_idle) {}
 
 EventDTO::EventDTO(const Event& event, const uint8_t& idPlayer) : 
     event(event), moveTo(MoveTo::move_idle), typeOperator(TypeOperator::operator_idle),
-    typeGame(TypeGame::game_idle), str(), n(0), idPlayer(idPlayer) {}
+    typeGame(TypeGame::game_idle), str(), n(0), idPlayer(idPlayer),
+    typeDifficulty(TypeDifficulty::difficulty_idle) {}
 
 
 Event EventDTO::getEvent() const {
@@ -35,6 +40,10 @@ TypeOperator EventDTO::getTypeOperator() const {
 
 TypeGame EventDTO::getTypeGame() const {
     return typeGame;
+}
+
+TypeDifficulty EventDTO::getTypeDifficulty() const {
+    return typeDifficulty;
 }
 
 std::string EventDTO::getStr() const {
