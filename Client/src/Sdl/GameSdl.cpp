@@ -26,6 +26,9 @@ bool GameSdl::isRunning() {
 void GameSdl::render() {
     this->map.render(camera.getRect());
     
+    for (const auto &obstacle: obstacles)
+        obstacle.second->render(camera.getRect());
+
     this->hud.render(soldiers[idPlayer]->getHealth(),
                     soldiers[idPlayer]->getMunition(),
                     enemies.size());
@@ -48,10 +51,7 @@ void GameSdl::render() {
             return a.second->getPosY() < b.second->getPosY();
     });
     for (const auto &soldier : vecSoldiers)
-        soldier.second->render(camera.getRect());
-    
-    for (const auto &obstacle: obstacles)
-        obstacle.second->render(camera.getRect());
+        soldier.second->render(camera.getRect()); 
 }
 
 void GameSdl::update() {

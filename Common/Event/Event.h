@@ -21,7 +21,14 @@ enum class Event : int8_t {
     event_leave = 0x14,
     event_end = 0x15,
     event_stats = 0x16,
-    event_recharge = 0x17
+    event_recharge = 0x17,
+    event_reanimate = 0x18,
+    event_stop_reanimate = 0x19,
+    event_cheat_finish_game = 0x20,
+    event_cheat_infinite_munition = 0x21,
+    event_cheat_more_velocity = 0x22,
+    event_cheat_kill_enemies = 0x23,
+    event_cheat_infinite_health = 0x24
 };
 
 #endif  // COMMON_EVENT_H_

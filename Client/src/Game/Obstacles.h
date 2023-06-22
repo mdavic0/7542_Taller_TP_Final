@@ -14,10 +14,8 @@ class Obstacles {
         Renderer& renderObstacle;
         std::pair<int16_t, int16_t> position;
         TextureManager& texture;
-        SDL_Rect rectInit;
-        void loadTexture();
-        void renderTire();
-        void renderCrater();
+        void renderTire(SDL_Rect camera);
+        void renderCrater(SDL_Rect camera);
     public:
         Obstacles(TypeObstacle type, Renderer& render,
                     std::pair<int16_t, int16_t> position,
