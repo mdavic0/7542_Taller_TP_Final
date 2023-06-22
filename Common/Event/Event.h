@@ -20,7 +20,8 @@ enum class Event : int8_t {
     event_stop_shoot = 0x13,
     event_leave = 0x14,
     event_end = 0x15,
-    event_stats = 0x16
+    event_stats = 0x16,
+    event_recharge = 0x17
 };
 
 #endif  // COMMON_EVENT_H_

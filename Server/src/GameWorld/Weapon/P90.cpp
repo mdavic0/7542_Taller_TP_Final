@@ -22,5 +22,11 @@ void P90::shoot(std::shared_ptr<Collidable>& player, bool right,
                 }
             }
         }
+        this->munition--;
+        this->totalFiredBullets++;
     }
+}
+
+void P90::reload() {
+    this->munition = CF::p90_capacity;
 }

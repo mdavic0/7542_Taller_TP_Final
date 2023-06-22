@@ -1,17 +1,13 @@
 #include "Weapon.h"
 
-Weapon::Weapon() : damage(0), rate(0), capacity(0), activated(false) {
-
-}
+Weapon::Weapon() : damage(0), rate(0), capacity(0), activated(false),
+    munition(0), totalFiredBullets(0) {}
 
 Weapon::Weapon(uint8_t damage, uint8_t rate, uint8_t capacity) :
-    damage(damage), rate(rate), capacity(capacity), activated(false) {
+    damage(damage), rate(rate), capacity(capacity), activated(false),
+    munition(capacity), totalFiredBullets(0) {}
 
-}
-
-Weapon::~Weapon() {
-
-}
+Weapon::~Weapon() = default;
 
 void Weapon::activate() {
     this->activated = true;

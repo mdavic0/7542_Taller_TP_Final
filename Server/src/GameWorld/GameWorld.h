@@ -57,6 +57,7 @@ class GameWorld {
 
         void updateMovementDirection(Event event, uint8_t id, MoveTo direction);
         void updateShootingState(Event event, uint8_t id);
+        void updateReloadingState(Event event, uint8_t id);
         void simulateStep();
         std::shared_ptr<Snapshot> getSnapshot(bool first);
         std::shared_ptr<Snapshot> getStats();

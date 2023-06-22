@@ -22,5 +22,11 @@ void Idf::shoot(std::shared_ptr<Collidable>& player, bool right,
                 }
             }
         }
+        this->munition--;
+        this->totalFiredBullets++;
     }
+}
+
+void Idf::reload() {
+    this->munition = CF::idf_capacity;
 }

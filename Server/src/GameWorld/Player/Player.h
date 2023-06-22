@@ -39,6 +39,7 @@ class Player {
         void stopMovementDirection(MoveTo direction);
         void setShootingState();
         void stopShootingState();
+        void setReloadingState();
         void applyStep(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables,
                        std::map<uint8_t, std::shared_ptr<Infected>>& infecteds);
         std::pair<int16_t, int16_t>& getPosition();
@@ -60,6 +61,7 @@ class Player {
     private:
         void move(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables);
         void shoot(std::map<uint8_t, std::shared_ptr<Infected>>& infecteds);
+        void reload();
         virtual void specialAtack(Event event) = 0;
 };
 

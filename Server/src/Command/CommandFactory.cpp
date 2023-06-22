@@ -5,6 +5,8 @@
 #include "ShootCommand.h"
 #include "StopShootCommand.h"
 #include "LeaveCommand.h"
+#include "ReloadCommand.h"
+
 
 CommandFactory::CommandFactory() = default;
 
@@ -28,6 +30,8 @@ std::unique_ptr <Command> CommandFactory::getCommand(std::shared_ptr <EventDTO> 
             break;
         case Event::event_blitz_atack:
             break;*/
+        case Event::event_recharge:
+            return std::make_unique<ReloadCommand>(event->getIdPlayer());
         case Event::event_leave:
             return std::make_unique<LeaveCommand>(event->getIdPlayer());
         default:

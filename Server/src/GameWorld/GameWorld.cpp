@@ -61,6 +61,19 @@ void GameWorld::updateShootingState(Event event, uint8_t id) {
     }
 }
 
+void GameWorld::updateReloadingState(Event event, uint8_t id) {
+    bool found = (std::find(deadPlayersId.begin(),
+                            deadPlayersId.end(),
+                            id) != deadPlayersId.end());
+    if (found) {
+        return;
+    }
+
+    if (event == Event::event_recharge) {
+        players.at(id)->setReloadingState();
+    }
+}
+
 void GameWorld::simulateStep() {
     if(!ended) {
         // Apply players step

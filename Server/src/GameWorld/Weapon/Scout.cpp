@@ -22,5 +22,11 @@ void Scout::shoot(std::shared_ptr<Collidable>& player, bool right,
                 }
             }
         }
+        this->munition--;
+        this->totalFiredBullets++;
     }
+}
+
+void Scout::reload() {
+    this->munition = CF::scout_capacity;
 }

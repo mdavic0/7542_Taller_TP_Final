@@ -64,6 +64,7 @@ void Player::stopMovementDirection(MoveTo direction) {
             break;
     }
     if (this->state != State::injure and
+        this->state != State::recharge and
         this->movement_direction.first == 0 and
         this->movement_direction.second == 0) {
         this->state = State::idle;
@@ -89,10 +90,19 @@ void Player::stopShootingState() {
     this->weapon->deactivate();
 }
 
+void Player::setReloadingState() {
+    if (this->state == State::injure) {
+        return;
+    }
+    this->movement_direction = {0, 0};
+    this->state = State::recharge;
+}
+
 void Player::applyStep(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables,
                        std::map<uint8_t, std::shared_ptr<Infected>>& infecteds) {
     this->move(collidables);
     this->shoot(infecteds);
+    this->reload();
 }
 
 std::pair<int16_t, int16_t>& Player::getPosition() {
@@ -135,8 +145,18 @@ void Player::move(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables) {
 }
 
 void Player::shoot(std::map<uint8_t, std::shared_ptr<Infected>>& infecteds) {
-    if (this->state != State::injure) {
+    if (this->state != State::injure and this->state != State::recharge) {
         this->weapon->shoot(this->collidable, this->lookingRight, infecteds);
+
+        if (this->weapon->getMunition() <= 0) {
+            this->setReloadingState();
+        }
+    }
+}
+
+void Player::reload() {
+    if (this->state == State::recharge) {
+        this->weapon->reload();
     }
 }
 

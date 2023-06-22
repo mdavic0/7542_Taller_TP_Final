@@ -10,6 +10,7 @@
 #include "Protocol.h"
 #include "EventDTO.h"
 #include "Snapshot.h"
+#include <iostream>
 /*
  * TDA ClientProtocol
  * Se comunica con el servidor a través de su T.
@@ -302,10 +303,8 @@ std::vector<StOperator> getPlayers(std::shared_ptr<T> skt) {
 
         this->recvAll(&x, 2, skt);
         x = ntohs(x);
-        // std::cout << "X " << (int)x << std::endl;
         this->recvAll(&y, 2, skt);
         y = ntohs(y);
-        // std::cout << "Y " << (int)y << std::endl;
 
         uint8_t health;
         this->recvAll(&health, 1, skt);
@@ -314,7 +313,6 @@ std::vector<StOperator> getPlayers(std::shared_ptr<T> skt) {
         this->recvAll(&munition, 1, skt);
 
         vector.push_back(StOperator(idPlayer, type, state, {x, y}, health, munition));
-
     }
 
     return vector;
@@ -440,7 +438,6 @@ std::vector<ObstacleDto> getObstacles(std::shared_ptr<T> skt) {
         this->recvAll(&y, 2, skt);
         y = ntohs(y);
         // std::cout << "Y " << (int)y << std::endl;
-        std::cout << "x: " << x << " y: " << y << std::endl; 
         vector.push_back(ObstacleDto(id, type, {x, y}));
     }
 

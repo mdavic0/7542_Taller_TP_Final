@@ -10,13 +10,16 @@ class Infected;
 
 class Weapon {
     private:
-    uint8_t rate;
-    uint8_t capacity;
-    uint8_t munition;
-protected:
-    bool activated;
-    uint8_t damage;
-public:
+        uint8_t rate;
+        uint8_t capacity;
+
+    protected:
+        bool activated;
+        uint8_t damage;
+        uint8_t munition;
+        uint16_t totalFiredBullets;
+
+    public:
         Weapon();
         Weapon(uint8_t damage, uint8_t rate, uint8_t capacity);
         void activate();
@@ -24,6 +27,8 @@ public:
         uint8_t& getMunition();
         virtual void shoot(std::shared_ptr<Collidable>& player, bool right,
                            std::map<uint8_t, std::shared_ptr<Infected>>& infecteds) = 0;
+        virtual void reload() = 0;
+
         virtual ~Weapon();
 };
 

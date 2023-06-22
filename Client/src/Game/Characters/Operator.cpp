@@ -48,6 +48,7 @@ void Operator::update(std::pair<int16_t, int16_t> pos, State state,
         this->flipType = SDL_FLIP_NONE;
     this->position = pos;
     this->health = health;
+    this->munition = munition;
 }
 
 TypeOperator Operator::getType() {
