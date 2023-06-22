@@ -9,6 +9,8 @@
 #include "Obstacles.h"
 #include "RendererSdl.h"
 #include "TypeGame.h"
+#include "TextureManager.h"
+#include "WindowSdl.h"
 
 class ConfigGame {
     private:  
@@ -17,13 +19,15 @@ class ConfigGame {
         std::map<uint8_t, std::shared_ptr<Obstacles>> obstacles;
         uint8_t idMap;
         TypeGame mode;
+        TextureManager textures;
     public:
-        ConfigGame(std::shared_ptr<Snapshot> config, Renderer& render);
+        ConfigGame(std::shared_ptr<Snapshot> config, Renderer& render,
+                    WindowSdl& window);
         ~ConfigGame();
         std::map<uint8_t, std::shared_ptr<Operator>>& getPlayers();    
         std::map<uint8_t, std::shared_ptr<Enemy>>& getEnemies();    
         std::map<uint8_t, std::shared_ptr<Obstacles>>& getObstacles();
-        uint8_t getIdMap();
+        TextureManager& getTextureManager();
         TypeGame getMode();
 };
 

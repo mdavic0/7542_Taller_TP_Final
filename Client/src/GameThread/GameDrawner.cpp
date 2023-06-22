@@ -45,7 +45,7 @@ void GameDrawner::run() {
         lobby.initLobby();
         
         if (initGame) {
-            ConfigGame config(lobby.getConfigSnap(), render);
+            ConfigGame config(lobby.getConfigSnap(), render, window);
             
             GameSdl gameSdl(window, render, snapshot_queue, client_events,
                             endGame, idPlayer, font, config);

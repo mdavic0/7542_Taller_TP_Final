@@ -51,6 +51,17 @@ void Operator::update(std::pair<int16_t, int16_t> pos, State state,
     this->munition = munition;
 }
 
+void Operator::update(StOperator snap) {
+    this->setState(snap.getState());
+    if (snap.getPosition().first < position.first)
+        this->flipType = SDL_FLIP_HORIZONTAL;
+    else if (snap.getPosition().first > position.first)
+        this->flipType = SDL_FLIP_NONE;
+    this->position = snap.getPosition();
+    this->health = snap.getHealth();
+    this->munition = snap.getMunition();
+}
+
 TypeOperator Operator::getType() {
     return this->operatorId;
 }

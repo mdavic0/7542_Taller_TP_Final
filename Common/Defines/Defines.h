@@ -11,6 +11,11 @@
 #define CREATE_MENU 1
 #define JOIN_MENU 2
 
+// Paths assets
+#define PATH_OBSTACLES "assets/images/sdl/obstacles/"
+#define PATH_MAPS "assets/images/sdl/maps/"
+#define PATH_ENEMIES "assets/images/sdl/enemies/"
+
 // Animation SDL
 #define SIZE_FRAME 128
 #define SIZE_FRAME_ENEMY 96

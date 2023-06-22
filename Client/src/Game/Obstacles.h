@@ -3,7 +3,7 @@
 
 #include "TypeObstacle.h"
 #include "RendererSdl.h"
-#include "TextureSdl.h"
+#include "TextureManager.h"
 #include <optional>
 #include <memory>
 #include <SDL2/SDL.h>
@@ -13,12 +13,15 @@ class Obstacles {
         TypeObstacle type;
         Renderer& renderObstacle;
         std::pair<int16_t, int16_t> position;
-        std::optional<Texture> textureObstacle;
+        TextureManager& texture;
         SDL_Rect rectInit;
         void loadTexture();
+        void renderTire();
+        void renderCrater();
     public:
         Obstacles(TypeObstacle type, Renderer& render,
-                    std::pair<int16_t, int16_t> position);
+                    std::pair<int16_t, int16_t> position,
+                    TextureManager& texture);
         ~Obstacles();
         void render(SDL_Rect camera);
 };

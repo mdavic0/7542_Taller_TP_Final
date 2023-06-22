@@ -6,6 +6,7 @@
 #include "TypeOperator.h"
 #include "TextureSdl.h"
 #include "RendererSdl.h"
+#include "OperatorDto.h"
 #include <SDL2/SDL.h>
 #include <map>
 #include <memory>
@@ -36,6 +37,7 @@ class Operator {
         void updateMove(MoveTo direction);
         void update(std::pair<int16_t, int16_t> pos, State state,
                     int health, uint8_t munition);
+        void update(StOperator snap);
         TypeOperator getType();
         void setState(State state);
         uint8_t getId();

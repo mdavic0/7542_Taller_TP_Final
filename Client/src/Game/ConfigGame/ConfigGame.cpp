@@ -1,6 +1,10 @@
 #include "ConfigGame.h"
 
-ConfigGame::ConfigGame(std::shared_ptr<Snapshot> config, Renderer& render) {
+ConfigGame::ConfigGame(std::shared_ptr<Snapshot> config, Renderer& render,
+    WindowSdl& window) : textures(render, config->getMap()) {
+    idMap = config->getMap();
+    mode = config->getTypeGame();
+
     players.clear();
     for (auto &player : config->getInfo()) {
         players[player.getId()] = std::make_shared<Operator>(player.getId(), 
@@ -9,7 +13,7 @@ ConfigGame::ConfigGame(std::shared_ptr<Snapshot> config, Renderer& render) {
 
     enemies.clear();
     for (auto &infected : config->getEnemies()) {
-        enemies[infected.getId()] = std::make_shared<Enemy>(render,
+        enemies[infected.getId()] = std::make_shared<Enemy>(textures, render,
                                     infected.getTypeInfected());
     }
 
@@ -17,14 +21,12 @@ ConfigGame::ConfigGame(std::shared_ptr<Snapshot> config, Renderer& render) {
     for (auto &obstacle : config->getObstacles()) {
         obstacles[obstacle.getId()] =
             std::make_shared<Obstacles>(obstacle.getTypeObstacle(), render,
-                                        obstacle.getPosition());
+                                        obstacle.getPosition(), textures);
     }
-    idMap = config->getMap();
-    mode = config->getTypeGame();
 }
 
-uint8_t ConfigGame::getIdMap() {
-    return this->idMap;
+TextureManager& ConfigGame::getTextureManager() {
+    return this->textures;
 }
 
 std::map<uint8_t, std::shared_ptr<Operator>>& ConfigGame::getPlayers() {

@@ -1,22 +1,19 @@
 #ifndef MAPSDL_H_
 #define MAPDSL_H_
 
+#include "TextureManager.h"
 #include "RendererSdl.h"
-#include "TextureSdl.h"
 #include "WindowSdl.h"
-#include <map>
-#include <string>
-#include <memory>
+#include <SDL2/SDL.h>
 
 class MapSdl {
     private:
-        uint8_t mapId;
+        TextureManager& textures;
         Renderer& renderMap;
         WindowSdl& window;
-        std::map<std::string, std::shared_ptr<Texture>> textures;
-        void chargeTexture(Renderer& renderer);
     public:
-        MapSdl(uint8_t id, Renderer& renderer, WindowSdl& window);
+        MapSdl(TextureManager& textureManager, Renderer& render,
+                WindowSdl& window);
         ~MapSdl();
         void render(SDL_Rect camera);
 };

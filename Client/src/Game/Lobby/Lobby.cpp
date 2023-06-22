@@ -91,15 +91,17 @@ void Lobby::initLobbyCreate() {
         }
         renderer.present();
         snapshotQueue.try_pop(snap);
-        if (snap != nullptr && snap->getEvent() == Event::event_join)
+        if (snap != nullptr && snap->getEvent() == Event::event_join) {
             numPlayers = snap->getSize();
-        else if (snap != nullptr && snap->getEvent() == Event::event_start_game)
+        } else if (snap != nullptr && 
+                    snap->getEvent() == Event::event_start_game) {
             noReady = false;
+            snapConfig = snap;
+        }
         SDL_Delay(1000 / 40);
     }
-    // en caso de que falle el juego descomentar la siguinte linea y comentar el pop de la queue
-    // snapConfig = snap;
-    snapConfig = snapshotQueue.pop();
+    if (!snapConfig)
+        snapConfig = snapshotQueue.pop();
 }
 
 void Lobby::render(const std::string& text1, const std::string& text2) {

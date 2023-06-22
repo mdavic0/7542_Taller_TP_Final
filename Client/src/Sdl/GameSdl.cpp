@@ -12,7 +12,7 @@ GameSdl::GameSdl(WindowSdl& window, Renderer& renderer,
     bool& endGame, uint8_t idPlayer, Font& font, ConfigGame& config) :
     window(window), renderer(renderer), snapshotQueue(snapshotQueue),
     eventQueue(eventQueue), endGame(endGame), events(eventQueue, idPlayer),
-    map(config.getIdMap(), this->renderer, this->window),
+    map(config.getTextureManager(), renderer, window),
     soldiers(config.getPlayers()),
     hud(soldiers[idPlayer]->getType(), config.getMode(), renderer, font, window),
     idPlayer(idPlayer), mode(config.getMode()), font(font),
@@ -26,9 +26,6 @@ bool GameSdl::isRunning() {
 void GameSdl::render() {
     this->map.render(camera.getRect());
     
-    for (const auto &obstacle: obstacles)
-        obstacle.second->render(camera.getRect());
-
     this->hud.render(soldiers[idPlayer]->getHealth(),
                     soldiers[idPlayer]->getMunition(),
                     enemies.size());
@@ -52,6 +49,9 @@ void GameSdl::render() {
     });
     for (const auto &soldier : vecSoldiers)
         soldier.second->render(camera.getRect());
+    
+    for (const auto &obstacle: obstacles)
+        obstacle.second->render(camera.getRect());
 }
 
 void GameSdl::update() {
@@ -59,20 +59,12 @@ void GameSdl::update() {
     while (!snapshotQueue.try_pop(snap)) {
     }
     if (snap->getEvent() != Event::event_end) {
-        // for (auto &player : snap->getInfo()) {
-        // }
-
-        // Actualizo todos los clientes si no actualizo a uno significa
-        // que alguno se desconecto
         if (soldiers.size() >= snap->getInfo().size()) {
             for (auto &player : soldiers) {
                 bool found = false;
                 for (const auto& stOperator : snap->getInfo())
                     if (player.first == stOperator.getId()) {
-                        player.second->update(stOperator.getPosition(),
-                                                stOperator.getState(),
-                                                stOperator.getHealth(),
-                                                stOperator.getMunition());
+                        player.second->update(stOperator);
                         found = true;
                         break;
                     }

@@ -1,20 +1,9 @@
 #include "Enemy.h"
 #include "Defines.h"
 
-Enemy::Enemy(Renderer &render, TypeInfected type) : renderEnemy(render),
-    position({0, 0}), type(type), flipType(SDL_FLIP_NONE) {
-    this->chargeTextures();
-}
-
-void Enemy::chargeTextures() {
-    std::string path = 
-                    "assets/images/sdl/enemys/" + std::to_string((int)type);
-    textures["Idle"] = std::make_unique<Texture>(renderEnemy,
-                                                path + "/Idle.png");
-    textures["Run"] = std::make_unique<Texture>(renderEnemy,
-                                                path + "/Run.png");
-    textures["Attack"] = std::make_unique<Texture>(renderEnemy,
-                                                path + "/Attack_1.png");
+Enemy::Enemy(TextureManager& textures, Renderer &render, TypeInfected type) :
+    renderEnemy(render), position({0, 0}), type(type), 
+    flipType(SDL_FLIP_NONE), textures(textures) {
 }
 
 void Enemy::update(std::pair<int16_t, int16_t> pos, State state) {
@@ -38,11 +27,11 @@ int16_t Enemy::getPosY() {
 int Enemy::setNumFrames(State state) {
     switch (state) {
         case State::idle:
-            return this->textures["Idle"]->frames();
+            return this->textures.getFrames(type, "Idle");
         case State::moving:
-            return this->textures["Run"]->frames();
+            return this->textures.getFrames(type, "Run");
         case State::atack:
-            return this->textures["Attack"]->frames();
+            return this->textures.getFrames(type, "Attack");
         default:
             return 0;
     }
@@ -51,14 +40,15 @@ int Enemy::setNumFrames(State state) {
 void Enemy::render(SDL_Rect camera) {
     switch (stateEnemy) {
         case State::idle:
-            renderAnimation(SPEED_IDLE, textures["Idle"]->getTexture(),
+            renderAnimation(SPEED_IDLE, textures.getTexture(type, "Idle"),
                             camera);
             break;
         case State::moving:
-            renderAnimation(SPEED_RUN, textures["Run"]->getTexture(), camera);
+            renderAnimation(SPEED_RUN, textures.getTexture(type, "Run"),
+                            camera);
             break;
         case State::atack:
-            renderAnimation(SPEED_ATACK, textures["Attack"]->getTexture(),
+            renderAnimation(SPEED_ATACK, textures.getTexture(type, "Attack"),
                             camera);
             break;
         default:
