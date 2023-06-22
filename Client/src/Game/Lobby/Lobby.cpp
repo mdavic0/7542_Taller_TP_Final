@@ -1,6 +1,7 @@
 #include "Lobby.h"
 #include "Defines.h"
 #include "TextureSdl.h"
+#include <iostream>
 
 Lobby::Lobby(WindowSdl& window, Renderer& renderer, Font& font,
     Queue<std::shared_ptr<Snapshot>> &snapshotQueue,
@@ -77,6 +78,7 @@ void Lobby::initLobbyCreate() {
                                 std::make_shared<EventDTO>(Event::event_leave,
                                                             idPlayer));
                     }
+                    std::cout << "sali de sdl\n";
                     break;
                 case SDL_KEYDOWN:
                     if (event.key.keysym.sym == SDLK_RETURN) {
@@ -101,7 +103,7 @@ void Lobby::initLobbyCreate() {
         SDL_Delay(1000 / 40);
     }
     if (!snapConfig)
-        snapConfig = snapshotQueue.pop();
+        snapshotQueue.try_pop(snapConfig);
 }
 
 void Lobby::render(const std::string& text1, const std::string& text2) {

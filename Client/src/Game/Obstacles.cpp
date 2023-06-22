@@ -19,7 +19,7 @@ void Obstacles::renderTire(SDL_Rect camera) {
 void Obstacles::renderCrater(SDL_Rect camera) {
     SDL_Rect rectInit = {0, 0, 392, 100};
     SDL_Rect rectFinal = {  position.first - camera.x,
-                            position.second - camera.y + (CRATER_HEIGHT * 3/2),
+                            position.second - camera.y + (CRATER_HEIGHT * 2),
                             CRATER_WIDTH * 2, CRATER_HEIGHT};
     this->renderObstacle.copy(texture.getTexture(type), rectInit,
                             rectFinal);

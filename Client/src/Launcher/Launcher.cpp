@@ -110,7 +110,7 @@ void Launcher::sendCreateMatch(const QString& name, int mode,
     try {
         std::string nameMatch = name.toStdString();
         EventDTO eventCreate(nameMatch, TypeGame(mode),
-                            TypeOperator(operatorSelect), TypeDifficulty(1));
+                            TypeOperator(operatorSelect), difficulty);
         clientProtocol.sendEvent(eventCreate, this->socket.value());
         Snapshot receive = clientProtocol.getSnapshot(this->socket.value());
         if (receive.getCode() >= 0) {

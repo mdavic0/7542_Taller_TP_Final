@@ -73,7 +73,6 @@ void GameDrawner::run() {
         std::cerr << "Launcher: " << exc.what() << std::endl;
     } catch (const ClosedQueue& exc){
         client_events.close();
-        // server closed
     }
 }
 
