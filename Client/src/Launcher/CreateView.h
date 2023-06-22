@@ -8,6 +8,8 @@
 #include <QButtonGroup>
 #include <QGridLayout>
 #include <QPushButton>
+#include <QComboBox>
+#include "TypeDifficulty.h"
 
 class CreateView : public QWidget {
     Q_OBJECT
@@ -28,6 +30,8 @@ class CreateView : public QWidget {
         QLabel weaponLabel;
         QLabel habilityLabel;
         QLabel rateLabel;
+        QLabel difficultyLabel;
+        QComboBox difficultyBox;
         void initWidget();
         void initStylesheet();
         void initBackground();
@@ -35,7 +39,8 @@ class CreateView : public QWidget {
         explicit CreateView(QWidget* parent = 0);
         virtual ~CreateView();
     Q_SIGNALS:
-        void createClicked(const QString& name, int mode, int operatorSelect);
+        void createClicked(const QString& name, int mode, int operatorSelect,
+                            TypeDifficulty difficulty);
         void backClicked();
         // void selectOperator(QAbstractButton* opSelect);
     public slots:

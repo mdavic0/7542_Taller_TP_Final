@@ -16,6 +16,7 @@
 #include "EventSender.h"
 #include "SnapshotReceiver.h"
 #include "GameDrawner.h"
+#include "TypeDifficulty.h"
 #include <memory>
 
 class Launcher : public QWidget {
@@ -46,7 +47,7 @@ class Launcher : public QWidget {
         void goToJoin();
         void createProtocol(const QString& ip, const QString& port);
         void sendCreateMatch(const QString& name, int mode, 
-                            int operatorSelect);
+                            int operatorSelect, TypeDifficulty difficulty);
         void sendJoinMatch(int code, int operatorSelect);
 
 };

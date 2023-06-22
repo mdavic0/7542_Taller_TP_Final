@@ -105,7 +105,7 @@ void Launcher::createProtocol(const QString& ip, const QString& port) {
 }
 
 void Launcher::sendCreateMatch(const QString& name, int mode, 
-        int operatorSelect) {
+        int operatorSelect, TypeDifficulty difficulty) {
     try {
         std::string nameMatch = name.toStdString();
         EventDTO eventCreate(nameMatch, TypeGame(mode),

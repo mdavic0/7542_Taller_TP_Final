@@ -11,7 +11,8 @@ CreateView::CreateView(QWidget* parent) : QWidget(parent),
     operatorSelect(this), mainLayout(this), 
     createButton("Crear", this), backButton("Volver", this),
     operatorLabel("", this), weaponLabel("", this),
-    habilityLabel("", this), rateLabel("", this) {
+    habilityLabel("", this), rateLabel("", this),
+    difficultyLabel("Dificultad", this), difficultyBox(this) {
 
     this->initWidget();
     nameGame.setBuddy(&lineName);
@@ -31,6 +32,12 @@ CreateView::CreateView(QWidget* parent) : QWidget(parent),
     layoutMode->addWidget(&clearZone);
     layoutMode->addWidget(&survival);
 
+    QStringList difficulty = {"Easy", "Normal", "Hard", "God"};
+    difficultyBox.addItems(difficulty);
+    QHBoxLayout *layoutDifficulty = new QHBoxLayout;
+    layoutDifficulty->addWidget(&difficultyLabel);
+    layoutDifficulty->addWidget(&difficultyBox);
+
     QHBoxLayout *layoutGroupMode = new QHBoxLayout;
     layoutGroupMode->addLayout(layoutMode, Qt::AlignCenter);
 
@@ -40,6 +47,10 @@ CreateView::CreateView(QWidget* parent) : QWidget(parent),
 
     QHBoxLayout* layoutModeBox = new QHBoxLayout;
     layoutModeBox->addWidget(modeBox);
+
+    QVBoxLayout* layoutOptions = new QVBoxLayout;
+    layoutOptions->addLayout(layoutModeBox);
+    layoutOptions->addLayout(layoutDifficulty);
 
     // Selector de operador
     idf.setObjectName("IDF");
@@ -100,7 +111,7 @@ CreateView::CreateView(QWidget* parent) : QWidget(parent),
     connect(&scout, &QCheckBox::clicked, this, &CreateView::viewScout);
 
     mainLayout.addLayout(layoutName, 0, 0, Qt::AlignCenter);
-    mainLayout.addLayout(layoutModeBox, 1, 0,Qt::AlignCenter);
+    mainLayout.addLayout(layoutOptions, 1, 0,Qt::AlignCenter);
     mainLayout.addLayout(layout, 2, 0,Qt::AlignLeft);
     mainLayout.addLayout(buttonLayout, 3, 0, Qt::AlignHCenter);
     this->setLayout(&mainLayout);
@@ -129,8 +140,26 @@ void CreateView::viewScout() {
 }
 
 void CreateView::onCreateClicked() {
+    TypeDifficulty difficulty;
+    switch (this->difficultyBox.currentIndex()) {
+        case 0:
+            difficulty = TypeDifficulty::difficulty_easy;
+            break;
+        case 1:
+            difficulty = TypeDifficulty::difficulty_normal;
+            break;
+        case 2:
+            difficulty = TypeDifficulty::difficulty_hard;
+            break;
+        case 3:
+            difficulty = TypeDifficulty::difficulty_god;
+            break;
+        default:
+            difficulty = TypeDifficulty::difficulty_normal;
+            break;
+    }
     Q_EMIT createClicked(this->lineName.text(), this->modeSelect.checkedId(),
-                this->operatorSelect.checkedId());
+                this->operatorSelect.checkedId(), difficulty);
     // enviar los datos al launcher;
 }
 
