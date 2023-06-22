@@ -31,3 +31,8 @@ void IDFPlayer::throwSmoke() {
 IDFPlayer::~IDFPlayer() {
 
 }
+
+void IDFPlayer::revive() {
+    this->life = CF::idf_health / 2.0;
+    this->state = State::idle;
+}

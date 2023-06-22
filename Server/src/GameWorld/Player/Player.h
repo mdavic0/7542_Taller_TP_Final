@@ -17,8 +17,6 @@ class Weapon;
 class Player {
     private:
         TypeOperator typeOperator;
-        State state;
-        int8_t life;
         uint8_t fell_down;
         std::pair<int16_t, int16_t> position;
         std::pair<int16_t, int16_t> movement_direction;
@@ -26,6 +24,12 @@ class Player {
         std::shared_ptr<Weapon> weapon;
         bool lookingRight;
         std::shared_ptr<Collidable> collidable;
+        bool alive;
+
+    protected:
+        int8_t life;
+        State state;
+
     public:
         explicit Player(TypeOperator typeOperator);
         Player(TypeOperator typeOperator,uint8_t life,uint8_t velocity,
@@ -46,7 +50,13 @@ class Player {
         std::shared_ptr<Collidable>& getCollidable();
         void applyDamage(const int& amount);
 
+        bool isAlive();
+        bool isFellDown();
+
+        virtual void revive() = 0;
+
         virtual ~Player() = default;
+
     private:
         void move(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables);
         void shoot(std::map<uint8_t, std::shared_ptr<Infected>>& infecteds);

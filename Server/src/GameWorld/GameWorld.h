@@ -49,7 +49,7 @@ class GameWorld {
         ObstacleFactory obstacleFactory;
 
         PlayerFactory playerFactory;
-
+        std::list<uint8_t> deadPlayersId;
     public:
         GameWorld(const TypeGame& type);
         uint8_t addPlayer(TypeOperator op);

@@ -3,11 +3,13 @@
 #include <functional>
 #include <iterator>
 #include <utility>
+#include <algorithm>
 
 GameWorld::GameWorld(const TypeGame& type) :
     players_amount(INITIAL_PLAYERS_AMOUNT), players(), type(type), map(this->generateMapType()),
     collidables(), infectedId(INITIAL_INFECTED_ID), obsacleId(INITIAL_OBSTACLE_ID),
-    infectedFactory(), RC(), ended(false), obstacleFactory(), playerFactory() {
+    infectedFactory(), RC(), ended(false), obstacleFactory(), playerFactory(),
+    deadPlayersId() {
     this->generateInfecteds();
     this->generateObstacles();
 }
@@ -25,9 +27,18 @@ uint8_t GameWorld::addPlayer(TypeOperator op) {
 void GameWorld::deletePlayer(uint8_t id) {
     this->players.erase(id);
     this->collidables.erase(id);
+    this->deadPlayersId.push_back(id);
 }
 
 void GameWorld::updateMovementDirection(Event event, uint8_t id, MoveTo direction) {
+    bool found = (std::find(deadPlayersId.begin(),
+                            deadPlayersId.end(),
+                            id) != deadPlayersId.end());
+
+    if (found) {
+        return;
+    }
+
     if (event == Event::event_move) {
         players.at(id)->setMovementDirection(direction);
     } else {
@@ -36,6 +47,13 @@ void GameWorld::updateMovementDirection(Event event, uint8_t id, MoveTo directio
 }
 
 void GameWorld::updateShootingState(Event event, uint8_t id) {
+    bool found = (std::find(deadPlayersId.begin(),
+                            deadPlayersId.end(),
+                            id) != deadPlayersId.end());
+    if (found) {
+        return;
+    }
+
     if (event == Event::event_shoot) {
         players.at(id)->setShootingState();
     } else {
@@ -45,10 +63,23 @@ void GameWorld::updateShootingState(Event event, uint8_t id) {
 
 void GameWorld::simulateStep() {
     if(!ended) {
+        // Apply players step
         for (auto& player : players) {
             players.at(player.first)->applyStep(this->collidables, this->infecteds);
         }
 
+        // Reap dead players
+        for (auto it = players.cbegin(); it != players.cend(); /*no increment*/ ){
+            if (not it->second->isAlive()) {
+                deadPlayersId.push_back(it->first);
+                collidables.erase(it->first);
+                players.erase(it++);
+            } else {
+                ++it;
+            }
+        }
+
+        // Reap dead infecteds
         for (auto it = infecteds.cbegin(); it != infecteds.cend(); /* no increment */){
             if (not it->second->isAlive()) {
                 collidables.erase(it->first);
@@ -58,6 +89,7 @@ void GameWorld::simulateStep() {
             }
         }
 
+        // Apply infecteds step
         for (auto& infected : infecteds) {
             infecteds.at(infected.first)->applyStep(this->collidables, this->players);
         }

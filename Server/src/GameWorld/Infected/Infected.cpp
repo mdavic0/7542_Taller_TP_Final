@@ -70,7 +70,7 @@ void Infected::move(std::map<uint8_t, std::shared_ptr<Collidable>> &collidables)
 }
 
 void Infected::atack() {
-    if (this->target and
+    if (this->target != nullptr and
         this->target->getCollidable()->
         isCloseTo(this->collidable, CLOSE_DISTANCE)) {
         this->stopMovementDirection();
@@ -81,9 +81,9 @@ void Infected::atack() {
 
 void Infected::applyStep(std::map<uint8_t, std::shared_ptr<Collidable>> &collidables,
                          std::map<uint8_t, std::shared_ptr<Player>>& players) {
-    //this->setTarget(players);
-    //this->move(collidables);
-    //this->atack();
+    this->setTarget(players);
+    this->move(collidables);
+    this->atack();
 }
 
 std::shared_ptr<Collidable> &Infected::getCollidable() {
@@ -126,13 +126,13 @@ bool Infected::isIntoHostilRange(std::shared_ptr<Player> player) {
 }
 
 void Infected::setTarget(std::map<uint8_t, std::shared_ptr<Player>> &players) {
-    if (this->target != nullptr) {
+    if (this->target != nullptr and not this->target->isFellDown()) {
         this->setMovementDirection();
         return;
     }
 
     for (auto& player : players) {
-        if (isIntoHostilRange(player.second)) {
+        if (not player.second->isFellDown() and isIntoHostilRange(player.second)) {
             this->target = player.second;
             this->setMovementDirection();
             // each infected has only one target player a time

@@ -31,3 +31,8 @@ void SCOUTPlayer::throwSmoke() {
 SCOUTPlayer::~SCOUTPlayer() {
 
 }
+
+void SCOUTPlayer::revive() {
+    this->life = CF::scout_health / 2.0;
+    this->state = State::idle;
+}

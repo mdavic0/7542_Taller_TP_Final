@@ -1,19 +1,26 @@
 #include "Player.h"
 
 #include <utility>
+#include "Defines.h"
 
 Player::Player(TypeOperator typeOperator) : typeOperator(typeOperator),
     state(State::idle), life(100), fell_down(0), position(0,0),
-    movement_direction(0,0), velocity(1), weapon(), lookingRight(true) {}
+    movement_direction(0,0), velocity(1), weapon(), lookingRight(true),
+    alive(true) {}
 
 Player::Player(TypeOperator typeOperator, uint8_t life, uint8_t velocity,
     std::shared_ptr<Weapon> weapon, std::pair<int16_t, int16_t>& position,
     std::shared_ptr<Collidable> collidable) :
     typeOperator(typeOperator), state(State::idle), life(life), fell_down(0),
     position(position), movement_direction(0,0), velocity(velocity),
-    weapon(std::move(weapon)), lookingRight(true), collidable(std::move(collidable)) {}
+    weapon(std::move(weapon)), lookingRight(true), collidable(std::move(collidable)),
+    alive(true) {}
 
 void Player::setMovementDirection(MoveTo direction) {
+    if (this->state == State::injure) {
+        return;
+    }
+
     switch (direction) {
         // Por sdl el eje "y" va hacia abajo
         case MoveTo::move_up:
@@ -64,8 +71,11 @@ void Player::stopMovementDirection(MoveTo direction) {
 }
 
 void Player::setShootingState() {
-    this->movement_direction.first = 0;
-    this->movement_direction.second = 0;
+    if (this->state == State::injure) {
+        return;
+    }
+
+    this->movement_direction = {0, 0};
     this->state = State::atack;
     this->weapon->activate();
 }
@@ -106,15 +116,17 @@ std::shared_ptr<Collidable> &Player::getCollidable() {
 }
 
 void Player::move(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables) {
-    if (not this->collidable->collidesWith(collidables)) {
-        this->position.first += movement_direction.first + movement_direction.first * (velocity / 10);
-        this->position.second += movement_direction.second + movement_direction.second * (velocity / 10);
-        this->collidable->updatePosition(this->position);
-    }
-    if (this->collidable->collidesWith(collidables)) {
-        this->position.first -= movement_direction.first + movement_direction.first * (velocity / 10);
-        this->position.second -= movement_direction.second + movement_direction.second * (velocity / 10);
-        this->collidable->updatePosition(this->position);
+    if (this->state != State::injure) {
+        if (not this->collidable->collidesWith(collidables)) {
+            this->position.first += movement_direction.first + movement_direction.first * (velocity / 10);
+            this->position.second += movement_direction.second + movement_direction.second * (velocity / 10);
+            this->collidable->updatePosition(this->position);
+        }
+        if (this->collidable->collidesWith(collidables)) {
+            this->position.first -= movement_direction.first + movement_direction.first * (velocity / 10);
+            this->position.second -= movement_direction.second + movement_direction.second * (velocity / 10);
+            this->collidable->updatePosition(this->position);
+        }
     }
 }
 
@@ -122,14 +134,25 @@ void Player::shoot(std::map<uint8_t, std::shared_ptr<Infected>>& infecteds) {
     this->weapon->shoot(this->collidable, this->lookingRight, infecteds);
 }
 
-#include <iostream>
 void Player::applyDamage(const int &amount) {
     this->life -= amount;
-    std::cout << "Soy un Player, Me la re dieron! Vida: " << std::to_string(life) << "\n";
+
     if (this->life <= 0) {
-        std::cout << "UHH ME RE MATARON LPM!\n";
-        this->fell_down++;
+        this->life = 0;
         this->movement_direction = {0, 0};
         this->state = State::injure;
+        this->fell_down++;
+
+        if (this->fell_down >= FELL_DOWN_LIMIT) {
+            this->alive = false;
+        }
     }
+}
+
+bool Player::isAlive() {
+    return this->alive;
+}
+
+bool Player::isFellDown() {
+    return this->state == State::injure;
 }

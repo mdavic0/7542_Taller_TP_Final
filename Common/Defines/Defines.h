@@ -100,4 +100,5 @@
 #define PLAYER_WIDTH 20
 #define PLAYER_HEIGHT 20
 
+#define FELL_DOWN_LIMIT 3
 #endif

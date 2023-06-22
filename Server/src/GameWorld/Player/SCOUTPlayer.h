@@ -10,6 +10,7 @@ class SCOUTPlayer : public Player {
         SCOUTPlayer(std::pair<int16_t, int16_t>& position,
                              std::shared_ptr<Collidable> collidable);
         void specialAtack(Event event) override;
+        void revive() override;
         ~SCOUTPlayer() override;
 
     private:

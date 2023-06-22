@@ -25,3 +25,8 @@ void P90Player::blitz() {
 P90Player::~P90Player() {
 
 }
+
+void P90Player::revive() {
+    this->life = CF::p90_health / 2;
+    this->state = State::idle;
+}
