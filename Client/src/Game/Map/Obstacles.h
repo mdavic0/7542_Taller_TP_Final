@@ -4,11 +4,12 @@
 #include "TypeObstacle.h"
 #include "RendererSdl.h"
 #include "TextureManager.h"
+#include "Object.h"
 #include <optional>
 #include <memory>
 #include <SDL2/SDL.h>
 
-class Obstacles {
+class Obstacles : public Object {
     private:
         TypeObstacle type;
         Renderer& renderObstacle;
@@ -21,7 +22,8 @@ class Obstacles {
                     std::pair<int16_t, int16_t> position,
                     TextureManager& texture);
         ~Obstacles();
-        void render(SDL_Rect camera);
+        void render(SDL_Rect camera) override;
+        int16_t getPosY() override;
 };
 
 #endif

@@ -2,7 +2,7 @@
 #include "Defines.h"
 
 Enemy::Enemy(TextureManager& textures, Renderer &render, TypeInfected type) :
-    renderEnemy(render), position({0, 0}), type(type), 
+    Object(), renderEnemy(render), position({0, 0}), type(type), 
     flipType(SDL_FLIP_NONE), textures(textures) {
 }
 

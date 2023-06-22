@@ -5,10 +5,11 @@
 #include "State.h"
 #include "TypeInfected.h"
 #include "TextureManager.h"
+#include "Object.h"
 #include <map>
 #include <memory>
 
-class Enemy {
+class Enemy : public Object {
     private:
         Renderer& renderEnemy;
         std::pair<int16_t, int16_t> position;
@@ -25,8 +26,8 @@ class Enemy {
         Enemy(TextureManager& textures, Renderer& render, TypeInfected type);
         ~Enemy();
         void update(std::pair<int16_t, int16_t> pos, State state);
-        void render(SDL_Rect camera);
-        int16_t getPosY();
+        void render(SDL_Rect camera) override;
+        int16_t getPosY() override;
 };
 
 #endif

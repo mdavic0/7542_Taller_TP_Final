@@ -2,10 +2,11 @@
 #include "Defines.h"
 #include <iostream>
 
-Operator::Operator(uint8_t id, TypeOperator op, Renderer& renderer) : id(id),
-    operatorId(op), position({0, 0}), renderPlayer(renderer),
-    stateOperator(State::idle), numFrames(0), flipType(SDL_FLIP_NONE),
-    health(0), animationDeadFinish(false), munition(0) {
+Operator::Operator(uint8_t id, TypeOperator op, Renderer& renderer) :
+    Object(), id(id), operatorId(op), position({0, 0}),
+    renderPlayer(renderer), stateOperator(State::idle), numFrames(0),
+    flipType(SDL_FLIP_NONE), health(0), animationDeadFinish(false),
+    munition(0) {
     this->chargeTexture(renderer);
     this->setState(State::idle);
 }

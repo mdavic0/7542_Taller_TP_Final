@@ -7,13 +7,14 @@
 #include "TextureSdl.h"
 #include "RendererSdl.h"
 #include "OperatorDto.h"
+#include "Object.h"
 #include <SDL2/SDL.h>
 #include <map>
 #include <memory>
 #include <string>
 #include <iostream>
 
-class Operator {
+class Operator : public Object {
     private:
         uint8_t id;
         TypeOperator operatorId;
@@ -43,11 +44,11 @@ class Operator {
         uint8_t getId();
         uint8_t getHealth();
         int16_t getPosX();
-        int16_t getPosY();
+        int16_t getPosY() override;
         uint8_t getMunition();
         State getState();
         std::pair<int16_t, int16_t> getPosition();
-        void render(SDL_Rect camera);
+        void render(SDL_Rect camera) override;
         bool isDead();
 };
 

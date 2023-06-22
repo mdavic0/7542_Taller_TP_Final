@@ -1,6 +1,7 @@
 #include "GameSdl.h"
 #include "Defines.h"
 #include "Operator.h"
+#include "Object.h"
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -26,32 +27,34 @@ bool GameSdl::isRunning() {
 void GameSdl::render() {
     this->map.render(camera.getRect());
     
-    for (const auto &obstacle: obstacles)
-        obstacle.second->render(camera.getRect());
 
     this->hud.render(soldiers[idPlayer]->getHealth(),
                     soldiers[idPlayer]->getMunition(),
                     enemies.size());
     
     // reordeno los enemigos antes de renderizar
-    std::vector<std::pair<uint8_t,std::shared_ptr<Enemy>>> vecEnemies(
-        enemies.begin(), enemies.end());
-    std::sort(vecEnemies.begin(), vecEnemies.end(),
+    std::vector<std::shared_ptr<Object>> vecObjects;
+    for (const auto &obstacle: obstacles)
+        vecObjects.push_back(obstacle.second);
+    for (const auto &enemy : enemies)
+        vecObjects.push_back(enemy.second);
+    for (const auto &soldier : soldiers)
+        vecObjects.push_back(soldier.second);
+        
+    std::sort(vecObjects.begin(), vecObjects.end(),
         [](const auto& a, const auto&b) {
-            return a.second->getPosY() < b.second->getPosY();
+            return a->getPosY() <= b->getPosY();
     });
-    for (const auto &enemy : vecEnemies)
-        enemy.second->render(camera.getRect());
+    for (const auto &object : vecObjects)
+        object->render(camera.getRect());
     
-    // reordeno los operadores antes de renderizar
-    std::vector<std::pair<uint8_t,std::shared_ptr<Operator>>> vecSoldiers(
-        soldiers.begin(), soldiers.end());
-    std::sort(vecSoldiers.begin(), vecSoldiers.end(), 
-        [](const auto& a, const auto&b) {
-            return a.second->getPosY() < b.second->getPosY();
-    });
-    for (const auto &soldier : vecSoldiers)
-        soldier.second->render(camera.getRect()); 
+    // // reordeno los operadores antes de renderizar
+    // std::vector<std::pair<uint8_t,std::shared_ptr<Operator>>> vecSoldiers(
+    //     soldiers.begin(), soldiers.end());
+    // std::sort(vecSoldiers.begin(), vecSoldiers.end(), 
+    //     [](const auto& a, const auto&b) {
+    //         return a.second->getPosY() < b.second->getPosY();
+    // });
 }
 
 void GameSdl::update() {

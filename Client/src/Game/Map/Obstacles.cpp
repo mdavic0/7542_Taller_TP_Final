@@ -3,8 +3,12 @@
 
 Obstacles::Obstacles(TypeObstacle type, Renderer& render,
     std::pair<int16_t, int16_t> position, TextureManager& texture) :
-    type(type), renderObstacle(render), position(position),
+    Object(), type(type), renderObstacle(render), position(position),
     texture(texture) {
+}
+
+int16_t Obstacles::getPosY() {
+    return this->position.second;
 }
 
 void Obstacles::renderTire(SDL_Rect camera) {
