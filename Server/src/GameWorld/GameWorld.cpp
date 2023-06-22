@@ -74,11 +74,11 @@ void GameWorld::updateReloadingState(Event event, uint8_t id) {
     }
 }
 
-void GameWorld::simulateStep() {
+void GameWorld::simulateStep(double stepTime) {
     if(!ended) {
         // Apply players step
         for (auto& player : players) {
-            players.at(player.first)->applyStep(this->collidables, this->infecteds);
+            players.at(player.first)->applyStep(this->collidables, this->infecteds, stepTime);
         }
 
         // Reap dead players

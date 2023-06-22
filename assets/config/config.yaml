@@ -9,6 +9,8 @@ idf_velocity: 20
 idf_rate: 20
 idf_capacity: 50
 idf_injure: 3
+idf_reload_time: 2
+
 # 2: # p90
 p90_damage: 20
 p90_health: 140
@@ -16,6 +18,8 @@ p90_velocity: 30
 p90_rate: 10
 p90_capacity: 30
 p90_injure: 3
+p90_reload_time: 1
+
 # 3: # scout
 scout_damage: 60
 scout_health: 200
@@ -23,11 +27,13 @@ scout_velocity: 12
 scout_rate: 1
 scout_capacity: 20
 scout_injure: 3
+scout_reload_time: 1.5
 
 # skills:
 #   grenade:
 grenade_damage: 50
 grenade_recharge: 10
+
 #   smoke:
 smoke_damage: 0
 smoke_recharge: 10

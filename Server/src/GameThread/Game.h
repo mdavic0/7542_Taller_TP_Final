@@ -73,7 +73,17 @@ class Game : public Thread {
 
     private:
         void gameLoop();
+
+        /*
+         * Popea hasta que no haya más eventos en la queue
+         * y los procesa en el GameWorld.
+         */
         void processEvents();
+
+        /*
+         * Pushea el Snapshot a los hilos sender.
+         * Un snapshot por gameloop
+         */
         void broadcastSnapshot(std::shared_ptr<Snapshot> snapshot);
 };
 

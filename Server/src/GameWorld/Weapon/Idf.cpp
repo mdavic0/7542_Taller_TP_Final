@@ -27,6 +27,14 @@ void Idf::shoot(std::shared_ptr<Collidable>& player, bool right,
     }
 }
 
-void Idf::reload() {
-    this->munition = CF::idf_capacity;
+#include <iostream>
+bool Idf::reload(double stepTime) {
+    this->reloadingClock += stepTime;
+    std::cout << std::to_string(reloadingClock) << std::endl;
+    if (reloadingClock >= CF::idf_reload_time) {
+        this->munition = CF::idf_capacity;
+        this->reloadingClock = 0;
+        return true;
+    }
+    return false;
 }

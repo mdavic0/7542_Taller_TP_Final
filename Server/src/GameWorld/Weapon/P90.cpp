@@ -27,6 +27,12 @@ void P90::shoot(std::shared_ptr<Collidable>& player, bool right,
     }
 }
 
-void P90::reload() {
-    this->munition = CF::p90_capacity;
+bool P90::reload(double stepTime) {
+    this->reloadingClock += stepTime;
+    if (reloadingClock >= CF::p90_reload_time) {
+        this->munition = CF::p90_capacity;
+        this->reloadingClock = 0;
+        return true;
+    }
+    return false;
 }

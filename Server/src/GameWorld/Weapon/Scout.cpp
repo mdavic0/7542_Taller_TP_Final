@@ -27,6 +27,12 @@ void Scout::shoot(std::shared_ptr<Collidable>& player, bool right,
     }
 }
 
-void Scout::reload() {
-    this->munition = CF::scout_capacity;
+bool Scout::reload(double stepTime) {
+    this->reloadingClock += stepTime;
+    if (reloadingClock >= CF::scout_reload_time) {
+        this->munition = CF::scout_capacity;
+        this->reloadingClock = 0;
+        return true;
+    }
+    return false;
 }

@@ -10,7 +10,7 @@ class P90 : public Weapon {
         P90();
         void shoot(std::shared_ptr<Collidable>& player, bool right,
                    std::map<uint8_t, std::shared_ptr<Infected>>& infecteds) override;
-        void reload() override;
+        bool reload(double stepTime) override;
 };
 
 
