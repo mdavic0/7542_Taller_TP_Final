@@ -31,16 +31,20 @@ void EventReceiver::run() {
             }
         } catch (const LibError& err) {
             break;
-        }
+            // socket closed
+        } catch (...) {}
     }
     alive = false;
     snapshot_queue.close();
 }
 
 void EventReceiver::stop() {
-    talking = false;
+    if (talking == true) {
+        skt->shutdown(2);
+        skt->close();
+        talking = false;
+    }
     sender.stop();
-    // protocol.stop();
 }
 
 bool EventReceiver::ended() {

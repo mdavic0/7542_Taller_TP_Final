@@ -67,11 +67,14 @@ void GameDrawner::run() {
                     SDL_Delay(1000 / 40 - processTime);
             }
         }
-        this->endGame = true;
         client_events.close();
+        this->endGame = true;
     } catch (const SdlException &exc) {
         std::cerr << "Launcher: " << exc.what() << std::endl;
-    } 
+    } catch (const ClosedQueue& exc){
+        client_events.close();
+        // server closed
+    }
 }
 
 void GameDrawner::stop() {
