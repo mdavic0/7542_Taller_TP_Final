@@ -81,6 +81,10 @@ void Player::setShootingState() {
 }
 
 void Player::stopShootingState() {
+    if (this->state == State::injure) {
+        return;
+    }
+
     this->state = State::idle;
     this->weapon->deactivate();
 }
@@ -131,7 +135,9 @@ void Player::move(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables) {
 }
 
 void Player::shoot(std::map<uint8_t, std::shared_ptr<Infected>>& infecteds) {
-    this->weapon->shoot(this->collidable, this->lookingRight, infecteds);
+    if (this->state != State::injure) {
+        this->weapon->shoot(this->collidable, this->lookingRight, infecteds);
+    }
 }
 
 void Player::applyDamage(const int &amount) {
