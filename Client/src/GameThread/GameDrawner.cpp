@@ -102,14 +102,14 @@ void GameDrawner::run() {
                 players[player.getId()] = std::make_shared<Operator>(player.getId(), 
                     player.getTypeOperator(), render);
             }
-            //std::cout << "PLAYERS OK " << std::endl;
+            std::cout << "PLAYERS OK " << std::endl;
 
             enemies.clear();
             for (auto &infected : snap->getEnemies()) {
                 enemies[infected.getId()] = std::make_shared<Enemy>(render,
                                             infected.getTypeInfected());
             }
-            //std::cout << "ENEMIES OK " << std::endl;
+            std::cout << "ENEMIES OK " << std::endl;
 
             obstacles.clear();
             for (auto &obstacle : snap->getObstacles()) {
@@ -120,10 +120,12 @@ void GameDrawner::run() {
                     // std::cout << "obstacle position x: " << (int)obstacle.getPosition().first << std::endl;
                     // std::cout << "obstacle position y: " << (int)obstacle.getPosition().second << std::endl;
             }
-            //std::cout << "OBSTACLES OK " << std::endl;
+            std::cout << "OBSTACLES OK " << std::endl;
 
             uint8_t idMap = snap->getMap();
             TypeGame mode = snap->getTypeGame();
+            //uint8_t idMap = 1;
+            //TypeGame mode = TypeGame::game_survival;
             
             GameSdl gameSdl(window, render, snapshot_queue, client_events,
                             endGame, players, idPlayer, idMap, mode, font,
@@ -146,11 +148,13 @@ void GameDrawner::run() {
                     SDL_Delay(1000 / 40 - processTime);
             }
         }
-        this->endGame = true;
         client_events.close();
     } catch (const SdlException &exc) {
         std::cerr << "Launcher: " << exc.what() << std::endl;
-    } 
+    } catch (const ClosedQueue& exc){
+        // server closed
+    }
+    this->endGame = true;
 }
 
 void GameDrawner::renderText(const std::string& text1, const std::string& text2,
