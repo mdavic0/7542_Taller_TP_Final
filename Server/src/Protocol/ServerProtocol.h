@@ -234,11 +234,67 @@ EventDTO getStopShoot(std::shared_ptr<T> skt) {
     return EventDTO(Event::event_stop_shoot, id);
 }
 
+EventDTO getRecharge(std::shared_ptr<T> skt) {
+    uint8_t id;
+    this->recvAll(&id, 1, skt);
+
+    return EventDTO(Event::event_recharge, id);
+}
+
+EventDTO getReanimate(std::shared_ptr<T> skt) {
+    uint8_t id;
+    this->recvAll(&id, 1, skt);
+
+    return EventDTO(Event::event_reanimate, id);
+}
+
+EventDTO getStopReanimate(std::shared_ptr<T> skt) {
+    uint8_t id;
+    this->recvAll(&id, 1, skt);
+
+    return EventDTO(Event::event_stop_reanimate, id);
+}
+
 EventDTO getLeave(std::shared_ptr<T> skt) {
     uint8_t id;
     this->recvAll(&id, 1, skt);
 
     return EventDTO(Event::event_leave, id);
+}
+
+EventDTO getCheatFinish(std::shared_ptr<T> skt) {
+    uint8_t id;
+    this->recvAll(&id, 1, skt);
+
+    return EventDTO(Event::event_cheat_finish_game, id);   
+}
+
+EventDTO getCheatMunition(std::shared_ptr<T> skt) {
+    uint8_t id;
+    this->recvAll(&id, 1, skt);
+
+    return EventDTO(Event::event_cheat_infinite_munition, id);
+}
+
+EventDTO getCheatVelocity(std::shared_ptr<T> skt) {
+    uint8_t id;
+    this->recvAll(&id, 1, skt);
+
+    return EventDTO(Event::event_cheat_more_velocity, id);
+}
+
+EventDTO getCheatKills(std::shared_ptr<T> skt) {
+    uint8_t id;
+    this->recvAll(&id, 1, skt);
+
+    return EventDTO(Event::event_cheat_kill_enemies, id);
+}
+
+EventDTO getCheatHealth(std::shared_ptr<T> skt) {
+    uint8_t id;
+    this->recvAll(&id, 1, skt);
+
+    return EventDTO(Event::event_cheat_infinite_health, id);
 }
 
 void sendCreate(const uint32_t& code, const uint8_t& idPlayer, std::shared_ptr<T> skt) {
@@ -482,11 +538,11 @@ EventDTO getEvent(std::shared_ptr<T> skt) {
         break;
 
     case THROW_GRENADE_CODE:
-        return getSmoke(skt);
+        return getGrenade(skt);
         break;
 
     case STOP_GRENADE_CODE:
-        return getStopSmoke(skt);
+        return getStopGrenade(skt);
         break;
 
     case BLITZ_ATACK_CODE:
@@ -501,8 +557,40 @@ EventDTO getEvent(std::shared_ptr<T> skt) {
         return getStopShoot(skt);
         break;
 
+    case RECHARGE_CODE:
+        return getRecharge(skt);
+        break;
+
+    case REANIMATE_CODE:
+        return getReanimate(skt);
+        break;
+
+    case STOP_REANIMATE_CODE:
+        return getStopReanimate(skt);
+        break;
+
     case LEAVE_CODE:
         return getLeave(skt);
+        break;
+
+    case CHEAT_FINISH_GAME_CODE:
+        return getCheatFinish(skt);
+        break;
+
+    case CHEAT_INFINITE_MUNITION_CODE:
+        return getCheatMunition(skt);
+        break;
+
+    case CHEAT_MORE_VELOCITY_CODE:
+        return getCheatVelocity(skt);
+        break;
+
+    case CHEAT_KILL_ENEMIES_CODE:
+        return getCheatKills(skt);
+        break;
+
+    case CHEAT_INFINITE_HEALTH_CODE:
+        return getCheatHealth(skt);
         break;
 
     default:
