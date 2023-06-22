@@ -39,9 +39,11 @@ void EventReceiver::run() {
 }
 
 void EventReceiver::stop() {
-    skt->shutdown(2);
-    skt->close();
-    talking = false;
+    if (talking == true) {
+        skt->shutdown(2);
+        skt->close();
+        talking = false;
+    }
     sender.stop();
 }
 
