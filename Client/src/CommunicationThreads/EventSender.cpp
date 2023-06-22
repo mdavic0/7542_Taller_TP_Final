@@ -14,6 +14,8 @@ void EventSender::run() {
             protocol.sendEvent(*response, skt);
         } catch (const ClosedQueue &exc) {
             talking = false;
+            skt->shutdown(2);
+            skt->close();
         } catch (const LibError &exc) {
             talking = false;
             sdl_events.close();

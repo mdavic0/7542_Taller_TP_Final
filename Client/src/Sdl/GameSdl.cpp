@@ -57,7 +57,9 @@ void GameSdl::render() {
 }
 
 void GameSdl::update() {
-    std::shared_ptr<Snapshot> snap = snapshotQueue.pop();
+    std::shared_ptr<Snapshot> snap = nullptr;
+    while (!snapshotQueue.try_pop(snap)) {
+    }
     if (snap->getEvent() != Event::event_end) {
         for (auto &player : snap->getInfo()) {
             soldiers[player.getId()]->update(player.getPosition(),

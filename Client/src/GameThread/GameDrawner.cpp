@@ -149,12 +149,13 @@ void GameDrawner::run() {
             }
         }
         client_events.close();
+        this->endGame = true;
     } catch (const SdlException &exc) {
         std::cerr << "Launcher: " << exc.what() << std::endl;
     } catch (const ClosedQueue& exc){
+        client_events.close();
         // server closed
     }
-    this->endGame = true;
 }
 
 void GameDrawner::renderText(const std::string& text1, const std::string& text2,
