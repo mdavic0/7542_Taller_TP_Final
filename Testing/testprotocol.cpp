@@ -15,12 +15,13 @@ TEST(ClientToServer, SendCreate) {
   std::shared_ptr<SimulatedSocket> skt = std::make_shared<SimulatedSocket>();
   ClientProtocol<SimulatedSocket> client;
   ServerProtocol<SimulatedSocket> server;
-  EventDTO event("SALA", TypeGame(SURVIVAL_CODE), TypeOperator(SCOUT_CODE));
+  EventDTO event("SALA", TypeGame(SURVIVAL_CODE), TypeOperator(SCOUT_CODE), TypeDifficulty(DIFFICULTY_HARD));
   client.sendEvent(event, skt);
   EventDTO recvEvent = server.getEvent(skt);
   EXPECT_EQ(Event::event_create, recvEvent.getEvent());
   EXPECT_EQ(TypeGame::game_survival, recvEvent.getTypeGame());
   EXPECT_EQ(TypeOperator::operator_scout, recvEvent.getTypeOperator());
+  EXPECT_EQ(TypeDifficulty::difficulty_hard, recvEvent.getTypeDifficulty());
   EXPECT_EQ("SALA", recvEvent.getStr());
 }
 

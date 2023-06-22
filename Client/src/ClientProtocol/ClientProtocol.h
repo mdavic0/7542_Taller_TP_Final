@@ -20,7 +20,7 @@ class ClientProtocol : public Protocol<T> {
     private:
  
 void sendCreate(const std::string& scenario, const TypeOperator& typeOperator,
-    const TypeGame& typeGame, std::shared_ptr<T> skt) {
+    const TypeGame& typeGame, const TypeDifficulty & typeDifficulty, std::shared_ptr<T> skt) {
     uint8_t command = CREATE_CODE;
     this->sendAll(&command, 1, skt);
 
@@ -33,6 +33,8 @@ void sendCreate(const std::string& scenario, const TypeOperator& typeOperator,
         idGame = CLEAR_ZONE_CODE;
     }
     this->sendAll(&idGame, 1, skt);
+
+    sendDifficulty(typeDifficulty, skt);
 
     this->sendString(scenario, skt);
 }
@@ -155,6 +157,20 @@ void sendMoveTo(const MoveTo& moveTo, std::shared_ptr<T> skt) {
 
 void sendId(const uint8_t& idPlayer, std::shared_ptr<T> skt) {
     this->sendAll(&idPlayer, 1, skt);    
+}
+
+void sendDifficulty(const TypeDifficulty & typeDifficulty, std::shared_ptr<T> skt) {
+    uint8_t diff;
+    if(typeDifficulty == TypeDifficulty::difficulty_easy){
+        diff = DIFFICULTY_EASY;
+    } else if (typeDifficulty == TypeDifficulty::difficulty_normal) {
+        diff = DIFFICULTY_NORMAL;
+    } else if (typeDifficulty == TypeDifficulty::difficulty_hard) {
+        diff = DIFFICULTY_HARD;
+    } else if (typeDifficulty == TypeDifficulty::difficulty_god) {
+        diff = DIFFICULTY_GOD;
+    }
+    this->sendAll(&diff, 1, skt);
 }
 
 Snapshot getCreate (std::shared_ptr<T> skt) {
@@ -454,7 +470,8 @@ void sendEvent(const EventDTO& eventdto, std::shared_ptr<T> skt) {
     Event event = eventdto.getEvent();
 
     if (event == Event::event_create) {
-        sendCreate(eventdto.getStr(), eventdto.getTypeOperator(), eventdto.getTypeGame(), skt);
+        sendCreate(eventdto.getStr(), eventdto.getTypeOperator(), eventdto.getTypeGame(),
+            eventdto.getTypeDifficulty(), skt);
     } else if (event == Event::event_join) {
         sendJoin(eventdto.getN(), eventdto.getTypeOperator(), skt);
     } else if (event == Event::event_start_game) {

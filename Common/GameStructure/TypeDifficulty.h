@@ -4,10 +4,11 @@
 #include <stdint.h>
 
 enum class TypeDifficulty : int8_t {
-    difficulty_easy = 0x00,
-    difficulty_normal = 0x01,
-    difficulty_hard = 0x02,
-    difficulty_god = 0x03
+    difficulty_idle = 0x00,
+    difficulty_easy = 0x01,
+    difficulty_normal = 0x02,
+    difficulty_hard = 0x03,
+    difficulty_god = 0x04
 };
 
 

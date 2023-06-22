@@ -2,6 +2,7 @@
 #include "Event.h"
 #include "TypeGame.h"
 #include "TypeOperator.h"
+#include "TypeDifficulty.h"
 #include "Socket.h"
 #include "Defines.h"
 #include "Liberror.h"
@@ -109,7 +110,7 @@ void Launcher::sendCreateMatch(const QString& name, int mode,
     try {
         std::string nameMatch = name.toStdString();
         EventDTO eventCreate(nameMatch, TypeGame(mode),
-                            TypeOperator(operatorSelect));
+                            TypeOperator(operatorSelect), TypeDifficulty(1));
         clientProtocol.sendEvent(eventCreate, this->socket.value());
         Snapshot receive = clientProtocol.getSnapshot(this->socket.value());
         if (receive.getCode() >= 0) {
