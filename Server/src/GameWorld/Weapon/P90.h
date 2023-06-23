@@ -6,11 +6,22 @@
 #include "Infected.h"
 
 class P90 : public Weapon {
+    private:
+        int burstFiredBullets;
+        bool burstEnded;
+
     public:
         P90();
-        void shoot(std::shared_ptr<Collidable>& player, bool right,
-                   std::map<uint8_t, std::shared_ptr<Infected>>& infecteds) override;
-        void reload() override;
+        bool shoot(std::shared_ptr<Collidable> &player, bool right,
+                   std::map<uint8_t, std::shared_ptr<Infected>> &infecteds,
+                   double stepTime) override;
+        bool reload(double stepTime) override;
+
+    private:
+        void shootRight(std::shared_ptr<Collidable> &player,
+                    std::map<uint8_t, std::shared_ptr<Infected>> &infecteds) override;
+        void shootLeft(std::shared_ptr<Collidable> &player,
+                   std::map<uint8_t, std::shared_ptr<Infected>> &infecteds) override;
 };
 
 

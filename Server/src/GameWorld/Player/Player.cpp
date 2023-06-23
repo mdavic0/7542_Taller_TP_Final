@@ -17,7 +17,8 @@ Player::Player(TypeOperator typeOperator, uint8_t life, uint8_t velocity,
     alive(true) {}
 
 void Player::setMovementDirection(MoveTo direction) {
-    if (this->state == State::injure) {
+    if (this->state == State::injure or
+        this->state == State::recharge) {
         return;
     }
 
@@ -72,7 +73,8 @@ void Player::stopMovementDirection(MoveTo direction) {
 }
 
 void Player::setShootingState() {
-    if (this->state == State::injure) {
+    if (this->state == State::injure or
+        this->state == State::recharge) {
         return;
     }
 
@@ -82,7 +84,8 @@ void Player::setShootingState() {
 }
 
 void Player::stopShootingState() {
-    if (this->state == State::injure) {
+    if (this->state == State::injure or
+        this->state == State::recharge) {
         return;
     }
 
@@ -94,15 +97,17 @@ void Player::setReloadingState() {
     if (this->state == State::injure) {
         return;
     }
+    this->weapon->deactivate();
     this->movement_direction = {0, 0};
     this->state = State::recharge;
 }
 
-void Player::applyStep(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables,
-                       std::map<uint8_t, std::shared_ptr<Infected>>& infecteds) {
+void Player::applyStep(std::map<uint8_t, std::shared_ptr<Collidable>> &collidables,
+                       std::map<uint8_t, std::shared_ptr<Infected>> &infecteds,
+                       double stepTime) {
     this->move(collidables);
-    this->shoot(infecteds);
-    this->reload();
+    this->shoot(infecteds, stepTime);
+    this->reload(stepTime);
 }
 
 std::pair<int16_t, int16_t>& Player::getPosition() {
@@ -130,7 +135,7 @@ std::shared_ptr<Collidable> &Player::getCollidable() {
 }
 
 void Player::move(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables) {
-    if (this->state != State::injure) {
+    if (this->state == State::moving) {
         if (not this->collidable->collidesWith(collidables)) {
             this->position.first += movement_direction.first + movement_direction.first * (velocity / 10);
             this->position.second += movement_direction.second + movement_direction.second * (velocity / 10);
@@ -144,9 +149,14 @@ void Player::move(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables) {
     }
 }
 
-void Player::shoot(std::map<uint8_t, std::shared_ptr<Infected>>& infecteds) {
-    if (this->state != State::injure and this->state != State::recharge) {
-        this->weapon->shoot(this->collidable, this->lookingRight, infecteds);
+void Player::shoot(std::map<uint8_t, std::shared_ptr<Infected>> &infecteds, double stepTime) {
+    if (this->state == State::atack) {
+        if (not weapon->shoot(this->collidable,
+                                    this->lookingRight,
+                                    infecteds,
+                                    stepTime)) {
+            this->state = State::idle;
+        }
 
         if (this->weapon->getMunition() <= 0) {
             this->setReloadingState();
@@ -154,9 +164,11 @@ void Player::shoot(std::map<uint8_t, std::shared_ptr<Infected>>& infecteds) {
     }
 }
 
-void Player::reload() {
+void Player::reload(double stepTime) {
     if (this->state == State::recharge) {
-        this->weapon->reload();
+        if (this->weapon->reload(stepTime)) {
+            this->state = State::idle;
+        }
     }
 }
 

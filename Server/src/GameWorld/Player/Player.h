@@ -40,8 +40,9 @@ class Player {
         void setShootingState();
         void stopShootingState();
         void setReloadingState();
-        void applyStep(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables,
-                       std::map<uint8_t, std::shared_ptr<Infected>>& infecteds);
+        void applyStep(std::map<uint8_t, std::shared_ptr<Collidable>> &collidables,
+                       std::map<uint8_t, std::shared_ptr<Infected>> &infecteds,
+                       double stepTime);
         std::pair<int16_t, int16_t>& getPosition();
         TypeOperator& getTypeOperator();
         State& getState();
@@ -60,8 +61,8 @@ class Player {
 
     private:
         void move(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables);
-        void shoot(std::map<uint8_t, std::shared_ptr<Infected>>& infecteds);
-        void reload();
+        void shoot(std::map<uint8_t, std::shared_ptr<Infected>> &infecteds, double stepTime);
+        void reload(double stepTime);
         virtual void specialAtack(Event event) = 0;
 };
 

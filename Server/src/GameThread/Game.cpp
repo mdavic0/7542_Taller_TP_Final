@@ -68,34 +68,29 @@ void Game::startGame() {
 } 
 
 void Game::gameLoop() {
-    // using namespace std::chrono;
-    while (alive) {
-        auto begin = std::chrono::steady_clock::now();
+    using namespace std::chrono;
+    auto begin = steady_clock::now();
+    auto end = steady_clock::now();
+    double t_delta;
+    int skippedLoops = 0;
 
-        //process_events() // popea hasta que no haya más eventos en la queue
-        // y los procesa en el gameworld.
+    while (alive) {
+        begin = steady_clock::now();
+
         processEvents();
 
-        // TODO:
-        //  step(some_time)
-        gameWorld.simulateStep();
-        // simula un tiempito en el 'gameworld'.
-        // Este tiempito lo que va a hacer es hacer que falte menos
-        // para poder lanzar una grandada, que los jugadores se muevan,
-        // todos los eventos que tienen que ver con el tiempo.
+        gameWorld.simulateStep(STEP_TIME * (skippedLoops + 1));
 
         std::shared_ptr<Snapshot> snapshot = gameWorld.getSnapshot(false);
-        // broadcastSnapshot() # acá recien se agarra el snapshot y se lo pushea
-        // a los hilos sender. Un snapshot por gameloop. Si hacen uno por evento,
-        // saturan la red sin sentido
         broadcastSnapshot(snapshot);
 
-        // ->>Bueno y el sleep de tiempo variable también
-        auto end = std::chrono::steady_clock::now();
-        int t_delta = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
-        // duration<double>(t_delta)
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000 / 20 - t_delta));
-        
+        end = steady_clock::now();
+        t_delta = duration<double>(end - begin).count();
+
+        if (t_delta < STEP_TIME) {
+            std::this_thread::sleep_for(duration<double>(STEP_TIME - t_delta));
+        }
+
         if(gameWorld.isEnded()){
             broadcastSnapshot(gameWorld.getStats());
             stop();

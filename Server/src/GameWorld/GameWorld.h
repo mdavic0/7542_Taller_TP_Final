@@ -58,7 +58,14 @@ class GameWorld {
         void updateMovementDirection(Event event, uint8_t id, MoveTo direction);
         void updateShootingState(Event event, uint8_t id);
         void updateReloadingState(Event event, uint8_t id);
-        void simulateStep();
+
+        /*
+         * Simula un tiempito en el 'gameworld'.
+         * Este tiempito lo que va a hacer es hacer que falte menos
+         * para poder lanzar una grandada, que los jugadores se muevan,
+         * todos los eventos que tienen que ver con el tiempo.
+         */
+        void simulateStep(double stepTime);
         std::shared_ptr<Snapshot> getSnapshot(bool first);
         std::shared_ptr<Snapshot> getStats();
         bool isEnded();

@@ -112,4 +112,5 @@
 #define PLAYER_HEIGHT 20
 
 #define FELL_DOWN_LIMIT 3
+#define STEP_TIME 0.05
 #endif
