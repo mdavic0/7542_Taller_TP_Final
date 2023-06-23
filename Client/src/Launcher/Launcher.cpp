@@ -108,6 +108,7 @@ void Launcher::createProtocol(const QString& ip, const QString& port) {
 void Launcher::sendCreateMatch(const QString& name, int mode, 
         int operatorSelect, TypeDifficulty difficulty) {
     try {
+        bool error = false;
         std::string nameMatch = name.toStdString();
         EventDTO eventCreate(nameMatch, TypeGame(mode),
                             TypeOperator(operatorSelect), difficulty);
@@ -119,9 +120,13 @@ void Launcher::sendCreateMatch(const QString& name, int mode,
             QMessageBox::information(this, "Exito", message.c_str(),
                 QMessageBox::Close);
             this->hide();
-            this->initGame(CREATE_MENU, receive.getIdPlayer(), 1);
+            this->initGame(CREATE_MENU, receive.getIdPlayer(), 1, error);
             this->goToConnect();
             this->show();
+            if (error)
+                QMessageBox::information(this, "Error", 
+                            "Conexion al server perdida",
+                            QMessageBox::Close);
         } else {
             QMessageBox::information(this, "Error", 
                         "No se pudo crear la partida",
@@ -137,6 +142,7 @@ void Launcher::sendCreateMatch(const QString& name, int mode,
 
 void Launcher::sendJoinMatch(int code, int operatorSelect) {
     try {
+        bool error = false;
         EventDTO eventCreate(code, TypeOperator(operatorSelect));
         clientProtocol.sendEvent(eventCreate, this->socket.value());
         Snapshot receive = clientProtocol.getSnapshot(this->socket.value());
@@ -145,9 +151,13 @@ void Launcher::sendJoinMatch(int code, int operatorSelect) {
                 QMessageBox::Close);
             this->hide();
             this->initGame(JOIN_MENU, receive.getIdPlayer(),
-                            receive.getSize());
+                            receive.getSize(), error);
             this->goToConnect();
             this->show();
+            if (error)
+                QMessageBox::information(this, "Error", 
+                            "Conexion al server perdida",
+                            QMessageBox::Close);
         } else {
             QMessageBox::information(this, "Error", 
                         "No se puede unir a la partida",
@@ -161,15 +171,15 @@ void Launcher::sendJoinMatch(int code, int operatorSelect) {
     }
 }
 
-void Launcher::initGame(int menu, uint8_t idPlayer, uint8_t numPlayers) {
-    bool endGame = false;
+void Launcher::initGame(int menu, uint8_t idPlayer, uint8_t numPlayers,
+                        bool& error) {
     Queue<std::shared_ptr<Snapshot>> snapshotQueue(SIZE_QUEUE);
     Queue<std::shared_ptr<EventDTO>> eventQueue(SIZE_QUEUE);
-    GameDrawner gameDrawner(snapshotQueue, eventQueue, endGame, menu, idPlayer,
+    GameDrawner gameDrawner(snapshotQueue, eventQueue, error, menu, idPlayer,
                             numPlayers);
     SnapshotReceiver snapshotReceiver(socket.value(), snapshotQueue,
-                                        endGame);
-    EventSender eventSender(eventQueue, socket.value(), endGame);
+                                        error);
+    EventSender eventSender(eventQueue, socket.value(), error);
     eventSender.start();
     snapshotReceiver.start();
     gameDrawner.start();

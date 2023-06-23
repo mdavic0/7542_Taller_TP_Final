@@ -14,15 +14,15 @@ class GameDrawner : public Thread {
     private:
         Queue<std::shared_ptr<EventDTO>>& client_events;
         Queue<std::shared_ptr<Snapshot>>& snapshot_queue;
-        bool& endGame;
+        bool& error;
         int menu;
         int numPlayers;
         int idPlayer;
-
+    
     public:
         GameDrawner(Queue<std::shared_ptr<Snapshot>>& snapshot_queue,
             Queue<std::shared_ptr<EventDTO>>& client_events,
-            bool& endGame, int menu, uint8_t idPlayer, uint8_t numPlayers);
+            bool& error, int menu, uint8_t idPlayer, uint8_t numPlayers);
         virtual ~GameDrawner();
         virtual void run() override;
         virtual void stop() override;

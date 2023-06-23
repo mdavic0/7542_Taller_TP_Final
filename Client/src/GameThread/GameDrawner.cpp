@@ -13,10 +13,10 @@
 #include <map>
 
 GameDrawner::GameDrawner(Queue<std::shared_ptr<Snapshot>> &snapshot_queue,
-    Queue<std::shared_ptr<EventDTO>> &client_events, bool& endGame, int menu,
-    uint8_t idPlayer, uint8_t numPlayers) :
-    client_events(client_events), snapshot_queue(snapshot_queue),
-    endGame(endGame), menu(menu), numPlayers(numPlayers), idPlayer(idPlayer) {
+    Queue<std::shared_ptr<EventDTO>> &client_events, bool& error, int menu,
+    uint8_t idPlayer, uint8_t numPlayers) : client_events(client_events),
+    snapshot_queue(snapshot_queue), error(error), menu(menu),
+    numPlayers(numPlayers), idPlayer(idPlayer) {
 }
 
 void GameDrawner::run() {
@@ -48,7 +48,7 @@ void GameDrawner::run() {
             ConfigGame config(lobby.getConfigSnap(), render, window);
             
             GameSdl gameSdl(window, render, snapshot_queue, client_events,
-                            endGame, idPlayer, font, config);
+                            error, idPlayer, font, config);
             
             while (gameSdl.isRunning()) {
                 uint32_t frameInit = SDL_GetTicks();
@@ -68,11 +68,11 @@ void GameDrawner::run() {
             }
         }
         client_events.close();
-        this->endGame = true;
     } catch (const SdlException &exc) {
         std::cerr << "Launcher: " << exc.what() << std::endl;
     } catch (const ClosedQueue& exc){
         client_events.close();
+        this->error = true;
     }
 }
 

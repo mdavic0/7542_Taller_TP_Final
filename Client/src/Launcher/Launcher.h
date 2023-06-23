@@ -32,7 +32,8 @@ class Launcher : public QWidget {
         ClientProtocol<Socket> clientProtocol;
         void initWidget();
         void initFont();
-        void initGame(int menu, uint8_t idPlayer, uint8_t numPlayers);
+        void initGame(int menu, uint8_t idPlayer, uint8_t numPlayers,
+                        bool& error);
     
     public:
         explicit Launcher(QWidget* parent = 0);

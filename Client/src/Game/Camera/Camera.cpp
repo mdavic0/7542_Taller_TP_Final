@@ -40,8 +40,8 @@ int16_t Camera::getScaleX() {
 SDL_Rect Camera::getRect() {
     return {posCamera.first,
             posCamera.second,
-            1920,
-            1080};
+            SIZE_SPRITE_MAP_X,
+            SIZE_SPRITE_MAP_Y};
 }
 
 Camera::~Camera() {
