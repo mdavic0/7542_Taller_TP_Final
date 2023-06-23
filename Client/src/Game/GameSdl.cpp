@@ -27,12 +27,11 @@ bool GameSdl::isRunning() {
 void GameSdl::render() {
     this->map.render(camera.getRect());
     
-
     this->hud.render(soldiers[idPlayer]->getHealth(),
                     soldiers[idPlayer]->getMunition(),
                     enemies.size());
     
-    // reordeno los enemigos antes de renderizar
+    // reordeno todo antes de renderizar
     std::vector<std::shared_ptr<Object>> vecObjects;
     for (const auto &obstacle: obstacles)
         vecObjects.push_back(obstacle.second);
@@ -47,14 +46,6 @@ void GameSdl::render() {
     });
     for (const auto &object : vecObjects)
         object->render(camera.getRect());
-    
-    // // reordeno los operadores antes de renderizar
-    // std::vector<std::pair<uint8_t,std::shared_ptr<Operator>>> vecSoldiers(
-    //     soldiers.begin(), soldiers.end());
-    // std::sort(vecSoldiers.begin(), vecSoldiers.end(), 
-    //     [](const auto& a, const auto&b) {
-    //         return a.second->getPosY() < b.second->getPosY();
-    // });
 }
 
 void GameSdl::update() {

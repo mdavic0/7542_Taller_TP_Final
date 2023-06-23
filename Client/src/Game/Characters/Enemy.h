@@ -2,6 +2,7 @@
 #define ENEMY_H_
 
 #include "RendererSdl.h"
+#include "WindowSdl.h"
 #include "State.h"
 #include "TypeInfected.h"
 #include "TextureManager.h"
@@ -18,12 +19,15 @@ class Enemy : public Object {
         SDL_RendererFlip flipType;
         int numFrames;
         TextureManager& textures;
+        WindowSdl& window;
         void setState(State state);
         int setNumFrames(State state);
         void renderAnimation(int speed, SDL_Texture* texture, SDL_Rect camera);
+        bool verifyRender(SDL_Rect camera, SDL_Rect final);
 
     public:
-        Enemy(TextureManager& textures, Renderer& render, TypeInfected type);
+        Enemy(TextureManager& textures, Renderer& render, TypeInfected type,
+            WindowSdl& window);
         ~Enemy();
         void update(std::pair<int16_t, int16_t> pos, State state);
         void render(SDL_Rect camera) override;

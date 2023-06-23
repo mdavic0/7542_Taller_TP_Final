@@ -1,9 +1,10 @@
 #include "Enemy.h"
 #include "Defines.h"
 
-Enemy::Enemy(TextureManager& textures, Renderer &render, TypeInfected type) :
+Enemy::Enemy(TextureManager& textures, Renderer &render, TypeInfected type,
+    WindowSdl& window) :
     Object(), renderEnemy(render), position({0, 0}), type(type), 
-    flipType(SDL_FLIP_NONE), textures(textures) {
+    flipType(SDL_FLIP_NONE), textures(textures), window(window) {
 }
 
 void Enemy::update(std::pair<int16_t, int16_t> pos, State state) {
@@ -75,7 +76,15 @@ void Enemy::renderAnimation(int speed, SDL_Texture* texture, SDL_Rect camera) {
                         position.second - camera.y,
                         SIZE_FRAME, SIZE_FRAME};
     }
-    this->renderEnemy.copy(texture, rectInit, rectFinal, this->flipType);
+    if (verifyRender(camera, rectFinal))
+        this->renderEnemy.copy(texture, rectInit, rectFinal, this->flipType);
+}
+
+bool Enemy::verifyRender(SDL_Rect camera, SDL_Rect final) {
+    return  position.first >= camera.x - final.w && 
+            position.first <= camera.x + window.getWidth() &&
+            position.second >= camera.y - final.h &&
+            position.second <= camera.y + window.getHeight();
 }
 
 Enemy::~Enemy() {
