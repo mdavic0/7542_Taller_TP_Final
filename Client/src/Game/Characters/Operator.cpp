@@ -186,7 +186,7 @@ void Operator::renderIconInjure( SDL_Rect camera) {
                             SIZE_FRAME / 3,
                             SIZE_FRAME / 3};
     if (verifyRender(camera, rectFinal)) {
-        this->renderPlayer.copy(textures["bg"]->getTexture(), rectInit,
+        this->renderPlayer.copy(textures["bgIcon"]->getTexture(), rectInit,
                                 rectFinal);
         this->renderPlayer.copy(textures["iconHurt"]->getTexture(), rectInit,
                                 rectFinal);
