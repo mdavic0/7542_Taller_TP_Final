@@ -11,12 +11,14 @@ void SnapshotReceiver::run() {
         try {
             snapshot_queue.push(std::make_shared<Snapshot>(protocol.getSnapshot(skt)));
         } catch (const ClosedQueue& exc){
+            std::cout << "Client sanp Queue closed " << std::endl;
             break;
         } catch (const LibError &exc) {
             snapshot_queue.close();
+            std::cout << "Client sanp recv closed, then snap Queue is closed too " << std::endl;
             break;
         } catch (const std::exception& exc) {
-            std::cout << "Exception occurred custom: " << exc.what() << std::endl;
+            std::cout << "SnapshotReceiver - Exception occurred test log: " << exc.what() << std::endl;
         }
     }
     alive = false;

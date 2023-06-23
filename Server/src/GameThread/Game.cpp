@@ -17,15 +17,17 @@ void Game::run() {
         while(talking) {
             gameLoop();
         }
-    } catch(std::exception& e) {
-        // hacer algo
+    } catch (const std::exception& exc) {
+        std::cout << "Game - Exception occurred test log: " << exc.what() << std::endl;
     }
     alive = false;
 }
 
 void Game::stop() {
+    std::cout << "Game - stop " << std::endl;
     talking = false;
     alive = false;
+    std::cout << "Game - end stop " << std::endl;
 }
 
 bool Game::ended() {
@@ -127,5 +129,7 @@ void Game::broadcastSnapshot(std::shared_ptr<Snapshot> snapshot) {
 }
 
 Game::~Game() {
-    join();
+    if (started)
+        join();
+    std::cout << "Game - end delete " << std::endl;
 }

@@ -43,6 +43,9 @@ void Acceptor::run() {
         } catch (const LibError& err) {
             // socket closed
             break;
+        } catch (const std::exception& exc) {
+            std::cout << "Acceptor - Exception occurred test log: " << exc.what() << std::endl;
+            break;
         }
     }
 
@@ -50,9 +53,11 @@ void Acceptor::run() {
 }
 
 void Acceptor::stop() {
+    std::cout << "Acceptor - stop " << std::endl;
     talking = false;
     skt.shutdown(2);
     skt.close();
+    std::cout << "Acceptor - end stop " << std::endl;
 }
 
 bool Acceptor::ended() {
@@ -60,6 +65,8 @@ bool Acceptor::ended() {
 }
 
 Acceptor::~Acceptor() {
+    std::cout << "Acceptor - delete " << std::endl;
     waitClients();
+    std::cout << "Acceptor - end delete " << std::endl;
     join();
 }

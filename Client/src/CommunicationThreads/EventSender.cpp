@@ -13,14 +13,16 @@ void EventSender::run() {
             std::shared_ptr<EventDTO> response = sdl_events.pop();
             protocol.sendEvent(*response, skt);
         } catch (const ClosedQueue &exc) {
-            talking = false;
             skt->shutdown(2);
             skt->close();
+            std::cout << "Client event Queue closed, then socket is closed " << std::endl;
+            break;
         } catch (const LibError &exc) {
-            talking = false;
             sdl_events.close();
+            std::cout << "Client event sender closed, then events Queue is closed too " << std::endl;
+            break;
         } catch (const std::exception& exc) {
-            std::cout << "Exception occurred custom: " << exc.what() << std::endl;
+            std::cout << "EventSender - Exception occurred test log: " << exc.what() << std::endl;
         }
     }
     alive = false;

@@ -29,22 +29,27 @@ void EventReceiver::run() {
             } else {
                 event_queue->push(eventDto);
             }
-        } catch (const LibError& err) {
+        } catch (const LibError& exc) {
+            std::cout << "EventReceiver - socket closed " << std::endl;
             break;
-            // socket closed
-        } catch (...) {}
+        }  catch (const std::exception& exc) {
+            std::cout << "EventReceiver - Exception occurred test log: " << exc.what() << std::endl;
+            break;
+        }
     }
     alive = false;
     snapshot_queue.close();
 }
 
 void EventReceiver::stop() {
-    if (talking == true) {
+    std::cout << "EventReceiver - stop " << std::endl;
+    if (alive == true) {
         skt->shutdown(2);
         skt->close();
         talking = false;
     }
     sender.stop();
+    std::cout << "EventReceiver - end stop " << std::endl;
 }
 
 bool EventReceiver::ended() {
@@ -52,5 +57,6 @@ bool EventReceiver::ended() {
 }
 
 EventReceiver::~EventReceiver() {
+    std::cout << "EventReceiver - delete " << std::endl;
     join();
 }

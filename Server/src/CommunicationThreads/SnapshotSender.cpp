@@ -11,9 +11,14 @@ void SnapshotSender::run() {
             std::shared_ptr<Snapshot> response = snapshot_queue.pop();
             protocol.sendSnapshot(response, skt);
             // delete response;
-        } catch (const ClosedQueue&) {
+        } catch (const ClosedQueue& exc) {
+            std::cout << "SnapshotSender - snap Queue closed " << std::endl;
             break;
-        } catch (const LibError& err) {
+        } catch (const LibError& exc) {
+            std::cout << "SnapshotSender - socket closed " << std::endl;
+            break;
+        } catch (const std::exception& exc) {
+            std::cout << "SnapshotSender - Exception occurred test log: " << exc.what() << std::endl;
             break;
         }
     }
@@ -21,6 +26,7 @@ void SnapshotSender::run() {
 }
 
 void SnapshotSender::stop() {
+    std::cout << "SnapshotSender - stop " << std::endl;
     talking = false;
 }
 
@@ -29,5 +35,6 @@ bool SnapshotSender::ended() {
 }
 
 SnapshotSender::~SnapshotSender() {
+    std::cout << "SnapshotSender - delete " << std::endl;
     join();
 }

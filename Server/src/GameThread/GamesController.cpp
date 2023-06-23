@@ -36,8 +36,11 @@ void GamesController::startGame(const uint32_t& code){
 }
 
 GamesController::~GamesController() {
+    std::cout << "GamesController - delete " << std::endl;
   for (auto it = games.begin(); it != games.end(); ++it) {
     it->second->stop();
     delete it->second;
+    i++;
   }
+    std::cout << "GamesController - end delete " << std::endl;
 }
