@@ -106,7 +106,7 @@ void Player::applyStep(std::map<uint8_t, std::shared_ptr<Collidable>> &collidabl
                        std::map<uint8_t, std::shared_ptr<Infected>> &infecteds,
                        double stepTime) {
     this->move(collidables);
-    this->shoot(infecteds);
+    this->shoot(infecteds, stepTime);
     this->reload(stepTime);
 }
 
@@ -135,7 +135,7 @@ std::shared_ptr<Collidable> &Player::getCollidable() {
 }
 
 void Player::move(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables) {
-    if (this->state != State::injure and this->state != State::recharge) {
+    if (this->state == State::moving) {
         if (not this->collidable->collidesWith(collidables)) {
             this->position.first += movement_direction.first + movement_direction.first * (velocity / 10);
             this->position.second += movement_direction.second + movement_direction.second * (velocity / 10);
@@ -149,21 +149,24 @@ void Player::move(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables) {
     }
 }
 
-void Player::shoot(std::map<uint8_t, std::shared_ptr<Infected>>& infecteds) {
-    if (this->state != State::injure and this->state != State::recharge) {
-        this->weapon->shoot(this->collidable, this->lookingRight, infecteds);
+void Player::shoot(std::map<uint8_t, std::shared_ptr<Infected>> &infecteds, double stepTime) {
+    if (this->state == State::atack) {
+        if (not weapon->shoot(this->collidable,
+                                    this->lookingRight,
+                                    infecteds,
+                                    stepTime)) {
+            this->state = State::idle;
+        }
 
         if (this->weapon->getMunition() <= 0) {
             this->setReloadingState();
         }
     }
 }
-#include <iostream>
+
 void Player::reload(double stepTime) {
     if (this->state == State::recharge) {
-        std::cout <<"recargando" << std::endl;
         if (this->weapon->reload(stepTime)) {
-            std::cout <<"RECARGA COMPLETADA" << std::endl;
             this->state = State::idle;
         }
     }

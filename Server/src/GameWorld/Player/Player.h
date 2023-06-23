@@ -61,7 +61,7 @@ class Player {
 
     private:
         void move(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables);
-        void shoot(std::map<uint8_t, std::shared_ptr<Infected>>& infecteds);
+        void shoot(std::map<uint8_t, std::shared_ptr<Infected>> &infecteds, double stepTime);
         void reload(double stepTime);
         virtual void specialAtack(Event event) = 0;
 };

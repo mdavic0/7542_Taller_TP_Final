@@ -2,29 +2,45 @@
 
 P90::P90() : Weapon(CF::p90_damage,
                     CF::p90_rate,
-                    CF::p90_capacity) {}
+                    CF::p90_capacity),
+                    burstFiredBullets(0), burstEnded(false) {}
 
-void P90::shoot(std::shared_ptr<Collidable>& player, bool right,
-                std::map<uint8_t, std::shared_ptr<Infected>>& infecteds) {
-    if (activated) {
+bool P90::shoot(std::shared_ptr<Collidable> &player, bool right,
+                std::map<uint8_t, std::shared_ptr<Infected>> &infecteds,
+                double stepTime) {
+    if (not activated) {
+        return false;
+    }
+    this->rateClock += stepTime;
+    this->shootingClock += stepTime;
+
+    if (rateClock >= CF::p90_rate_time and burstFiredBullets < CF::p90_rate) {
         if (right) {
-            //atacar a los q tan a la derecha...
-            for (auto &infected : infecteds) {
-                if (player->isAlignedRight(infected.second->getCollidable())) {
-                    infected.second->applyDamage(this->damage);
-                }
-            }
+            shootRight(player, infecteds);
         } else {
-            //atacar a los que tan a la izq
-            for (auto &infected : infecteds) {
-                if (player->isAlignedLeft(infected.second->getCollidable())) {
-                    infected.second->applyDamage(this->damage);
-                }
-            }
+            shootLeft(player, infecteds);
         }
-        this->munition--;
+
+        burstFiredBullets++;
+        if (burstFiredBullets >= CF::p90_rate) {
+            burstEnded = true;
+        }
+        this->rateClock = 0;
         this->totalFiredBullets++;
     }
+
+    if (shootingClock >= CF::p90_rate_time * CF::p90_rate) {
+        if (burstFiredBullets >= CF::p90_rate and burstEnded) {
+            this->munition--;
+            burstEnded = false;
+        }
+        if (shootingClock >= (CF::p90_rate_time * CF::p90_rate) + CF::p90_burst_delay) {
+            shootingClock = 0;
+            burstFiredBullets = 0;
+        }
+        return false;
+    }
+    return true;
 }
 
 bool P90::reload(double stepTime) {
@@ -35,4 +51,21 @@ bool P90::reload(double stepTime) {
         return true;
     }
     return false;
+}
+
+void P90::shootRight(std::shared_ptr<Collidable> &player,
+                     std::map<uint8_t, std::shared_ptr<Infected>> &infecteds) {
+    for (auto &infected : infecteds) {
+        if (player->isAlignedRight(infected.second->getCollidable())) {
+            infected.second->applyDamage(this->damage);
+        }
+    }
+}
+void P90::shootLeft(std::shared_ptr<Collidable> &player,
+                    std::map<uint8_t, std::shared_ptr<Infected>> &infecteds) {
+    for (auto &infected : infecteds) {
+        if (player->isAlignedLeft(infected.second->getCollidable())) {
+            infected.second->applyDamage(this->damage);
+        }
+    }
 }

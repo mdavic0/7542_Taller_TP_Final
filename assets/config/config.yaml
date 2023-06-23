@@ -10,6 +10,8 @@ idf_rate: 20
 idf_capacity: 50
 idf_injure: 3
 idf_reload_time: 2
+idf_rate_time: 0.05
+idf_burst_delay: 0.1
 
 # 2: # p90
 p90_damage: 20
@@ -19,6 +21,8 @@ p90_rate: 10
 p90_capacity: 30
 p90_injure: 3
 p90_reload_time: 1
+p90_rate_time: 0.05
+p90_burst_delay: 0.15
 
 # 3: # scout
 scout_damage: 60
@@ -28,6 +32,8 @@ scout_rate: 1
 scout_capacity: 20
 scout_injure: 3
 scout_reload_time: 1.5
+scout_rate_time: 0.4
+scout_burst_delay: 0.25
 
 # skills:
 #   grenade:

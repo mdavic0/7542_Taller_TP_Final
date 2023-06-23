@@ -16,6 +16,8 @@ int CF::idf_rate = CF::file["idf_rate"].as<int>();
 int CF::idf_capacity = CF::file["idf_capacity"].as<int>();
 int CF::idf_injure = CF::file["idf_injure"].as<int>();
 double CF::idf_reload_time = CF::file["idf_reload_time"].as<double>();
+double CF::idf_rate_time = CF::file["idf_rate_time"].as<double>();
+double CF::idf_burst_delay = CF::file["idf_burst_delay"].as<double>();
 
 // P90:
 int CF::p90_damage = CF::file["p90_damage"].as<int>();
@@ -25,6 +27,8 @@ int CF::p90_rate = CF::file["p90_rate"].as<int>();
 int CF::p90_capacity = CF::file["p90_capacity"].as<int>();
 int CF::p90_injure = CF::file["p90_injure"].as<int>();
 double CF::p90_reload_time = CF::file["p90_reload_time"].as<double>();
+double CF::p90_rate_time = CF::file["p90_rate_time"].as<double>();
+double CF::p90_burst_delay = CF::file["p90_burst_delay"].as<double>();
 
 // SCOUT:
 int CF::scout_damage = CF::file["scout_damage"].as<int>();
@@ -34,6 +38,8 @@ int CF::scout_rate = CF::file["scout_rate"].as<int>();
 int CF::scout_capacity = CF::file["scout_capacity"].as<int>();
 int CF::scout_injure = CF::file["scout_injure"].as<int>();
 double CF::scout_reload_time = CF::file["scout_reload_time"].as<double>();
+double CF::scout_rate_time = CF::file["scout_rate_time"].as<double>();
+double CF::scout_burst_delay = CF::file["scout_burst_delay"].as<double>();
 
 // Special abilties
 int CF::grenade_damage = CF::file["grenade_damage"].as<int>();
@@ -118,6 +124,8 @@ void Configuration::loadConfiguration(const std::string& filename) {
     idf_capacity = file["idf_capacity"].as<int>();
     idf_injure = file["idf_injure"].as<int>();
     idf_reload_time = file["idf_reload_time"].as<double>();
+    idf_rate_time = file["idf_rate_time"].as<double>();
+    idf_burst_delay = file["idf_burst_delay"].as<double>();
 
     // P90:
     p90_damage = file["p90_damage"].as<int>();
@@ -127,6 +135,8 @@ void Configuration::loadConfiguration(const std::string& filename) {
     p90_capacity = file["p90_capacity"].as<int>();
     p90_injure = file["p90_injure"].as<int>();
     p90_reload_time = file["p90_reload_time"].as<double>();
+    p90_rate_time = file["p90_rate_time"].as<double>();
+    p90_burst_delay = file["p90_burst_delay"].as<double>();
 
     // SCOUT:
     scout_damage = file["scout_damage"].as<int>();
@@ -136,6 +146,8 @@ void Configuration::loadConfiguration(const std::string& filename) {
     scout_capacity = file["scout_capacity"].as<int>();
     scout_injure = file["scout_injure"].as<int>();
     scout_reload_time = file["scout_reload_time"].as<double>();
+    scout_rate_time = file["scout_rate_time"].as<double>();
+    scout_burst_delay = file["scout_burst_delay"].as<double>();
 
     // Special abilties
     grenade_damage = file["grenade_damage"].as<int>();

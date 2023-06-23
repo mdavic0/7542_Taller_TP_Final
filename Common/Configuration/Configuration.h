@@ -23,6 +23,8 @@ class Configuration {
         static int idf_capacity;
         static int idf_injure;
         static double idf_reload_time;
+        static double idf_rate_time;
+        static double idf_burst_delay;
 
         // P90:
         static int p90_damage;
@@ -32,6 +34,8 @@ class Configuration {
         static int p90_capacity;
         static int p90_injure;
         static double p90_reload_time;
+        static double p90_rate_time;
+        static double p90_burst_delay;
 
         // SCOUT:
         static int scout_damage;
@@ -41,6 +45,8 @@ class Configuration {
         static int scout_capacity;
         static int scout_injure;
         static double scout_reload_time;
+        static double scout_rate_time;
+        static double scout_burst_delay;
 
         // Special abilties
         static int grenade_damage;
