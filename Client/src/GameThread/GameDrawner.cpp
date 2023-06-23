@@ -73,6 +73,7 @@ void GameDrawner::run() {
     } catch (const ClosedQueue& exc){
         client_events.close();
         this->error = true;
+        std::cout << "Client sanp Queue closed, then events Queue is closed in GameDrawner " << std::endl;
     }
 }
 
