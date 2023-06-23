@@ -20,9 +20,6 @@ private:
     uint8_t idPlayer;
 
 public:
-    explicit EventDTO(Event event, MoveTo moveTo, TypeOperator typeOperator, TypeGame typeGame,
-         const std::string& str, const uint32_t& n);
-
     // Event create
     explicit EventDTO(const std::string& name, const TypeGame& typeGame,
         const TypeOperator& typeOperator, const TypeDifficulty & typeDifficulty);

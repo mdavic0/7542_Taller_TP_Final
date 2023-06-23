@@ -1,10 +1,5 @@
 #include "EventDTO.h"
 
-EventDTO::EventDTO(Event event, MoveTo moveTo, TypeOperator typeOperator, TypeGame typeGame,
-    const std::string& str, const uint32_t& n) : event(event), moveTo(moveTo),
-    typeOperator(typeOperator), typeGame(typeGame), str(str), n(n), idPlayer(0),
-    typeDifficulty(TypeDifficulty::difficulty_idle) {}
-
 EventDTO::EventDTO(const std::string& name, const TypeGame& typeGame,
     const TypeOperator& typeOperator, const TypeDifficulty & typeDifficulty) : 
     event(Event::event_create), moveTo(MoveTo::move_idle), typeOperator(typeOperator),

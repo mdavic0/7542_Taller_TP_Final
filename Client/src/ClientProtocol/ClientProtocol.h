@@ -129,6 +129,62 @@ void sendLeave(const uint8_t& idPlayer, std::shared_ptr<T> skt) {
     sendId(idPlayer, skt);
 }
 
+void sendRecharge(const uint8_t& idPlayer, std::shared_ptr<T> skt) {
+    uint8_t command = RECHARGE_CODE;
+    this->sendAll(&command, 1, skt);
+
+    sendId(idPlayer, skt);
+}
+
+void sendReanimate(const uint8_t& idPlayer, std::shared_ptr<T> skt) {
+    uint8_t command = REANIMATE_CODE;
+    this->sendAll(&command, 1, skt);
+
+    sendId(idPlayer, skt);
+}
+
+void sendStopReanimate(const uint8_t& idPlayer, std::shared_ptr<T> skt) {
+    uint8_t command = STOP_REANIMATE_CODE;
+    this->sendAll(&command, 1, skt);
+
+    sendId(idPlayer, skt);
+}
+
+void sendCheatFinish(const uint8_t& idPlayer, std::shared_ptr<T> skt){
+    uint8_t command = CHEAT_FINISH_GAME_CODE;
+    this->sendAll(&command, 1, skt);
+
+    sendId(idPlayer, skt);
+}
+
+void sendCheatMunition(const uint8_t& idPlayer, std::shared_ptr<T> skt){
+    uint8_t command = CHEAT_INFINITE_MUNITION_CODE;
+    this->sendAll(&command, 1, skt);
+
+    sendId(idPlayer, skt);
+}
+
+void sendCheatVelocity(const uint8_t& idPlayer, std::shared_ptr<T> skt) {
+    uint8_t command = CHEAT_MORE_VELOCITY_CODE;
+    this->sendAll(&command, 1, skt);
+
+    sendId(idPlayer, skt);
+}
+
+void sendCheatKills(const uint8_t& idPlayer, std::shared_ptr<T> skt) {
+    uint8_t command = CHEAT_KILL_ENEMIES_CODE;
+    this->sendAll(&command, 1, skt);
+
+    sendId(idPlayer, skt);
+}
+
+void sendCheatHealth(const uint8_t& idPlayer, std::shared_ptr<T> skt) {
+    uint8_t command = CHEAT_INFINITE_HEALTH_CODE;
+    this->sendAll(&command, 1, skt);
+
+    sendId(idPlayer, skt);
+}
+
 void sendOperator(const TypeOperator& typeOperator, std::shared_ptr<T> skt) {
     uint8_t op;
     if(typeOperator == TypeOperator::operator_idf){
@@ -494,11 +550,26 @@ void sendEvent(const EventDTO& eventdto, std::shared_ptr<T> skt) {
         sendStopGrenade(eventdto.getIdPlayer(), skt);
     } else if (event == Event::event_blitz_atack) {
         sendBlitz(eventdto.getIdPlayer(), skt);
+    } else if (event == Event::event_recharge) {
+        sendRecharge(eventdto.getIdPlayer(), skt);
+    } else if (event == Event::event_reanimate) {
+        sendReanimate(eventdto.getIdPlayer(), skt);
+    } else if (event == Event::event_stop_reanimate) {
+        sendStopReanimate(eventdto.getIdPlayer(), skt);
     } else if (event == Event::event_leave) {
         sendLeave(eventdto.getIdPlayer(), skt);
+    } else if (event == Event::event_cheat_finish_game) {
+        sendCheatFinish(eventdto.getIdPlayer(), skt);
+    } else if (event == Event::event_cheat_infinite_munition) {
+        sendCheatMunition(eventdto.getIdPlayer(), skt);
+    } else if (event == Event::event_cheat_more_velocity) {
+        sendCheatVelocity(eventdto.getIdPlayer(), skt);
+    } else if (event == Event::event_cheat_kill_enemies) {
+        sendCheatKills(eventdto.getIdPlayer(), skt);
+    } else if (event == Event::event_cheat_infinite_health) {
+        sendCheatHealth(eventdto.getIdPlayer(), skt);
     }
-    
-}
+};
 
 Snapshot getSnapshot(std::shared_ptr<T> skt) {
     uint8_t event;
