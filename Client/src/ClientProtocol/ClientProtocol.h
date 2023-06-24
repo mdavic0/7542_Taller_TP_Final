@@ -522,52 +522,52 @@ std::vector<ObstacleDto> getObstacles(std::shared_ptr<T> skt) {
         * */
         explicit ClientProtocol() {}
 
-void sendEvent(const EventDTO& eventdto, std::shared_ptr<T> skt) {
-    Event event = eventdto.getEvent();
+void sendEvent(std::shared_ptr<EventDTO>&  eventdto, std::shared_ptr<T> skt) {
+    Event event = eventdto->getEvent();
 
     if (event == Event::event_create) {
-        sendCreate(eventdto.getStr(), eventdto.getTypeOperator(), eventdto.getTypeGame(),
-            eventdto.getTypeDifficulty(), skt);
+        sendCreate(eventdto->getStr(), eventdto->getTypeOperator(), eventdto->getTypeGame(),
+            eventdto->getTypeDifficulty(), skt);
     } else if (event == Event::event_join) {
-        sendJoin(eventdto.getN(), eventdto.getTypeOperator(), skt);
+        sendJoin(eventdto->getN(), eventdto->getTypeOperator(), skt);
     } else if (event == Event::event_start_game) {
         sendStart(skt);
     } else if (event == Event::event_move) {
-        sendMove(eventdto.getMoveTo(), eventdto.getIdPlayer(), skt);
+        sendMove(eventdto->getMoveTo(), eventdto->getIdPlayer(), skt);
     } else if (event == Event::event_stop_move) {
-        sendStopMove(eventdto.getMoveTo(), eventdto.getIdPlayer(), skt);
+        sendStopMove(eventdto->getMoveTo(), eventdto->getIdPlayer(), skt);
     } else if (event == Event::event_shoot) {
-        sendShoot(eventdto.getIdPlayer(), skt);
+        sendShoot(eventdto->getIdPlayer(), skt);
     } else if (event == Event::event_stop_shoot) {
-        sendStopShoot(eventdto.getIdPlayer(), skt);
+        sendStopShoot(eventdto->getIdPlayer(), skt);
     } else if (event == Event::event_throw_smoke) {
-        sendSmoke(eventdto.getIdPlayer(), skt);
+        sendSmoke(eventdto->getIdPlayer(), skt);
     } else if (event == Event::event_stop_smoke) {
-        sendStopSmoke(eventdto.getIdPlayer(), skt);
+        sendStopSmoke(eventdto->getIdPlayer(), skt);
     } else if (event == Event::event_throw_grenade) {
-        sendGrenade(eventdto.getIdPlayer(), skt);
+        sendGrenade(eventdto->getIdPlayer(), skt);
     } else if (event == Event::event_stop_grenade) {
-        sendStopGrenade(eventdto.getIdPlayer(), skt);
+        sendStopGrenade(eventdto->getIdPlayer(), skt);
     } else if (event == Event::event_blitz_atack) {
-        sendBlitz(eventdto.getIdPlayer(), skt);
+        sendBlitz(eventdto->getIdPlayer(), skt);
     } else if (event == Event::event_recharge) {
-        sendRecharge(eventdto.getIdPlayer(), skt);
+        sendRecharge(eventdto->getIdPlayer(), skt);
     } else if (event == Event::event_reanimate) {
-        sendReanimate(eventdto.getIdPlayer(), skt);
+        sendReanimate(eventdto->getIdPlayer(), skt);
     } else if (event == Event::event_stop_reanimate) {
-        sendStopReanimate(eventdto.getIdPlayer(), skt);
+        sendStopReanimate(eventdto->getIdPlayer(), skt);
     } else if (event == Event::event_leave) {
-        sendLeave(eventdto.getIdPlayer(), skt);
+        sendLeave(eventdto->getIdPlayer(), skt);
     } else if (event == Event::event_cheat_finish_game) {
-        sendCheatFinish(eventdto.getIdPlayer(), skt);
+        sendCheatFinish(eventdto->getIdPlayer(), skt);
     } else if (event == Event::event_cheat_infinite_munition) {
-        sendCheatMunition(eventdto.getIdPlayer(), skt);
+        sendCheatMunition(eventdto->getIdPlayer(), skt);
     } else if (event == Event::event_cheat_more_velocity) {
-        sendCheatVelocity(eventdto.getIdPlayer(), skt);
+        sendCheatVelocity(eventdto->getIdPlayer(), skt);
     } else if (event == Event::event_cheat_kill_enemies) {
-        sendCheatKills(eventdto.getIdPlayer(), skt);
+        sendCheatKills(eventdto->getIdPlayer(), skt);
     } else if (event == Event::event_cheat_infinite_health) {
-        sendCheatHealth(eventdto.getIdPlayer(), skt);
+        sendCheatHealth(eventdto->getIdPlayer(), skt);
     }
 };
 
