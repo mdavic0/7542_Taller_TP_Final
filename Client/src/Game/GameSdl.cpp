@@ -55,7 +55,7 @@ void GameSdl::update() {
     std::shared_ptr<Snapshot> snap = nullptr;
     while (!snapshotQueue.try_pop(snap)) {
     }
-    if (snap->getEvent() != Event::event_end && snap != nullptr) {
+    if (snap->getEvent() != Event::event_end) {
         if (soldiers.size() >= snap->getInfo().size()) {
             for (auto &player : soldiers) {
                 bool found = false;
@@ -73,20 +73,35 @@ void GameSdl::update() {
 
         camera.update(calculateMassCenter());
 
-        if (enemies.size() >= snap->getEnemies().size()) {
-            for (auto &enemy : enemies) {
-                bool found = false;
-                for (const auto& enemyDto : snap->getEnemies())
-                    if (enemy.first == enemyDto.getId()) {
-                        enemy.second->update(enemyDto.getPosition(),
-                                            enemyDto.getState());
-                        found = true;
-                        break;
-                    }
-                if (!found)
-                    enemies.erase(enemy.first);
-            }
-            // std::cout << "enemiesUpdate\n";
+        // if (enemies.size() >= snap->getEnemies().size()) {
+        //     for (auto &enemy : enemies) {
+        //         bool found = false;
+        //         for (const auto& enemyDto : snap->getEnemies())
+        //             if (enemy.first == enemyDto.getId()) {
+        //                 enemy.second->update(enemyDto.getPosition(),
+        //                                     enemyDto.getState());
+        //                 found = true;
+        //                 break;
+        //             }
+        //         if (!found)
+        //             enemies.erase(enemy.first);
+        //     }
+        //     // std::cout << "enemiesUpdate\n";
+        // }
+        std::unordered_set<uint8_t> mapIds;
+        for (auto &infected : snap->getEnemies()) {
+            mapIds.insert(infected.getId());
+            enemies[infected.getId()]->update(infected.getPosition(),
+                                                infected.getState());
+        }
+
+        // Eliminio enemigo muerto
+        auto iterator = enemies.begin();
+        while (iterator != enemies.end()) {
+            if (mapIds.find(iterator->first) == mapIds.end())
+                iterator = enemies.erase(iterator);
+            else
+                ++iterator;
         }
     } else {
         this->endGame = true;
