@@ -17,6 +17,7 @@
 #include "SnapshotReceiver.h"
 #include "GameDrawner.h"
 #include "TypeDifficulty.h"
+#include "PlayerReproductor.h"
 #include <memory>
 
 class Launcher : public QWidget {
@@ -30,6 +31,7 @@ class Launcher : public QWidget {
         JoinView joinView;
         std::optional<std::shared_ptr<Socket>> socket;
         ClientProtocol<Socket> clientProtocol;
+        PlayerReproductor player;
         void initWidget();
         void initFont();
         void initGame(int menu, uint8_t idPlayer, uint8_t numPlayers,

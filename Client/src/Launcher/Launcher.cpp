@@ -17,7 +17,7 @@
 
 Launcher::Launcher(QWidget* parent) : QWidget(parent),
     initView(), connectView(), menuView(), createView(), joinView(),
-    socket(std::nullopt), clientProtocol() {
+    socket(std::nullopt), clientProtocol(), player() {
     this->initWidget();
     mainWidget.addWidget(&initView);
     mainWidget.addWidget(&connectView);
@@ -120,6 +120,7 @@ void Launcher::sendCreateMatch(const QString& name, int mode,
             QMessageBox::information(this, "Exito", message.c_str(),
                 QMessageBox::Close);
             this->hide();
+            this->player.stopMusic();
             this->initGame(CREATE_MENU, receive.getIdPlayer(), 1, error);
             this->goToConnect();
             this->show();
@@ -150,6 +151,7 @@ void Launcher::sendJoinMatch(int code, int operatorSelect) {
             QMessageBox::information(this, "Exito", "Union Exitosa",
                 QMessageBox::Close);
             this->hide();
+            this->player.stopMusic();
             this->initGame(JOIN_MENU, receive.getIdPlayer(),
                             receive.getSize(), error);
             this->goToConnect();

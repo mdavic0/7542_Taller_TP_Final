@@ -5,9 +5,11 @@
 #include "State.h"
 #include "TypeOperator.h"
 #include "TextureSdl.h"
+#include "WindowSdl.h"
 #include "RendererSdl.h"
 #include "OperatorDto.h"
 #include "Object.h"
+#include "ManagerMusic.h"
 #include <SDL2/SDL.h>
 #include <map>
 #include <memory>
@@ -25,15 +27,20 @@ class Operator : public Object {
         SDL_RendererFlip flipType;
         int numFrames;
         int health;
+        bool animationDeadFinish;
+        uint8_t munition;
+        WindowSdl& window;
+        ManagerMusic& music;
         void chargeTexture(Renderer& renderer);
         void renderAnimation(int speed, SDL_Texture* texture, SDL_Rect camera);
         void renderDead(int speed, SDL_Texture* texture, SDL_Rect camera);
-        void renderIconInjure(int speed, SDL_Texture* texture, SDL_Rect camera);
+        void renderIconInjure(SDL_Rect camera);
         int setNumFrames(State state);
-        bool animationDeadFinish;
-        uint8_t munition;
+        bool verifyRender(SDL_Rect camera, SDL_Rect final);
+        
     public:
-        Operator(uint8_t id, TypeOperator op, Renderer& renderer);
+        Operator(uint8_t id, TypeOperator op, Renderer& renderer,
+                WindowSdl& window, ManagerMusic& music);
         ~Operator();     
         void updateMove(MoveTo direction);
         void update(std::pair<int16_t, int16_t> pos, State state,

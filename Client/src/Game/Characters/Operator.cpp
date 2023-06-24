@@ -2,11 +2,12 @@
 #include "Defines.h"
 #include <iostream>
 
-Operator::Operator(uint8_t id, TypeOperator op, Renderer& renderer) :
+Operator::Operator(uint8_t id, TypeOperator op, Renderer& renderer,
+    WindowSdl& window, ManagerMusic& music) :
     Object(), id(id), operatorId(op), position({0, 0}),
     renderPlayer(renderer), stateOperator(State::idle), numFrames(0),
     flipType(SDL_FLIP_NONE), health(0), animationDeadFinish(false),
-    munition(0) {
+    munition(0), window(window), music(music) {
     this->chargeTexture(renderer);
     this->setState(State::idle);
 }
@@ -104,13 +105,18 @@ void Operator::chargeTexture(Renderer& renderer) {
                 "assets/images/sdl/units/" + std::to_string((int)operatorId);
     textures["Idle"] = std::make_unique<Texture>(renderer, path + "/Idle.png");
     textures["Run"] = std::make_unique<Texture>(renderer, path + "/Run.png");
-    textures["Shot"] = std::make_unique<Texture>(renderer, path + "/Shot_1.png");
+    textures["Shot"] = std::make_unique<Texture>(renderer,
+                                                    path + "/Shot_1.png");
     textures["Hurt"] = std::make_unique<Texture>(renderer, path + "/Hurt.png");
-    textures["Recharge"] = std::make_unique<Texture>(renderer, path + "/Recharge.png");
-    textures["Grenade"] = std::make_unique<Texture>(renderer, path + "/Grenade.png");
+    textures["Recharge"] = std::make_unique<Texture>(renderer,
+                                                    path + "/Recharge.png");
+    textures["Grenade"] = std::make_unique<Texture>(renderer,
+                                                    path + "/Grenade.png");
     textures["Dead"] = std::make_unique<Texture>(renderer, path + "/Dead.png");
     std::string icon = "assets/images/sdl/hud/icon_reviving.png";
     textures["iconHurt"] = std::make_unique<Texture>(renderer, icon);
+    std::string bg = "assets/images/sdl/hud/healthbg.png";
+    textures["bgIcon"] = std::make_unique<Texture>(renderer, bg);
 }
 
 void Operator::setState(State state) {
@@ -151,15 +157,17 @@ void Operator::render(SDL_Rect camera) {
         case State::atack:
             renderAnimation(SPEED_ATACK, textures["Shot"]->getTexture(),
                             camera);
+            music.playAction(operatorId, "attack");
             break;
         case State::injure:
-            renderIconInjure(0, textures["iconHurt"]->getTexture(), camera);
+            renderIconInjure(camera);
             renderAnimation(SPEED_INJURE, textures["Hurt"]->getTexture(),
                             camera);
             break;
         case State::recharge:
             renderAnimation(SPEED_RECHARGE, textures["Recharge"]->getTexture(),
                             camera);
+            music.playAction(operatorId, "recharge");
             break;
         case State::hability:
             renderAnimation(SPEED_SKILL, textures["Grenade"]->getTexture(),
@@ -173,30 +181,36 @@ void Operator::render(SDL_Rect camera) {
     }
 }
 
-void Operator::renderIconInjure(int speed, SDL_Texture* texture, SDL_Rect camera) {
+void Operator::renderIconInjure( SDL_Rect camera) {
     SDL_Rect rectInit = { 0, 0, SIZE_FRAME, SIZE_FRAME};
     SDL_Rect rectFinal = {  (position.first + SIZE_FRAME / 3) - camera.x,
                             (position.second + SIZE_FRAME / 6) - camera.y,
                             SIZE_FRAME / 3,
                             SIZE_FRAME / 3};
-    Texture bg(this->renderPlayer, "assets/images/sdl/hud/healthbg.png");
-    this->renderPlayer.copy(bg.getTexture(), rectInit, rectFinal);
-    this->renderPlayer.copy(texture, rectInit, rectFinal);
+    if (verifyRender(camera, rectFinal)) {
+        this->renderPlayer.copy(textures["bgIcon"]->getTexture(), rectInit,
+                                rectFinal);
+        this->renderPlayer.copy(textures["iconHurt"]->getTexture(), rectInit,
+                                rectFinal);
+    }
 }
 
-void Operator::renderAnimation(int speed, SDL_Texture* texture, SDL_Rect camera) {
-    int speedAnimation = static_cast<int>((SDL_GetTicks() / speed) % numFrames);
+void Operator::renderAnimation(int speed, SDL_Texture* texture,
+    SDL_Rect camera) {
+    int speedAnimation = static_cast<int>((SDL_GetTicks()/speed) % numFrames);
     SDL_Rect rectInit = {   speedAnimation * SIZE_FRAME, 0,
                             SIZE_FRAME, SIZE_FRAME};
-    SDL_Rect rectFinal = {  position.first - camera.x, position.second - camera.y,
+    SDL_Rect rectFinal = {  position.first - camera.x,
+                            position.second - camera.y,
                             SIZE_FRAME, SIZE_FRAME};
-    this->renderPlayer.copy(texture, rectInit, rectFinal, this->flipType);
+    if (verifyRender(camera, rectFinal))
+        this->renderPlayer.copy(texture, rectInit, rectFinal, this->flipType);
 }
 
 void Operator::renderDead(int speed, SDL_Texture* texture, SDL_Rect camera) {
     int speedAnimation;
     if (!animationDeadFinish) {
-        speedAnimation = static_cast<int>((SDL_GetTicks() / speed) % numFrames);
+        speedAnimation = static_cast<int>((SDL_GetTicks()/speed) % numFrames);
         if (speedAnimation == (numFrames - 1))
             animationDeadFinish = true;
     } else {
@@ -204,9 +218,18 @@ void Operator::renderDead(int speed, SDL_Texture* texture, SDL_Rect camera) {
     }
     SDL_Rect rectInit = {   speedAnimation * SIZE_FRAME, 0,
                             SIZE_FRAME, SIZE_FRAME};
-    SDL_Rect rectFinal = {  position.first - camera.x, position.second - camera.y,
+    SDL_Rect rectFinal = {  position.first - camera.x, 
+                            position.second - camera.y,
                             SIZE_FRAME, SIZE_FRAME};
-    this->renderPlayer.copy(texture, rectInit, rectFinal, this->flipType);
+    if (verifyRender(camera, rectFinal))
+        this->renderPlayer.copy(texture, rectInit, rectFinal, this->flipType);
+}
+
+bool Operator::verifyRender(SDL_Rect camera, SDL_Rect final) {
+    return  position.first >= camera.x - final.w && 
+            position.first <= camera.x + window.getWidth() &&
+            position.second >= camera.y - final.h &&
+            position.second <= camera.y + window.getHeight();
 }
 
 Operator::~Operator() {

@@ -26,13 +26,14 @@ bool GameSdl::isRunning() {
 
 void GameSdl::render() {
     this->map.render(camera.getRect());
-    
+    // std::cout << "mapRender\n";
 
     this->hud.render(soldiers[idPlayer]->getHealth(),
                     soldiers[idPlayer]->getMunition(),
                     enemies.size());
+    // std::cout << "hudRender\n";
     
-    // reordeno los enemigos antes de renderizar
+    // reordeno todo antes de renderizar
     std::vector<std::shared_ptr<Object>> vecObjects;
     for (const auto &obstacle: obstacles)
         vecObjects.push_back(obstacle.second);
@@ -47,21 +48,14 @@ void GameSdl::render() {
     });
     for (const auto &object : vecObjects)
         object->render(camera.getRect());
-    
-    // // reordeno los operadores antes de renderizar
-    // std::vector<std::pair<uint8_t,std::shared_ptr<Operator>>> vecSoldiers(
-    //     soldiers.begin(), soldiers.end());
-    // std::sort(vecSoldiers.begin(), vecSoldiers.end(), 
-    //     [](const auto& a, const auto&b) {
-    //         return a.second->getPosY() < b.second->getPosY();
-    // });
+    // std::cout << "restoRender\n";
 }
 
 void GameSdl::update() {
     std::shared_ptr<Snapshot> snap = nullptr;
     while (!snapshotQueue.try_pop(snap)) {
     }
-    if (snap->getEvent() != Event::event_end) {
+    if (snap->getEvent() != Event::event_end && snap != nullptr) {
         if (soldiers.size() >= snap->getInfo().size()) {
             for (auto &player : soldiers) {
                 bool found = false;
@@ -74,23 +68,25 @@ void GameSdl::update() {
                 if (!found)
                     player.second->setState(State::dead);
             }
+            // std::cout << "soldiersUpdate\n";
         }
+
         camera.update(calculateMassCenter());
 
-        std::unordered_set<uint8_t> mapIds;
-        for (auto &infected : snap->getEnemies()) {
-            mapIds.insert(infected.getId());
-            enemies[infected.getId()]->update(infected.getPosition(),
-                                                infected.getState());
-        }
-
-        // Eliminio enemigo muerto
-        auto iterator = enemies.begin();
-        while (iterator != enemies.end()) {
-            if (mapIds.find(iterator->first) == mapIds.end())
-                iterator = enemies.erase(iterator);
-            else
-                ++iterator;
+        if (enemies.size() >= snap->getEnemies().size()) {
+            for (auto &enemy : enemies) {
+                bool found = false;
+                for (const auto& enemyDto : snap->getEnemies())
+                    if (enemy.first == enemyDto.getId()) {
+                        enemy.second->update(enemyDto.getPosition(),
+                                            enemyDto.getState());
+                        found = true;
+                        break;
+                    }
+                if (!found)
+                    enemies.erase(enemy.first);
+            }
+            // std::cout << "enemiesUpdate\n";
         }
     } else {
         this->endGame = true;

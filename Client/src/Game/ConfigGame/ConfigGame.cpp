@@ -1,27 +1,28 @@
 #include "ConfigGame.h"
 
 ConfigGame::ConfigGame(std::shared_ptr<Snapshot> config, Renderer& render,
-    WindowSdl& window) : textures(render, config->getMap()) {
+    WindowSdl& window, ManagerMusic& music) : 
+    textures(render, config->getMap()), music(music) {
     idMap = config->getMap();
     mode = config->getTypeGame();
 
     players.clear();
     for (auto &player : config->getInfo()) {
         players[player.getId()] = std::make_shared<Operator>(player.getId(), 
-            player.getTypeOperator(), render);
+            player.getTypeOperator(), render, window, music);
     }
 
     enemies.clear();
     for (auto &infected : config->getEnemies()) {
         enemies[infected.getId()] = std::make_shared<Enemy>(textures, render,
-                                    infected.getTypeInfected());
+                                    infected.getTypeInfected(), window);
     }
 
     obstacles.clear();
     for (auto &obstacle : config->getObstacles()) {
         obstacles[obstacle.getId()] =
             std::make_shared<Obstacles>(obstacle.getTypeObstacle(), render,
-                                        obstacle.getPosition(), textures);
+                                    obstacle.getPosition(), textures, window);
     }
 }
 

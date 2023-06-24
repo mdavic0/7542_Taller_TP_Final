@@ -14,7 +14,7 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ggdb -DDEBUG -fno-inline ")
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 
 # SDL
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lSDL2 -lSDL2_image -lSDL2_ttf") # -lSDL2_ttf -lSDL2_gfx")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer") # -lSDL2_ttf -lSDL2_gfx")
 
 # Qt UI
 set(CMAKE_AUTOMOC ON)
@@ -23,6 +23,7 @@ set(CMAKE_AUTORCC ON)
 
 find_package(Qt5 COMPONENTS REQUIRED Core)
 find_package(Qt5 COMPONENTS REQUIRED Widgets)
+find_package(Qt5 COMPONENTS REQUIRED Multimedia)
 find_package(yaml-cpp)
 
 # SDL2
@@ -84,10 +85,13 @@ include_directories(${PROJECT_SOURCE_DIR}/Client/src/Game/ConfigGame)
 include_directories(${PROJECT_SOURCE_DIR}/Client/src/Game/Hud)
 include_directories(${PROJECT_SOURCE_DIR}/Client/src/Game/Lobby)
 include_directories(${PROJECT_SOURCE_DIR}/Client/src/Game/Map)
+include_directories(${PROJECT_SOURCE_DIR}/Client/src/Game/Music)
 include_directories(${PROJECT_SOURCE_DIR}/Client/src/Game/Textures)
 include_directories(${PROJECT_SOURCE_DIR}/Client/src/GameThread)
 include_directories(${PROJECT_SOURCE_DIR}/Client/src/Launcher)
 include_directories(${PROJECT_SOURCE_DIR}/Client/src/Sdl)
+include_directories(${PROJECT_SOURCE_DIR}/Client/src/Sdl/Config)
+include_directories(${PROJECT_SOURCE_DIR}/Client/src/Sdl/Music)
 
 add_subdirectory("Client/src")
 
@@ -113,7 +117,7 @@ add_executable(server "Server/main.cpp")
 target_link_libraries(server server_classes common_classes yaml-cpp)
 
 add_executable(client "Client/main.cpp")
-target_link_libraries(client client_classes common_classes SDL2 SDL2_image SDL2_ttf yaml-cpp)
+target_link_libraries(client client_classes common_classes SDL2 SDL2_image SDL2_ttf SDL2_mixer yaml-cpp)
 
 add_executable(testprotocol "Testing/testprotocol.cpp" )
 target_link_libraries(testprotocol common_classes mock_classes)

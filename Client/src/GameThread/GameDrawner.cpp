@@ -8,6 +8,7 @@
 #include "SdlTTF.h"
 #include "SdlException.h"
 #include "Configuration.h"
+#include "ManagerMusic.h"
 #include "Font.h"
 #include "Lobby.h"
 #include <map>
@@ -39,18 +40,22 @@ void GameDrawner::run() {
         Font font("assets/font/Futurot.ttf", 20);
         font.setHinting();
         bool initGame = true;
-        
+
+        ManagerMusic manager;
+        manager.playMusic("lobby");
+
         Lobby lobby(window, render, font, snapshot_queue, client_events, menu,
                     initGame, idPlayer, numPlayers);
         lobby.initLobby();
         
         if (initGame) {
-            ConfigGame config(lobby.getConfigSnap(), render, window);
+            ConfigGame config(lobby.getConfigSnap(), render, window, manager);
             
             GameSdl gameSdl(window, render, snapshot_queue, client_events,
                             error, idPlayer, font, config);
             
-            while (gameSdl.isRunning()) {       // sld quit stop this loop
+            manager.playMusic("game");
+            while (gameSdl.isRunning()) {
                 uint32_t frameInit = SDL_GetTicks();
 
                 render.clear();

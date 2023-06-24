@@ -6,4 +6,4 @@ add_library(launcher ${myFiles})
 
 target_include_directories(launcher PUBLIC ../Sdl)
 
-target_link_libraries(launcher Qt5::Widgets Qt5::Core)
+target_link_libraries(launcher Qt5::Widgets Qt5::Core Qt5::Multimedia)

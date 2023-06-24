@@ -107,7 +107,7 @@ int TextureManager::getFrames(TypeInfected type,
         case TypeInfected::infected_venom:
             return mapTextures["venom-" + nameTexture]->frames(); 
         default:
-            return 0;
+            return 1;
     }
 }
 
