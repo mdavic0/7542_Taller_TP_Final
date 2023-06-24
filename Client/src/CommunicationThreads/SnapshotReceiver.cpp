@@ -13,7 +13,7 @@ void SnapshotReceiver::run() {
         } catch (const ClosedQueue& exc){
             std::cout << "Client sanp Queue closed " << std::endl;
             break;
-        } catch (const LibError &exc) {     // sdl quit, server end with q
+        } catch (const LibError &exc) {     // sql quit 2, server ends q and slow client 1
             snapshot_queue.close();
             std::cout << "Client sanp recv closed" << std::endl;
             break;
@@ -25,9 +25,8 @@ void SnapshotReceiver::run() {
 }
 
 void SnapshotReceiver::stop() {
-    std::cout << "SnapshotReceiver - stop " << std::endl;
     talking = false;
-    std::cout << "SnapshotReceiver - end stop " << std::endl;
+    std::cout << "SnapshotReceiver - stop " << std::endl;
 }
 
 bool SnapshotReceiver::ended() {

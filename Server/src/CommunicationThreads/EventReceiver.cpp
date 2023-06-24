@@ -3,33 +3,51 @@
 #include "Liberror.h"
 
 EventReceiver::EventReceiver(std::shared_ptr<Socket> skt, GamesController& controller) :
-    skt(skt), protocol(), event_queue(),
+    skt(skt), protocol(), event_queue(nullptr),
     snapshot_queue(1000), sender(this->skt, snapshot_queue),
-    controller(controller), game_code(0), talking(true), alive(true) {
+    controller(controller), game(nullptr), talking(true), alive(true) {
 }
 
 void EventReceiver::run() {
     sender.start();
-    while (talking) {        // slow client -> sanp queue closed and deleted from game
+    while (talking) {
         try {
-            std::shared_ptr<EventDTO> eventDto = std::make_shared<EventDTO>(protocol.getEvent(skt));
-            Event event = eventDto->getEvent();
-            if (event == Event::event_create) {
-                this->event_queue = controller.create(eventDto,
-                                                      &snapshot_queue,
-                                                      game_code);
+            while (!game) {
+                std::shared_ptr<EventDTO> eventDto = std::make_shared<EventDTO>(protocol.getEvent(skt));
+                Event event = eventDto->getEvent();
+                if (event == Event::event_create) {
+                    this->event_queue = controller.create(eventDto,
+                                                          &snapshot_queue,
+                                                          &game);
 
-            } else if (event == Event::event_join) {
-                this->event_queue = controller.try_join_game(eventDto,
-                                                             &snapshot_queue);
+                } else if (event == Event::event_join) {
+                    this->event_queue = controller.try_join_game(eventDto,
+                                                                &snapshot_queue,
+                                                                &game);
+                } else if (event == Event::event_leave) {
+                    snapshot_queue.close();
 
-            } else if (event == Event::event_start_game) {
-                controller.startGame(game_code);
+                }
+            }
 
-            } else {
+            while (!game->running()) {
+                std::shared_ptr<EventDTO> eventDto = std::make_shared<EventDTO>(protocol.getEvent(skt));
+                Event event = eventDto->getEvent();
+                if (event == Event::event_start_game && game != nullptr) {
+                    game->startGame();
+
+                } else if (event == Event::event_leave && game != nullptr) {
+                    game->clientLeave(&snapshot_queue);
+
+                }
+            }
+
+            while (game->running()) {
+                std::shared_ptr<EventDTO> eventDto = std::make_shared<EventDTO>(protocol.getEvent(skt));
                 event_queue->push(eventDto);
             }
-        } catch (const LibError& exc) {     // client slow or quit sdl
+
+        } catch (const LibError& exc) {     // client slow, quit sdl, server ends whit q input
             std::cout << "EventReceiver - socket closed " << std::endl;
             break;
         }  catch (const std::exception& exc) {
@@ -44,11 +62,11 @@ void EventReceiver::stop() {
     std::cout << "EventReceiver - stop " << std::endl;
     talking = false;
     if (!sender.ended()) {      // server ended with q
-        std::cout << "EventReceiver - stop close skt " << std::endl;
-        skt->shutdown(2);
-        skt->close();
+        std::cout << "EventReceiver - stop close sanp q " << std::endl;
+        //skt->shutdown(2);
+        //skt->close();
+        snapshot_queue.close();
     }
-    sender.stop();
     std::cout << "EventReceiver - end stop " << std::endl;
 }
 

@@ -15,7 +15,7 @@
  */
 class GamesController {
     private:
-    uint32_t counter;  // games id
+    uint8_t counter;       // counter
     std::map<uint32_t, Game*> games;
     std::mutex mutex;
 
@@ -33,7 +33,7 @@ class GamesController {
      */
     Queue<std::shared_ptr<EventDTO>>* create(std::shared_ptr<EventDTO> eventdto,
                                              Queue<std::shared_ptr<Snapshot>>* snapshot_queue,
-                                             uint32_t& code);
+                                             Game **game);
 
     /*
      * Este método sera el encargado de unir un cliente a un sala.
@@ -41,12 +41,15 @@ class GamesController {
      * modificado mientras se lo esta 'iterando'.
      */
     Queue<std::shared_ptr<EventDTO>>* try_join_game(std::shared_ptr<EventDTO> eventdto,
-                                                    Queue<std::shared_ptr<Snapshot>> *q);
+                                                    Queue<std::shared_ptr<Snapshot>> *q,
+                                                    Game **game);
 
     /*
      * Iniciar el hilo Game
      */
-    void startGame(const uint32_t& code);
+    //void startGame(const uint32_t& code);
+
+    //void clientLeave(Queue<std::shared_ptr<Snapshot>>* snapshot_queue, const uint32_t& code);
 
     ~GamesController();
 };

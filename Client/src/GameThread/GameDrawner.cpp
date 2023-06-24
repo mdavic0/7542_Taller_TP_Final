@@ -50,7 +50,7 @@ void GameDrawner::run() {
             GameSdl gameSdl(window, render, snapshot_queue, client_events,
                             error, idPlayer, font, config);
             
-            while (gameSdl.isRunning()) {
+            while (gameSdl.isRunning()) {       // sld quit stop this loop
                 uint32_t frameInit = SDL_GetTicks();
 
                 render.clear();
@@ -67,7 +67,7 @@ void GameDrawner::run() {
                     SDL_Delay(1000 / 40 - processTime);
             }
         }
-        client_events.close();
+        client_events.close();      // cause close socket
     } catch (const SdlException &exc) {
         std::cerr << "Launcher: " << exc.what() << std::endl;
     } catch (const ClosedQueue& exc){

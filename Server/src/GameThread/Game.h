@@ -26,8 +26,8 @@ class Game : public Thread {
         std::map<uint8_t, Queue<std::shared_ptr<Snapshot>>*> client_snapshot_queues;
         std::atomic<bool> talking;
         std::atomic<bool> alive;
+        std::atomic<bool> started;
         GameWorld gameWorld;
-        bool started;
         CommandFactory commandFactory;
 
     public:
@@ -63,6 +63,10 @@ class Game : public Thread {
          * el juego, a su vez hace el start del hilo.
          */
         void startGame();
+
+        void clientLeave(Queue<std::shared_ptr<Snapshot>> *q);
+
+        bool running();
 
         /*
          * No queremos permitir que alguien haga copias

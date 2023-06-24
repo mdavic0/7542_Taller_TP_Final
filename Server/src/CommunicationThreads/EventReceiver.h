@@ -5,6 +5,7 @@
 #include "ServerProtocol.h"
 #include "GamesController.h"
 #include "SnapshotSender.h"
+#include "Game.h"
 #include <atomic>
 #include <map>
 #include <memory>
@@ -21,7 +22,7 @@ class EventReceiver : public Thread {
         Queue<std::shared_ptr<Snapshot>> snapshot_queue;
         SnapshotSender sender;
         GamesController& controller;
-        uint32_t game_code;
+        Game *game;
         std::atomic<bool> talking;
         std::atomic<bool> alive;
 

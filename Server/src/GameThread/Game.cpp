@@ -14,7 +14,7 @@ Game::Game(const uint32_t id, std::string name, const TypeGame& type) :
 
 void Game::run() {
     try {
-        while(talking) {
+        while(talking && client_snapshot_queues.size() > 0) {
             gameLoop();
         }
     } catch (const std::exception& exc) {
@@ -24,13 +24,16 @@ void Game::run() {
 }
 
 void Game::stop() {
-    std::cout << "Game - stop " << std::endl;
     talking = false;
-    std::cout << "Game - end stop " << std::endl;
+    std::cout << "Game - stop " << std::endl;
 }
 
 bool Game::ended() {
     return !alive;
+}
+
+bool Game::running() {
+    return started && alive;
 }
 
 Queue<std::shared_ptr<EventDTO>>* Game::createGame(Queue<std::shared_ptr<Snapshot>> *q,
@@ -43,8 +46,7 @@ Queue<std::shared_ptr<EventDTO>>* Game::createGame(Queue<std::shared_ptr<Snapsho
 
 Queue<std::shared_ptr<EventDTO>>* Game::joinGame(Queue<std::shared_ptr<Snapshot>> *q,
                                                  const TypeOperator& op) {
-    if (not started) {                   
-        std::lock_guard<std::mutex> locker(mutex);
+    if (not started) {                 
         uint8_t idPlayer = gameWorld.addPlayer(op);
         client_snapshot_queues.insert({idPlayer, q});
         // Notify all clients that a new player joined
@@ -66,7 +68,20 @@ void Game::startGame() {
     std::shared_ptr<Snapshot> snapshot = gameWorld.getSnapshot(true);
     broadcastSnapshot(snapshot);
     this->start();
-} 
+}
+
+void Game::clientLeave(Queue<std::shared_ptr<Snapshot>> *q) {
+    if (not started) {
+        for (auto it = client_snapshot_queues.begin(); it != client_snapshot_queues.end(); ) {
+            if (it->second == q) {
+                q->close();
+                it = client_snapshot_queues.erase(it);
+            } else {
+                ++it;
+            }
+        }
+    }
+}
 
 void Game::gameLoop() {
     using namespace std::chrono;
