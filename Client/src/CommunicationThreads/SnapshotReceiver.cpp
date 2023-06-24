@@ -13,9 +13,9 @@ void SnapshotReceiver::run() {
         } catch (const ClosedQueue& exc){
             std::cout << "Client sanp Queue closed " << std::endl;
             break;
-        } catch (const LibError &exc) {
+        } catch (const LibError &exc) {     // sdl quit, server end with q
             snapshot_queue.close();
-            std::cout << "Client sanp recv closed, then snap Queue is closed too " << std::endl;
+            std::cout << "Client sanp recv closed" << std::endl;
             break;
         } catch (const std::exception& exc) {
             std::cout << "SnapshotReceiver - Exception occurred test log: " << exc.what() << std::endl;
@@ -25,8 +25,9 @@ void SnapshotReceiver::run() {
 }
 
 void SnapshotReceiver::stop() {
+    std::cout << "SnapshotReceiver - stop " << std::endl;
     talking = false;
-    //snapshot_queue.close(); // ????
+    std::cout << "SnapshotReceiver - end stop " << std::endl;
 }
 
 bool SnapshotReceiver::ended() {
@@ -34,5 +35,6 @@ bool SnapshotReceiver::ended() {
 }
 
 SnapshotReceiver::~SnapshotReceiver() {
+    std::cout << "SnapshotReceiver - delete " << std::endl;
     join();
 }

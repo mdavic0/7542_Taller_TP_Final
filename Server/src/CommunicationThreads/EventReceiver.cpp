@@ -10,7 +10,7 @@ EventReceiver::EventReceiver(std::shared_ptr<Socket> skt, GamesController& contr
 
 void EventReceiver::run() {
     sender.start();
-    while (talking) {
+    while (talking) {        // slow client -> sanp queue closed and deleted from game
         try {
             std::shared_ptr<EventDTO> eventDto = std::make_shared<EventDTO>(protocol.getEvent(skt));
             Event event = eventDto->getEvent();
@@ -29,7 +29,7 @@ void EventReceiver::run() {
             } else {
                 event_queue->push(eventDto);
             }
-        } catch (const LibError& exc) {
+        } catch (const LibError& exc) {     // client slow or quit sdl
             std::cout << "EventReceiver - socket closed " << std::endl;
             break;
         }  catch (const std::exception& exc) {
@@ -38,15 +38,15 @@ void EventReceiver::run() {
         }
     }
     alive = false;
-    snapshot_queue.close();
 }
 
 void EventReceiver::stop() {
     std::cout << "EventReceiver - stop " << std::endl;
-    if (alive == true) {
+    talking = false;
+    if (!sender.ended()) {      // server ended with q
+        std::cout << "EventReceiver - stop close skt " << std::endl;
         skt->shutdown(2);
         skt->close();
-        talking = false;
     }
     sender.stop();
     std::cout << "EventReceiver - end stop " << std::endl;

@@ -40,7 +40,6 @@ GamesController::~GamesController() {
   for (auto it = games.begin(); it != games.end(); ++it) {
     it->second->stop();
     delete it->second;
-    i++;
   }
     std::cout << "GamesController - end delete " << std::endl;
 }

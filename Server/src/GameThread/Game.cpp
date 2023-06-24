@@ -26,7 +26,6 @@ void Game::run() {
 void Game::stop() {
     std::cout << "Game - stop " << std::endl;
     talking = false;
-    alive = false;
     std::cout << "Game - end stop " << std::endl;
 }
 
@@ -76,7 +75,7 @@ void Game::gameLoop() {
     double t_delta;
     int skippedLoops = 0;
 
-    while (alive) {
+    while (talking && client_snapshot_queues.size() > 0) {
         begin = steady_clock::now();
 
         processEvents();
@@ -110,8 +109,13 @@ void Game::processEvents() {
             command->execute(this->gameWorld);
 
             if (event->getEvent() == Event::event_leave) {
-                std::lock_guard<std::mutex> l(mutex);
-                client_snapshot_queues.erase(event->getIdPlayer());
+                std::lock_guard<std::mutex> locker(mutex);
+
+                auto search = client_snapshot_queues.find(event->getIdPlayer());
+                if (search != client_snapshot_queues.end()) {
+                    search->second->close();
+                    client_snapshot_queues.erase(search);
+                }
             }
 
             iterations++;
@@ -122,9 +126,16 @@ void Game::processEvents() {
 }
 
 void Game::broadcastSnapshot(std::shared_ptr<Snapshot> snapshot) {
-    std::lock_guard<std::mutex> l(mutex);
-    for (auto const& i : this->client_snapshot_queues) {
-        i.second->push(snapshot);
+    std::lock_guard<std::mutex> locker(mutex);
+    for (auto it = client_snapshot_queues.begin(); it != client_snapshot_queues.end(); /* increment inside loop */) {
+        if (!it->second->try_push(snapshot)) {
+            std::cout << "Push failed, need to remove client " << it->first << std::endl;
+            gameWorld.deletePlayer(it->first);
+            it->second->close();
+            it = client_snapshot_queues.erase(it);
+        } else {
+            ++it;
+        }
     }
 }
 
