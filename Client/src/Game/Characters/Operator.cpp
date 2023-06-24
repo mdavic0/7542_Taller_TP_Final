@@ -3,11 +3,11 @@
 #include <iostream>
 
 Operator::Operator(uint8_t id, TypeOperator op, Renderer& renderer,
-    WindowSdl& window) :
+    WindowSdl& window, ManagerMusic& music) :
     Object(), id(id), operatorId(op), position({0, 0}),
     renderPlayer(renderer), stateOperator(State::idle), numFrames(0),
     flipType(SDL_FLIP_NONE), health(0), animationDeadFinish(false),
-    munition(0), window(window) {
+    munition(0), window(window), music(music) {
     this->chargeTexture(renderer);
     this->setState(State::idle);
 }
@@ -157,6 +157,7 @@ void Operator::render(SDL_Rect camera) {
         case State::atack:
             renderAnimation(SPEED_ATACK, textures["Shot"]->getTexture(),
                             camera);
+            music.playAction(operatorId, "attack");
             break;
         case State::injure:
             renderIconInjure(camera);
@@ -166,6 +167,7 @@ void Operator::render(SDL_Rect camera) {
         case State::recharge:
             renderAnimation(SPEED_RECHARGE, textures["Recharge"]->getTexture(),
                             camera);
+            music.playAction(operatorId, "recharge");
             break;
         case State::hability:
             renderAnimation(SPEED_SKILL, textures["Grenade"]->getTexture(),

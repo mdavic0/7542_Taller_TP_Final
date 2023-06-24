@@ -26,10 +26,12 @@ bool GameSdl::isRunning() {
 
 void GameSdl::render() {
     this->map.render(camera.getRect());
-    
+    // std::cout << "mapRender\n";
+
     this->hud.render(soldiers[idPlayer]->getHealth(),
                     soldiers[idPlayer]->getMunition(),
                     enemies.size());
+    // std::cout << "hudRender\n";
     
     // reordeno todo antes de renderizar
     std::vector<std::shared_ptr<Object>> vecObjects;
@@ -46,6 +48,7 @@ void GameSdl::render() {
     });
     for (const auto &object : vecObjects)
         object->render(camera.getRect());
+    // std::cout << "restoRender\n";
 }
 
 void GameSdl::update() {
@@ -65,23 +68,25 @@ void GameSdl::update() {
                 if (!found)
                     player.second->setState(State::dead);
             }
+            // std::cout << "soldiersUpdate\n";
         }
+
         camera.update(calculateMassCenter());
 
-        std::unordered_set<uint8_t> mapIds;
-        for (auto &infected : snap->getEnemies()) {
-            mapIds.insert(infected.getId());
-            enemies[infected.getId()]->update(infected.getPosition(),
-                                                infected.getState());
-        }
-
-        // Eliminio enemigo muerto
-        auto iterator = enemies.begin();
-        while (iterator != enemies.end()) {
-            if (mapIds.find(iterator->first) == mapIds.end())
-                iterator = enemies.erase(iterator);
-            else
-                ++iterator;
+        if (enemies.size() >= snap->getEnemies().size()) {
+            for (auto &enemy : enemies) {
+                bool found = false;
+                for (const auto& enemyDto : snap->getEnemies())
+                    if (enemy.first == enemyDto.getId()) {
+                        enemy.second->update(enemyDto.getPosition(),
+                                            enemyDto.getState());
+                        found = true;
+                        break;
+                    }
+                if (!found)
+                    enemies.erase(enemy.first);
+            }
+            // std::cout << "enemiesUpdate\n";
         }
     } else {
         this->endGame = true;

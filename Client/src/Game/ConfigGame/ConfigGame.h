@@ -10,6 +10,7 @@
 #include "RendererSdl.h"
 #include "TypeGame.h"
 #include "TextureManager.h"
+#include "ManagerMusic.h"
 #include "WindowSdl.h"
 
 class ConfigGame {
@@ -20,9 +21,10 @@ class ConfigGame {
         uint8_t idMap;
         TypeGame mode;
         TextureManager textures;
+        ManagerMusic& music;
     public:
         ConfigGame(std::shared_ptr<Snapshot> config, Renderer& render,
-                    WindowSdl& window);
+                    WindowSdl& window, ManagerMusic& music);
         ~ConfigGame();
         std::map<uint8_t, std::shared_ptr<Operator>>& getPlayers();    
         std::map<uint8_t, std::shared_ptr<Enemy>>& getEnemies();    

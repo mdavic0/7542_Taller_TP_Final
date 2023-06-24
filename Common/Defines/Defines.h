@@ -15,6 +15,11 @@
 #define PATH_OBSTACLES "assets/images/sdl/obstacles/"
 #define PATH_MAPS "assets/images/sdl/maps/"
 #define PATH_ENEMIES "assets/images/sdl/enemies/"
+// Path Music
+#define PATH_MUSIC_LAUNCHER "../assets/music/launcher/"
+#define PATH_MUSIC_LOBBY "assets/music/sdl/sound/lobby.wav"
+#define PATH_MUSIC_GAME "assets/music/sdl/sound/game.wav"
+#define PATH_MUSIC_OPERATOR "assets/music/sdl/units/"
 
 // Animation SDL
 #define SIZE_FRAME 128
@@ -27,7 +32,7 @@
 #define SPEED_RUN 120
 #define SPEED_ATACK 200
 #define SPEED_INJURE 110
-#define SPEED_RECHARGE 140
+#define SPEED_RECHARGE 90
 #define SPEED_SKILL 190
 #define SPEED_DEAD 120
 #define COLOR_WHITE {255, 255, 255, 255}

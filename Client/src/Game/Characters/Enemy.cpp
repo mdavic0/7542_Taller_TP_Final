@@ -34,7 +34,7 @@ int Enemy::setNumFrames(State state) {
         case State::atack:
             return this->textures.getFrames(type, "Attack");
         default:
-            return 0;
+            return 1;
     }
 }
 

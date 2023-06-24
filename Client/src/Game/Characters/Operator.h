@@ -9,6 +9,7 @@
 #include "RendererSdl.h"
 #include "OperatorDto.h"
 #include "Object.h"
+#include "ManagerMusic.h"
 #include <SDL2/SDL.h>
 #include <map>
 #include <memory>
@@ -29,6 +30,7 @@ class Operator : public Object {
         bool animationDeadFinish;
         uint8_t munition;
         WindowSdl& window;
+        ManagerMusic& music;
         void chargeTexture(Renderer& renderer);
         void renderAnimation(int speed, SDL_Texture* texture, SDL_Rect camera);
         void renderDead(int speed, SDL_Texture* texture, SDL_Rect camera);
@@ -38,7 +40,7 @@ class Operator : public Object {
         
     public:
         Operator(uint8_t id, TypeOperator op, Renderer& renderer,
-                WindowSdl& window);
+                WindowSdl& window, ManagerMusic& music);
         ~Operator();     
         void updateMove(MoveTo direction);
         void update(std::pair<int16_t, int16_t> pos, State state,
