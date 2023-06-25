@@ -106,6 +106,13 @@
 #define DIFFICULTY_HARD 0x03
 #define DIFFICULTY_GOD 0x04
 
+#define GRENADE_IDLE 0x00
+#define GRENADE_EXPLOSIVE 0x01
+#define GRENADE_SMOKE 0x02
+
+#define BOOL_TRUE 0x00
+#define BOOL_FALSE 0x01
+
 // Server
 #define JOIN_OK 0x00
 #define JOIN_FAILED 0X01

@@ -340,13 +340,15 @@ void sendStart(const std::vector<StOperator> &playersInfo, const std::vector<Ene
     this->sendAll(&idMap, 1, skt);
 }
 
-void sendPlaying(const std::vector<StOperator> &playersInfo,
-    const std::vector<EnemyDto> &enemiesInfo, std::shared_ptr<T> skt) {
+void sendPlaying(const std::vector<StOperator> &playersInfo, const std::vector<EnemyDto> &enemiesInfo,
+    const std::vector<GrenadeDto> &grenadesInfo, const bool &blitzAttacking, std::shared_ptr<T> skt) {
     uint8_t event = PLAYING_CODE;
     this->sendAll(&event, 1, skt);
 
     sendPlayersInfo(playersInfo, skt);
     sendEnemiesInfo(enemiesInfo, skt);
+    sendGrenades(grenadesInfo, skt);
+    sendBoolean(blitzAttacking, skt);
 }
 
 void sendEnd(std::shared_ptr<T> skt) {
@@ -408,6 +410,16 @@ void sendTypeObstacle(const TypeObstacle& typeObstacle, std::shared_ptr<T> skt) 
         this->sendAll(&ob, 1, skt);
     }
 }
+
+void sendTypeGrenade(const TypeGrenade& typeGrenade, std::shared_ptr<T> skt) {
+    if(typeGrenade == TypeGrenade::grenade_explosive){
+        uint8_t gre = GRENADE_EXPLOSIVE;
+        this->sendAll(&gre, 1, skt);
+    } else if (typeGrenade == TypeGrenade::grenade_smoke) {
+        uint8_t gre = GRENADE_SMOKE;
+        this->sendAll(&gre, 1, skt);
+    }
+}
         
 void sendOperator(const TypeInfected& typeInfected, std::shared_ptr<T> skt) {
     if(typeInfected == TypeInfected::infected_zombie){
@@ -463,6 +475,8 @@ void sendPlayersInfo(const std::vector<StOperator> &playersInfo, std::shared_ptr
         this->sendAll(&health, 1, skt);
         uint8_t munition = it->getMunition();
         this->sendAll(&munition, 1, skt);
+        sendBoolean(it->isGrenadeAvailable(), skt);
+        sendBoolean(it->isSmokeAvailable(), skt);
   }
 }
 
@@ -488,7 +502,18 @@ void sendObstaclesInfo(const std::vector<ObstacleDto> &obstaclesInfo, std::share
         sendTypeObstacle(it->getTypeObstacle(), skt);
         sendPosition(it->getPosition().first, it->getPosition().second, skt); // x = it->second.first, y = it->second.second
   }
-}   
+} 
+
+void sendGrenades(const std::vector<GrenadeDto> &grenadesInfo, std::shared_ptr<T> skt) {
+    uint8_t countGrenades = grenadesInfo.size();
+    this->sendAll(&countGrenades, 1, skt);
+    for (auto it = grenadesInfo.begin(); it != grenadesInfo.end(); ++it) {
+        sendTypeGrenade(it->getTypeGrenade(), skt);
+        sendBoolean(it->alreadyExploded(), skt);
+        sendPosition(it->getPosition().first, it->getPosition().second, skt); // x = it->second.first, y = it->second.second
+  }
+
+}
 
 void sendPosition(const uint16_t& x, const uint16_t& y, std::shared_ptr<T> skt) {
     uint16_t xAux = htons(x);
@@ -496,6 +521,16 @@ void sendPosition(const uint16_t& x, const uint16_t& y, std::shared_ptr<T> skt) 
 
     uint16_t yAux = htons(y);
     this->sendAll(&yAux, 2, skt);
+}
+
+void sendBoolean(const bool& inputBool, std::shared_ptr<T> skt) {
+    if(inputBool) {
+        uint8_t b = BOOL_TRUE;
+        this->sendAll(&b, 1, skt);
+    } else {
+        uint8_t b = BOOL_FALSE;
+        this->sendAll(&b, 1, skt);
+    }
 }
 
     public:
@@ -609,7 +644,7 @@ void sendSnapshot(std::shared_ptr<Snapshot>& snapshot, std::shared_ptr<T> skt) {
     } else if (event == Event::event_start_game) {
         sendStart(snapshot->getInfo(), snapshot->getEnemies(), snapshot->getObstacles(), snapshot->getTypeGame(), snapshot->getMap(), skt);
     } else if (event == Event::event_playing) {
-        sendPlaying(snapshot->getInfo(), snapshot->getEnemies(), skt);
+        sendPlaying(snapshot->getInfo(), snapshot->getEnemies(), snapshot->getGrenades(), snapshot->getBlitzAttacking(), skt);
     } else if (event == Event::event_end) {
         sendEnd(skt);
     } else if (event == Event::event_stats) {

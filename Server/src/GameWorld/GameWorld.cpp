@@ -110,7 +110,9 @@ std::shared_ptr<Snapshot> GameWorld::getSnapshot(bool first) {
                                          player.second->getState(),
                                          player.second->getPosition(), 
                                          player.second->getHealth(),
-                                         player.second->getMunition()));
+                                         player.second->getMunition(),
+                                         player.second->isGrenadeAvailable(),
+                                         player.second->isSmokeAvailable()));
         }
         
         std::vector<EnemyDto> enemies;
@@ -130,7 +132,17 @@ std::shared_ptr<Snapshot> GameWorld::getSnapshot(bool first) {
                 }
             return std::make_shared<Snapshot>(playersInfo, enemies, obsts, type, map);        
         }
-        return std::make_shared<Snapshot>(playersInfo, enemies);
+
+        std::vector<GrenadeDto> grenadesInfo;
+        for (auto& grenade : grenades) {
+            grenadesInfo.push_back(GrenadeDto(grenade->exploded(),
+                                         grenade->getTypeGrenade(),
+                                         grenade->getPosition()));
+        }
+        
+        bool blitzAttacking = blitzAtacks.size() > 0;
+        
+        return std::make_shared<Snapshot>(playersInfo, enemies, grenadesInfo, blitzAttacking);
     }
     return std::make_shared<Snapshot>(Event::event_end);
 }

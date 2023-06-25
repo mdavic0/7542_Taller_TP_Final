@@ -35,4 +35,8 @@ bool Grenade::exploded() {
     return false;
 }
 
+TypeGrenade Grenade::getTypeGrenade() {
+    return typeGrenade;
+}
+
 Grenade::~Grenade() = default;
