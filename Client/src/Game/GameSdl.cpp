@@ -18,7 +18,8 @@ GameSdl::GameSdl(WindowSdl& window, Renderer& renderer,
     hud(soldiers[idPlayer]->getType(), config.getMode(), renderer, font,
     window), idPlayer(idPlayer), mode(config.getMode()), font(font),
     enemies(config.getEnemies()), camera(window),
-    obstacles(config.getObstacles()) {
+    obstacles(config.getObstacles()), grenades(),
+    textures(config.getTextureManager()), music(config.getManagerMusic()) {
 }
 
 bool GameSdl::isRunning() {
@@ -35,6 +36,9 @@ void GameSdl::render() {
                     soldiers[idPlayer]->getGrenadeAvailable(),
                     soldiers[idPlayer]->getSmokeAvailable());
     // std::cout << "hudRender\n";
+    
+    for (const auto &grenade : grenades)
+        grenade->render(camera.getRect());
     
     // reordeno todo antes de renderizar
     std::vector<std::shared_ptr<Object>> vecObjects;
@@ -112,8 +116,43 @@ void GameSdl::update() {
                 ++iterator;
             }
         }
+        this->updateGrenades(snap);
     } else {
         this->endGame = true;
+    }
+}
+
+void GameSdl::updateGrenades(std::shared_ptr<Snapshot> snap) {
+    if (grenades.empty()) {
+        for (const auto &grenade : snap->getGrenades()) {
+            grenades.push_back(
+                std::make_shared<GrenadeSdl>(grenade, textures, renderer,
+                                            music));
+        }
+    } else {
+        std::list<std::shared_ptr<GrenadeSdl>> updatedGrenades;
+        for (const auto& grenade : grenades) {
+            if (!grenade->exploded())
+                updatedGrenades.push_back(grenade);
+        }
+
+        const auto& newGrenades = snap->getGrenades();
+        for (const auto& grenade : newGrenades) {
+            bool exists = false;
+            for (const auto& updatedGrenade : updatedGrenades) {
+                if (updatedGrenade->getPosition() == grenade.getPosition() &&
+                    updatedGrenade->getType() == grenade.getTypeGrenade()) {
+                    exists = true;
+                    break;
+                }
+            }
+            if (!exists) {
+                updatedGrenades.push_back(
+                    std::make_shared<GrenadeSdl>(grenade, textures, renderer,
+                                                music));
+            }
+        }
+        grenades = std::move(updatedGrenades);
     }
 }
 

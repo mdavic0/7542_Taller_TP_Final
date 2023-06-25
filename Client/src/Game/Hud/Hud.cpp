@@ -139,7 +139,6 @@ void Hud::renderIconBullet() {
 void Hud::renderGrenades(bool grenade, bool smoke) {
     SDL_Rect rectInit = {0, 0, SIZE_SPRITE_64, SIZE_SPRITE_64};
     SDL_Rect rectFinal = { 280, 110, SIZE_SPRITE_32, SIZE_SPRITE_32};
-    window.adjustedRect(rectFinal);
     if (type == TypeOperator::operator_p90){
         window.adjustedRect(rectFinal);
         if (grenade) {

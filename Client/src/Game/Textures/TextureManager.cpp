@@ -83,6 +83,13 @@ void TextureManager::loadTextures(Renderer& render, uint8_t idMap) {
                                                     path + "/Attack_1.png");
     mapTextures["venom-Dead"] = std::make_shared<Texture>(render,
                                                     path + "/Dead.png");
+    // Grenade types
+    // Explotion
+    path = PATH_GRENADES_EXPLOTION;
+    mapTextures["grenade"] = std::make_shared<Texture>(render, path);
+    // Smoke
+    path = PATH_GRENADES_SMOKE;
+    mapTextures["smoke"] = std::make_shared<Texture>(render, path);
 }
 
 SDL_Texture* TextureManager::getTexture(TypeInfected type,
@@ -116,6 +123,17 @@ int TextureManager::getFrames(TypeInfected type,
             return mapTextures["spear-" + nameTexture]->frames(); 
         case TypeInfected::infected_venom:
             return mapTextures["venom-" + nameTexture]->frames(); 
+        default:
+            return 1;
+    }
+}
+
+int TextureManager::getFrames(TypeGrenade type, std::string nameTexture) {
+    switch (type) {
+        case TypeGrenade::grenade_explosive:
+            return mapTextures["grenade"]->frames();
+        case TypeGrenade::grenade_smoke:
+            return mapTextures["smoke"]->frames();
         default:
             return 1;
     }

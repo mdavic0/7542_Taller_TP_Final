@@ -18,6 +18,9 @@
 #include "Camera.h"
 #include "Obstacles.h"
 #include "ConfigGame.h"
+#include "GrenadeSdl.h"
+#include "ManagerMusic.h"
+#include <list>
 #include <memory>
 #include <map>
 
@@ -33,12 +36,16 @@ class GameSdl {
         std::map<uint8_t, std::shared_ptr<Operator>>& soldiers;
         std::map<uint8_t, std::shared_ptr<Enemy>>& enemies;
         std::map<uint8_t, std::shared_ptr<Obstacles>>& obstacles;
+        std::list<std::shared_ptr<GrenadeSdl>> grenades;
         Hud hud;
         uint8_t idPlayer;
         TypeGame mode;
         Font& font;
         Camera camera;
+        TextureManager& textures;
+        ManagerMusic& music;
         std::pair<int16_t, int16_t> calculateMassCenter();
+        void updateGrenades(std::shared_ptr<Snapshot> snap);
 
     public:
         GameSdl(WindowSdl& window, Renderer& renderer,
