@@ -12,6 +12,7 @@ idf_injure: 3
 idf_reload_time: 2
 idf_rate_time: 0.05
 idf_burst_delay: 0.1
+idf_scope: 0.7
 
 # 2: # p90
 p90_damage: 20
@@ -23,6 +24,7 @@ p90_injure: 3
 p90_reload_time: 1
 p90_rate_time: 0.05
 p90_burst_delay: 0.15
+p90_scope: 0.2
 
 # 3: # scout
 scout_damage: 60

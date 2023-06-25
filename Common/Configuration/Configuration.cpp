@@ -18,6 +18,7 @@ int CF::idf_injure = CF::file["idf_injure"].as<int>();
 double CF::idf_reload_time = CF::file["idf_reload_time"].as<double>();
 double CF::idf_rate_time = CF::file["idf_rate_time"].as<double>();
 double CF::idf_burst_delay = CF::file["idf_burst_delay"].as<double>();
+float CF::idf_scope = CF::file["idf_scope"].as<float>();
 
 // P90:
 int CF::p90_damage = CF::file["p90_damage"].as<int>();
@@ -29,6 +30,7 @@ int CF::p90_injure = CF::file["p90_injure"].as<int>();
 double CF::p90_reload_time = CF::file["p90_reload_time"].as<double>();
 double CF::p90_rate_time = CF::file["p90_rate_time"].as<double>();
 double CF::p90_burst_delay = CF::file["p90_burst_delay"].as<double>();
+float CF::p90_scope = CF::file["p90_scope"].as<float>();
 
 // SCOUT:
 int CF::scout_damage = CF::file["scout_damage"].as<int>();

@@ -22,6 +22,10 @@ class Collidable {
         bool isCloseTo(std::shared_ptr<Collidable>& other, float closeDistance);
         bool isOnRight(std::shared_ptr<Collidable>& other);
         bool isDown(std::shared_ptr<Collidable>& other);
+
+        int leftDistance(std::shared_ptr<Collidable>& other);
+        int rightDistance(std::shared_ptr<Collidable>& other);
+
     private:
         bool collidesWith(std::shared_ptr<Collidable>& other);
         bool overlapVerticalAxis(std::shared_ptr<Collidable>& other);
