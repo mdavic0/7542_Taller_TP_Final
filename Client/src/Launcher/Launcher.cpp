@@ -110,9 +110,9 @@ void Launcher::sendCreateMatch(const QString& name, int mode,
     try {
         bool error = false;
         std::string nameMatch = name.toStdString();
-        EventDTO eventCreate(nameMatch, TypeGame(mode),
-                            TypeOperator(operatorSelect), difficulty);
-        clientProtocol.sendEvent(eventCreate, this->socket.value());
+        std::shared_ptr<EventDTO> event = std::make_shared<EventDTO>(nameMatch, TypeGame(mode),
+                                                TypeOperator(operatorSelect), difficulty);
+        clientProtocol.sendEvent(event, this->socket.value());
         Snapshot receive = clientProtocol.getSnapshot(this->socket.value());
         if (receive.getCode() >= 0) {
             std::string message = "Partida creada con codigo: " + 
@@ -144,8 +144,8 @@ void Launcher::sendCreateMatch(const QString& name, int mode,
 void Launcher::sendJoinMatch(int code, int operatorSelect) {
     try {
         bool error = false;
-        EventDTO eventCreate(code, TypeOperator(operatorSelect));
-        clientProtocol.sendEvent(eventCreate, this->socket.value());
+        std::shared_ptr<EventDTO> event = std::make_shared<EventDTO>(code, TypeOperator(operatorSelect));
+        clientProtocol.sendEvent(event, this->socket.value());
         Snapshot receive = clientProtocol.getSnapshot(this->socket.value());
         if (receive.getOk() == 0) {
             QMessageBox::information(this, "Exito", "Union Exitosa",
