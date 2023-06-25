@@ -52,6 +52,10 @@ int Collidable::rightDistance(std::shared_ptr<Collidable>& other) {
     return other->topLeftCorner.first - (topLeftCorner.first + width);
 }
 
+int Collidable::getLeftCorner() const {
+    return this->topLeftCorner.first;
+}
+
 bool Collidable::overlapVerticalAxis(std::shared_ptr<Collidable> &other) {
     if (this->topLeftCorner.second <= other->topLeftCorner.second + other->height &&
         this->topLeftCorner.second + this->height >= other->topLeftCorner.second) {

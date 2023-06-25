@@ -12,7 +12,7 @@ idf_injure: 3
 idf_reload_time: 2
 idf_rate_time: 0.05
 idf_burst_delay: 0.1
-idf_scope: 0.7
+idf_scope: 0.6
 
 # 2: # p90
 p90_damage: 20
@@ -36,6 +36,8 @@ scout_injure: 3
 scout_reload_time: 1.5
 scout_rate_time: 0.4
 scout_burst_delay: 0.25
+scout_scope: 0.05
+scout_damage_decrease_by_enemy: 2.5
 
 # skills:
 #   grenade:

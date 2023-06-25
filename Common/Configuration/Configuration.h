@@ -49,6 +49,8 @@ class Configuration {
         static double scout_reload_time;
         static double scout_rate_time;
         static double scout_burst_delay;
+        static float scout_scope;
+        static float scout_damage_decrease_by_enemy;
 
         // Special abilties
         static int grenade_damage;

@@ -42,6 +42,8 @@ int CF::scout_injure = CF::file["scout_injure"].as<int>();
 double CF::scout_reload_time = CF::file["scout_reload_time"].as<double>();
 double CF::scout_rate_time = CF::file["scout_rate_time"].as<double>();
 double CF::scout_burst_delay = CF::file["scout_burst_delay"].as<double>();
+float CF::scout_scope = CF::file["scout_scope"].as<float>();
+float CF::scout_damage_decrease_by_enemy = CF::file["scout_damage_decrease_by_enemy"].as<float>();
 
 // Special abilties
 int CF::grenade_damage = CF::file["grenade_damage"].as<int>();

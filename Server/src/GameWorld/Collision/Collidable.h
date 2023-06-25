@@ -25,6 +25,7 @@ class Collidable {
 
         int leftDistance(std::shared_ptr<Collidable>& other);
         int rightDistance(std::shared_ptr<Collidable>& other);
+        int getLeftCorner() const;
 
     private:
         bool collidesWith(std::shared_ptr<Collidable>& other);

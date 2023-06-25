@@ -1,9 +1,11 @@
 #include "Scout.h"
+#include <algorithm>
 
 Scout::Scout() : Weapon(CF::scout_damage,
                         CF::scout_rate,
                         CF::scout_capacity),
-                        burstFiredBullets(0), burstEnded(false) {}
+                        burstFiredBullets(0), burstEnded(false), scope(CF::scout_scope),
+                        damageDecreaseByEnemy(CF::scout_damage_decrease_by_enemy) {}
 
 bool Scout::shoot(std::shared_ptr<Collidable> &player, bool right,
                   std::map<uint8_t, std::shared_ptr<Infected>> &infecteds,
@@ -55,18 +57,56 @@ bool Scout::reload(double stepTime) {
 
 void Scout::shootRight(std::shared_ptr<Collidable> &player,
                      std::map<uint8_t, std::shared_ptr<Infected>> &infecteds) {
-    for (auto &infected : infecteds) {
-        if (player->isAlignedRight(infected.second->getCollidable())) {
-            infected.second->applyDamage(this->damage);
+    int counter = 0;
+    for (auto &infected : sortEnemiesRight(infecteds)) {
+        if (player->isAlignedRight(infected->getCollidable())) {
+            infected->applyDamage(calculateDamage(player->rightDistance(infected->getCollidable()), counter));
+            counter++;
         }
     }
 }
 
 void Scout::shootLeft(std::shared_ptr<Collidable> &player,
                     std::map<uint8_t, std::shared_ptr<Infected>> &infecteds) {
-    for (auto &infected : infecteds) {
-        if (player->isAlignedLeft(infected.second->getCollidable())) {
-            infected.second->applyDamage(this->damage);
+    int counter = 0;
+    for (auto &infected : sortEnemiesLeft(infecteds)) {
+        if (player->isAlignedLeft(infected->getCollidable())) {
+            infected->applyDamage(calculateDamage(player->leftDistance(infected->getCollidable()), counter));
+            counter++;
         }
     }
+}
+
+float Scout::calculateDamage(float distance, int& counter) {
+    return this->damage - (distance*this->scope) - (counter*this->damageDecreaseByEnemy);
+}
+
+std::vector<std::shared_ptr<Infected>> Scout::sortEnemiesRight(const std::map<uint8_t, std::shared_ptr<Infected>> &infecteds) {
+    std::vector<std::shared_ptr<Infected>> sortedInfected;
+
+    for (const auto& pair : infecteds) {
+        sortedInfected.push_back(pair.second);
+    }
+
+    std::sort(sortedInfected.begin(), sortedInfected.end(), [](std::shared_ptr<Infected> obj1, std::shared_ptr<Infected> obj2) {
+        return obj1->getCollidable()->getLeftCorner() < obj2->getCollidable()->getLeftCorner();
+    });
+
+
+    return sortedInfected;
+}
+
+std::vector<std::shared_ptr<Infected>> Scout::sortEnemiesLeft(const std::map<uint8_t, std::shared_ptr<Infected>> &infecteds) {
+    std::vector<std::shared_ptr<Infected>> sortedInfected;
+
+    for (const auto& pair : infecteds) {
+        sortedInfected.push_back(pair.second);
+    }
+
+    std::sort(sortedInfected.begin(), sortedInfected.end(), [](std::shared_ptr<Infected> obj1, std::shared_ptr<Infected> obj2) {
+        return obj1->getCollidable()->getLeftCorner() > obj2->getCollidable()->getLeftCorner();
+    });
+
+
+    return sortedInfected;
 }
