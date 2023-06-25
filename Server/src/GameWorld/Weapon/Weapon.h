@@ -40,8 +40,6 @@ class Weapon {
                         std::map<uint8_t, std::shared_ptr<Infected>> &infecteds) = 0;
         virtual void shootLeft(std::shared_ptr<Collidable> &player,
                        std::map<uint8_t, std::shared_ptr<Infected>> &infecteds) = 0;
-
-
 };
 
 

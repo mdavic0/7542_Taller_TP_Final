@@ -25,6 +25,9 @@
 #include "RespawnController.h"
 #include "ObstacleFactory.h"
 #include "PlayerFactory.h"
+#include "Grenade.h"
+#include "BlitzAtack.h"
+
 
 class GameWorld {
     private:
@@ -50,14 +53,21 @@ class GameWorld {
 
         PlayerFactory playerFactory;
         std::list<uint8_t> deadPlayersId;
+
+        std::list<std::shared_ptr<Grenade>> grenades;
+        std::list<std::shared_ptr<BlitzAtack>> blitzAtacks;
+
+        TypeDifficulty difficulty;
+
     public:
-        GameWorld(const TypeGame& type);
+        GameWorld(const TypeGame& type, TypeDifficulty difficulty);
         uint8_t addPlayer(TypeOperator op);
         void deletePlayer(uint8_t id);
 
         void updateMovementDirection(Event event, uint8_t id, MoveTo direction);
         void updateShootingState(Event event, uint8_t id);
         void updateReloadingState(Event event, uint8_t id);
+        void updateSkillState(Event event, uint8_t id);
 
         /*
          * Simula un tiempito en el 'gameworld'.
@@ -75,6 +85,11 @@ class GameWorld {
         void generateObstacles();
         TypeObstacle generateObstacleType();
         int generateMapType();
+
+        void simulatePlayersStep(double stepTime);
+        void simulateInfectedStep(double stepTime);
+        void simulateGrenadeStep(double stepTime);
+        void simulateBlitzAtackStep(double stepTime);
 };
 
 

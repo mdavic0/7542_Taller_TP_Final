@@ -4,7 +4,8 @@
 
 EventHandler::EventHandler(Queue<std::shared_ptr<EventDTO>>& eventQueue,
     uint8_t idPlayer) : moveDirection(MoveTo::move_idle),
-    running(true), eventQueue(eventQueue) , idPlayer(idPlayer) {
+    running(true), eventQueue(eventQueue) , idPlayer(idPlayer),
+    previousEvent(Event::event_playing){
 }
 
 void EventHandler::listen() {
@@ -52,7 +53,7 @@ void EventHandler::handleKeyDownEvent(SDL_Keysym keysym) {
             break;
         case SDLK_e:
             event = Event::event_throw_smoke;
-            std::cout << "smoke\n";
+            //std::cout << "smoke\n";
             break;
         case SDLK_f:
             event = Event::event_reanimate;
@@ -86,8 +87,12 @@ void EventHandler::handleKeyDownEvent(SDL_Keysym keysym) {
             moveDirection = MoveTo::move_idle;
             break;
     }
-    if (moveDirection != MoveTo::move_idle)
+    if ((event != previousEvent and moveDirection != MoveTo::move_idle) or
+        (event == previousEvent and event == Event::event_move and moveDirection != MoveTo::move_idle) or
+        (event == previousEvent and event == Event::event_shoot and moveDirection != MoveTo::move_idle)) {
+        this->previousEvent = event;
         this->eventQueue.push(std::make_shared<EventDTO>(event, moveDirection, idPlayer));
+    }
 }
 
 void EventHandler::handleKeyUpEvent(SDL_Keysym keysym) {
@@ -121,8 +126,10 @@ void EventHandler::handleKeyUpEvent(SDL_Keysym keysym) {
             moveDirection = MoveTo::move_idle;
             break;
     }
-    if (moveDirection != MoveTo::move_idle)
+    if (moveDirection != MoveTo::move_idle) {
+        this->previousEvent = event;
         this->eventQueue.push(std::make_shared<EventDTO>(event, moveDirection, idPlayer));
+    }
 }
 
 MoveTo EventHandler::getMoveDirection() const {

@@ -19,7 +19,7 @@
  */
 class Game : public Thread {
     private:
-        const uint32_t id;
+    const uint32_t id;
         const std::string name;
         std::mutex mutex;
         Queue<std::shared_ptr<EventDTO>> unprocessed_events;
@@ -31,7 +31,7 @@ class Game : public Thread {
         CommandFactory commandFactory;
 
     public:
-        explicit Game(const uint32_t id, std::string  name, const TypeGame& type);
+        Game(const uint32_t id, std::string  name, const TypeGame& type, TypeDifficulty difficulty);
 
         virtual void run() override;
 
@@ -49,7 +49,8 @@ class Game : public Thread {
          * Este método debe añadir una nueva queue a la lista
          * de forma atomica y pushear el snapshot de create
          */
-        Queue<std::shared_ptr<EventDTO>>* createGame(Queue<std::shared_ptr<Snapshot>> *q, const TypeOperator& op);
+        Queue<std::shared_ptr<EventDTO>> *
+        createGame(Queue<std::shared_ptr<Snapshot>> *q, const TypeOperator &op);
 
         /*
          * Este método debe añadir una nueva queue a la lista
@@ -75,7 +76,7 @@ class Game : public Thread {
          Game& operator=(const Game&) = delete;
          ~Game();
 
-    private:
+private:
         void gameLoop();
 
         /*

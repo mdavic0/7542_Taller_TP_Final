@@ -10,7 +10,7 @@ class StopShootCommand : public Command {
         uint8_t id;
 
     public:
-        StopShootCommand(uint8_t id);
+        explicit StopShootCommand(uint8_t id);
         void execute(GameWorld &gameWorld) override;
         ~StopShootCommand() override;
 };

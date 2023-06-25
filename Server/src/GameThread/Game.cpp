@@ -6,10 +6,10 @@
 #include <iterator>
 #include <utility>
 
-Game::Game(const uint32_t id, std::string name, const TypeGame& type) :
+Game::Game(const uint32_t id, std::string name, const TypeGame& type, TypeDifficulty difficulty) :
     id(id), name(std::move(name)), mutex(),
-    unprocessed_events(1000), client_snapshot_queues(),
-    talking(true), alive(true), gameWorld(type),
+    unprocessed_events(QUEUE_MAX_SIZE), client_snapshot_queues(),
+    talking(true), alive(true), gameWorld(type, difficulty),
     started(false), commandFactory() {}
 
 void Game::run() {
@@ -52,14 +52,14 @@ Queue<std::shared_ptr<EventDTO>>* Game::joinGame(Queue<std::shared_ptr<Snapshot>
         // Notify all clients that a new player joined
         for (auto &clientQueue : client_snapshot_queues) {
             clientQueue.second->push(std::make_shared<Snapshot>(Event::event_join,
-                                                        (uint8_t)0x00,
+                                                        JOIN_OK,
                                                         idPlayer, client_snapshot_queues.size()));
         }
         
         return &this->unprocessed_events;
     }
     // JOIN FAILED
-    q->push(std::make_shared<Snapshot>(Event::event_join, (uint8_t)0x01, 0, 0));
+    q->push(std::make_shared<Snapshot>(Event::event_join, JOIN_FAILED, 0, 0));
     return nullptr;
 }
 

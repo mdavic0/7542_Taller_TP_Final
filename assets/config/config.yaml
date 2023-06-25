@@ -43,6 +43,7 @@ grenade_recharge: 10
 #   smoke:
 smoke_damage: 0
 smoke_recharge: 10
+
 #   blitz:
 blitz_damage: 100
 blitz_recharge: 30
