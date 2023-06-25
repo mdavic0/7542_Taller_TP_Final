@@ -31,7 +31,9 @@ void GameSdl::render() {
 
     this->hud.render(soldiers[idPlayer]->getHealth(),
                     soldiers[idPlayer]->getMunition(),
-                    enemies.size());
+                    enemies.size(),
+                    soldiers[idPlayer]->getGrenadeAvailable(),
+                    soldiers[idPlayer]->getSmokeAvailable());
     // std::cout << "hudRender\n";
     
     // reordeno todo antes de renderizar
@@ -101,7 +103,6 @@ void GameSdl::update() {
         while (iterator != enemies.end()) {
             if (mapIds.find(iterator->first) == mapIds.end()) {
                 if (iterator->second->isDeadFinish()) {
-
                     iterator = enemies.erase(iterator);
                 } else {
                     iterator->second->setState(State::dead);

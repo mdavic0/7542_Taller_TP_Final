@@ -124,6 +124,7 @@ void Launcher::sendCreateMatch(const QString& name, int mode,
             this->initGame(CREATE_MENU, receive.getIdPlayer(), 1, error);
             this->goToConnect();
             this->show();
+            this->player.playMusic();
             if (error)
                 QMessageBox::information(this, "Error", 
                             "Conexion al server perdida",
@@ -156,6 +157,7 @@ void Launcher::sendJoinMatch(int code, int operatorSelect) {
                             receive.getSize(), error);
             this->goToConnect();
             this->show();
+            this->player.playMusic();
             if (error)
                 QMessageBox::information(this, "Error", 
                             "Conexion al server perdida",

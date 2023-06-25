@@ -49,7 +49,7 @@ void EventHandler::handleKeyDownEvent(SDL_Keysym keysym) {
             break;
         case SDLK_q:
             event = Event::event_throw_grenade;
-            std::cout << "grenade\n";
+            // std::cout << "grenade\n";
             break;
         case SDLK_e:
             event = Event::event_throw_smoke;

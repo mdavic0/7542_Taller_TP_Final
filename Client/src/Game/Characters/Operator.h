@@ -31,8 +31,13 @@ class Operator : public Object {
         uint8_t munition;
         WindowSdl& window;
         ManagerMusic& music;
+        bool stopGrenade;
+        bool grenadeAvailable;
+        bool smokeAvailable;
         void chargeTexture(Renderer& renderer);
         void renderAnimation(int speed, SDL_Texture* texture, SDL_Rect camera);
+        void renderGrenade(int speed, SDL_Texture* texture, SDL_Rect camera);
+        void renderStopGrenade(int speed, SDL_Texture* texture, SDL_Rect camera);
         void renderDead(int speed, SDL_Texture* texture, SDL_Rect camera);
         void renderIconInjure(SDL_Rect camera);
         void renderMusic();
@@ -58,6 +63,8 @@ class Operator : public Object {
         std::pair<int16_t, int16_t> getPosition();
         void render(SDL_Rect camera) override;
         bool isDead();
+        bool getGrenadeAvailable();
+        bool getSmokeAvailable();
 };
 
 #endif

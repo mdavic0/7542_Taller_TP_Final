@@ -19,5 +19,9 @@ void PlayerReproductor::stopMusic() {
     this->player.stop();
 }
 
+void PlayerReproductor::playMusic() {
+    this->player.play();
+}
+
 PlayerReproductor::~PlayerReproductor() {
 }

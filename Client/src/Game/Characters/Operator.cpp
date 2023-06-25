@@ -7,7 +7,9 @@ Operator::Operator(uint8_t id, TypeOperator op, Renderer& renderer,
     Object(), id(id), operatorId(op), position({0, 0}),
     renderPlayer(renderer), stateOperator(State::idle), numFrames(0),
     flipType(SDL_FLIP_NONE), health(0), animationDeadFinish(false),
-    munition(0), window(window), music(music) {
+    munition(0), window(window), music(music), stopGrenade(false),
+    grenadeAvailable(true),
+    smokeAvailable(operatorId != TypeOperator::operator_p90 ? true : false) {
     this->chargeTexture(renderer);
     this->setState(State::idle);
 }
@@ -100,6 +102,14 @@ State Operator::getState() {
     return this->stateOperator;
 }
 
+bool Operator::getGrenadeAvailable() {
+    return this->grenadeAvailable;
+}
+
+bool Operator::getSmokeAvailable() {
+    return this->smokeAvailable;
+}
+
 void Operator::chargeTexture(Renderer& renderer) {
     std::string path = 
                 "assets/images/sdl/units/" + std::to_string((int)operatorId);
@@ -169,7 +179,19 @@ void Operator::render(SDL_Rect camera) {
                             camera);
             break;
         case State::hability:
-            renderAnimation(SPEED_SKILL, textures["Grenade"]->getTexture(),
+            if (operatorId != TypeOperator::operator_p90)
+                renderGrenade(SPEED_SKILL, textures["Grenade"]->getTexture(),
+                            camera);
+            else
+                renderAnimation(SPEED_SKILL, textures["Grenade"]->getTexture(),
+                            camera);
+            break;
+        case State::stop_hability:
+            if (operatorId != TypeOperator::operator_p90)
+                renderStopGrenade(SPEED_SKILL, textures["Grenade"]->getTexture(),
+                            camera);
+            else
+                renderAnimation(SPEED_SKILL, textures["Grenade"]->getTexture(),
                             camera);
             break;
         case State::dead:
@@ -216,6 +238,40 @@ void Operator::renderIconInjure( SDL_Rect camera) {
 void Operator::renderAnimation(int speed, SDL_Texture* texture,
     SDL_Rect camera) {
     int speedAnimation = static_cast<int>((SDL_GetTicks()/speed) % numFrames);
+    SDL_Rect rectInit = {   speedAnimation * SIZE_FRAME, 0,
+                            SIZE_FRAME, SIZE_FRAME};
+    SDL_Rect rectFinal = {  position.first - camera.x,
+                            position.second - camera.y,
+                            SIZE_FRAME, SIZE_FRAME};
+    if (verifyRender(camera, rectFinal))
+        this->renderPlayer.copy(texture, rectInit, rectFinal, this->flipType);
+}
+
+void Operator::renderGrenade(int speed, SDL_Texture* texture,
+    SDL_Rect camera) {
+    int speedAnimation;
+    if (!stopGrenade) {
+        speedAnimation = static_cast<int>((SDL_GetTicks()/speed) % numFrames);
+        if (speedAnimation == 4) {
+            stopGrenade = true;
+        }
+    } else {
+        speedAnimation = 4;
+    }
+    SDL_Rect rectInit = {   speedAnimation * SIZE_FRAME, 0,
+                            SIZE_FRAME, SIZE_FRAME};
+    SDL_Rect rectFinal = {  position.first - camera.x,
+                            position.second - camera.y,
+                            SIZE_FRAME, SIZE_FRAME};
+    if (verifyRender(camera, rectFinal))
+        this->renderPlayer.copy(texture, rectInit, rectFinal, this->flipType);
+}
+
+void Operator::renderStopGrenade(int speed, SDL_Texture* texture,
+    SDL_Rect camera) {
+    stopGrenade = false;
+    std::cout << "solte granada\n";
+    int speedAnimation = static_cast<int>((SDL_GetTicks()/speed) % 4) + (numFrames - 4);
     SDL_Rect rectInit = {   speedAnimation * SIZE_FRAME, 0,
                             SIZE_FRAME, SIZE_FRAME};
     SDL_Rect rectFinal = {  position.first - camera.x,

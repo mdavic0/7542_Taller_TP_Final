@@ -29,13 +29,16 @@ class Hud {
         void renderIconWeapon();
         void renderIconBullet();
         void renderNumBullet(int numBullet);
+        void renderGrenades(bool grenade, bool smoke);
         void renderBgMode();
         void renderTextMode(size_t size);
 
     public:
-        Hud(TypeOperator type, TypeGame game, Renderer& render, Font& font, WindowSdl& window);
+        Hud(TypeOperator type, TypeGame game, Renderer& render, Font& font,
+            WindowSdl& window);
         ~Hud();
-        void render(uint8_t healthPlayer, int numBullet, size_t size);
+        void render(uint8_t healthPlayer, int numBullet, size_t size,
+            bool grenade, bool smoke);
 };
 
 #endif

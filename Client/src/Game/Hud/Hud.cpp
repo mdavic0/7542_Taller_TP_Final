@@ -44,9 +44,23 @@ void Hud::loadTextures() {
                                     renderHud, path + "bullet_rifle.png");
     texturesHud["bullet-hunting"] = std::make_unique<Texture>(
                                     renderHud, path + "bullet_hunting.png");
+    texturesHud["blitz"] = std::make_unique<Texture>(
+                                    renderHud, path + "blitz.png");
+    texturesHud["notblitz"] = std::make_unique<Texture>(
+                                    renderHud, path + "notBlitz.png");
+    texturesHud["grenade"] = std::make_unique<Texture>(
+                                    renderHud, path + "grenade.png");
+    texturesHud["notGrenade"] = std::make_unique<Texture>(
+                                    renderHud, path + "notGrenade.png");
+    texturesHud["smoke"] = std::make_unique<Texture>(
+                                    renderHud, path + "smoke.png");
+    texturesHud["notSmoke"] = std::make_unique<Texture>(
+                                    renderHud, path + "notSmoke.png");
+    
 }
 
-void Hud::render(uint8_t healthPlayer, int numBullet, size_t size) {
+void Hud::render(uint8_t healthPlayer, int numBullet, size_t size,
+    bool grenade, bool smoke) {
     this->renderBg();
     this->renderHealthBar();
     this->renderHealthIcon();
@@ -54,6 +68,7 @@ void Hud::render(uint8_t healthPlayer, int numBullet, size_t size) {
     this->renderIconWeapon();
     this->renderIconBullet();
     this->renderNumBullet(numBullet);
+    this->renderGrenades(grenade, smoke);
     this->renderBgMode();
     this->renderTextMode(size);
 }
@@ -118,6 +133,41 @@ void Hud::renderIconBullet() {
         rectInit = {0, 0, SIZE_SPRITE_32, SIZE_SPRITE_32};
         this->renderHud.copy(texturesHud["bullet-rifle"]->getTexture(),
                             rectInit, rectFinal);
+    }
+}
+
+void Hud::renderGrenades(bool grenade, bool smoke) {
+    SDL_Rect rectInit = {0, 0, SIZE_SPRITE_64, SIZE_SPRITE_64};
+    SDL_Rect rectFinal = { 280, 110, SIZE_SPRITE_32, SIZE_SPRITE_32};
+    window.adjustedRect(rectFinal);
+    if (type == TypeOperator::operator_p90){
+        window.adjustedRect(rectFinal);
+        if (grenade) {
+            this->renderHud.copy(texturesHud["blitz"]->getTexture(),
+                        rectInit, rectFinal);
+        } else {
+            this->renderHud.copy(texturesHud["notBlitz"]->getTexture(),
+                        rectInit, rectFinal);
+        }
+    } else if (type == TypeOperator::operator_idf || 
+            type == TypeOperator::operator_scout) {
+        window.adjustedRect(rectFinal);
+        if (grenade) {
+            this->renderHud.copy(texturesHud["grenade"]->getTexture(),
+                        rectInit, rectFinal);
+        } else {
+            this->renderHud.copy(texturesHud["notGrenade"]->getTexture(),
+                        rectInit, rectFinal);
+        }
+        rectFinal = { 320, 110, SIZE_SPRITE_32, SIZE_SPRITE_32};;
+        window.adjustedRect(rectFinal);
+        if (smoke) {
+            this->renderHud.copy(texturesHud["smoke"]->getTexture(),
+                        rectInit, rectFinal);
+        } else {
+            this->renderHud.copy(texturesHud["notSmoke"]->getTexture(),
+                        rectInit, rectFinal);
+        }
     }
 }
 

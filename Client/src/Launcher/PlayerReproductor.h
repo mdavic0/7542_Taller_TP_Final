@@ -12,6 +12,7 @@ class PlayerReproductor : public QWidget {
         explicit PlayerReproductor(QWidget* parent = 0);
         ~PlayerReproductor();
         void stopMusic();
+        void playMusic();
 };
 
 #endif
