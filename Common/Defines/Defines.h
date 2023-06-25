@@ -20,6 +20,7 @@
 #define PATH_MUSIC_LOBBY "assets/music/sdl/sound/lobby.wav"
 #define PATH_MUSIC_GAME "assets/music/sdl/sound/game.wav"
 #define PATH_MUSIC_OPERATOR "assets/music/sdl/units/"
+#define PATH_MUSIC_ENEMY "assets/music/sdl/enemies/"
 
 // Animation SDL
 #define SIZE_FRAME 128

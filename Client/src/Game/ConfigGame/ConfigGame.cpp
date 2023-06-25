@@ -15,7 +15,7 @@ ConfigGame::ConfigGame(std::shared_ptr<Snapshot> config, Renderer& render,
     enemies.clear();
     for (auto &infected : config->getEnemies()) {
         enemies[infected.getId()] = std::make_shared<Enemy>(textures, render,
-                                    infected.getTypeInfected(), window);
+                                    infected.getTypeInfected(), window, music);
     }
 
     obstacles.clear();

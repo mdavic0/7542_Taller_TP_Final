@@ -15,9 +15,10 @@ GameSdl::GameSdl(WindowSdl& window, Renderer& renderer,
     eventQueue(eventQueue), endGame(endGame), events(eventQueue, idPlayer),
     map(config.getTextureManager(), renderer, window),
     soldiers(config.getPlayers()),
-    hud(soldiers[idPlayer]->getType(), config.getMode(), renderer, font, window),
-    idPlayer(idPlayer), mode(config.getMode()), font(font),
-    enemies(config.getEnemies()), camera(window), obstacles(config.getObstacles()) {
+    hud(soldiers[idPlayer]->getType(), config.getMode(), renderer, font,
+    window), idPlayer(idPlayer), mode(config.getMode()), font(font),
+    enemies(config.getEnemies()), camera(window),
+    obstacles(config.getObstacles()) {
 }
 
 bool GameSdl::isRunning() {

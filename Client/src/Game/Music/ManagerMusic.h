@@ -8,6 +8,7 @@
 #include "Chunk.h"
 #include "Mixer.h"
 #include "TypeOperator.h"
+#include "TypeInfected.h"
 
 class ManagerMusic {
     private:
@@ -19,6 +20,7 @@ class ManagerMusic {
         ManagerMusic();
         ~ManagerMusic();
         void playAction(TypeOperator type, const std::string& action);
+        void playAction(TypeInfected type, const std::string& action);
         void playMusic(std::string music);
 
 };

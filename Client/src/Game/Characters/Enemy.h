@@ -6,6 +6,7 @@
 #include "State.h"
 #include "TypeInfected.h"
 #include "TextureManager.h"
+#include "ManagerMusic.h"
 #include "Object.h"
 #include <map>
 #include <memory>
@@ -20,6 +21,7 @@ class Enemy : public Object {
         int numFrames;
         TextureManager& textures;
         WindowSdl& window;
+        ManagerMusic& music;
         void setState(State state);
         int setNumFrames(State state);
         void renderAnimation(int speed, SDL_Texture* texture, SDL_Rect camera);
@@ -27,7 +29,7 @@ class Enemy : public Object {
 
     public:
         Enemy(TextureManager& textures, Renderer& render, TypeInfected type,
-            WindowSdl& window);
+            WindowSdl& window, ManagerMusic& music);
         ~Enemy();
         void update(std::pair<int16_t, int16_t> pos, State state);
         void render(SDL_Rect camera) override;

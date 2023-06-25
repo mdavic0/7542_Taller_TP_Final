@@ -2,9 +2,9 @@
 #include "Defines.h"
 
 Enemy::Enemy(TextureManager& textures, Renderer &render, TypeInfected type,
-    WindowSdl& window) :
+    WindowSdl& window, ManagerMusic& music) :
     Object(), renderEnemy(render), position({0, 0}), type(type), 
-    flipType(SDL_FLIP_NONE), textures(textures), window(window) {
+    flipType(SDL_FLIP_NONE), textures(textures), window(window), music(music) {
 }
 
 void Enemy::update(std::pair<int16_t, int16_t> pos, State state) {
@@ -43,6 +43,10 @@ void Enemy::render(SDL_Rect camera) {
         case State::idle:
             renderAnimation(SPEED_IDLE, textures.getTexture(type, "Idle"),
                             camera);
+            // if (type == TypeInfected::infected_zombie ||
+            //     type == TypeInfected::infected_witch ||
+            //     type == TypeInfected::infected_spear)
+            //     music.playAction(type, "idle");
             break;
         case State::moving:
             renderAnimation(SPEED_RUN, textures.getTexture(type, "Run"),
@@ -51,6 +55,7 @@ void Enemy::render(SDL_Rect camera) {
         case State::atack:
             renderAnimation(SPEED_ATACK, textures.getTexture(type, "Attack"),
                             camera);
+            music.playAction(type, "attack");
             break;
         default:
             break;
