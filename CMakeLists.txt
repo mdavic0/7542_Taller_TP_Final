@@ -119,14 +119,14 @@ target_link_libraries(server server_classes common_classes yaml-cpp)
 add_executable(client "Client/main.cpp")
 target_link_libraries(client client_classes common_classes SDL2 SDL2_image SDL2_ttf SDL2_mixer yaml-cpp)
 
-add_executable(testprotocol "Testing/testprotocol.cpp" )
-target_link_libraries(testprotocol common_classes mock_classes)
+add_executable(tests "Testing/tests.cpp" )
+target_link_libraries(tests server_classes common_classes mock_classes)
 
 target_link_libraries(
- testprotocol
+ tests
  GTest::gtest_main
  GTest::gmock_main
 )
 
 include(GoogleTest)
-gtest_discover_tests(testprotocol)
+gtest_discover_tests(tests)

@@ -1,16 +1,13 @@
 #include <gtest/gtest.h>
+
 #include "ClientProtocol.h"
 #include "ServerProtocol.h"
 #include "SimulatedSocket.h"
 
-// Demonstrate some basic assertions.
-TEST(HelloTest, BasicAssertions) {
-  // Expect two strings not to be equal.
-  EXPECT_STRNE("hello", "world");
-  // Expect equality.
-  EXPECT_EQ(7 * 6, 42);
-}
+#include <Collidable.h>
 
+
+//  PROTOCOL TESTS
 TEST(ClientToServer, SendCreate) {
   std::shared_ptr<SimulatedSocket> skt = std::make_shared<SimulatedSocket>();
   ClientProtocol<SimulatedSocket> client;
@@ -333,6 +330,158 @@ sendPlaying
 sendEnd
 sendStats
 */
+
+//  COLLIDABLE TESTS
+
+TEST(Collidable, FalseCollidesWith) {
+  std::pair<int16_t, int16_t> posFirst(10, 10);
+  Collidable first(1, posFirst, 6, 6);
+  std::pair<int16_t, int16_t> postSecond(30, 30);
+  std::shared_ptr<Collidable> second = std::make_shared<Collidable>(2, postSecond, 6, 6);
+
+  std::map<uint8_t, std::shared_ptr<Collidable>> collidables;
+  collidables.insert(std::make_pair(2, second));
+  
+  EXPECT_EQ(false, first.collidesWith(collidables));
+}
+
+
+TEST(Collidable, TrueCollidesWith) {
+  std::pair<int16_t, int16_t> posFirst(10, 10);
+  Collidable first(1, posFirst, 6, 6);
+  std::pair<int16_t, int16_t> postSecond(10, 10);
+  std::shared_ptr<Collidable> second = std::make_shared<Collidable>(2, postSecond, 6, 6);
+
+  std::map<uint8_t, std::shared_ptr<Collidable>> collidables;
+  collidables.insert(std::make_pair(2, second));
+  
+  EXPECT_EQ(true, first.collidesWith(collidables));
+}
+
+TEST(Collidable, TrueLeftCollidesWith) {
+  std::pair<int16_t, int16_t> posFirst(15, 10);
+  Collidable first(1, posFirst, 6, 6);
+  std::pair<int16_t, int16_t> postSecond(10, 10);
+  std::shared_ptr<Collidable> second = std::make_shared<Collidable>(2, postSecond, 6, 6);
+
+  std::map<uint8_t, std::shared_ptr<Collidable>> collidables;
+  collidables.insert(std::make_pair(2, second));
+  
+  EXPECT_EQ(true, first.collidesWith(collidables));
+}
+
+TEST(Collidable, TrueRightCollidesWith) {
+  std::pair<int16_t, int16_t> posFirst(10, 10);
+  Collidable first(1, posFirst, 6, 6);
+  std::pair<int16_t, int16_t> postSecond(15, 10);
+  std::shared_ptr<Collidable> second = std::make_shared<Collidable>(2, postSecond, 6, 6);
+
+  std::map<uint8_t, std::shared_ptr<Collidable>> collidables;
+  collidables.insert(std::make_pair(2, second));
+  
+  EXPECT_EQ(true, first.collidesWith(collidables));
+}
+
+TEST(Collidable, TrueUpCollidesWith) {
+  std::pair<int16_t, int16_t> posFirst(10, 10);
+  Collidable first(1, posFirst, 6, 6);
+  std::pair<int16_t, int16_t> postSecond(10, 15);
+  std::shared_ptr<Collidable> second = std::make_shared<Collidable>(2, postSecond, 6, 6);
+
+  std::map<uint8_t, std::shared_ptr<Collidable>> collidables;
+  collidables.insert(std::make_pair(2, second));
+  
+  EXPECT_EQ(true, first.collidesWith(collidables));
+}
+
+TEST(Collidable, TrueDownCollidesWith) {
+  std::pair<int16_t, int16_t> posFirst(10, 10);
+  Collidable first(1, posFirst, 6, 6);
+  std::pair<int16_t, int16_t> postSecond(10, 5);
+  std::shared_ptr<Collidable> second = std::make_shared<Collidable>(2, postSecond, 6, 6);
+
+  std::map<uint8_t, std::shared_ptr<Collidable>> collidables;
+  collidables.insert(std::make_pair(2, second));
+  
+  EXPECT_EQ(true, first.collidesWith(collidables));
+}
+
+TEST(Collidable, FalseIsAlignedRight) {
+  std::pair<int16_t, int16_t> posFirst(10, 10);
+  Collidable first(1, posFirst, 6, 6);
+  std::pair<int16_t, int16_t> postSecond(18, 20);
+  std::shared_ptr<Collidable> second = std::make_shared<Collidable>(2, postSecond, 6, 6);
+  
+  EXPECT_EQ(false, first.isAlignedRight(second));
+}
+
+TEST(Collidable, TrueIsAlignedRight) {
+  std::pair<int16_t, int16_t> posFirst(10, 10);
+  Collidable first(1, posFirst, 6, 6);
+  std::pair<int16_t, int16_t> postSecond(18, 10);
+  std::shared_ptr<Collidable> second = std::make_shared<Collidable>(2, postSecond, 6, 6);
+  
+  EXPECT_EQ(true, first.isAlignedRight(second));
+}
+
+TEST(Collidable, FalseIsAlignedLeft) {
+  std::pair<int16_t, int16_t> posFirst(20, 10);
+  Collidable first(1, posFirst, 6, 6);
+  std::pair<int16_t, int16_t> postSecond(12, 20);
+  std::shared_ptr<Collidable> second = std::make_shared<Collidable>(2, postSecond, 6, 6);
+  
+  EXPECT_EQ(false, first.isAlignedLeft(second));
+}
+
+TEST(Collidable, TrueIsAlignedLeft) {
+  std::pair<int16_t, int16_t> posFirst(20, 10);
+  Collidable first(1, posFirst, 6, 6);
+  std::pair<int16_t, int16_t> postSecond(12, 10);
+  std::shared_ptr<Collidable> second = std::make_shared<Collidable>(2, postSecond, 6, 6);
+  
+  EXPECT_EQ(true, first.isAlignedLeft(second));
+}
+
+TEST(Collidable, FalseIsCloseTo) {
+  std::pair<int16_t, int16_t> posFirst(5, 10);
+  Collidable first(1, posFirst, 6, 6);
+  std::pair<int16_t, int16_t> postSecond(15, 10);
+  std::shared_ptr<Collidable> second = std::make_shared<Collidable>(2, postSecond, 6, 6);
+  
+  EXPECT_EQ(false, first.isCloseTo(second, 2));
+}
+
+TEST(Collidable, TrueFalseIsCloseTo) {
+  std::pair<int16_t, int16_t> posFirst(5, 10);
+  Collidable first(1, posFirst, 6, 6);
+  std::pair<int16_t, int16_t> postSecond(15, 10);
+  std::shared_ptr<Collidable> second = std::make_shared<Collidable>(2, postSecond, 6, 6);
+  
+  EXPECT_EQ(true, first.isCloseTo(second, 11));
+}
+
+
+// isOnRight method -> other is on my right side?
+
+TEST(Collidable, FalseIsOnRight) {
+  std::pair<int16_t, int16_t> posFirst(15, 10);
+  Collidable first(1, posFirst, 6, 6);
+  std::pair<int16_t, int16_t> postSecond(5, 10);
+  std::shared_ptr<Collidable> second = std::make_shared<Collidable>(2, postSecond, 6, 6);
+  
+  EXPECT_EQ(false, first.isOnRight(second));
+}
+
+TEST(Collidable, TrueIsOnRight) {
+  std::pair<int16_t, int16_t> posFirst(5, 10);
+  Collidable first(1, posFirst, 6, 6);
+  std::pair<int16_t, int16_t> postSecond(15, 10);
+  std::shared_ptr<Collidable> second = std::make_shared<Collidable>(2, postSecond, 6, 6);
+  
+  EXPECT_EQ(true, first.isOnRight(second));
+}
+
+// isDown(std::shared_ptr<Collidable>& other);
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
