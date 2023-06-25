@@ -35,6 +35,7 @@ class Operator : public Object {
         void renderAnimation(int speed, SDL_Texture* texture, SDL_Rect camera);
         void renderDead(int speed, SDL_Texture* texture, SDL_Rect camera);
         void renderIconInjure(SDL_Rect camera);
+        void renderMusic();
         int setNumFrames(State state);
         bool verifyRender(SDL_Rect camera, SDL_Rect final);
         

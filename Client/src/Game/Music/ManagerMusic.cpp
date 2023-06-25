@@ -1,9 +1,11 @@
 #include "ManagerMusic.h"
 #include "SdlException.h"
 #include "Defines.h"
+#include <SDL2/SDL.h>
 
 ManagerMusic::ManagerMusic() : 
-    mixer(MIX_DEFAULT_FREQUENCY, AUDIO_S16, MIX_DEFAULT_CHANNELS, 512) {
+    mixer(MIX_DEFAULT_FREQUENCY, AUDIO_S16, MIX_DEFAULT_CHANNELS, 512),
+    lastSoundTime(0) {
     this->loadMusic();
 }
 
@@ -78,7 +80,15 @@ void ManagerMusic::playAction(TypeOperator type, const std::string& action) {
             playEffect(listMusic["p90-" + action]->get());
             break;
         case TypeOperator::operator_scout:
-            playEffect(listMusic["scout-" + action]->get());
+            if (action == "attack") {
+                uint32_t currentTime = SDL_GetTicks();
+                if (currentTime - lastSoundTime >= 400) {
+                    playEffect(listMusic["scout-" + action]->get());
+                    lastSoundTime = currentTime;
+                }
+            } else {
+                playEffect(listMusic["scout-" + action]->get());
+            }
             break;
         default:
             break;
@@ -86,6 +96,18 @@ void ManagerMusic::playAction(TypeOperator type, const std::string& action) {
 }
 
 void ManagerMusic::playAction(TypeInfected type, const std::string& action) {
+    if (action !=  "attack") {
+        this->playInfectedMusic(type, action);
+    } else {
+        uint32_t currentTime = SDL_GetTicks();
+        if (currentTime - lastSoundTime >= 100) {
+            this->playInfectedMusic(type, action);
+            lastSoundTime = currentTime;
+        }
+    }
+}
+
+void ManagerMusic::playInfectedMusic(TypeInfected type, const std::string& action) {
     switch (type) {
         case TypeInfected::infected_zombie:
             playEffect(listMusic["zombie-" + action]->get());
@@ -106,6 +128,7 @@ void ManagerMusic::playAction(TypeInfected type, const std::string& action) {
             break;
     }
 }
+
 
 void ManagerMusic::playEffect(Mix_Chunk* chunk) {
     this->mixer.playChannel(2, chunk, 0);

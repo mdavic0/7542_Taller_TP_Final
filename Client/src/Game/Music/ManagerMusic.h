@@ -14,8 +14,10 @@ class ManagerMusic {
     private:
         Mixer mixer;
         std::map<std::string, std::unique_ptr<Chunk>> listMusic;
+        uint32_t lastSoundTime;
         void loadMusic();
         void playEffect(Mix_Chunk* chunk);
+        void playInfectedMusic(TypeInfected type, const std::string& action);
     public:
         ManagerMusic();
         ~ManagerMusic();

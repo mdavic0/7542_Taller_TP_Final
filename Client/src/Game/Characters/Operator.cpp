@@ -146,6 +146,7 @@ int Operator::setNumFrames(State state) {
 }
 
 void Operator::render(SDL_Rect camera) {
+    this->renderMusic();
     switch (stateOperator) {
         case State::idle:
             renderAnimation(SPEED_IDLE, textures["Idle"]->getTexture(),
@@ -157,7 +158,6 @@ void Operator::render(SDL_Rect camera) {
         case State::atack:
             renderAnimation(SPEED_ATACK, textures["Shot"]->getTexture(),
                             camera);
-            music.playAction(operatorId, "attack");
             break;
         case State::injure:
             renderIconInjure(camera);
@@ -167,7 +167,6 @@ void Operator::render(SDL_Rect camera) {
         case State::recharge:
             renderAnimation(SPEED_RECHARGE, textures["Recharge"]->getTexture(),
                             camera);
-            music.playAction(operatorId, "recharge");
             break;
         case State::hability:
             renderAnimation(SPEED_SKILL, textures["Grenade"]->getTexture(),
@@ -175,6 +174,25 @@ void Operator::render(SDL_Rect camera) {
             break;
         case State::dead:
             renderDead(SPEED_DEAD, textures["Dead"]->getTexture(),camera);
+            break;
+        default:
+            break;
+    }
+}
+
+void Operator::renderMusic() {
+    switch (stateOperator) {
+        case State::atack:
+            music.playAction(operatorId, "attack");
+            break;
+        case State::injure:
+            music.playAction(operatorId, "injure");
+            break;
+        case State::recharge:
+            music.playAction(operatorId, "recharge");
+            break;
+        case State::hability:
+            music.playAction(operatorId, "grenade");
             break;
         default:
             break;
