@@ -329,8 +329,73 @@ TEST(ServerToClient, SendStart) {
   EXPECT_EQ(8, recvOb.getPosition().first);
   EXPECT_EQ(30, recvOb.getPosition().second);
 }
+
+TEST(ServerToClient, SendPlaying) {
+  std::shared_ptr<SimulatedSocket> skt = std::make_shared<SimulatedSocket>();
+  ClientProtocol<SimulatedSocket> client;
+  ServerProtocol<SimulatedSocket> server;
+
+  std::vector<StOperator> playersInfo;
+  playersInfo.push_back(StOperator(3,
+                                  TypeOperator::operator_scout,
+                                  State::moving,
+                                  std::pair<int16_t, int16_t>(22,33), 
+                                  30,
+                                  22,
+                                  true,
+                                  true));
+
+  
+  std::vector<EnemyDto> enemies;
+  enemies.push_back(EnemyDto(1,
+                            TypeInfected::infected_zombie,
+                            State::atack,
+                            std::pair<int16_t, int16_t>(15,40)));
+
+  std::vector<ObstacleDto> obsts;
+  obsts.push_back(ObstacleDto(5,
+                              TypeObstacle::obstacle_crater,
+                              std::pair<int16_t, int16_t>(8,30)));
+
+
+  std::vector<GrenadeDto> grenades;
+  grenades.push_back(GrenadeDto(false,
+                              TypeGrenade::grenade_explosive,
+                              std::pair<int16_t, int16_t>(6,5)));
+    
+  std::shared_ptr<Snapshot> snap = std::make_shared<Snapshot>(playersInfo, enemies, grenades, false);
+  
+  server.sendSnapshot(snap, skt);
+  Snapshot recvSnap = client.getSnapshot(skt);
+
+  EXPECT_EQ(Event::event_playing, recvSnap.getEvent());
+  EXPECT_EQ(false, recvSnap.getBlitzAttacking());
+
+  StOperator recvOp = recvSnap.getInfo().at(0);
+  EXPECT_EQ(3, recvOp.getId());
+  EXPECT_EQ(TypeOperator::operator_scout, recvOp.getTypeOperator());
+  EXPECT_EQ(State::moving, recvOp.getState());
+  EXPECT_EQ(22, recvOp.getPosition().first);
+  EXPECT_EQ(33, recvOp.getPosition().second);
+  EXPECT_EQ(30, recvOp.getHealth());
+  EXPECT_EQ(22, recvOp.getMunition());
+  EXPECT_EQ(true, recvOp.isGrenadeAvailable());
+  EXPECT_EQ(true, recvOp.isSmokeAvailable());
+
+  EnemyDto recvEn = recvSnap.getEnemies().at(0);
+  EXPECT_EQ(1, recvEn.getId());
+  EXPECT_EQ(TypeInfected::infected_zombie, recvEn.getTypeInfected());
+  EXPECT_EQ(State::atack, recvEn.getState());
+  EXPECT_EQ(15, recvEn.getPosition().first);
+  EXPECT_EQ(40, recvEn.getPosition().second);
+
+  GrenadeDto recvGr = recvSnap.getGrenades().at(0);
+  EXPECT_EQ(false, recvGr.alreadyExploded());
+  EXPECT_EQ(TypeGrenade::grenade_explosive, recvGr.getTypeGrenade());
+  EXPECT_EQ(6, recvGr.getPosition().first);
+  EXPECT_EQ(5, recvGr.getPosition().second);
+}
 /*
-sendPlaying
 sendEnd
 sendStats
 */
