@@ -15,6 +15,8 @@ class EventHandler {
         void handleKeyDownEvent(SDL_Keysym keysym);
         void handleKeyUpEvent(SDL_Keysym keysym);
         uint8_t idPlayer;
+        Event previousEvent;
+
     public:
         EventHandler(Queue<std::shared_ptr<EventDTO>>& eventQueue, uint8_t idPlayer);
         ~EventHandler();

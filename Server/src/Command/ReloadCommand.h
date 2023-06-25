@@ -3,7 +3,7 @@
 
 #include "Command.h"
 
-class ReloadCommand  : public Command {
+class ReloadCommand : public Command {
     private:
         uint8_t id;
 

@@ -18,7 +18,9 @@ Player::Player(TypeOperator typeOperator, uint8_t life, uint8_t velocity,
 
 void Player::setMovementDirection(MoveTo direction) {
     if (this->state == State::injure or
-        this->state == State::recharge) {
+        this->state == State::recharge or
+        this->state == State::hability or
+        this->state == State::stop_hability) {
         return;
     }
 
@@ -66,6 +68,8 @@ void Player::stopMovementDirection(MoveTo direction) {
     }
     if (this->state != State::injure and
         this->state != State::recharge and
+        this->state != State::hability and
+        this->state != State::stop_hability and
         this->movement_direction.first == 0 and
         this->movement_direction.second == 0) {
         this->state = State::idle;
@@ -74,7 +78,9 @@ void Player::stopMovementDirection(MoveTo direction) {
 
 void Player::setShootingState() {
     if (this->state == State::injure or
-        this->state == State::recharge) {
+        this->state == State::recharge or
+        this->state == State::hability or
+        this->state == State::stop_hability) {
         return;
     }
 
@@ -85,7 +91,9 @@ void Player::setShootingState() {
 
 void Player::stopShootingState() {
     if (this->state == State::injure or
-        this->state == State::recharge) {
+        this->state == State::recharge or
+        this->state == State::hability or
+        this->state == State::stop_hability) {
         return;
     }
 
@@ -94,7 +102,9 @@ void Player::stopShootingState() {
 }
 
 void Player::setReloadingState() {
-    if (this->state == State::injure) {
+    if (this->state == State::injure or
+        this->state == State::hability or
+        this->state == State::stop_hability) {
         return;
     }
     this->weapon->deactivate();
@@ -104,10 +114,13 @@ void Player::setReloadingState() {
 
 void Player::applyStep(std::map<uint8_t, std::shared_ptr<Collidable>> &collidables,
                        std::map<uint8_t, std::shared_ptr<Infected>> &infecteds,
+                       std::list<std::shared_ptr<Grenade>> &grenades,
+                       std::list<std::shared_ptr<BlitzAtack>>& blitzAtacks,
                        double stepTime) {
     this->move(collidables);
     this->shoot(infecteds, stepTime);
     this->reload(stepTime);
+    this->specialAtack(grenades, blitzAtacks, stepTime);
 }
 
 std::pair<int16_t, int16_t>& Player::getPosition() {

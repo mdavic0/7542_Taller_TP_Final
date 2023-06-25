@@ -9,7 +9,7 @@ class ShootCommand : public Command {
         uint8_t id;
 
     public:
-        ShootCommand(uint8_t id);
+        explicit ShootCommand(uint8_t id);
         void execute(GameWorld &gameWorld) override;
         ~ShootCommand() override;
 };

@@ -1,7 +1,8 @@
 #ifndef STATES_H_
 #define STATES_H_
 
-#include <stdint.h>
+#include <cstdint>
+
 
 enum class State : uint8_t {
     idle = 0x00,
@@ -9,8 +10,9 @@ enum class State : uint8_t {
     atack = 0x02,
     injure = 0x03,
     hability = 0x04,
-    recharge = 0x05,
-    dead = 0x06
+    stop_hability = 0x05,
+    recharge = 0x06,
+    dead = 0x07
 };
 
 #endif
