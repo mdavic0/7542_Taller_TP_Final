@@ -64,6 +64,8 @@ void Operator::update(StOperator snap) {
     this->position = snap.getPosition();
     this->health = snap.getHealth();
     this->munition = snap.getMunition();
+    this->grenadeAvailable = snap.isGrenadeAvailable();
+    this->smokeAvailable = snap.isSmokeAvailable();
 }
 
 TypeOperator Operator::getType() {
