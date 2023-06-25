@@ -140,7 +140,7 @@ std::shared_ptr<Snapshot> GameWorld::getSnapshot(bool first) {
                                          grenade->getPosition()));
         }
         
-        bool blitzAttacking = blitzAtacks.size() > 0;
+        bool blitzAttacking = !blitzAtacks.empty();
         
         return std::make_shared<Snapshot>(playersInfo, enemies, grenadesInfo, blitzAttacking);
     }
