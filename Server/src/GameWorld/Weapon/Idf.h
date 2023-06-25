@@ -9,6 +9,7 @@ class Idf : public Weapon {
     private:
         int burstFiredBullets;
         bool burstEnded;
+        float scope;
 
     public:
         Idf();
@@ -22,6 +23,8 @@ class Idf : public Weapon {
                         std::map<uint8_t, std::shared_ptr<Infected>> &infecteds) override;
         void shootLeft(std::shared_ptr<Collidable> &player,
                        std::map<uint8_t, std::shared_ptr<Infected>> &infecteds) override;
+
+        float calculateDamage(float distance);
 };
 
 
