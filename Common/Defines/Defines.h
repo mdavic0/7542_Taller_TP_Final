@@ -35,7 +35,7 @@
 #define SPEED_INJURE 110
 #define SPEED_RECHARGE 290
 #define SPEED_SKILL 190
-#define SPEED_DEAD 120
+#define SPEED_DEAD 200
 #define COLOR_WHITE {255, 255, 255, 255}
 #define SIZE_SPRITE_64 64
 #define SIZE_SPRITE_32 32
@@ -45,6 +45,9 @@
 #define HEALTH_FILL_W 412
 #define HEALTH_FILL_H 25
 #define WIDTH_SCREEN_INIT 1440
+
+// Music Channels
+#define MIX_CHANNELS_MANAGER 3
 
 // Protocol Code
 #define CREATE_CODE 0x01

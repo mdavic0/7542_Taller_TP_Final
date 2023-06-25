@@ -99,10 +99,17 @@ void GameSdl::update() {
         // Eliminio enemigo muerto
         auto iterator = enemies.begin();
         while (iterator != enemies.end()) {
-            if (mapIds.find(iterator->first) == mapIds.end())
-                iterator = enemies.erase(iterator);
-            else
+            if (mapIds.find(iterator->first) == mapIds.end()) {
+                if (iterator->second->isDeadFinish()) {
+
+                    iterator = enemies.erase(iterator);
+                } else {
+                    iterator->second->setState(State::dead);
+                    ++iterator;
+                }
+            } else {
                 ++iterator;
+            }
         }
     } else {
         this->endGame = true;

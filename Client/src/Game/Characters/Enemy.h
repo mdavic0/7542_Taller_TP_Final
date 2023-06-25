@@ -22,10 +22,11 @@ class Enemy : public Object {
         TextureManager& textures;
         WindowSdl& window;
         ManagerMusic& music;
-        void setState(State state);
+        bool animationDeadFinish;
         int setNumFrames(State state);
         void renderAnimation(int speed, SDL_Texture* texture, SDL_Rect camera);
         bool verifyRender(SDL_Rect camera, SDL_Rect final);
+        void renderDead(int speed, SDL_Texture* texture, SDL_Rect camera);
 
     public:
         Enemy(TextureManager& textures, Renderer& render, TypeInfected type,
@@ -33,6 +34,8 @@ class Enemy : public Object {
         ~Enemy();
         void update(std::pair<int16_t, int16_t> pos, State state);
         void render(SDL_Rect camera) override;
+        void setState(State state);
+        bool isDeadFinish();
         int16_t getPosY() override;
 };
 

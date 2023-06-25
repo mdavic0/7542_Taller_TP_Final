@@ -41,6 +41,8 @@ void TextureManager::loadTextures(Renderer& render, uint8_t idMap) {
                                                     path + "/Run.png");
     mapTextures["zombie-Attack"] = std::make_shared<Texture>(render,
                                                     path + "/Attack_1.png");
+    mapTextures["zombie-Dead"] = std::make_shared<Texture>(render,
+                                                    path + "/Dead.png");
     // Jumper
     path = PATH_ENEMIES + std::to_string((int)TypeInfected::infected_jumper);
     mapTextures["jumper-Idle"] = std::make_shared<Texture>(render,
@@ -49,6 +51,8 @@ void TextureManager::loadTextures(Renderer& render, uint8_t idMap) {
                                                     path + "/Run.png");
     mapTextures["jumper-Attack"] = std::make_shared<Texture>(render,
                                                     path + "/Attack_1.png");
+    mapTextures["jumper-Dead"] = std::make_shared<Texture>(render,
+                                                    path + "/Dead.png");
     // witch
     path = PATH_ENEMIES + std::to_string((int)TypeInfected::infected_witch);
     mapTextures["witch-Idle"] = std::make_shared<Texture>(render,
@@ -57,6 +61,8 @@ void TextureManager::loadTextures(Renderer& render, uint8_t idMap) {
                                                     path + "/Run.png");
     mapTextures["witch-Attack"] = std::make_shared<Texture>(render,
                                                     path + "/Attack_1.png");
+    mapTextures["witch-Dead"] = std::make_shared<Texture>(render,
+                                                    path + "/Dead.png");
     // spear
     path = PATH_ENEMIES + std::to_string((int)TypeInfected::infected_spear);
     mapTextures["spear-Idle"] = std::make_shared<Texture>(render,
@@ -65,6 +71,8 @@ void TextureManager::loadTextures(Renderer& render, uint8_t idMap) {
                                                     path + "/Run.png");
     mapTextures["spear-Attack"] = std::make_shared<Texture>(render,
                                                     path + "/Attack_1.png");
+    mapTextures["spear-Dead"] = std::make_shared<Texture>(render,
+                                                    path + "/Dead.png");
     // venom
     path = PATH_ENEMIES + std::to_string((int)TypeInfected::infected_venom);
     mapTextures["venom-Idle"] = std::make_shared<Texture>(render,
@@ -73,6 +81,8 @@ void TextureManager::loadTextures(Renderer& render, uint8_t idMap) {
                                                     path + "/Run.png");
     mapTextures["venom-Attack"] = std::make_shared<Texture>(render,
                                                     path + "/Attack_1.png");
+    mapTextures["venom-Dead"] = std::make_shared<Texture>(render,
+                                                    path + "/Dead.png");
 }
 
 SDL_Texture* TextureManager::getTexture(TypeInfected type,

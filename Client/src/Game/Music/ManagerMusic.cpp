@@ -4,7 +4,7 @@
 #include <SDL2/SDL.h>
 
 ManagerMusic::ManagerMusic() : 
-    mixer(MIX_DEFAULT_FREQUENCY, AUDIO_S16, MIX_DEFAULT_CHANNELS, 512),
+    mixer(MIX_DEFAULT_FREQUENCY, AUDIO_S16, MIX_CHANNELS_MANAGER, 512),
     lastSoundTime(0) {
     this->loadMusic();
 }
@@ -74,20 +74,20 @@ void ManagerMusic::loadMusic() {
 void ManagerMusic::playAction(TypeOperator type, const std::string& action) {
     switch (type) {
         case TypeOperator::operator_idf:
-            playEffect(listMusic["idf-" + action]->get());
+            playEffectOperator(listMusic["idf-" + action]->get());
             break;
         case TypeOperator::operator_p90:
-            playEffect(listMusic["p90-" + action]->get());
+            playEffectOperator(listMusic["p90-" + action]->get());
             break;
         case TypeOperator::operator_scout:
             if (action == "attack") {
                 uint32_t currentTime = SDL_GetTicks();
                 if (currentTime - lastSoundTime >= 400) {
-                    playEffect(listMusic["scout-" + action]->get());
+                    playEffectOperator(listMusic["scout-" + action]->get());
                     lastSoundTime = currentTime;
                 }
             } else {
-                playEffect(listMusic["scout-" + action]->get());
+                playEffectOperator(listMusic["scout-" + action]->get());
             }
             break;
         default:
@@ -110,19 +110,19 @@ void ManagerMusic::playAction(TypeInfected type, const std::string& action) {
 void ManagerMusic::playInfectedMusic(TypeInfected type, const std::string& action) {
     switch (type) {
         case TypeInfected::infected_zombie:
-            playEffect(listMusic["zombie-" + action]->get());
+            playEffectEnemy(listMusic["zombie-" + action]->get());
             break;
         case TypeInfected::infected_jumper:
-            playEffect(listMusic["jumper-" + action]->get());
+            playEffectEnemy(listMusic["jumper-" + action]->get());
             break;
         case TypeInfected::infected_witch:
-            playEffect(listMusic["witch-" + action]->get());
+            playEffectEnemy(listMusic["witch-" + action]->get());
             break;
         case TypeInfected::infected_spear:
-            playEffect(listMusic["spear-" + action]->get());
+            playEffectEnemy(listMusic["spear-" + action]->get());
             break;
         case TypeInfected::infected_venom:
-            playEffect(listMusic["venom-" + action]->get());
+            playEffectEnemy(listMusic["venom-" + action]->get());
             break;
         default:
             break;
@@ -130,8 +130,12 @@ void ManagerMusic::playInfectedMusic(TypeInfected type, const std::string& actio
 }
 
 
-void ManagerMusic::playEffect(Mix_Chunk* chunk) {
+void ManagerMusic::playEffectOperator(Mix_Chunk* chunk) {
     this->mixer.playChannel(2, chunk, 0);
+}
+
+void ManagerMusic::playEffectEnemy(Mix_Chunk* chunk) {
+    this->mixer.playChannel(3, chunk, 0);
 }
 
 void ManagerMusic::playMusic(std::string music) {
