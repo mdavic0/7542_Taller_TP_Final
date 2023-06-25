@@ -20,7 +20,7 @@ Queue<std::shared_ptr<EventDTO>>* GamesController::create(std::shared_ptr<EventD
         while (games.count(key) > 0) {
             key = distribution(generator);
         }
-        Game *newGame = new Game(key, eventdto->getStr(), eventdto->getTypeGame());
+        Game *newGame = new Game(key, eventdto->getStr(), eventdto->getTypeGame(), eventdto->getTypeDifficulty());
         games.insert(std::pair{key, newGame});
         *game = newGame;
         counter++;
