@@ -455,7 +455,10 @@ void sendState(const State& state, std::shared_ptr<T> skt) {
         this->sendAll(&aux, 1, skt);       
     } else if (state == State::hability) {
         uint8_t aux = STATE_HABILITY;
-        this->sendAll(&aux, 1, skt);       
+        this->sendAll(&aux, 1, skt);
+    } else if (state == State::stop_hability) {
+        uint8_t aux = STATE_STOP_HABILITY;
+        this->sendAll(&aux, 1, skt);
     } else if (state == State::recharge) {
         uint8_t aux = STATE_RECHARGE;
         this->sendAll(&aux, 1, skt);       

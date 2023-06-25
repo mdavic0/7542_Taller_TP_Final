@@ -47,7 +47,7 @@
 #define WIDTH_SCREEN_INIT 1440
 
 // Music Channels
-#define MIX_CHANNELS_MANAGER 3
+#define MIX_CHANNELS_MANAGER 2
 
 // Protocol Code
 #define CREATE_CODE 0x01
@@ -92,7 +92,8 @@
 #define STATE_ATACK 0x02
 #define STATE_INJURE 0x03
 #define STATE_HABILITY 0x04
-#define STATE_RECHARGE 0x05
+#define STATE_STOP_HABILITY 0x05
+#define STATE_RECHARGE 0x06
 
 #define INFECTED_ZOMBIE 0x00
 #define INFECTED_JUMPER 0x01

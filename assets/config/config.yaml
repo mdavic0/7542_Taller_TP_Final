@@ -36,6 +36,7 @@ scout_rate_time: 0.4
 scout_burst_delay: 0.25
 
 # skills:
+stop_skill_time: 1
 #   grenade:
 grenade_damage: 50
 grenade_recharge: 10
@@ -47,6 +48,7 @@ smoke_recharge: 10
 #   blitz:
 blitz_damage: 100
 blitz_recharge: 30
+blitz_animation_time: 1.7
 
 ####################################################
 # Infected

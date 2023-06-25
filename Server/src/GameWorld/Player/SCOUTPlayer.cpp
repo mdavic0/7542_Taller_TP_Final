@@ -16,7 +16,8 @@ SCOUTPlayer::SCOUTPlayer(std::pair<int16_t, int16_t>& position,
 void SCOUTPlayer::setSkillState(Event event) {
     if (this->state == State::injure or
         this->state == State::recharge or
-        this->state == State::atack) {
+        this->state == State::atack or
+        this->state == State::stop_hability) {
         return;
     }
 
@@ -41,18 +42,24 @@ void SCOUTPlayer::setSkillState(Event event) {
 void SCOUTPlayer::stopSkillState(Event event) {
     if (this->state == State::injure or
         this->state == State::recharge or
-        this->state == State::atack) {
+        this->state == State::atack or
+        this->state == State::stop_hability) {
         return;
     }
 
     if (this->state == State::hability) {
         this->state = State::stop_hability;
+        stopSkillCLock = 0;
     }
 }
 
 void SCOUTPlayer::specialAtack(std::list<std::shared_ptr<Grenade>>& grenades,
                                std::list<std::shared_ptr<BlitzAtack>>& blitzAtacks,
                                double stepTime) {
+    if (this->state == State::stop_hability) {
+        this->stopSkillCLock += stepTime;
+    }
+
     if (throwingGrenade and isGrenadeAvailable()) {
         this->throwGrenade(grenades, stepTime);
     }
@@ -74,15 +81,15 @@ bool SCOUTPlayer::isGrenadeAvailable() {
 bool SCOUTPlayer::isSmokeAvailable() {
     return this->smoke->isAvailable();
 }
-#include <iostream>
+
 void SCOUTPlayer::throwGrenade(std::list<std::shared_ptr<Grenade>>& grenades,
                                double stepTime) {
     grenadeElapsedTime += stepTime;
-    if (this->state == State::stop_hability) {
+    if (this->state == State::stop_hability and stopSkillCLock >= CF::stop_skill_time) {
         grenades.push_back(grenade);
         this->grenade->throwGrenade(position, grenadeElapsedTime, lookingRight);
-        std::cout << "Grenade Amount: " + std::to_string(grenades.size()) << std::endl;
         grenadeElapsedTime = 0;
+        stopSkillCLock = 0;
         throwingGrenade = false;
         this->state = State::idle;
     }
@@ -91,11 +98,11 @@ void SCOUTPlayer::throwGrenade(std::list<std::shared_ptr<Grenade>>& grenades,
 void SCOUTPlayer::throwSmoke(std::list<std::shared_ptr<Grenade>>& grenades,
                              double stepTime) {
     smokeElapsedTime += stepTime;
-    if (this->state == State::stop_hability) {
+    if (this->state == State::stop_hability and stopSkillCLock >= CF::stop_skill_time) {
         grenades.push_back(smoke);
         this->smoke->throwGrenade(position, smokeElapsedTime, lookingRight);
-        std::cout << "Grenade Amount: " + std::to_string(grenades.size()) << std::endl;
         smokeElapsedTime = 0;
+        stopSkillCLock = 0;
         throwingSmoke = false;
         this->state = State::idle;
     }

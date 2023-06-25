@@ -12,7 +12,8 @@ P90Player::P90Player(std::pair<int16_t, int16_t>& position,
 void P90Player::setSkillState(Event event) {
     if (this->state == State::injure or
         this->state == State::recharge or
-        this->state == State::atack) {
+        this->state == State::atack or
+        this->state == State::stop_hability) {
         return;
     }
 
@@ -27,29 +28,35 @@ void P90Player::setSkillState(Event event) {
 void P90Player::stopSkillState(Event event) {
     if (this->state == State::injure or
         this->state == State::recharge or
-        this->state == State::atack) {
+        this->state == State::atack or
+        this->state == State::stop_hability) {
         return;
     }
 
     if (this->state == State::hability) {
         this->state = State::stop_hability;
+        stopSkillCLock = 0;
     }
 }
 
 void P90Player::specialAtack(std::list<std::shared_ptr<Grenade>>& grenades,
                              std::list<std::shared_ptr<BlitzAtack>>& blitzAtacks,
                              double stepTime) {
+    if (this->state == State::stop_hability) {
+        this->stopSkillCLock += stepTime;
+    }
+
     if (throwingBlitzAtack and isGrenadeAvailable()) {
         this->throwBlitzAtack(blitzAtacks);
     }
 }
-#include <iostream>
+
 void P90Player::throwBlitzAtack(std::list<std::shared_ptr<BlitzAtack>>& blitzAtacks) {
-    if (this->state == State::stop_hability) {
+    if (this->state == State::stop_hability and stopSkillCLock >= CF::blitz_animation_time) {
         blitzAtacks.push_back(blitz);
         this->blitz->throwBlitz(this->position);
-        std::cout << "BlitzAtack Amount: " + std::to_string(blitzAtacks.size()) << std::endl;
         throwingBlitzAtack = false;
+        stopSkillCLock = 0;
         this->state = State::idle;
     }
 }

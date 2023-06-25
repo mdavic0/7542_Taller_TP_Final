@@ -42,12 +42,14 @@ double CF::scout_rate_time = CF::file["scout_rate_time"].as<double>();
 double CF::scout_burst_delay = CF::file["scout_burst_delay"].as<double>();
 
 // Special abilties
+double CF::stop_skill_time = CF::file["stop_skill_time"].as<double>();
 int CF::grenade_damage = CF::file["grenade_damage"].as<int>();
 int CF::grenade_recharge = CF::file["grenade_recharge"].as<int>();
 int CF::smoke_damage = CF::file["smoke_damage"].as<int>();
 int CF::smoke_recharge = CF::file["smoke_recharge"].as<int>();
 int CF::blitz_damage = CF::file["blitz_damage"].as<int>();
 int CF::blitz_recharge = CF::file["blitz_recharge"].as<int>();
+double CF::blitz_animation_time = CF::file["blitz_animation_time"].as<double>();
 
 /*****************************
 * INFECTED
@@ -150,12 +152,14 @@ void Configuration::loadConfiguration(const std::string& filename) {
     scout_burst_delay = file["scout_burst_delay"].as<double>();
 
     // Special abilties
+    stop_skill_time = file["stop_skill_time"].as<double>();
     grenade_damage = file["grenade_damage"].as<int>();
     grenade_recharge = file["grenade_recharge"].as<int>();
     smoke_damage = file["smoke_damage"].as<int>();
     smoke_recharge = file["smoke_recharge"].as<int>();
     blitz_damage = file["blitz_damage"].as<int>();
     blitz_recharge = file["blitz_recharge"].as<int>();
+    blitz_animation_time = file["blitz_animation_time"].as<double>();
 
     /*****************************
     * INFECTED

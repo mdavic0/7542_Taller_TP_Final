@@ -6,7 +6,7 @@
 Player::Player(TypeOperator typeOperator) : typeOperator(typeOperator),
     state(State::idle), life(100), fell_down(0), position(0,0),
     movement_direction(0,0), velocity(1), weapon(), lookingRight(true),
-    alive(true) {}
+    alive(true), stopSkillCLock(0) {}
 
 Player::Player(TypeOperator typeOperator, uint8_t life, uint8_t velocity,
     std::shared_ptr<Weapon> weapon, std::pair<int16_t, int16_t>& position,
@@ -14,7 +14,7 @@ Player::Player(TypeOperator typeOperator, uint8_t life, uint8_t velocity,
     typeOperator(typeOperator), state(State::idle), life(life), fell_down(0),
     position(position), movement_direction(0,0), velocity(velocity),
     weapon(std::move(weapon)), lookingRight(true), collidable(std::move(collidable)),
-    alive(true) {}
+    alive(true), stopSkillCLock(0) {}
 
 void Player::setMovementDirection(MoveTo direction) {
     if (this->state == State::injure or

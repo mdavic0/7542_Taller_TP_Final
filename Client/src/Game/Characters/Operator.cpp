@@ -150,6 +150,8 @@ int Operator::setNumFrames(State state) {
             return this->textures["Recharge"]->frames();
         case State::hability:
             return this->textures["Grenade"]->frames();
+        case State::stop_hability:
+            return this->textures["Grenade"]->frames();
         case State::dead:
             return this->textures["Dead"]->frames();
         default:

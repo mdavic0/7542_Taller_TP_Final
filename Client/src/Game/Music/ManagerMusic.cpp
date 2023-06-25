@@ -135,7 +135,7 @@ void ManagerMusic::playEffectOperator(Mix_Chunk* chunk) {
 }
 
 void ManagerMusic::playEffectEnemy(Mix_Chunk* chunk) {
-    this->mixer.playChannel(3, chunk, 0);
+    this->mixer.playChannel(2, chunk, 0);
 }
 
 void ManagerMusic::playMusic(std::string music) {

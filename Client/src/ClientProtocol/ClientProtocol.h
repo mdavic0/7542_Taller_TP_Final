@@ -369,6 +369,10 @@ std::vector<StOperator> getPlayers(std::shared_ptr<T> skt) {
                 state = State::hability;
                 break;
 
+            case STATE_STOP_HABILITY:
+                state = State::stop_hability;
+                break;
+
             case STATE_RECHARGE:
                 state = State::recharge;
                 break;

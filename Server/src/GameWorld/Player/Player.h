@@ -34,6 +34,7 @@ class Player {
         std::pair<int16_t, int16_t> movement_direction;
         bool lookingRight;
         std::pair<int16_t, int16_t> position;
+        double stopSkillCLock;
 
     public:
         explicit Player(TypeOperator typeOperator);

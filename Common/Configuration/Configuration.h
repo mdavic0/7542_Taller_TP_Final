@@ -49,6 +49,7 @@ class Configuration {
         static double scout_burst_delay;
 
         // Special abilties
+        static double stop_skill_time;
         static int grenade_damage;
         static int grenade_recharge;
 
@@ -57,6 +58,7 @@ class Configuration {
         
         static int blitz_damage;
         static int blitz_recharge;
+        static double blitz_animation_time;
 
         /*****************************
          * INFECTED
