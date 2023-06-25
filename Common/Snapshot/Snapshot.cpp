@@ -15,10 +15,11 @@ Snapshot::Snapshot(const std::vector<StOperator> &playersInfo, const std::vector
     code(0), ok(0), idPlayer(0), size(0), idMap(idMap), typeGame(typeGame), enemies(enemies),
     obstacles(obstacles), time(0), shots(0), kills(0) {}
 
-Snapshot::Snapshot(const std::vector<StOperator> &playersInfo, const std::vector<EnemyDto>& enemies) :
+Snapshot::Snapshot(const std::vector<StOperator> &playersInfo, const std::vector<EnemyDto>& enemies,
+    const std::vector<GrenadeDto>& grenades, const bool& blitzAttacking) :
     event(Event::event_playing), playersInfo(playersInfo), typeOperator(TypeOperator::operator_idle), 
     code(0), ok(0), idPlayer(0), size(0), idMap(0), typeGame(TypeGame::game_idle), enemies(enemies),
-    time(0), shots(0), kills(0) {}
+    time(0), shots(0), kills(0), grenades(grenades), blitzAttacking(blitzAttacking) {}
 
 Snapshot::Snapshot(const Event& event) : event(event), code(0),
     idPlayer(0), ok(0), size(0), typeOperator(TypeOperator::operator_idle),
@@ -82,6 +83,14 @@ std::vector<EnemyDto> Snapshot::getEnemies() const {
 
 std::vector<ObstacleDto> Snapshot::getObstacles() const {
     return obstacles;
+}
+
+std::vector<GrenadeDto> Snapshot::getGrenades() const{
+    return grenades;
+}
+
+bool Snapshot::getBlitzAttacking() const {
+    return blitzAttacking;
 }
 
 Snapshot::Snapshot(Snapshot&& other) {

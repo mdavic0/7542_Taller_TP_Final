@@ -6,6 +6,7 @@
 #include "ObstacleDto.h"
 #include "TypeGame.h"
 #include "EnemyDto.h"
+#include "GrenadeDto.h"
 #include <utility>
 #include <string>
 #include <vector>
@@ -15,6 +16,8 @@ class Snapshot {
     std::vector<StOperator> playersInfo;
     std::vector<EnemyDto> enemies;
     std::vector<ObstacleDto> obstacles;
+    std::vector<GrenadeDto> grenades;
+    bool blitzAttacking;
     TypeOperator typeOperator;
     TypeGame typeGame;
     uint32_t code;
@@ -36,7 +39,8 @@ public:
     explicit Snapshot(const std::vector<StOperator>& playersInfo, const std::vector<EnemyDto>& enemies,
                       const std::vector<ObstacleDto>& obstacles, const TypeGame& typeGame, const uint8_t& idMap);
     // PLAYING
-    explicit Snapshot(const std::vector<StOperator>& playersInfo, const std::vector<EnemyDto>& enemies);
+    explicit Snapshot(const std::vector<StOperator>& playersInfo, const std::vector<EnemyDto>& enemies,
+        const std::vector<GrenadeDto>& grenades, const bool& blitzAttacking);
 
     // GENERIC
     explicit Snapshot(const Event& event);
@@ -71,6 +75,10 @@ public:
     std::vector<EnemyDto> getEnemies() const;
 
     std::vector<ObstacleDto> getObstacles() const;
+
+    std::vector<GrenadeDto> getGrenades() const;
+
+    bool getBlitzAttacking() const;
 
     /*
      * No queremos permitir que alguien haga copias

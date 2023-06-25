@@ -280,7 +280,9 @@ TEST(ServerToClient, SendStart) {
                                   State::moving,
                                   std::pair<int16_t, int16_t>(22,33), 
                                   30,
-                                  22));
+                                  22,
+                                  true,
+                                  true));
 
   
   std::vector<EnemyDto> enemies;
@@ -311,6 +313,8 @@ TEST(ServerToClient, SendStart) {
   EXPECT_EQ(33, recvOp.getPosition().second);
   EXPECT_EQ(30, recvOp.getHealth());
   EXPECT_EQ(22, recvOp.getMunition());
+  EXPECT_EQ(true, recvOp.isGrenadeAvailable());
+  EXPECT_EQ(true, recvOp.isSmokeAvailable());
 
   EnemyDto recvEn = recvSnap.getEnemies().at(0);
   EXPECT_EQ(1, recvEn.getId());

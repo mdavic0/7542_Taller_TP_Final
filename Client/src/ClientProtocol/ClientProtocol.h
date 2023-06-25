@@ -287,8 +287,10 @@ Snapshot getStart (std::shared_ptr<T> skt) {
 Snapshot getPlaying (std::shared_ptr<T> skt) {
     std::vector<StOperator> players = getPlayers(skt);
     std::vector<EnemyDto> enemies = getEnemies(skt);
+    std::vector<GrenadeDto> grenades = getGrenades(skt);
+    bool blitzAttacking = getBlitz(skt);
 
-    return Snapshot(players, enemies);
+    return Snapshot(players, enemies, grenades, blitzAttacking);
 }
 
 Snapshot getEnd(std::shared_ptr<T> skt) {
@@ -386,7 +388,41 @@ std::vector<StOperator> getPlayers(std::shared_ptr<T> skt) {
         uint8_t munition;
         this->recvAll(&munition, 1, skt);
 
-        vector.push_back(StOperator(idPlayer, type, state, {x, y}, health, munition));
+        uint8_t idGrenadeAvailable;
+        bool grenadeAvailable;
+        this->recvAll(&idGrenadeAvailable, 1, skt);
+        switch (idGrenadeAvailable) {
+
+        case BOOL_TRUE:
+            grenadeAvailable = true;
+            break;
+        
+        case BOOL_FALSE:
+            grenadeAvailable = false;
+            break;
+        
+        default:
+            break;
+        }
+
+        uint8_t idSmokeAvailable;
+        bool smokeAvailable;
+        this->recvAll(&idSmokeAvailable, 1, skt);
+        switch (idSmokeAvailable) {
+
+        case BOOL_TRUE:
+            smokeAvailable = true;
+            break;
+        
+        case BOOL_FALSE:
+            smokeAvailable = false;
+            break;
+        
+        default:
+            break;
+        }
+
+        vector.push_back(StOperator(idPlayer, type, state, {x, y}, health, munition, grenadeAvailable, smokeAvailable));
     }
 
     return vector;
@@ -515,6 +551,87 @@ std::vector<ObstacleDto> getObstacles(std::shared_ptr<T> skt) {
 
     return vector;
 }
+
+std::vector<GrenadeDto> getGrenades(std::shared_ptr<T> skt) {
+    uint8_t count;
+    this->recvAll(&count, 1, skt);
+
+    std::vector<GrenadeDto> vector;
+
+    uint8_t idType;
+    TypeGrenade type = TypeGrenade::grenade_idle;
+
+    uint8_t idExploded;
+    bool exploded;
+
+    int16_t x;
+    int16_t y;
+
+    for (uint8_t i = 0; i < count; i++) {
+
+        this->recvAll(&idType, 1, skt);
+        switch (idType) {
+
+        case GRENADE_EXPLOSIVE:
+            type = TypeGrenade::grenade_explosive;
+            break;
+        
+        case GRENADE_SMOKE:
+            type = TypeGrenade::grenade_explosive;
+            break;
+        
+        default:
+            break;
+        }
+
+        this->recvAll(&idExploded, 1, skt);
+        switch (idExploded) {
+
+        case BOOL_TRUE:
+            exploded = true;
+            break;
+        
+        case BOOL_FALSE:
+            exploded = false;
+            break;
+        
+        default:
+            break;
+        }
+
+        this->recvAll(&x, 2, skt);
+        x = ntohs(x);
+        this->recvAll(&y, 2, skt);
+        y = ntohs(y);
+
+        vector.push_back(GrenadeDto(exploded, type, {x, y}));
+    }
+
+    return vector;
+}
+
+
+bool getBlitz(std::shared_ptr<T> skt) {
+    uint8_t idAttacking;
+    bool attacking;
+    this->recvAll(&idAttacking, 1, skt);
+    switch (idAttacking) {
+
+    case BOOL_TRUE:
+        attacking = true;
+        break;
+    
+    case BOOL_FALSE:
+        attacking = false;
+        break;
+    
+    default:
+        break;
+    }
+
+    return attacking;
+}
+
 
     public:
         /*

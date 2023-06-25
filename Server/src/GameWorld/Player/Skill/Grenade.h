@@ -39,6 +39,7 @@ class Grenade {
         std::pair<int16_t, int16_t>& getPosition();
         bool isAvailable();
         bool exploded();
+        TypeGrenade getTypeGrenade();
         virtual ~Grenade();
 
     private:
