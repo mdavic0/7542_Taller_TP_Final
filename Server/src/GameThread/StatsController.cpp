@@ -1,15 +1,17 @@
 #include "StatsController.h"
+#include <iostream>
 #include <algorithm>
 #include <ostream>
 #include <fstream>
+#include <filesystem>
 #include "Defines.h"
 
 
-StatsController::StatsController() {
-    std::ifstream file(STATS_PATH);
+StatsController::StatsController(const std::string& path) : path(path) {
+    std::ifstream file(path);
     if (file.is_open()) {
         std::string header;
-        int value;
+        int16_t value;
         while (file >> header && header != HEADER_END) {
             if (header == HEADER_KILL) {
                 while (file >> value && value != -1) {
@@ -20,7 +22,7 @@ StatsController::StatsController() {
                     shotsRanking.push_back(value);
                 }
             } else if (header == HEADER_DURATION) {
-                char value1, value2;
+                int8_t value1, value2;
                 while (file >> value1 >> value2 && value1 != -1 && value2 != -1) {
                     durationRanking.push_back({value1, value2});
                 }
@@ -30,12 +32,12 @@ StatsController::StatsController() {
     }
 }
 
-void StatsController::insertKillsRanking(const uint16_t& kills) {
+void StatsController::insertKillsRanking(const int16_t& kills) {
     auto it = std::lower_bound(killsRanking.begin(), killsRanking.end(), kills);
     killsRanking.insert(it, kills);
 }
 
-void StatsController::insertShotsRanking(const uint16_t& shots) {
+void StatsController::insertShotsRanking(const int16_t& shots) {
     auto it = std::lower_bound(shotsRanking.begin(), shotsRanking.end(), shots);
     shotsRanking.insert(it, shots);
 }
@@ -47,12 +49,12 @@ void StatsController::insertDurationRanking(const std::pair<int8_t, int8_t>& dur
     durationRanking.insert(it, duration);
 }
 
-uint32_t StatsController::getKillsIndex(const uint16_t& kills) {
+uint32_t StatsController::getKillsIndex(const int16_t& kills) {
     auto it = std::lower_bound(killsRanking.begin(), killsRanking.end(), kills);
     return std::distance(killsRanking.begin(), it);
 }
 
-uint32_t StatsController::getShotsIndex(const uint16_t& shots) {
+uint32_t StatsController::getShotsIndex(const int16_t& shots) {
     auto it = std::lower_bound(shotsRanking.begin(), shotsRanking.end(), shots);
     return std::distance(shotsRanking.begin(), it);
 }
@@ -65,12 +67,12 @@ uint32_t StatsController::getDurationIndex(const std::pair<int8_t, int8_t>& dura
 }
 
 std::shared_ptr<Snapshot> StatsController::updateStats(std::vector<StatsDto> statsFromGame,
-    const uint8_t& minutes, const uint8_t& seconds) {
+    const int8_t& minutes, const int8_t& seconds) {
     std::lock_guard<std::mutex> locker(mutex);
 
     std::pair<int8_t, int8_t> duration({minutes, seconds});
     insertDurationRanking(duration);
-    uint32_t indexDuration = getDurationIndex(duration);
+    int32_t indexDuration = getDurationIndex(duration);
 
     for (auto& stats : statsFromGame) {
         insertKillsRanking(stats.getKills());
@@ -91,7 +93,7 @@ std::shared_ptr<Snapshot> StatsController::updateStats(std::vector<StatsDto> sta
 }
 
 StatsController::~StatsController() {
-    std::ofstream file(STATS_PATH);
+    std::ofstream file(path);
     if (file.is_open()) {
         // SAVE KILLS
         file << HEADER_KILL << std::endl;
@@ -110,7 +112,7 @@ StatsController::~StatsController() {
         // SAVE DURATION
         file << HEADER_DURATION << std::endl;
         for (const auto& value : durationRanking) {
-            file << value.first << " " << value.second << " ";
+            file << (int)value.first << " " << (int)value.second << " ";
         }
         file << "-1 -1" << std::endl; 
 

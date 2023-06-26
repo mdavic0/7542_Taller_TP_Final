@@ -363,28 +363,28 @@ void sendStats(const std::vector<StatsDto> &stats, std::shared_ptr<T> skt) {
     uint8_t count = stats.size();
     this->sendAll(&count, 1, skt);
     for (auto it = stats.begin(); it != stats.end(); ++it) {
-        uint8_t id = it->getPlayerId();
+        int8_t id = it->getPlayerId();
         this->sendAll(&id, 1, skt);
 
-        uint16_t aux_kills = htons(it->getKills());
+        int16_t aux_kills = htons(it->getKills());
         this->sendAll(&aux_kills, 2, skt);
 
-        uint32_t aux_rkg_kills = htonl(it->getRankingKills());
+        int32_t aux_rkg_kills = htonl(it->getRankingKills());
         this->sendAll(&aux_rkg_kills, 4, skt);
 
-        uint16_t aux_shots = htons(it->getShots());
+        int16_t aux_shots = htons(it->getShots());
         this->sendAll(&aux_shots, 2, skt);
 
-        uint32_t aux_rkg_shots = htonl(it->getRankingShots());
+        int32_t aux_rkg_shots = htonl(it->getRankingShots());
         this->sendAll(&aux_rkg_shots, 4, skt);
 
-        uint8_t aux_minutes = it->getMinutes();
+        int8_t aux_minutes = it->getMinutes();
         this->sendAll(&aux_minutes, 1, skt);
 
-        uint8_t aux_seconds = it->getSeconds();
+        int8_t aux_seconds = it->getSeconds();
         this->sendAll(&aux_seconds, 1, skt);
 
-        uint32_t aux_rkg_duration = htonl(it->getRankingDuration());
+        int32_t aux_rkg_duration = htonl(it->getRankingDuration());
         this->sendAll(&aux_rkg_duration, 4, skt);
   }   
 }

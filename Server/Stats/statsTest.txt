@@ -1,0 +1,7 @@
+KILL
+22 -1
+SHOT
+80 -1
+DURATION
+6 45 -1 -1
+END
