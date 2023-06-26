@@ -107,7 +107,7 @@ void Lobby::initLobbyCreate() {
 }
 
 void Lobby::render(const std::string& text1, const std::string& text2) {
-    SDL_Color color = {255, 255, 255, 255};
+    SDL_Color color = COLOR_WHITE;
     int w, h, w2, h2, w3, h3;
     font.getSizeFont(text1, &w, &h);
     Texture textureFont(renderer, font.RenderText_Solid(text1, color));

@@ -52,7 +52,7 @@ void GameDrawner::run() {
             ConfigGame config(lobby.getConfigSnap(), render, window, manager);
             
             GameSdl gameSdl(window, render, snapshot_queue, client_events,
-                            error, idPlayer, font, config);
+                            idPlayer, font, config);
             
             manager.playMusic("game");
             while (gameSdl.isRunning()) {

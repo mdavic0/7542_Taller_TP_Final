@@ -26,6 +26,7 @@ class ManagerMusic {
         void playAction(TypeInfected type, const std::string& action);
         void playMusic(std::string music);
         void playEffectGrenade(std::string music);
+        void stopEffects();
 
 };
 

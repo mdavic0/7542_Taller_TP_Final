@@ -11,9 +11,9 @@
 GameSdl::GameSdl(WindowSdl& window, Renderer& renderer,
     Queue<std::shared_ptr<Snapshot>>& snapshotQueue,
     Queue<std::shared_ptr<EventDTO>>& eventQueue,
-    bool& endGame, uint8_t idPlayer, Font& font, ConfigGame& config) :
+    uint8_t idPlayer, Font& font, ConfigGame& config) :
     window(window), renderer(renderer), snapshotQueue(snapshotQueue),
-    eventQueue(eventQueue), endGame(endGame), events(eventQueue, idPlayer),
+    eventQueue(eventQueue), endGame(false), events(eventQueue, idPlayer),
     map(config.getTextureManager(), renderer, window),
     soldiers(config.getPlayers()),
     hud(soldiers[idPlayer]->getType(), config.getMode(), renderer, font,
@@ -21,7 +21,8 @@ GameSdl::GameSdl(WindowSdl& window, Renderer& renderer,
     enemies(config.getEnemies()), camera(window),
     obstacles(config.getObstacles()), grenades(),
     textures(config.getTextureManager()), music(config.getManagerMusic()),
-    blitzAttack(false) {
+    blitzAttack(false), endGameSdl(font, renderer, config.getTextureManager(),
+    config.getMode(), window) {
 }
 
 bool GameSdl::isRunning() {
@@ -36,9 +37,6 @@ void GameSdl::render() {
                     enemies.size(),
                     soldiers[idPlayer]->getGrenadeAvailable(),
                     soldiers[idPlayer]->getSmokeAvailable());
-    
-    for (const auto &grenade : grenades)
-        grenade->render(camera.getRect());
     
     // reordeno todo antes de renderizar
     std::vector<std::shared_ptr<Object>> vecObjects;
@@ -56,7 +54,14 @@ void GameSdl::render() {
     for (const auto &object : vecObjects)
         object->render(camera.getRect());
 
+    for (const auto &grenade : grenades)
+        grenade->render(camera.getRect());
     this->renderBlitz();
+
+    if (endGame) {
+        endGameSdl.render();
+        music.stopEffects();
+    }
 }
 
 void GameSdl::renderBlitz() {
@@ -71,7 +76,7 @@ void GameSdl::update() {
     std::shared_ptr<Snapshot> snap = nullptr;
     while (!snapshotQueue.try_pop(snap)) {
     }
-    if (snap->getEvent() != Event::event_end) {
+    if (snap->getEvent() != Event::event_end && enemies.size() != 0) {
         if (soldiers.size() >= snap->getInfo().size()) {
             for (auto &player : soldiers) {
                 bool found = false;

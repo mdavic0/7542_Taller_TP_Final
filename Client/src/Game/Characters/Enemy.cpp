@@ -36,6 +36,8 @@ int Enemy::setNumFrames(State state) {
             return this->textures.getFrames(type, "Attack");
         case State::dead:
             return this->textures.getFrames(type, "Dead");
+        case State::injure:
+            return this->textures.getFrames(type, "Hurt");
         default:
             return 1;
     }
@@ -63,6 +65,10 @@ void Enemy::render(SDL_Rect camera) {
         case State::dead:
             music.playAction(type, "dead");
             renderDead(SPEED_DEAD, textures.getTexture(type, "Dead"), camera);
+            break;
+        case State::injure:
+            renderAnimation(SPEED_INJURE, textures.getTexture(type, "Hurt"),
+                            camera);
             break;
         default:
             break;

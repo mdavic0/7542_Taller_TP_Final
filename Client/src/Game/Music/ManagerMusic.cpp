@@ -155,6 +155,11 @@ void ManagerMusic::playMusic(std::string music) {
     this->mixer.playChannel(0, listMusic[music]->get(), -1);
 }
 
+void ManagerMusic::stopEffects() {
+    this->mixer.haltChannel(1);
+    this->mixer.haltChannel(2);
+}
+
 ManagerMusic::~ManagerMusic() {
 }
 

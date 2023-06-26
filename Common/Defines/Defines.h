@@ -18,6 +18,7 @@
 #define PATH_GRENADES_EXPLOTION "assets/images/sdl/grenades/Explosion.png"
 #define PATH_GRENADES_SMOKE "assets/images/sdl/grenades/Smoke.png"
 #define PATH_GRENADES_BLITZ "assets/images/sdl/grenades/Blitz.png"
+#define PATH_HUD "assets/images/sdl/hud/"
 // Path Music
 #define PATH_MUSIC_LAUNCHER "../assets/music/launcher/"
 #define PATH_MUSIC_LOBBY "assets/music/sdl/sound/lobby.wav"
@@ -53,6 +54,9 @@
 #define MIX_CHANNELS_MANAGER 2
 #define TIME_SLEEP 4000
 #define TIME_SLEEP_SCOUT 400
+// End Game
+#define TEXT_CLEAR_ZONE "Mission Complete"
+#define TEXT_SURVIVAL "Your Die"
 
 // Protocol Code
 #define CREATE_CODE 0x01

@@ -20,6 +20,7 @@
 #include "ConfigGame.h"
 #include "GrenadeSdl.h"
 #include "ManagerMusic.h"
+#include "EndGame.h"
 #include <list>
 #include <memory>
 #include <map>
@@ -32,7 +33,7 @@ class GameSdl {
         Queue<std::shared_ptr<Snapshot>>& snapshotQueue;
         Queue<std::shared_ptr<EventDTO>>& eventQueue;
         MapSdl map;
-        bool& endGame;
+        bool endGame;
         std::map<uint8_t, std::shared_ptr<Operator>>& soldiers;
         std::map<uint8_t, std::shared_ptr<Enemy>>& enemies;
         std::map<uint8_t, std::shared_ptr<Obstacles>>& obstacles;
@@ -45,6 +46,7 @@ class GameSdl {
         TextureManager& textures;
         ManagerMusic& music;
         bool blitzAttack;
+        EndGame endGameSdl;
         std::pair<int16_t, int16_t> calculateMassCenter();
         void updateGrenades(std::shared_ptr<Snapshot> snap);
         void renderBlitz();
@@ -52,7 +54,7 @@ class GameSdl {
     public:
         GameSdl(WindowSdl& window, Renderer& renderer,
                 Queue<std::shared_ptr<Snapshot>>& snapshotQueue,
-                Queue<std::shared_ptr<EventDTO>>& eventQueue, bool& endGame,
+                Queue<std::shared_ptr<EventDTO>>& eventQueue,
                 uint8_t idPlayer, Font& font, ConfigGame& config);
         ~GameSdl();
         void update();

@@ -27,7 +27,7 @@ Hud::Hud(TypeOperator type, TypeGame game, Renderer& render, Font& font,
 }
 
 void Hud::loadTextures() {
-    std::string path = "assets/images/sdl/hud/";
+    std::string path = PATH_HUD;
     texturesHud["healthbg"] = std::make_unique<Texture>(
                                     renderHud, path + "healthbg.png");
     texturesHud["bar-bg"] = std::make_unique<Texture>(
