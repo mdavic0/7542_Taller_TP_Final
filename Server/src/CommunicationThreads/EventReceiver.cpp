@@ -13,6 +13,7 @@ void EventReceiver::run() {
     while (talking) {
         try {
             while (!game) {
+            //std::cout << "EventReceiver not game" << std::endl;
                 std::shared_ptr<EventDTO> eventDto = std::make_shared<EventDTO>(protocol.getEvent(skt));
                 Event event = eventDto->getEvent();
                 if (event == Event::event_create) {
@@ -26,11 +27,11 @@ void EventReceiver::run() {
                                                                 &game);
                 } else if (event == Event::event_leave) {
                     snapshot_queue.close();
-
                 }
             }
 
             while (!game->running()) {
+            //std::cout << "EventReceiver game not run" << std::endl;
                 std::shared_ptr<EventDTO> eventDto = std::make_shared<EventDTO>(protocol.getEvent(skt));
                 Event event = eventDto->getEvent();
                 if (event == Event::event_start_game && game != nullptr) {
@@ -43,8 +44,18 @@ void EventReceiver::run() {
             }
 
             while (game->running()) {
+            //std::cout << "EventReceiver game run" << std::endl;
                 std::shared_ptr<EventDTO> eventDto = std::make_shared<EventDTO>(protocol.getEvent(skt));
                 event_queue->push(eventDto);
+            }
+
+            while (true) {
+                std::shared_ptr<EventDTO> eventDto = std::make_shared<EventDTO>(protocol.getEvent(skt));
+                Event event = eventDto->getEvent();
+                if (event == Event::event_leave) {
+                    snapshot_queue.close();
+                    break;
+                }
             }
 
         } catch (const LibError& exc) {     // client slow, quit sdl, server ends whit q input
@@ -63,8 +74,6 @@ void EventReceiver::stop() {
     talking = false;
     if (!sender.ended()) {      // server ended with q
         std::cout << "EventReceiver - stop close sanp q " << std::endl;
-        //skt->shutdown(2);
-        //skt->close();
         snapshot_queue.close();
     }
     std::cout << "EventReceiver - end stop " << std::endl;

@@ -10,13 +10,12 @@ void SnapshotSender::run() {
         try {
             std::shared_ptr<Snapshot> response = snapshot_queue.pop();
             protocol.sendSnapshot(response, skt);
-        } catch (const ClosedQueue& exc) {      // client leaver or slow
+        } catch (const ClosedQueue& exc) {      // client leaver or slow,  server ends with q
             std::cout << "SnapshotSender - snap Queue closed " << std::endl;
             skt->shutdown(2);
             skt->close();
             break;
-        } catch (const LibError& exc) {     // server ends with q
-            //snapshot_queue.close();
+        } catch (const LibError& exc) {
             std::cout << "SnapshotSender - socket closed " << std::endl;
             break;
         } catch (const std::exception& exc) {

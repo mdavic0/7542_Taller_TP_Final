@@ -7,11 +7,11 @@
 #include <iostream>
 
 
-GameWorld::GameWorld(const TypeGame& type, TypeDifficulty difficulty) :
+GameWorld::GameWorld(const TypeGame& type, const TypeDifficulty& difficulty) :
     players_amount(INITIAL_PLAYERS_AMOUNT), players(), type(type), map(this->generateMapType()),
     collidables(), infectedId(INITIAL_INFECTED_ID), obsacleId(INITIAL_OBSTACLE_ID),
     infectedFactory(), RC(), ended(false), obstacleFactory(), playerFactory(),
-    deadPlayersId(), difficulty(difficulty) {
+    deadPlayersId(), difficulty(difficulty), rounds(0) {
     this->generateInfecteds();
     this->generateObstacles();
 }
@@ -97,18 +97,12 @@ void GameWorld::updateSkillState(Event event, uint8_t id) {
 void GameWorld::simulateStep(double stepTime) {
     if(!ended) {
         simulatePlayersStep(stepTime);
-        simulateInfectedStep(stepTime);
-        simulateGrenadeStep(stepTime);
-        simulateBlitzAtackStep(stepTime);
-        simulatePostExplosionGrenadesStep(stepTime);
-        /*if (allPlayersAreDead()) {
-            std::cout << "PLAYERS DIED " << std::endl;
-            ended = true;
-        } else if(infecteds.empty()) {
+        if(infecteds.empty()) {
             std::cout << "NO MORE INFECTEDS" << std::endl;
             switch (this->type) {
                 case TypeGame::game_survival:
-                    this->infecteds = infectedFactory.generateInfecteds(TypeDifficulty::difficulty_easy,
+                    updateRounds();
+                    this->infecteds = infectedFactory.generateInfecteds(difficulty,
                                                                         infectedId,
                                                                         collidables,
                                                                         RC);
@@ -119,7 +113,15 @@ void GameWorld::simulateStep(double stepTime) {
                 default:
                     break;
             }
-        }*/
+        }
+        simulateInfectedStep(stepTime);
+        if (allPlayersAreDead()) {
+            std::cout << "PLAYERS DIED " << std::endl;
+            ended = true;
+        } 
+        simulateGrenadeStep(stepTime);
+        simulateBlitzAtackStep(stepTime);
+        simulatePostExplosionGrenadesStep(stepTime);
         simulateBlitzAtackStep(stepTime);
     }
 }
@@ -253,77 +255,88 @@ void GameWorld::simulatePlayersStep(double stepTime) {
 }
 
 void GameWorld::simulateInfectedStep(double stepTime) {
-    // Erase dead infecteds
-    for (auto it = infecteds.cbegin(); it != infecteds.cend(); /* no increment */){
-        if (not it->second->isAlive()) {
-            collidables.erase(it->first);
-            infecteds.erase(it++);
-        } else {
-            ++it;
+    if (not ended) {
+        // Erase dead infecteds
+        for (auto it = infecteds.cbegin(); it != infecteds.cend(); /* no increment */){
+            if (not it->second->isAlive()) {
+                collidables.erase(it->first);
+                infecteds.erase(it++);
+            } else {
+                ++it;
+            }
         }
-    }
 
-    // Apply infecteds step
-    for (auto& infected : infecteds) {
-        infecteds.at(infected.first)->applyStep(this->collidables, this->players);
+        // Apply infecteds step
+        for (auto& infected : infecteds) {
+            infecteds.at(infected.first)->applyStep(this->collidables, this->players);
+        }
     }
 }
 
 void GameWorld::simulateGrenadeStep(double stepTime) {
-    // Erase exploded grenades
-    for (auto it = grenades.cbegin(); it != grenades.cend(); /* no increment */){
-        if ((*it)->exploded()) {
-            // Post explosion the grenades still need to simulate steps
-            // till it is available again (while reloading)
-            postExplosionGrenades.push_back((*it));
-            grenades.erase(it++);
-        } else {
-            ++it;
+    if (not ended) {
+        // Erase exploded grenades
+        for (auto it = grenades.cbegin(); it != grenades.cend(); /* no increment */){
+            if ((*it)->exploded()) {
+                // Post explosion the grenades still need to simulate steps
+                // till it is available again (while reloading)
+                postExplosionGrenades.push_back((*it));
+                grenades.erase(it++);
+            } else {
+                ++it;
+            }
         }
-    }
 
-    // Apply grenade step
-    for (auto& grenade : grenades) {
-        grenade->applyStep(this->players, this->infecteds, stepTime);
+        // Apply grenade step
+        for (auto& grenade : grenades) {
+            grenade->applyStep(this->players, this->infecteds, stepTime);
+        }
     }
 }
 
 void GameWorld::simulateBlitzAtackStep(double stepTime) {
-    // Erase ended blitz atack
-    for (auto it = blitzAtacks.cbegin(); it != blitzAtacks.cend(); /* no increment */){
-        if ((*it)->ended()) {
-            // Post explosion the blitz atacks still need to simulate steps
-            // till it is available again (while reloading)
-            postExplosionBlitz.push_back((*it));
-            blitzAtacks.erase(it++);
-        } else {
-            ++it;
+    if (not ended) {
+        // Erase ended blitz atack
+        for (auto it = blitzAtacks.cbegin(); it != blitzAtacks.cend(); /* no increment */){
+            if ((*it)->ended()) {
+                // Post explosion the blitz atacks still need to simulate steps
+                // till it is available again (while reloading)
+                postExplosionBlitz.push_back((*it));
+                blitzAtacks.erase(it++);
+            } else {
+                ++it;
+            }
         }
-    }
 
-    // Apply blitz step
-    for (auto& blitzAtack : blitzAtacks) {
-        blitzAtack->applyStep(this->infecteds, stepTime);
+        // Apply blitz step
+        for (auto& blitzAtack : blitzAtacks) {
+            blitzAtack->applyStep(this->infecteds, stepTime);
+        }
     }
 }
 
 void GameWorld::simulatePostExplosionGrenadesStep(double stepTime) {
-    // Erase availables grenades
-    for (auto it = postExplosionGrenades.cbegin(); it != postExplosionGrenades.cend(); /* no increment */){
-        if ((*it)->isAvailable()) {
-            postExplosionGrenades.erase(it++);
-        } else {
-            ++it;
+    if (not ended) {
+        // Erase availables grenades
+        for (auto it = postExplosionGrenades.cbegin(); it != postExplosionGrenades.cend(); /* no increment */){
+            if ((*it)->isAvailable()) {
+                postExplosionGrenades.erase(it++);
+            } else {
+                ++it;
+            }
         }
-    }
 
-    // Apply postExplosionGrenade step
-    for (auto& grenade : postExplosionGrenades) {
-        grenade->applyStep(this->players, this->infecteds, stepTime);
+        // Apply postExplosionGrenade step
+        for (auto& grenade : postExplosionGrenades) {
+            grenade->applyStep(this->players, this->infecteds, stepTime);
+        }
     }
 }
 
 bool GameWorld::allPlayersAreDead() {
+    if (deadPlayersId.empty())
+        return false;
+
     for (const auto& id : deadPlayersId) {
         if (players.find(id) == players.end()) {
             return false;
@@ -333,17 +346,36 @@ bool GameWorld::allPlayersAreDead() {
 }
 
 void GameWorld::simulatePostExplosionBlitz(double stepTime) {
-    // Erase availables blitz
-    for (auto it = postExplosionBlitz.cbegin(); it != postExplosionBlitz.cend(); /* no increment */){
-        if ((*it)->isAvailable()) {
-            postExplosionBlitz.erase(it++);
-        } else {
-            ++it;
+    if (not ended) {
+        // Erase availables blitz
+        for (auto it = postExplosionBlitz.cbegin(); it != postExplosionBlitz.cend(); /* no increment */){
+            if ((*it)->isAvailable()) {
+                postExplosionBlitz.erase(it++);
+            } else {
+                ++it;
+            }
+        }
+
+        // Apply postExplosionBlitz step
+        for (auto& blitz : postExplosionBlitz) {
+            blitz->applyStep(this->infecteds, stepTime);
+        }
+    }
+}
+
+void GameWorld::updateRounds() {
+    rounds++;
+    if (rounds < 21 && rounds % 5 == 0) {
+        switch (difficulty) {
+        case TypeDifficulty::difficulty_easy:
+            difficulty = TypeDifficulty::difficulty_normal;
+        case TypeDifficulty::difficulty_normal:
+            difficulty = TypeDifficulty::difficulty_hard;
+        case TypeDifficulty::difficulty_hard:
+            difficulty = TypeDifficulty::difficulty_god;
+        default:
+            difficulty = TypeDifficulty::difficulty_god;
         }
     }
 
-    // Apply postExplosionBlitz step
-    for (auto& blitz : postExplosionBlitz) {
-        blitz->applyStep(this->infecteds, stepTime);
-    }
 }

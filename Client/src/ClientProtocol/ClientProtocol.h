@@ -727,27 +727,33 @@ Snapshot getSnapshot(std::shared_ptr<T> skt) {
 
     switch (event) {
     case CREATE_CODE:
+            //std::cout << "SnapshotReceiver CREATE_CODE" << std::endl;
         return getCreate(skt);
         break;
 
     case JOIN_CODE:
+           // std::cout << "SnapshotReceiver JOIN_CODE" << std::endl;
         return getJoin(skt);
         break;
 
     case START_CODE:
+            //std::cout << "SnapshotReceiver START_CODE" << std::endl;
         return getStart(skt);
         break;
 
     case PLAYING_CODE:
+            //std::cout << "SnapshotReceiver PLAYING_CODE" << std::endl;
         return getPlaying(skt);
         break;
 
     case END_CODE:
+            //std::cout << "SnapshotReceiver END_CODE" << std::endl;
          std::cout << "end recieved " << std::endl;
         return getEnd(skt);
         break;
 
     case STATS_CODE:
+            //std::cout << "SnapshotReceiver STATS_CODE" << std::endl;
         return getStats(skt);
         break;
 
@@ -757,19 +763,19 @@ Snapshot getSnapshot(std::shared_ptr<T> skt) {
     return Snapshot(Event::event_invalid);
 }
 
-        /*
-        * No queremos permitir que alguien haga copias
-        * */
-        ClientProtocol(const ClientProtocol&) = delete;
-        ClientProtocol& operator=(const ClientProtocol&) = delete;
+    /*
+    * No queremos permitir que alguien haga copias
+    * */
+    ClientProtocol(const ClientProtocol&) = delete;
+    ClientProtocol& operator=(const ClientProtocol&) = delete;
 
-        /*
-        * Queremos permitir mover a los objetos (move semantics).
-        *
-        * Como todos nuestros atributos son movibles, la implementación
-        * por default de C++ nos alcanza.
-        * */
-        ClientProtocol(ClientProtocol&&) = default;
-        ClientProtocol& operator=(ClientProtocol&&) = default;
+    /*
+    * Queremos permitir mover a los objetos (move semantics).
+    *
+    * Como todos nuestros atributos son movibles, la implementación
+    * por default de C++ nos alcanza.
+    * */
+    ClientProtocol(ClientProtocol&&) = default;
+    ClientProtocol& operator=(ClientProtocol&&) = default;
 };
 #endif  // CLIENT_PROTOCOL_H_
