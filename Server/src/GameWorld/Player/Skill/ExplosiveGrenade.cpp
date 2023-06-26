@@ -2,8 +2,8 @@
 #include "Defines.h"
 
 
-ExplosiveGrenade::ExplosiveGrenade(std::pair<int16_t, int16_t> position) :
-    Grenade(TypeGrenade::grenade_explosive,  CF::grenade_damage, position) {}
+ExplosiveGrenade::ExplosiveGrenade(std::pair<int16_t, int16_t> position, uint8_t id) :
+    Grenade(TypeGrenade::grenade_explosive, id,CF::grenade_damage, position) {}
 
 void ExplosiveGrenade::applyStep(std::map<uint8_t, std::shared_ptr<Player>> &players,
                                  std::map<uint8_t, std::shared_ptr<Infected>> &infecteds,
@@ -15,7 +15,6 @@ void ExplosiveGrenade::applyStep(std::map<uint8_t, std::shared_ptr<Player>> &pla
         if (reloadingClock >= CF::grenade_recharge) {
             this->reloadingClock = 0;
             available = true;
-            hasExploded = false;
         }
     }
 }
@@ -39,7 +38,7 @@ void ExplosiveGrenade::throwGrenade(std::pair<int16_t, int16_t>& position,
         this->hasExploded = false;
     }
 }
-#include <iostream>
+
 void ExplosiveGrenade::explode(std::map<uint8_t, std::shared_ptr<Player>> &players,
                                std::map<uint8_t, std::shared_ptr<Infected>> &infecteds,
                                double stepTime) {
@@ -47,28 +46,15 @@ void ExplosiveGrenade::explode(std::map<uint8_t, std::shared_ptr<Player>> &playe
         explosionClock += stepTime;
         if (explosionClock >= CF::grenade_explosion_time) {
             for (auto &player : players) {
-                std::cout << "Player Pos: x:" + std::to_string(player.second->getPosition().first) + " y: " +
-                             std::to_string(player.second->getPosition().second) << std::endl;
-                std::cout << "Grenade Pos: x:" + std::to_string(position.first) + " y: " +
-                             std::to_string(position.second) << std::endl;
-                std::cout << "Distance: " + std::to_string(collidable->distance(player.second->getPosition())) + "\n\n";
-
                 if (player.second->getCollidable()->
                     isCloseTo(this->collidable, GRENADE_DAMAGE_RANGE)) {
-                    std::cout << "Estoy cerca, me pega la bombita" << std::endl;
                     player.second->applyDamage(this->damage);
                 }
             }
 
             for (auto &infected : infecteds) {
-                std::cout << "\nEXPLOSION:\nInfected Pos: x:" + std::to_string(infected.second->getPosition().first) + " y: " +
-                        std::to_string(infected.second->getPosition().second) << std::endl;
-                std::cout << "Grenade Pos: x:" + std::to_string(position.first) + " y: " +
-                             std::to_string(position.second) << std::endl;
-                std::cout << "Distance: " + std::to_string(collidable->distance(infected.second->getPosition())) + "\n\n";
                 if (infected.second->getCollidable()->
                     isCloseTo(this->collidable, GRENADE_DAMAGE_RANGE)) {
-                    std::cout << "Estoy cerca, me pega la bombita" << std::endl;
                     infected.second->applyDamage(this->damage);
                 }
             }

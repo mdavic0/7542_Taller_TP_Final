@@ -2,8 +2,8 @@
 #include "Defines.h"
 
 
-SmokeGrenade::SmokeGrenade(std::pair<int16_t, int16_t> position) :
-        Grenade(TypeGrenade::grenade_smoke,  CF::grenade_damage, position),
+SmokeGrenade::SmokeGrenade(std::pair<int16_t, int16_t> position, uint8_t id) :
+        Grenade(TypeGrenade::grenade_smoke, id, CF::grenade_damage, position),
         speedReduction(CF::smoke_speed_reduction) {}
 
 void SmokeGrenade::applyStep(std::map<uint8_t, std::shared_ptr<Player>> &players,
@@ -28,12 +28,14 @@ void SmokeGrenade::throwGrenade(std::pair<int16_t, int16_t>& position,
         } else {
             this->position = {position.first - GRENADE_DAMAGE_RANGE, position.second};
         }
+        this->collidable->updatePosition(this->position);
         this->elapsedTime = elapsedTime;
         this->setMovementDirection(right);
         this->calculateFinalPosition(right, elapsedTime);
         this->movementClock = 0;
         this->reloadingClock = 0;
         this->available = false;
+        this->hasExploded = false;
     }
 }
 

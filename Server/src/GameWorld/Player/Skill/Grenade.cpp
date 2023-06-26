@@ -2,8 +2,8 @@
 #include "Defines.h"
 #include "Configuration.h"
 
-Grenade::Grenade(TypeGrenade typeGrenade, uint8_t damage, std::pair<int16_t, int16_t> position) :
-    typeGrenade(typeGrenade), damage(damage), available(true), reloadingClock(0),
+Grenade::Grenade(TypeGrenade typeGrenade, uint8_t id, uint8_t damage, std::pair<int16_t, int16_t> position) :
+    typeGrenade(typeGrenade), id(id), damage(damage), available(true), reloadingClock(0),
     position(position), movement_direction({0,0}), velocity(0),
     collidable(std::make_shared<Collidable>(0, position, 5, 5)),
     elapsedTime(0), explosionClock(0), finalPosition({0, 0}), movementClock(0),
@@ -63,6 +63,14 @@ void Grenade::calculateFinalPosition(bool right, double time) {
         finalPosition = {this->position.first - (this->velocity * time) - GRENADE_DAMAGE_RANGE,
                          this->position.second};
     }
+}
+
+void Grenade::setId(uint8_t anId) {
+    this->id = anId;
+}
+
+uint8_t Grenade::getId() {
+    return this->id;
 }
 
 Grenade::~Grenade() = default;

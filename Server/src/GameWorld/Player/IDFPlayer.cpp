@@ -6,9 +6,9 @@ IDFPlayer::IDFPlayer(std::pair<int16_t, int16_t>& position,
                      std::shared_ptr<Collidable> collidable) :
         Player(TypeOperator::operator_idf, CF::idf_health, CF::idf_velocity,
            std::make_shared<Idf>(), position, std::move(collidable)),
-        grenade(std::make_shared<ExplosiveGrenade>(position)),
+        grenade(std::make_shared<ExplosiveGrenade>(position, 0)),
         grenadeElapsedTime(0), throwingGrenade(false),
-        smoke(std::make_shared<SmokeGrenade>(position)),
+        smoke(std::make_shared<SmokeGrenade>(position, 0)),
         smokeElapsedTime(0), throwingSmoke(false) {}
 
 void IDFPlayer::setSkillState(Event event) {
@@ -84,6 +84,7 @@ void IDFPlayer::throwGrenade(std::list<std::shared_ptr<Grenade>> &grenades,
                              double stepTime) {
     grenadeElapsedTime += stepTime;
     if (this->state == State::stop_hability and stopSkillCLock >= CF::stop_skill_time) {
+        this->grenade->setId(grenades.size());
         grenades.push_back(grenade);
         this->grenade->throwGrenade(position, grenadeElapsedTime, lookingRight);
         grenadeElapsedTime = 0;
@@ -96,6 +97,7 @@ void IDFPlayer::throwGrenade(std::list<std::shared_ptr<Grenade>> &grenades,
 void IDFPlayer::throwSmoke(std::list<std::shared_ptr<Grenade>> &grenades, double stepTime) {
     smokeElapsedTime += stepTime;
     if (this->state == State::stop_hability and stopSkillCLock >= CF::stop_skill_time) {
+        this->smoke->setId(grenades.size());
         grenades.push_back(smoke);
         this->smoke->throwGrenade(position, smokeElapsedTime, lookingRight);
         smokeElapsedTime = 0;

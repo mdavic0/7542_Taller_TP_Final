@@ -9,7 +9,7 @@
 
 class ExplosiveGrenade : public Grenade {
     public:
-        explicit ExplosiveGrenade(std::pair<int16_t, int16_t> position);
+        explicit ExplosiveGrenade(std::pair<int16_t, int16_t> position, uint8_t id);
         void applyStep(std::map<uint8_t, std::shared_ptr<Player>> &players,
                        std::map<uint8_t, std::shared_ptr<Infected>> &infecteds,
                        double stepTime) override;

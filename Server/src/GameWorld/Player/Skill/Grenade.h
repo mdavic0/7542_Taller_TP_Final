@@ -15,6 +15,7 @@ class Player;
 class Grenade {
     private:
         TypeGrenade typeGrenade;
+        uint8_t id;
 
     protected:
         uint8_t damage;
@@ -33,7 +34,8 @@ class Grenade {
         bool hasExploded;
 
     public:
-        Grenade(TypeGrenade typeGrenade, uint8_t damage, std::pair<int16_t, int16_t> position);
+        Grenade(TypeGrenade typeGrenade, uint8_t id, uint8_t damage,
+                std::pair<int16_t, int16_t> position);
         // aplica mov, incrementa el explosion clock, una vez que explota aplica danios
         virtual void applyStep(std::map<uint8_t, std::shared_ptr<Player>>& players,
                        std::map<uint8_t, std::shared_ptr<Infected>> &infecteds,
@@ -45,6 +47,8 @@ class Grenade {
         bool isAvailable();
         bool exploded();
         TypeGrenade getTypeGrenade();
+        void setId(uint8_t id);
+        uint8_t getId();
         virtual ~Grenade();
 
     protected:
