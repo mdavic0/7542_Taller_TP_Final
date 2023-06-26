@@ -6,6 +6,7 @@
 #include <vector>
 #include <algorithm>
 #include <unordered_set>
+#include "BlitzSdl.h"
 
 GameSdl::GameSdl(WindowSdl& window, Renderer& renderer,
     Queue<std::shared_ptr<Snapshot>>& snapshotQueue,
@@ -19,7 +20,8 @@ GameSdl::GameSdl(WindowSdl& window, Renderer& renderer,
     window), idPlayer(idPlayer), mode(config.getMode()), font(font),
     enemies(config.getEnemies()), camera(window),
     obstacles(config.getObstacles()), grenades(),
-    textures(config.getTextureManager()), music(config.getManagerMusic()) {
+    textures(config.getTextureManager()), music(config.getManagerMusic()),
+    blitzAttack(false) {
 }
 
 bool GameSdl::isRunning() {
@@ -28,14 +30,12 @@ bool GameSdl::isRunning() {
 
 void GameSdl::render() {
     this->map.render(camera.getRect());
-    // std::cout << "mapRender\n";
-
+   
     this->hud.render(soldiers[idPlayer]->getHealth(),
                     soldiers[idPlayer]->getMunition(),
                     enemies.size(),
                     soldiers[idPlayer]->getGrenadeAvailable(),
                     soldiers[idPlayer]->getSmokeAvailable());
-    // std::cout << "hudRender\n";
     
     for (const auto &grenade : grenades)
         grenade->render(camera.getRect());
@@ -55,7 +55,16 @@ void GameSdl::render() {
     });
     for (const auto &object : vecObjects)
         object->render(camera.getRect());
-    // std::cout << "restoRender\n";
+
+    this->renderBlitz();
+}
+
+void GameSdl::renderBlitz() {
+    if (this->blitzAttack) {
+        BlitzSdl blitz(renderer, textures, music, window);
+        blitz.render(camera.getRect());
+        this->blitzAttack = false;
+    }
 }
 
 void GameSdl::update() {
@@ -75,26 +84,10 @@ void GameSdl::update() {
                 if (!found)
                     player.second->setState(State::dead);
             }
-            // std::cout << "soldiersUpdate\n";
         }
 
         camera.update(calculateMassCenter());
 
-        // if (enemies.size() >= snap->getEnemies().size()) {
-        //     for (auto &enemy : enemies) {
-        //         bool found = false;
-        //         for (const auto& enemyDto : snap->getEnemies())
-        //             if (enemy.first == enemyDto.getId()) {
-        //                 enemy.second->update(enemyDto.getPosition(),
-        //                                     enemyDto.getState());
-        //                 found = true;
-        //                 break;
-        //             }
-        //         if (!found)
-        //             enemies.erase(enemy.first);
-        //     }
-        //     // std::cout << "enemiesUpdate\n";
-        // }
         std::unordered_set<uint8_t> mapIds;
         for (auto &infected : snap->getEnemies()) {
             mapIds.insert(infected.getId());
@@ -117,6 +110,7 @@ void GameSdl::update() {
             }
         }
         this->updateGrenades(snap);
+        this->blitzAttack = snap->getBlitzAttacking(); 
     } else {
         this->endGame = true;
     }

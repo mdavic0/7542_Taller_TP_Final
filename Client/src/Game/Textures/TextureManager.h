@@ -22,6 +22,7 @@ class TextureManager {
         SDL_Texture* getTexture(std::string nameTexture);
         int getFrames(TypeInfected type, std::string nameTexture);
         int getFrames(TypeGrenade type, std::string nameTexture);
+        int getFramesBlitz();
 
 };
 

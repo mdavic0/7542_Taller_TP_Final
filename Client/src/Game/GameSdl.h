@@ -44,8 +44,10 @@ class GameSdl {
         Camera camera;
         TextureManager& textures;
         ManagerMusic& music;
+        bool blitzAttack;
         std::pair<int16_t, int16_t> calculateMassCenter();
         void updateGrenades(std::shared_ptr<Snapshot> snap);
+        void renderBlitz();
 
     public:
         GameSdl(WindowSdl& window, Renderer& renderer,

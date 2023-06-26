@@ -90,6 +90,9 @@ void TextureManager::loadTextures(Renderer& render, uint8_t idMap) {
     // Smoke
     path = PATH_GRENADES_SMOKE;
     mapTextures["smoke"] = std::make_shared<Texture>(render, path);
+    // Blitz
+    path = PATH_GRENADES_BLITZ;
+    mapTextures["blitz"] = std::make_shared<Texture>(render, path);
 }
 
 SDL_Texture* TextureManager::getTexture(TypeInfected type,
@@ -137,6 +140,10 @@ int TextureManager::getFrames(TypeGrenade type, std::string nameTexture) {
         default:
             return 1;
     }
+}
+
+int TextureManager::getFramesBlitz() {
+    return mapTextures["blitz"]->frames();
 }
 
 SDL_Texture* TextureManager::getTexture(std::string nameTexture) {
