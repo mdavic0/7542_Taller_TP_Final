@@ -78,14 +78,15 @@ bool Collidable::isAlignedLeft(std::shared_ptr<Collidable> &other) {
 }
 #include <iostream>
 bool Collidable::isCloseTo(std::shared_ptr<Collidable> &other, float closeDistance) {
-    std::cout << "COLLIDABLE Distance: " + std::to_string(distance(other->position)) + "\n\n";
-    std::cout << "CLOSE Distance: " + std::to_string(closeDistance) + "\n\n";
-    std::cout << "Infected Pos: x:" + std::to_string(other->position.first) + " y: " +
+    /*std::cout << "\nCOLLIDABLE:\nInfected Pos: x:" + std::to_string(this->position.first) + " y: " +
+                 std::to_string(this->position.second) << std::endl;
+    std::cout << "Grenade Pos: x:" + std::to_string(other->position.first) + " y: " +
                  std::to_string(other->position.second) << std::endl;
+    std::cout << "Distance: " + std::to_string(distance(other->position)) + "\n";*/
     return (this->distance(other->position) < closeDistance);
 }
 
-float Collidable::distance(std::pair<int16_t, int16_t>& otherPos) {
+double Collidable::distance(std::pair<int16_t, int16_t>& otherPos) {
     return sqrt(pow(otherPos.first - position.first, 2) +
         pow(otherPos.second - position.second, 2) * 1.0);
 }

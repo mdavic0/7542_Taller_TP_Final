@@ -56,6 +56,7 @@ class Configuration {
         * Special abilities
         ******************************/
         static double stop_skill_time;
+        static int grenade_velocity;
 
         // Grenade
         static int grenade_damage;

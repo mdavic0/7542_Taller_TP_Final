@@ -13,7 +13,9 @@ void BlitzAtack::applyStep(std::map<uint8_t, std::shared_ptr<Infected>> &infecte
         this->reloadingClock += stepTime;
         if (reloadingClock >= CF::blitz_recharge) {
             this->reloadingClock = 0;
-            available = true;
+            this->available = true;
+            this->end = true;
+            this->readyToBlitz = false;
         }
     }
 }
@@ -25,6 +27,8 @@ void BlitzAtack::throwBlitz(std::pair<int16_t, int16_t>& pos) {
         this->reloadingClock = 0;
         this->blitzClock = 0;
         this->available = false;
+        this->end = false;
+        this->readyToBlitz = true;
     }
 }
 
@@ -38,19 +42,14 @@ bool BlitzAtack::ended() {
 
 void BlitzAtack::blitz(std::map<uint8_t, std::shared_ptr<Infected>> &infecteds,
                        double stepTime) {
-    this->blitzClock += stepTime;
-    if (blitzClock >= CF::blitz_animation_time) {
-        this->readyToBlitz = true;
-    }
     if (this->readyToBlitz) {
         for (auto &infected : infecteds) {
             if (infected.second->getCollidable()->
                 isCloseTo(this->collidable, BLITZ_ATTACK_IMPACT_RANGE)) {
                 infected.second->applyDamage(this->damage);
             }
-            this->end = true;
-            this->readyToBlitz = false;
             this->blitzClock = 0;
+            this->readyToBlitz = false;
         }
     }
 }

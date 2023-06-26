@@ -120,6 +120,7 @@ void GameWorld::simulateStep(double stepTime) {
                     break;
             }
         }*/
+        simulateBlitzAtackStep(stepTime);
     }
 }
 
@@ -291,6 +292,9 @@ void GameWorld::simulateBlitzAtackStep(double stepTime) {
     // Erase ended blitz atack
     for (auto it = blitzAtacks.cbegin(); it != blitzAtacks.cend(); /* no increment */){
         if ((*it)->ended()) {
+            // Post explosion the blitz atacks still need to simulate steps
+            // till it is available again (while reloading)
+            postExplosionBlitz.push_back((*it));
             blitzAtacks.erase(it++);
         } else {
             ++it;
@@ -326,4 +330,20 @@ bool GameWorld::allPlayersAreDead() {
         }
     }
     return true;
+}
+
+void GameWorld::simulatePostExplosionBlitz(double stepTime) {
+    // Erase availables blitz
+    for (auto it = postExplosionBlitz.cbegin(); it != postExplosionBlitz.cend(); /* no increment */){
+        if ((*it)->isAvailable()) {
+            postExplosionBlitz.erase(it++);
+        } else {
+            ++it;
+        }
+    }
+
+    // Apply postExplosionBlitz step
+    for (auto& blitz : postExplosionBlitz) {
+        blitz->applyStep(this->infecteds, stepTime);
+    }
 }
