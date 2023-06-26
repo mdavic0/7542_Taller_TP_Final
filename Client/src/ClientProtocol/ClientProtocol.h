@@ -323,11 +323,13 @@ Snapshot getStats(std::shared_ptr<T> skt) {
         this->recvAll(&rankingShots, 4, skt);
         rankingShots = ntohl(rankingShots);
 
-        int8_t minutes;
-        this->recvAll(&minutes, 1, skt);
+        int16_t minutes;
+        this->recvAll(&minutes, 2, skt);
+        minutes = ntohs(minutes);
 
-        int8_t seconds;
-        this->recvAll(&seconds, 1, skt);
+        int16_t seconds;
+        this->recvAll(&seconds, 2, skt);
+        seconds = ntohs(seconds);
 
         int32_t rankingDuration;
         this->recvAll(&rankingDuration, 4, skt);

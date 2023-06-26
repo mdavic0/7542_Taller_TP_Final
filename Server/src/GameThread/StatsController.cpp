@@ -1,5 +1,4 @@
 #include "StatsController.h"
-#include <iostream>
 #include <algorithm>
 #include <ostream>
 #include <fstream>
@@ -22,7 +21,7 @@ StatsController::StatsController(const std::string& path) : path(path) {
                     shotsRanking.push_back(value);
                 }
             } else if (header == HEADER_DURATION) {
-                int8_t value1, value2;
+                int16_t value1, value2;
                 while (file >> value1 >> value2 && value1 != -1 && value2 != -1) {
                     durationRanking.push_back({value1, value2});
                 }
@@ -33,44 +32,60 @@ StatsController::StatsController(const std::string& path) : path(path) {
 }
 
 void StatsController::insertKillsRanking(const int16_t& kills) {
-    auto it = std::lower_bound(killsRanking.begin(), killsRanking.end(), kills);
+    auto it = std::lower_bound(killsRanking.begin(), killsRanking.end(), kills, [](const int16_t& a, const int16_t& b) {
+        return a > b; 
+    });
     killsRanking.insert(it, kills);
 }
 
 void StatsController::insertShotsRanking(const int16_t& shots) {
-    auto it = std::lower_bound(shotsRanking.begin(), shotsRanking.end(), shots);
+    auto it = std::lower_bound(shotsRanking.begin(), shotsRanking.end(), shots, [](const int16_t& a, const int16_t& b) {
+        return a > b; 
+    });
     shotsRanking.insert(it, shots);
 }
 
-void StatsController::insertDurationRanking(const std::pair<int8_t, int8_t>& duration) {
-    auto it = std::lower_bound(durationRanking.begin(), durationRanking.end(), duration, [](const std::pair<int8_t, int8_t>& a, const std::pair<int8_t, int8_t>& b) {
-            return a.second < b.second;
+void StatsController::insertDurationRanking(const std::pair<int16_t, int16_t>& duration) {
+    auto it = std::lower_bound(durationRanking.begin(), durationRanking.end(), duration, [](const std::pair<int16_t, int16_t>& a, const std::pair<int16_t, int16_t>& b) {
+            int totalSecondsA = a.first * 60 + a.second;
+            int totalSecondsB = b.first * 60 + b.second;
+            return totalSecondsA > totalSecondsB;
         });
     durationRanking.insert(it, duration);
 }
 
 uint32_t StatsController::getKillsIndex(const int16_t& kills) {
-    auto it = std::lower_bound(killsRanking.begin(), killsRanking.end(), kills);
-    return std::distance(killsRanking.begin(), it);
+    for (uint i = 0; i < killsRanking.size(); i++) {
+        if (killsRanking[i] == kills) {
+            return i;
+        }
+    }
+    return -1;
 }
 
 uint32_t StatsController::getShotsIndex(const int16_t& shots) {
-    auto it = std::lower_bound(shotsRanking.begin(), shotsRanking.end(), shots);
-    return std::distance(shotsRanking.begin(), it);
+    for (uint i = 0; i < shotsRanking.size(); i++) {
+        if (shotsRanking[i] == shots) {
+            return i;
+        }
+    }
+    return -1;
 }
 
-uint32_t StatsController::getDurationIndex(const std::pair<int8_t, int8_t>& duration) {
-    auto it = std::lower_bound(durationRanking.begin(), durationRanking.end(), duration, [](const std::pair<int8_t, int8_t>& a, const std::pair<int8_t, int8_t>& b) {
-            return a.second < b.second;
-        });
-    return std::distance(durationRanking.begin(), it);
+uint32_t StatsController::getDurationIndex(const std::pair<int16_t, int16_t>& duration) {
+    for (uint i = 0; i < durationRanking.size(); i++) {
+        if (durationRanking[i] == duration) {
+            return i;
+        }
+    }
+    return -1;
 }
 
 std::shared_ptr<Snapshot> StatsController::updateStats(std::vector<StatsDto> statsFromGame,
-    const int8_t& minutes, const int8_t& seconds) {
+    const int16_t& minutes, const int16_t& seconds) {
     std::lock_guard<std::mutex> locker(mutex);
 
-    std::pair<int8_t, int8_t> duration({minutes, seconds});
+    std::pair<int16_t, int16_t> duration({minutes, seconds});
     insertDurationRanking(duration);
     int32_t indexDuration = getDurationIndex(duration);
 
@@ -112,7 +127,7 @@ StatsController::~StatsController() {
         // SAVE DURATION
         file << HEADER_DURATION << std::endl;
         for (const auto& value : durationRanking) {
-            file << (int)value.first << " " << (int)value.second << " ";
+            file << value.first << " " << value.second << " ";
         }
         file << "-1 -1" << std::endl; 
 

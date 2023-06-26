@@ -9,14 +9,14 @@ class StatsDto {
     int32_t rankingKills;
     int16_t shots;
     int32_t rankingShots;
-    int8_t minutes;
-    int8_t seconds;
+    int16_t minutes;
+    int16_t seconds;
     int32_t rankingDuration;
     
     public:
 
     explicit StatsDto(const int8_t& playerId, const int16_t& kills, const int32_t& rankingKills, const int16_t shots,
-        const int32_t& rankingShots, const int8_t& minutes, const int8_t& seconds, const int32_t& rankingDuration);
+        const int32_t& rankingShots, const int16_t& minutes, const int16_t& seconds, const int32_t& rankingDuration);
 
     explicit StatsDto(const int8_t& playerId, const int16_t& kills, const int16_t shots);
 
@@ -26,9 +26,9 @@ class StatsDto {
     
     int16_t getShots() const;
     
-    int8_t getMinutes() const;
+    int16_t getMinutes() const;
 
-    int8_t getSeconds() const;
+    int16_t getSeconds() const;
 
     int32_t getRankingKills() const;
 
@@ -36,9 +36,9 @@ class StatsDto {
 
     int32_t getRankingDuration() const;
 
-    void setMinutes(const int8_t& inputMinutes);
+    void setMinutes(const int16_t& inputMinutes);
 
-    void setSeconds(const int8_t& inputSeconds);
+    void setSeconds(const int16_t& inputSeconds);
 
     void setRankingKills(const int32_t& inputRankingKills);
 
