@@ -41,6 +41,7 @@ scout_damage_decrease_by_enemy: 2.5
 
 # skills:
 stop_skill_time: 1
+grenade_velocity: 10
 #   grenade:
 grenade_damage: 120
 grenade_recharge: 10

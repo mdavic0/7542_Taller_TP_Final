@@ -49,6 +49,7 @@ float CF::scout_damage_decrease_by_enemy = CF::file["scout_damage_decrease_by_en
 * Special abilities
 ******************************/
 double CF::stop_skill_time = CF::file["stop_skill_time"].as<double>();
+int CF::grenade_velocity = CF::file["grenade_velocity"].as<int>();
 
 // Grenade
 int CF::grenade_damage = CF::file["grenade_damage"].as<int>();
@@ -170,6 +171,8 @@ void Configuration::loadConfiguration(const std::string& filename) {
      * Special abilities
      ******************************/
     stop_skill_time = file["stop_skill_time"].as<double>();
+    grenade_velocity = file["grenade_velocity"].as<int>();
+
     // Grenade
     grenade_damage = file["grenade_damage"].as<int>();
     grenade_recharge = file["grenade_recharge"].as<int>();

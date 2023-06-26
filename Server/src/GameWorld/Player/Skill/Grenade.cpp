@@ -4,7 +4,7 @@
 
 Grenade::Grenade(TypeGrenade typeGrenade, uint8_t id, uint8_t damage, std::pair<int16_t, int16_t> position) :
     typeGrenade(typeGrenade), id(id), damage(damage), available(true), reloadingClock(0),
-    position(position), movement_direction({0,0}), velocity(0),
+    position(position), movement_direction({0,0}), velocity(CF::grenade_velocity),
     collidable(std::make_shared<Collidable>(0, position, 5, 5)),
     elapsedTime(0), explosionClock(0), finalPosition({0, 0}), movementClock(0),
     moving(false), readyToExplode(false), hasExploded(false) {}
