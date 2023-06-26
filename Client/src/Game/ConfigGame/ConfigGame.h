@@ -30,6 +30,7 @@ class ConfigGame {
         std::map<uint8_t, std::shared_ptr<Enemy>>& getEnemies();    
         std::map<uint8_t, std::shared_ptr<Obstacles>>& getObstacles();
         TextureManager& getTextureManager();
+        ManagerMusic& getManagerMusic();
         TypeGame getMode();
 };
 

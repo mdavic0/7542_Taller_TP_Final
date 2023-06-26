@@ -107,6 +107,8 @@ Snapshot::Snapshot(Snapshot&& other) {
     this->enemies = other.enemies;
     this->typeGame = other.typeGame;
     this->obstacles = other.obstacles;
+    this->grenades = other.grenades;
+    this->blitzAttacking = other.blitzAttacking;
 
     other.event = Event::event_invalid;
     other.code = 0;
@@ -119,6 +121,8 @@ Snapshot::Snapshot(Snapshot&& other) {
     other.playersInfo = std::vector<StOperator> {};
     other.enemies = std::vector<EnemyDto> {};
     other.obstacles = std::vector<ObstacleDto> {};
+    other.grenades = std::vector<GrenadeDto> {};
+    other.blitzAttacking = false;
 }
 
 Snapshot& Snapshot::operator=(Snapshot&& other) {
@@ -138,6 +142,8 @@ Snapshot& Snapshot::operator=(Snapshot&& other) {
     this->enemies = other.enemies;
     this->typeGame = other.typeGame;
     this->obstacles = other.obstacles;
+    this->grenades = other.grenades;
+    this->blitzAttacking = other.blitzAttacking;
 
     other.event = Event::event_invalid;
     other.code = 0;
@@ -150,6 +156,8 @@ Snapshot& Snapshot::operator=(Snapshot&& other) {
     other.playersInfo = std::vector<StOperator> {};
     other.enemies = std::vector<EnemyDto> {};
     other.obstacles = std::vector<ObstacleDto> {};
+    other.grenades = std::vector<GrenadeDto> {};
+    other.blitzAttacking = false;
 
     return *this;
 }

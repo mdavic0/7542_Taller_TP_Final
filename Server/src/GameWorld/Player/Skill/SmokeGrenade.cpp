@@ -4,7 +4,7 @@
 
 SmokeGrenade::SmokeGrenade(std::pair<int16_t, int16_t> position) :
         Grenade(TypeGrenade::grenade_smoke,  CF::grenade_damage, position),
-        speedReduction(CF::smoke_speed_reduction){}
+        speedReduction(CF::smoke_speed_reduction) {}
 
 void SmokeGrenade::applyStep(std::map<uint8_t, std::shared_ptr<Player>> &players,
                              std::map<uint8_t, std::shared_ptr<Infected>> &infecteds,

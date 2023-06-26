@@ -26,6 +26,10 @@ ConfigGame::ConfigGame(std::shared_ptr<Snapshot> config, Renderer& render,
     }
 }
 
+ManagerMusic& ConfigGame::getManagerMusic() {
+    return this->music;
+}
+
 TextureManager& ConfigGame::getTextureManager() {
     return this->textures;
 }

@@ -3,7 +3,7 @@
 Idf::Idf() : Weapon(CF::idf_damage,
                     CF::idf_rate,
                     CF::idf_capacity),
-                    burstFiredBullets(0), burstEnded(false) {}
+                    burstFiredBullets(0), burstEnded(false), scope(CF::idf_scope) {}
 
 bool Idf::shoot(std::shared_ptr<Collidable> &player, bool right,
            std::map<uint8_t, std::shared_ptr<Infected>> &infecteds,
@@ -58,7 +58,7 @@ void Idf::shootRight(std::shared_ptr<Collidable> &player,
                      std::map<uint8_t, std::shared_ptr<Infected>> &infecteds) {
     for (auto &infected : infecteds) {
         if (player->isAlignedRight(infected.second->getCollidable())) {
-            infected.second->applyDamage(this->damage);
+            infected.second->applyDamage(calculateDamage(player->rightDistance(infected.second->getCollidable())));
         }
     }
 }
@@ -67,7 +67,11 @@ void Idf::shootLeft(std::shared_ptr<Collidable> &player,
                     std::map<uint8_t, std::shared_ptr<Infected>> &infecteds) {
     for (auto &infected : infecteds) {
         if (player->isAlignedLeft(infected.second->getCollidable())) {
-            infected.second->applyDamage(this->damage);
+            infected.second->applyDamage(calculateDamage(player->leftDistance(infected.second->getCollidable())));
         }
     }
+}
+
+float Idf::calculateDamage(float distance) {
+    return this->damage - (distance*this->scope) ;
 }

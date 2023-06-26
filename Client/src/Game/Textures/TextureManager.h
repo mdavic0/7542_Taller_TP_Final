@@ -5,6 +5,7 @@
 #include "RendererSdl.h"
 #include "TypeInfected.h"
 #include "TypeObstacle.h"
+#include "TypeGrenade.h"
 #include <map>
 #include <memory>
 #include <string>
@@ -20,6 +21,8 @@ class TextureManager {
         SDL_Texture* getTexture(TypeObstacle type);
         SDL_Texture* getTexture(std::string nameTexture);
         int getFrames(TypeInfected type, std::string nameTexture);
+        int getFrames(TypeGrenade type, std::string nameTexture);
+        int getFramesBlitz();
 
 };
 

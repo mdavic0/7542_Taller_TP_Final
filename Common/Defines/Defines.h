@@ -15,13 +15,16 @@
 #define PATH_OBSTACLES "assets/images/sdl/obstacles/"
 #define PATH_MAPS "assets/images/sdl/maps/"
 #define PATH_ENEMIES "assets/images/sdl/enemies/"
+#define PATH_GRENADES_EXPLOTION "assets/images/sdl/grenades/Explosion.png"
+#define PATH_GRENADES_SMOKE "assets/images/sdl/grenades/Smoke.png"
+#define PATH_GRENADES_BLITZ "assets/images/sdl/grenades/Blitz.png"
 // Path Music
 #define PATH_MUSIC_LAUNCHER "../assets/music/launcher/"
 #define PATH_MUSIC_LOBBY "assets/music/sdl/sound/lobby.wav"
 #define PATH_MUSIC_GAME "assets/music/sdl/sound/game.wav"
 #define PATH_MUSIC_OPERATOR "assets/music/sdl/units/"
 #define PATH_MUSIC_ENEMY "assets/music/sdl/enemies/"
-
+#define PATH_MUSIC_EXPLOTION "assets/music/sdl/grenades/explotion.wav"
 // Animation SDL
 #define SIZE_FRAME 128
 #define SIZE_FRAME_ENEMY 96

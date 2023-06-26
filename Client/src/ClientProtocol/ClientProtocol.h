@@ -581,7 +581,7 @@ std::vector<GrenadeDto> getGrenades(std::shared_ptr<T> skt) {
             break;
         
         case GRENADE_SMOKE:
-            type = TypeGrenade::grenade_explosive;
+            type = TypeGrenade::grenade_smoke;
             break;
         
         default:

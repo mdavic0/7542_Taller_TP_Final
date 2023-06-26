@@ -4,7 +4,7 @@
 #include <SDL2/SDL.h>
 
 ManagerMusic::ManagerMusic() : 
-    mixer(MIX_DEFAULT_FREQUENCY, AUDIO_S16, MIX_CHANNELS_MANAGER, 512),
+    mixer(MIX_DEFAULT_FREQUENCY, AUDIO_S16, MIX_DEFAULT_CHANNELS, 512),
     lastSoundTime(0) {
     this->loadMusic();
 }
@@ -69,6 +69,9 @@ void ManagerMusic::loadMusic() {
     listMusic["venom-idle"] = std::make_unique<Chunk>(path + "/idle.wav");
     listMusic["venom-attack"] = std::make_unique<Chunk>(path + "/attack.wav");
     listMusic["venom-dead"] = std::make_unique<Chunk>(path + "/dead.wav");
+    // Music Explotion
+    path = PATH_MUSIC_EXPLOTION;
+    listMusic["explotion"] = std::make_unique<Chunk>(path); 
 }
 
 void ManagerMusic::playAction(TypeOperator type, const std::string& action) {
@@ -131,17 +134,25 @@ void ManagerMusic::playInfectedMusic(TypeInfected type, const std::string& actio
 
 
 void ManagerMusic::playEffectOperator(Mix_Chunk* chunk) {
-    this->mixer.playChannel(2, chunk, 0);
+    this->mixer.playChannel(1, chunk, 0);
 }
 
 void ManagerMusic::playEffectEnemy(Mix_Chunk* chunk) {
     this->mixer.playChannel(2, chunk, 0);
 }
 
+void ManagerMusic::playEffectGrenade(std::string music) {
+    uint32_t currentTime = SDL_GetTicks();
+    if (currentTime - lastSoundTime >= 200) {
+        this->mixer.playChannel(2, listMusic[music]->get(), 0);
+        lastSoundTime = currentTime;
+    }
+}
+
 void ManagerMusic::playMusic(std::string music) {
-    this->mixer.haltChannel(1);
-    this->mixer.setVolume(1, 15);
-    this->mixer.playChannel(1, listMusic[music]->get(), -1);
+    this->mixer.haltChannel(0);
+    this->mixer.setVolume(0, 15);
+    this->mixer.playChannel(0, listMusic[music]->get(), -1);
 }
 
 ManagerMusic::~ManagerMusic() {
