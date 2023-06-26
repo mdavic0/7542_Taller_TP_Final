@@ -76,7 +76,7 @@ void GameSdl::update() {
     std::shared_ptr<Snapshot> snap = nullptr;
     while (!snapshotQueue.try_pop(snap)) {
     }
-    if (snap->getEvent() != Event::event_end && enemies.size() != 0) {
+    if (snap->getEvent() != Event::event_end) {
         if (soldiers.size() >= snap->getInfo().size()) {
             for (auto &player : soldiers) {
                 bool found = false;

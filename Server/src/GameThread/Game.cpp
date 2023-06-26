@@ -80,13 +80,16 @@ Queue<std::shared_ptr<EventDTO>>* Game::joinGame(Queue<std::shared_ptr<Snapshot>
 }
 
 void Game::startGame() {
-    this->started = true;
-    std::shared_ptr<Snapshot> snapshot = gameWorld.getSnapshot(true);
-    broadcastSnapshot(snapshot);
-    this->start();
+    if (not started) {
+        this->started = true;
+        std::shared_ptr<Snapshot> snapshot = gameWorld.getSnapshot(true);
+        broadcastSnapshot(snapshot);
+        this->start();
+    }
 }
 
 void Game::clientLeave(Queue<std::shared_ptr<Snapshot>> *q) {
+   std::lock_guard<std::mutex> locker(mutex);
     if (not started) {
         for (auto it = client_snapshot_queues.begin(); it != client_snapshot_queues.end(); ) {
             if (it->second == q) {
@@ -140,8 +143,6 @@ void Game::processEvents() {
             command->execute(this->gameWorld);
 
             if (event->getEvent() == Event::event_leave) {
-                std::lock_guard<std::mutex> locker(mutex);
-
                 auto search = client_snapshot_queues.find(event->getIdPlayer());
                 if (search != client_snapshot_queues.end()) {
                     search->second->close();
@@ -159,13 +160,18 @@ void Game::processEvents() {
 void Game::broadcastSnapshot(std::shared_ptr<Snapshot> snapshot) {
     std::lock_guard<std::mutex> locker(mutex);
     for (auto it = client_snapshot_queues.begin(); it != client_snapshot_queues.end(); /* increment inside loop */) {
-        if (!it->second->try_push(snapshot)) {
-            std::cout << "Push failed, need to remove client " << it->first << std::endl;
+        try {
+            if (!it->second->try_push(snapshot)) {
+                std::cout << "Push failed, need to remove client " << it->first << std::endl;
+                gameWorld.deletePlayer(it->first);
+                it->second->close();
+                it = client_snapshot_queues.erase(it);
+            } else {
+                ++it;
+            }
+        } catch(ClosedQueue& e) {
             gameWorld.deletePlayer(it->first);
-            it->second->close();
             it = client_snapshot_queues.erase(it);
-        } else {
-            ++it;
         }
     }
 }

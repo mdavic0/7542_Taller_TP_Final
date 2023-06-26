@@ -294,6 +294,26 @@ TEST(ServerToClient, SendStart) {
                             State::atack,
                             std::pair<int16_t, int16_t>(15,40)));
 
+  enemies.push_back(EnemyDto(2,
+                            TypeInfected::infected_jumper,
+                            State::atack,
+                            std::pair<int16_t, int16_t>(16,41)));
+
+  enemies.push_back(EnemyDto(3,
+                            TypeInfected::infected_witch,
+                            State::atack,
+                            std::pair<int16_t, int16_t>(17,42)));
+
+  enemies.push_back(EnemyDto(4,
+                            TypeInfected::infected_spear,
+                            State::atack,
+                            std::pair<int16_t, int16_t>(18,43)));
+
+  enemies.push_back(EnemyDto(5,
+                            TypeInfected::infected_venom,
+                            State::atack,
+                            std::pair<int16_t, int16_t>(19,44)));
+
   std::vector<ObstacleDto> obsts;
   obsts.push_back(ObstacleDto(5,
                               TypeObstacle::obstacle_crater,
@@ -319,12 +339,42 @@ TEST(ServerToClient, SendStart) {
   EXPECT_EQ(true, recvOp.isGrenadeAvailable());
   EXPECT_EQ(true, recvOp.isSmokeAvailable());
 
+
   EnemyDto recvEn = recvSnap.getEnemies().at(0);
   EXPECT_EQ(1, recvEn.getId());
   EXPECT_EQ(TypeInfected::infected_zombie, recvEn.getTypeInfected());
   EXPECT_EQ(State::atack, recvEn.getState());
   EXPECT_EQ(15, recvEn.getPosition().first);
   EXPECT_EQ(40, recvEn.getPosition().second);
+
+  recvEn = recvSnap.getEnemies().at(1);
+  EXPECT_EQ(2, recvEn.getId());
+  EXPECT_EQ(TypeInfected::infected_jumper, recvEn.getTypeInfected());
+  EXPECT_EQ(State::atack, recvEn.getState());
+  EXPECT_EQ(16, recvEn.getPosition().first);
+  EXPECT_EQ(41, recvEn.getPosition().second);
+
+  recvEn = recvSnap.getEnemies().at(2);
+  EXPECT_EQ(3, recvEn.getId());
+  EXPECT_EQ(TypeInfected::infected_witch, recvEn.getTypeInfected());
+  EXPECT_EQ(State::atack, recvEn.getState());
+  EXPECT_EQ(17, recvEn.getPosition().first);
+  EXPECT_EQ(42, recvEn.getPosition().second);
+
+  recvEn = recvSnap.getEnemies().at(3);
+  EXPECT_EQ(4, recvEn.getId());
+  EXPECT_EQ(TypeInfected::infected_spear, recvEn.getTypeInfected());
+  EXPECT_EQ(State::atack, recvEn.getState());
+  EXPECT_EQ(18, recvEn.getPosition().first);
+  EXPECT_EQ(43, recvEn.getPosition().second);
+
+  recvEn = recvSnap.getEnemies().at(4);
+  EXPECT_EQ(5, recvEn.getId());
+  EXPECT_EQ(TypeInfected::infected_venom, recvEn.getTypeInfected());
+  EXPECT_EQ(State::atack, recvEn.getState());
+  EXPECT_EQ(19, recvEn.getPosition().first);
+  EXPECT_EQ(44, recvEn.getPosition().second);
+
 
   ObstacleDto recvOb = recvSnap.getObstacles().at(0);
   EXPECT_EQ(5, recvOb.getId());

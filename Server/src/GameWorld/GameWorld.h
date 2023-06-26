@@ -35,6 +35,7 @@ class GameWorld {
         std::map<uint8_t, std::shared_ptr<Player>> players;
         TypeGame type;
         uint8_t map; // id of the ui map generated
+        uint8_t rounds;
 
         // All the gameWorld collidables (can be Infecteds, Players, Obstacles...)
         std::map<uint8_t, std::shared_ptr<Collidable>> collidables;
@@ -63,7 +64,7 @@ class GameWorld {
         std::list<std::shared_ptr<BlitzAtack>> postExplosionBlitz;
 
     public:
-        GameWorld(const TypeGame& type, TypeDifficulty difficulty);
+        GameWorld(const TypeGame& type, const TypeDifficulty& difficulty);
         uint8_t addPlayer(TypeOperator op);
         void deletePlayer(uint8_t id);
 
@@ -96,6 +97,7 @@ class GameWorld {
         void simulatePostExplosionGrenadesStep(double stepTime);
         bool allPlayersAreDead();
         void simulatePostExplosionBlitz(double stepTime);
+        void updateRounds();
 };
 
 
