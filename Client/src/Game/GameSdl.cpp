@@ -147,6 +147,7 @@ void GameSdl::updateGrenades(std::shared_ptr<Snapshot> snap) {
             }
         }
         grenades = std::move(updatedGrenades);
+        std::cout << "grenades: " << grenades.size() << std::endl;
     }
 }
 

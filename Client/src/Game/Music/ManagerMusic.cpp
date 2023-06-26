@@ -85,7 +85,7 @@ void ManagerMusic::playAction(TypeOperator type, const std::string& action) {
         case TypeOperator::operator_scout:
             if (action == "attack") {
                 uint32_t currentTime = SDL_GetTicks();
-                if (currentTime - lastSoundTime >= 400) {
+                if (currentTime - lastSoundTime >= TIME_SLEEP_SCOUT) {
                     playEffectOperator(listMusic["scout-" + action]->get());
                     lastSoundTime = currentTime;
                 }
@@ -103,7 +103,7 @@ void ManagerMusic::playAction(TypeInfected type, const std::string& action) {
         this->playInfectedMusic(type, action);
     } else {
         uint32_t currentTime = SDL_GetTicks();
-        if (currentTime - lastSoundTime >= 100) {
+        if (currentTime - lastSoundTime >= TIME_SLEEP) {
             this->playInfectedMusic(type, action);
             lastSoundTime = currentTime;
         }
@@ -143,7 +143,7 @@ void ManagerMusic::playEffectEnemy(Mix_Chunk* chunk) {
 
 void ManagerMusic::playEffectGrenade(std::string music) {
     uint32_t currentTime = SDL_GetTicks();
-    if (currentTime - lastSoundTime >= 200) {
+    if (currentTime - lastSoundTime >= TIME_SLEEP) {
         this->mixer.playChannel(2, listMusic[music]->get(), 0);
         lastSoundTime = currentTime;
     }

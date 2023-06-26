@@ -46,7 +46,7 @@ void Hud::loadTextures() {
                                     renderHud, path + "bullet_hunting.png");
     texturesHud["blitz"] = std::make_unique<Texture>(
                                     renderHud, path + "blitz.png");
-    texturesHud["notblitz"] = std::make_unique<Texture>(
+    texturesHud["notBlitz"] = std::make_unique<Texture>(
                                     renderHud, path + "notBlitz.png");
     texturesHud["grenade"] = std::make_unique<Texture>(
                                     renderHud, path + "grenade.png");

@@ -1,5 +1,6 @@
 #include "GrenadeSdl.h"
 #include "Defines.h"
+#include <iostream>
 
 GrenadeSdl::GrenadeSdl(GrenadeDto dto, TextureManager& textures,
     Renderer& render, ManagerMusic& music) :
@@ -21,6 +22,7 @@ void GrenadeSdl::render(SDL_Rect camera) {
     if (!explotion) {
         renderMovement(camera);
     } else {
+        std::cout << "exploto\n";
         renderExplotion(camera);
     }
 }

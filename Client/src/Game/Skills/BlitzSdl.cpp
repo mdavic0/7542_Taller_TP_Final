@@ -9,15 +9,15 @@ BlitzSdl::BlitzSdl(Renderer& render, TextureManager& textures,
 
 void BlitzSdl::render(SDL_Rect camera) {
     int repet = window.getWidth() / SIZE_FRAME;
-    uint32_t lastSoundTime = 0;
+    // uint32_t lastSoundTime = 0;
     for (int i = 0; i < repet; ++i ) {
         this->renderExplotion(i, camera);
+        music.playEffectGrenade("explotion");
     }
-    uint32_t currentTime = SDL_GetTicks();
-    if (currentTime - lastSoundTime >= 4000) {
-        // music.playEffectGrenade("explotion");
-        lastSoundTime = currentTime;
-    }
+    // uint32_t currentTime = SDL_GetTicks();
+    // if (currentTime - lastSoundTime >= 4000) {
+    //     lastSoundTime = currentTime;
+    // }
 }
 
 void BlitzSdl::renderExplotion(int i, SDL_Rect camera) {

@@ -51,6 +51,8 @@
 
 // Music Channels
 #define MIX_CHANNELS_MANAGER 2
+#define TIME_SLEEP 4000
+#define TIME_SLEEP_SCOUT 400
 
 // Protocol Code
 #define CREATE_CODE 0x01
