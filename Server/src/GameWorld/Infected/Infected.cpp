@@ -8,7 +8,6 @@ Infected::Infected(TypeInfected typeInfected, uint8_t id, uint8_t life, uint8_t 
                    velocity(velocity), damage(damage), state(State::idle),
                    position(position), movement_direction(0,0),
                    collidable(std::move(collidable)), alive(true), target(nullptr) {
-    this->collidable->updatePosition(position);
 }
 
 void Infected::setMovementDirection(MoveTo direction) {
@@ -83,9 +82,9 @@ void Infected::atack() {
 
 void Infected::applyStep(std::map<uint8_t, std::shared_ptr<Collidable>> &collidables,
                          std::map<uint8_t, std::shared_ptr<Player>>& players) {
-    //this->setTarget(players);
+    this->setTarget(players);
     this->move(collidables);
-    //this->atack();
+    this->atack();
 }
 
 std::shared_ptr<Collidable> &Infected::getCollidable() {
@@ -150,6 +149,7 @@ void Infected::setTarget(std::map<uint8_t, std::shared_ptr<Player>> &players) {
 }
 
 void Infected::setMovementDirection() {
+    if (this->target == nullptr) return;
     if (this->collidable->isDown(this->target->getCollidable())) {
         this->setMovementDirection(MoveTo::move_down);
     } else {

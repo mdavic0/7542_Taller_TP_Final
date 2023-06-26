@@ -54,7 +54,7 @@ smoke_speed_reduction: 12
 
 #   blitz:
 blitz_damage: 100
-blitz_recharge: 30
+blitz_recharge: 10
 blitz_animation_time: 1.7
 
 ####################################################
@@ -89,11 +89,11 @@ venom_velocity: 20
 # Game Difficulty
 ####################################################
 # Easy
-zombie_amount_easy: 0
-jumper_amount_easy: 0
-witch_amount_easy: 0
+zombie_amount_easy: 13
+jumper_amount_easy: 5
+witch_amount_easy: 2
 spear_amount_easy: 3
-venom_amount_easy: 0
+venom_amount_easy: 2
 
 # Normal
 zombie_amount_normal: 20

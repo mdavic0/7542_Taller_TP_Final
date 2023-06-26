@@ -32,11 +32,15 @@ std::pair<int16_t, int16_t> RespawnController::getInfectedRespawnPosition() {
     std::mt19937_64 rng(dev());
 
     std::uniform_int_distribution<size_t> idDist(0, infectedAvailablePositions.size() - 1);
-    auto elementId = infectedAvailablePositions.begin();
-    std::advance(elementId, idDist(rng));
+    //auto elementId = infectedAvailablePositions.begin();
+    //std::advance(elementId, idDist(rng));
 
-    auto pos = *elementId;
-    infectedAvailablePositions.erase(elementId);
+    //auto pos = *elementId;
+    //infectedAvailablePositions.erase(elementId);
+
+    std::size_t randomIndex = idDist(rng);
+    auto pos = infectedAvailablePositions[randomIndex];
+    infectedAvailablePositions.erase(infectedAvailablePositions.begin() + randomIndex);
 
     return pos;
 }

@@ -192,7 +192,7 @@ InfectedFactory::createZombie(uint8_t &infectedId,
 
     return zombie;
 }
-#include <iostream>
+
 std::shared_ptr<Infected>
 InfectedFactory::createSpear(uint8_t &infectedId,
                              std::map<uint8_t, std::shared_ptr<Collidable>> &collidables,
@@ -208,8 +208,7 @@ InfectedFactory::createSpear(uint8_t &infectedId,
     spear = std::make_shared<Spear>(infectedId, spear_position, spear_collidable);
 
     collidables.insert({infectedId, spear_collidable});
-    std::cout << "Infected Pos: x:" + std::to_string(spear_position.first) + " y: " +
-                 std::to_string(spear_position.second) << std::endl;
+
     return spear;
 }
 

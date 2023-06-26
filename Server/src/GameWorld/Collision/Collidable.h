@@ -10,7 +10,7 @@ class Collidable {
         std::pair<int, int> topLeftCorner;
         int width;
         int height;
-        std::pair<int16_t, int16_t>& position;
+        std::pair<int16_t, int16_t> position;
 
     public:
         Collidable(uint8_t id, std::pair<int16_t, int16_t>& position, int width, int height);
@@ -22,7 +22,7 @@ class Collidable {
         bool isCloseTo(std::shared_ptr<Collidable> &other, float closeDistance);
         bool isOnRight(std::shared_ptr<Collidable>& other);
         bool isDown(std::shared_ptr<Collidable>& other);
-        float distance(std::pair<int16_t, int16_t>& otherPos);
+        double distance(std::pair<int16_t, int16_t>& otherPos);
 
         int leftDistance(std::shared_ptr<Collidable>& other);
         int rightDistance(std::shared_ptr<Collidable>& other);
