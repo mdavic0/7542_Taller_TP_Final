@@ -1,7 +1,34 @@
 #include "StatsController.h"
 #include <algorithm>
+#include <ostream>
+#include <fstream>
+#include "Defines.h"
 
-StatsController::StatsController() {}
+
+StatsController::StatsController() {
+    std::ifstream file(STATS_PATH);
+    if (file.is_open()) {
+        std::string header;
+        int value;
+        while (file >> header && header != HEADER_END) {
+            if (header == HEADER_KILL) {
+                while (file >> value && value != -1) {
+                    killsRanking.push_back(value);
+                }
+            } else if (header == HEADER_SHOT) {
+                while (file >> value && value != -1) {
+                    shotsRanking.push_back(value);
+                }
+            } else if (header == HEADER_DURATION) {
+                char value1, value2;
+                while (file >> value1 >> value2 && value1 != -1 && value2 != -1) {
+                    durationRanking.push_back({value1, value2});
+                }
+            }
+        }
+        file.close();
+    }
+}
 
 void StatsController::insertKillsRanking(const uint16_t& kills) {
     auto it = std::lower_bound(killsRanking.begin(), killsRanking.end(), kills);
@@ -60,7 +87,35 @@ std::shared_ptr<Snapshot> StatsController::updateStats(std::vector<StatsDto> sta
     }
 
     return std::make_shared<Snapshot>(statsFromGame);
+
 }
 
+StatsController::~StatsController() {
+    std::ofstream file(STATS_PATH);
+    if (file.is_open()) {
+        // SAVE KILLS
+        file << HEADER_KILL << std::endl;
+        for (const auto& value : killsRanking) {
+            file << value << " ";
+        }
+        file << "-1" << std::endl; 
 
-StatsController::~StatsController() {}
+        // SAVE SHOTS
+        file << HEADER_SHOT << std::endl;
+        for (const auto& value : shotsRanking) {
+            file << value << " ";
+        }
+        file << "-1" << std::endl; 
+
+        // SAVE DURATION
+        file << HEADER_DURATION << std::endl;
+        for (const auto& value : durationRanking) {
+            file << value.first << " " << value.second << " ";
+        }
+        file << "-1 -1" << std::endl; 
+
+        file << HEADER_END << std::endl;
+
+        file.close();
+    }
+}
