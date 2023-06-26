@@ -6,17 +6,33 @@
 #include <iterator>
 #include <utility>
 
-Game::Game(const uint32_t id, std::string name, const TypeGame& type, TypeDifficulty difficulty) :
-    id(id), name(std::move(name)), mutex(),
+Game::Game(const uint32_t id, std::string name, const TypeGame& type, const TypeDifficulty& difficulty,
+    StatsController& statsController) : id(id), name(std::move(name)), mutex(),
     unprocessed_events(QUEUE_MAX_SIZE), client_snapshot_queues(),
     talking(true), alive(true), gameWorld(type, difficulty),
-    started(false), commandFactory() {}
+    started(false), commandFactory(), statsController(statsController), sendStats(false) {}
 
 void Game::run() {
     try {
+        auto startGameTime = std::chrono::steady_clock::now();
+
         while(talking && client_snapshot_queues.size() > 0) {
             gameLoop();
         }
+
+        if (sendStats) {
+            auto endGameTime = std::chrono::steady_clock::now();
+            auto duration = endGameTime - startGameTime;
+
+            auto minutes = std::chrono::duration_cast<std::chrono::minutes>(duration);
+            auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration - minutes);
+
+            uint8_t minutesValue = static_cast<uint8_t>(minutes.count());
+            uint8_t secondsValue = static_cast<uint8_t>(seconds.count());
+
+            broadcastSnapshot(statsController.updateStats(gameWorld.getStats(), minutesValue, secondsValue));
+        }
+
     } catch (const std::exception& exc) {
         std::cout << "Game - Exception occurred test log: " << exc.what() << std::endl;
     }
@@ -108,7 +124,7 @@ void Game::gameLoop() {
         }
 
         if(gameWorld.isEnded()){
-            broadcastSnapshot(gameWorld.getStats());
+            sendStats = true;
             stop();
         }
     }

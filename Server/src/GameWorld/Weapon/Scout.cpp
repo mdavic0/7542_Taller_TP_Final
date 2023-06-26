@@ -61,6 +61,9 @@ void Scout::shootRight(std::shared_ptr<Collidable> &player,
     for (auto &infected : sortEnemiesRight(infecteds)) {
         if (player->isAlignedRight(infected->getCollidable())) {
             infected->applyDamage(calculateDamage(player->rightDistance(infected->getCollidable()), counter));
+            if (!infected->isAlive()) {
+                this->kills++;
+            }
             counter++;
         }
     }
@@ -72,6 +75,9 @@ void Scout::shootLeft(std::shared_ptr<Collidable> &player,
     for (auto &infected : sortEnemiesLeft(infecteds)) {
         if (player->isAlignedLeft(infected->getCollidable())) {
             infected->applyDamage(calculateDamage(player->leftDistance(infected->getCollidable()), counter));
+            if (!infected->isAlive()) {
+                this->kills++;
+            }
             counter++;
         }
     }

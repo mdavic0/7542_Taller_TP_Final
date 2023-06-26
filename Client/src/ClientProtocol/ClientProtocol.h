@@ -298,18 +298,45 @@ Snapshot getEnd(std::shared_ptr<T> skt) {
 }
 
 Snapshot getStats(std::shared_ptr<T> skt) {
-    uint32_t time;
-    this->recvAll(&time, 4, skt);
-    time = ntohl(time);
+    uint8_t count;
+    this->recvAll(&count, 1, skt);
 
-    uint16_t shots;
-    this->recvAll(&shots, 2, skt);
-    shots = ntohs(shots);
+    std::vector<StatsDto> stats;
 
-    uint8_t kills;
-    this->recvAll(&kills, 1, skt);
+    for (uint8_t i = 0; i < count; i++) {
+        uint8_t id;
+        this->recvAll(&id, 1, skt);
 
-    return Snapshot(time, shots, kills);
+        uint16_t kills;
+        this->recvAll(&kills, 2, skt);
+        kills = ntohs(kills);
+
+        uint32_t rankingKills;
+        this->recvAll(&rankingKills, 4, skt);
+        rankingKills = ntohl(rankingKills);
+
+        uint16_t shots;
+        this->recvAll(&shots, 2, skt);
+        shots = ntohs(shots);
+
+        uint32_t rankingShots;
+        this->recvAll(&rankingShots, 4, skt);
+        rankingShots = ntohl(rankingShots);
+
+        uint8_t minutes;
+        this->recvAll(&minutes, 1, skt);
+
+        uint8_t seconds;
+        this->recvAll(&seconds, 1, skt);
+
+        uint32_t rankingDuration;
+        this->recvAll(&rankingDuration, 4, skt);
+        rankingDuration = ntohl(rankingDuration);
+
+        stats.push_back(StatsDto(id, kills, rankingKills, shots, rankingShots, minutes, seconds, rankingDuration));
+    }
+
+    return Snapshot(stats);
 }
 
 std::vector<StOperator> getPlayers(std::shared_ptr<T> skt) {
@@ -714,6 +741,7 @@ Snapshot getSnapshot(std::shared_ptr<T> skt) {
         break;
 
     case END_CODE:
+         std::cout << "end recieved " << std::endl;
         return getEnd(skt);
         break;
 

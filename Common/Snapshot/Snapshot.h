@@ -7,6 +7,7 @@
 #include "TypeGame.h"
 #include "EnemyDto.h"
 #include "GrenadeDto.h"
+#include "StatsDto.h"
 #include <utility>
 #include <string>
 #include <vector>
@@ -26,9 +27,7 @@ class Snapshot {
     uint8_t size;
     uint8_t idMap;
 
-    uint8_t kills;
-    uint16_t shots;
-    uint32_t time; //seconds
+    std::vector<StatsDto> stats;
 
 public:
     // CREATE 
@@ -46,7 +45,7 @@ public:
     explicit Snapshot(const Event& event);
 
     // STATS
-    explicit Snapshot(const uint32_t& time, const uint16_t& shots, const uint8_t& kills);
+    explicit Snapshot(const std::vector<StatsDto>& stats);
 
     Event getEvent() const;
 
@@ -64,11 +63,7 @@ public:
 
     uint8_t getMap() const;
 
-    uint8_t getKills() const;
-    
-    uint16_t getShots() const;
-
-    uint32_t getTime() const;
+    std::vector<StatsDto> getStats() const;
 
     std::vector<StOperator> getInfo() const;
 

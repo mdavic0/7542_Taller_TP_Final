@@ -59,6 +59,9 @@ void Idf::shootRight(std::shared_ptr<Collidable> &player,
     for (auto &infected : infecteds) {
         if (player->isAlignedRight(infected.second->getCollidable())) {
             infected.second->applyDamage(calculateDamage(player->rightDistance(infected.second->getCollidable())));
+            if (!infected.second->isAlive()) {
+                this->kills++;
+            }
         }
     }
 }
@@ -68,6 +71,9 @@ void Idf::shootLeft(std::shared_ptr<Collidable> &player,
     for (auto &infected : infecteds) {
         if (player->isAlignedLeft(infected.second->getCollidable())) {
             infected.second->applyDamage(calculateDamage(player->leftDistance(infected.second->getCollidable())));
+            if (!infected.second->isAlive()) {
+                this->kills++;
+            }
         }
     }
 }

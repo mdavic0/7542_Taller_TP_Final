@@ -395,10 +395,42 @@ TEST(ServerToClient, SendPlaying) {
   EXPECT_EQ(6, recvGr.getPosition().first);
   EXPECT_EQ(5, recvGr.getPosition().second);
 }
-/*
-sendEnd
-sendStats
-*/
+
+TEST(ServerToClient, SendEnd) {
+  std::shared_ptr<SimulatedSocket> skt = std::make_shared<SimulatedSocket>();
+  ClientProtocol<SimulatedSocket> client;
+  ServerProtocol<SimulatedSocket> server;
+    
+  std::shared_ptr<Snapshot> snap = std::make_shared<Snapshot>(Event::event_end);
+  
+  server.sendSnapshot(snap, skt);
+  Snapshot recvSnap = client.getSnapshot(skt);
+
+  EXPECT_EQ(Event::event_end, recvSnap.getEvent());
+}
+
+TEST(ServerToClient, SendStats) {
+  std::shared_ptr<SimulatedSocket> skt = std::make_shared<SimulatedSocket>();
+  ClientProtocol<SimulatedSocket> client;
+  ServerProtocol<SimulatedSocket> server;
+    
+  std::vector<StatsDto> stats;
+  stats.push_back(StatsDto(1, 22, 80));
+
+  std::shared_ptr<Snapshot> snap = std::make_shared<Snapshot>(stats);
+  
+  server.sendSnapshot(snap, skt);
+  Snapshot recvSnap = client.getSnapshot(skt);
+
+  EXPECT_EQ(Event::event_stats, recvSnap.getEvent());
+
+  StatsDto stat = recvSnap.getStats().at(0);
+  EXPECT_EQ(1, stat.getPlayerId());
+  EXPECT_EQ(22, stat.getKills());
+  EXPECT_EQ(80, stat.getShots());
+  //EXPECT_EQ(40, stat.getMinutes());
+  //EXPECT_EQ(33, stat.getSeconds());
+}
 
 //  COLLIDABLE TESTS
 

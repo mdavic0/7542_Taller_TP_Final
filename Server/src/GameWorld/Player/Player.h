@@ -59,6 +59,9 @@ class Player {
 
         int8_t& getHealth();
         uint8_t& getMunition();
+        uint16_t& getKills();
+        uint16_t& getShots();
+
         virtual bool isGrenadeAvailable() = 0;
         virtual bool isSmokeAvailable() = 0;
         std::shared_ptr<Collidable>& getCollidable();

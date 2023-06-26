@@ -17,6 +17,7 @@ class Weapon {
         uint8_t damage;
         uint8_t munition;
         uint16_t totalFiredBullets;
+        uint16_t kills;
         double reloadingClock;
         uint8_t rate;
         double shootingClock;
@@ -28,6 +29,8 @@ class Weapon {
         void activate();
         void deactivate();
         uint8_t& getMunition();
+        uint16_t& getKills();
+        uint16_t& getShots();
         virtual bool shoot(std::shared_ptr<Collidable> &player, bool right,
                            std::map<uint8_t, std::shared_ptr<Infected>> &infecteds,
                            double stepTime) = 0;
