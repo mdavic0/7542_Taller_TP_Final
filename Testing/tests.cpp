@@ -412,7 +412,10 @@ TEST(ServerToClient, SendEnd) {
   EXPECT_EQ(Event::event_end, recvSnap.getEvent());
 }
 
-TEST(ServerToClient, SendStats) {
+TEST(ServerToClient, SendStats) {  
+  std::ofstream clearFile(STATS_TEST_PATH, std::ios::trunc);
+  clearFile.close();
+
   std::shared_ptr<SimulatedSocket> skt = std::make_shared<SimulatedSocket>();
   ClientProtocol<SimulatedSocket> client;
   ServerProtocol<SimulatedSocket> server;
@@ -434,6 +437,9 @@ TEST(ServerToClient, SendStats) {
   EXPECT_EQ(80, stat.getShots());
   EXPECT_EQ(6, stat.getMinutes());
   EXPECT_EQ(45, stat.getSeconds());
+  EXPECT_EQ(0, stat.getRankingKills());
+  EXPECT_EQ(0, stat.getRankingShots());
+  EXPECT_EQ(0, stat.getRankingDuration());
 }
 
 //  COLLIDABLE TESTS
@@ -641,6 +647,32 @@ TEST(Stats, StatsAraSavedToFile) {
   EXPECT_EQ(HEADER_END, header);
   
   file.close();
+}
+
+// USE THE STATS SAVED FROM BEFORE TEST
+TEST(Stats, RankingIsUpdated) {
+  //std::ofstream clearFile(STATS_TEST_PATH, std::ios::trunc);
+  //clearFile.close();
+
+  std::vector<StatsDto> stats;
+  stats.push_back(StatsDto(3, 10, 90));
+
+  // STATS WILL BE SAVED IN DESTRUCTOR
+  StatsController* controller = new StatsController(STATS_TEST_PATH);
+  std::shared_ptr<Snapshot> snap(controller->updateStats(stats, 5, 40));
+  delete controller;
+
+
+  StatsDto stat = snap->getStats().at(0);
+  EXPECT_EQ(3, stat.getPlayerId());
+  EXPECT_EQ(10, stat.getKills());
+  EXPECT_EQ(90, stat.getShots());
+  EXPECT_EQ(5, stat.getMinutes());
+  EXPECT_EQ(40, stat.getSeconds());
+
+  EXPECT_EQ(1, stat.getRankingKills());
+  EXPECT_EQ(0, stat.getRankingShots());
+  EXPECT_EQ(1, stat.getRankingDuration());
 }
 
 int main(int argc, char **argv) {
