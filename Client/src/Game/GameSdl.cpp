@@ -139,9 +139,9 @@ void GameSdl::updateGrenades(std::shared_ptr<Snapshot> snap) {
         for (const auto& grenade : newGrenades) {
             bool exists = false;
             for (const auto& updatedGrenade : updatedGrenades) {
-                if (updatedGrenade->getPosition() == grenade.getPosition() &&
-                    updatedGrenade->getType() == grenade.getTypeGrenade()) {
+                if (updatedGrenade->getType() == grenade.getTypeGrenade()) {
                     exists = true;
+                    updatedGrenade->update(grenade);
                     break;
                 }
             }

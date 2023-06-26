@@ -90,11 +90,11 @@ venom_velocity: 20
 # Game Difficulty
 ####################################################
 # Easy
-zombie_amount_easy: 13
-jumper_amount_easy: 5
-witch_amount_easy: 2
+zombie_amount_easy: 0
+jumper_amount_easy: 0
+witch_amount_easy: 0
 spear_amount_easy: 3
-venom_amount_easy: 2
+venom_amount_easy: 0
 
 # Normal
 zombie_amount_normal: 20
