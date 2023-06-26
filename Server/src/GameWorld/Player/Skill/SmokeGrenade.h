@@ -8,6 +8,9 @@
 
 
 class SmokeGrenade : public Grenade {
+    private:
+        double speedReduction;
+
     public:
         explicit SmokeGrenade(std::pair<int16_t, int16_t> position);
         void applyStep(std::map<uint8_t, std::shared_ptr<Player>> &players,
@@ -15,7 +18,9 @@ class SmokeGrenade : public Grenade {
                        double stepTime) override;
         void throwGrenade(std::pair<int16_t, int16_t>& position,
                           double elapsedTime, bool right) override;
-
+        void explode(std::map<uint8_t, std::shared_ptr<Player>> &players,
+                     std::map<uint8_t, std::shared_ptr<Infected>> &infecteds,
+                     double stepTime) override;
         ~SmokeGrenade() override;
 };
 

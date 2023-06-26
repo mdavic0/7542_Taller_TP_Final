@@ -59,6 +59,8 @@ class GameWorld {
 
         TypeDifficulty difficulty;
 
+        std::list<std::shared_ptr<Grenade>> postExplosionGrenades;
+
     public:
         GameWorld(const TypeGame& type, TypeDifficulty difficulty);
         uint8_t addPlayer(TypeOperator op);
@@ -90,6 +92,7 @@ class GameWorld {
         void simulateInfectedStep(double stepTime);
         void simulateGrenadeStep(double stepTime);
         void simulateBlitzAtackStep(double stepTime);
+        void simulatePostExplosionGrenadesStep(double stepTime);
 };
 
 

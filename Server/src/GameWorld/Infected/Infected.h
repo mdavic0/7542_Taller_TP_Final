@@ -41,6 +41,7 @@ class Infected {
                        std::map<uint8_t, std::shared_ptr<Player>>& players);
         std::shared_ptr<Collidable>& getCollidable();
         void applyDamage(const int& amount);
+        void applySpeedReduction(double speedReduction);
         bool isAlive();
 
         std::pair<int16_t, int16_t>& getPosition();

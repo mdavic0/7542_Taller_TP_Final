@@ -48,14 +48,23 @@ class Configuration {
         static double scout_rate_time;
         static double scout_burst_delay;
 
-        // Special abilties
+        /******************************
+        * Special abilities
+        ******************************/
         static double stop_skill_time;
+
+        // Grenade
         static int grenade_damage;
         static int grenade_recharge;
+        static double grenade_explosion_time;
 
+        // Smoke
         static int smoke_damage;
         static int smoke_recharge;
-        
+        static double smoke_explosion_time;
+        static double smoke_speed_reduction;
+
+        // Blitz Atack
         static int blitz_damage;
         static int blitz_recharge;
         static double blitz_animation_time;

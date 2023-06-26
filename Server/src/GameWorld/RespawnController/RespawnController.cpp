@@ -5,7 +5,7 @@
 #include <utility>
 #include "Defines.h"
 
-#include <iostream>
+
 RespawnController::RespawnController() : playerAvailablePositions(),
    infectedAvailablePositions(), obstacleAvailablePositions() {
     this->resetRespawns();
@@ -16,14 +16,15 @@ std::pair<int16_t, int16_t> RespawnController::getPlayerRespawnPosition() {
     std::mt19937_64 rng(dev());
 
     std::uniform_int_distribution<size_t> idDist(0, playerAvailablePositions.size() - 1);
-    auto elementId = playerAvailablePositions.begin();
-    std::advance(elementId, idDist(rng));
+    //auto elementId = playerAvailablePositions.begin();
+    //std::advance(elementId, idDist(rng));
 
-    auto pos = elementId;
-    playerAvailablePositions.erase(elementId);
-
-    return *pos;
-    //return playerAvailablePositions.front();
+    //auto pos = *elementId;
+    //playerAvailablePositions.erase(elementId);
+    std::size_t randomIndex = idDist(rng);
+    auto pos = playerAvailablePositions[randomIndex];
+    playerAvailablePositions.erase(playerAvailablePositions.begin() + randomIndex);
+    return pos;
 }
 
 std::pair<int16_t, int16_t> RespawnController::getInfectedRespawnPosition() {
@@ -34,11 +35,10 @@ std::pair<int16_t, int16_t> RespawnController::getInfectedRespawnPosition() {
     auto elementId = infectedAvailablePositions.begin();
     std::advance(elementId, idDist(rng));
 
-    auto pos = elementId;
+    auto pos = *elementId;
     infectedAvailablePositions.erase(elementId);
 
-    return *pos;
-    //return infectedAvailablePositions.front();
+    return pos;
 }
 
 std::pair<int16_t, int16_t> RespawnController::getObstacleRespawnPosition() {
@@ -49,11 +49,10 @@ std::pair<int16_t, int16_t> RespawnController::getObstacleRespawnPosition() {
     auto elementId = obstacleAvailablePositions.begin();
     std::advance(elementId, idDist(rng));
 
-    auto pos = elementId;
+    auto pos = *elementId;
     obstacleAvailablePositions.erase(elementId);
 
-    return *pos;
-    //return obstacleAvailablePositions.front();
+    return pos;
 }
 
 void RespawnController::resetRespawns() {
@@ -74,17 +73,17 @@ void RespawnController::createPlayerRespawns() {
 
 void RespawnController::createInfectedRespawns() {
     // LEFT SIDE OF THE SCREEN
-    for (int i = 0; i < 12; i++) {
-        for (int j = 0; j < 5; j++ ) {
-            std::pair<int16_t, int16_t> position = {(MAP_WIDTH / 32) + ((SIZE_SPRITE_X / 2) * i),
+    for (int i = 0; i < 20; i++) {
+        for (int j = 0; j < 4; j++ ) {
+            std::pair<int16_t, int16_t> position = {(MAP_WIDTH / 32) + ((SIZE_SPRITE_X) * i),
                                                     ((MAP_HEIGTH * 4) / 5) - (SIZE_SPRITE_Y) + ((SIZE_SPRITE_Y / 2) * j)};
             infectedAvailablePositions.push_back(position);
         }
     }
 
     // RIGHT SIDE OF THE SCREEN
-    for (int i = 0; i < 12; i++) {
-        for (int j = 0; j < 5; j++ ) {
+    for (int i = 0; i < 20; i++) {
+        for (int j = 0; j < 4; j++ ) {
             std::pair<int16_t, int16_t> position = {(MAP_WIDTH * 3 / 4) + ((SIZE_SPRITE_X / 2) * i),
                                                     ((MAP_HEIGTH * 4) / 5) + ((SIZE_SPRITE_Y / 2) * j)};
             infectedAvailablePositions.push_back(position);

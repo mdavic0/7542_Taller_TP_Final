@@ -20,11 +20,8 @@ bool Collidable::collidesWith(std::map<uint8_t, std::shared_ptr<Collidable>> &co
 }
 
 bool Collidable::collidesWith(std::shared_ptr<Collidable>& other) {
-   // std::cout << "(" << this->topLeftCorner.first << "," << this->topLeftCorner.second << ")\n";
-   // std::cout << "(" << other->topLeftCorner.first << "," << other->topLeftCorner.second << ")\n";
    if (this->ovelapHorizontalAxis(other) and
        this->overlapVerticalAxis(other)) {
-       // std::cout << "Hay colision!\n";
        return  true;
    }
    return false;
@@ -67,8 +64,12 @@ bool Collidable::isAlignedRight(std::shared_ptr<Collidable> &other) {
 bool Collidable::isAlignedLeft(std::shared_ptr<Collidable> &other) {
     return (not this->isOnRight(other) and (this->overlapVerticalAxis(other)));
 }
-
+#include <iostream>
 bool Collidable::isCloseTo(std::shared_ptr<Collidable> &other, float closeDistance) {
+    std::cout << "COLLIDABLE Distance: " + std::to_string(distance(other->position)) + "\n\n";
+    std::cout << "CLOSE Distance: " + std::to_string(closeDistance) + "\n\n";
+    std::cout << "Infected Pos: x:" + std::to_string(other->position.first) + " y: " +
+                 std::to_string(other->position.second) << std::endl;
     return (this->distance(other->position) < closeDistance);
 }
 

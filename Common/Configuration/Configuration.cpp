@@ -41,12 +41,23 @@ double CF::scout_reload_time = CF::file["scout_reload_time"].as<double>();
 double CF::scout_rate_time = CF::file["scout_rate_time"].as<double>();
 double CF::scout_burst_delay = CF::file["scout_burst_delay"].as<double>();
 
-// Special abilties
+/******************************
+* Special abilities
+******************************/
 double CF::stop_skill_time = CF::file["stop_skill_time"].as<double>();
+
+// Grenade
 int CF::grenade_damage = CF::file["grenade_damage"].as<int>();
 int CF::grenade_recharge = CF::file["grenade_recharge"].as<int>();
+double CF::grenade_explosion_time = CF::file["grenade_explosion_time"].as<double>();
+
+// Smoke
 int CF::smoke_damage = CF::file["smoke_damage"].as<int>();
 int CF::smoke_recharge = CF::file["smoke_recharge"].as<int>();
+double CF::smoke_explosion_time = CF::file["smoke_explosion_time"].as<double>();
+double CF::smoke_speed_reduction = CF::file["smoke_speed_reduction"].as<double>();
+
+// Blitz
 int CF::blitz_damage = CF::file["blitz_damage"].as<int>();
 int CF::blitz_recharge = CF::file["blitz_recharge"].as<int>();
 double CF::blitz_animation_time = CF::file["blitz_animation_time"].as<double>();
@@ -151,12 +162,22 @@ void Configuration::loadConfiguration(const std::string& filename) {
     scout_rate_time = file["scout_rate_time"].as<double>();
     scout_burst_delay = file["scout_burst_delay"].as<double>();
 
-    // Special abilties
+    /******************************
+     * Special abilities
+     ******************************/
     stop_skill_time = file["stop_skill_time"].as<double>();
+    // Grenade
     grenade_damage = file["grenade_damage"].as<int>();
     grenade_recharge = file["grenade_recharge"].as<int>();
+    grenade_explosion_time = file["grenade_explosion_time"].as<double>();
+
+    // Smoke
     smoke_damage = file["smoke_damage"].as<int>();
     smoke_recharge = file["smoke_recharge"].as<int>();
+    smoke_explosion_time = file["smoke_explosion_time"].as<double>();
+    smoke_speed_reduction = file["smoke_speed_reduction"].as<double>();
+
+    // Blitz
     blitz_damage = file["blitz_damage"].as<int>();
     blitz_recharge = file["blitz_recharge"].as<int>();
     blitz_animation_time = file["blitz_animation_time"].as<double>();

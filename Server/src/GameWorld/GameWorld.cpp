@@ -98,6 +98,7 @@ void GameWorld::simulateStep(double stepTime) {
         simulateInfectedStep(stepTime);
         simulateGrenadeStep(stepTime);
         simulateBlitzAtackStep(stepTime);
+        simulatePostExplosionGrenadesStep(stepTime);
     }
 }
 
@@ -244,6 +245,9 @@ void GameWorld::simulateGrenadeStep(double stepTime) {
     // Erase exploded grenades
     for (auto it = grenades.cbegin(); it != grenades.cend(); /* no increment */){
         if ((*it)->exploded()) {
+            // Post explosion the grenades still need to simulate steps
+            // till it is available again (while reloading)
+            postExplosionGrenades.push_back((*it));
             grenades.erase(it++);
         } else {
             ++it;
@@ -269,5 +273,21 @@ void GameWorld::simulateBlitzAtackStep(double stepTime) {
     // Apply blitz step
     for (auto& blitzAtack : blitzAtacks) {
         blitzAtack->applyStep(this->infecteds, stepTime);
+    }
+}
+
+void GameWorld::simulatePostExplosionGrenadesStep(double stepTime) {
+    // Erase availables grenades
+    for (auto it = postExplosionGrenades.cbegin(); it != postExplosionGrenades.cend(); /* no increment */){
+        if ((*it)->isAvailable()) {
+            postExplosionGrenades.erase(it++);
+        } else {
+            ++it;
+        }
+    }
+
+    // Apply postExplosionGrenade step
+    for (auto& grenade : postExplosionGrenades) {
+        grenade->applyStep(this->players, this->infecteds, stepTime);
     }
 }

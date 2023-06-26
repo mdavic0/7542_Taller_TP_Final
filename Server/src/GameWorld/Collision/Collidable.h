@@ -19,15 +19,15 @@ class Collidable {
         bool isAlignedRight(std::shared_ptr<Collidable>& other);
         bool isAlignedLeft(std::shared_ptr<Collidable>& other);
 
-        bool isCloseTo(std::shared_ptr<Collidable>& other, float closeDistance);
+        bool isCloseTo(std::shared_ptr<Collidable> &other, float closeDistance);
         bool isOnRight(std::shared_ptr<Collidable>& other);
         bool isDown(std::shared_ptr<Collidable>& other);
+        float distance(std::pair<int16_t, int16_t>& otherPos);
+
     private:
         bool collidesWith(std::shared_ptr<Collidable>& other);
         bool overlapVerticalAxis(std::shared_ptr<Collidable>& other);
         bool ovelapHorizontalAxis(std::shared_ptr<Collidable>& other);
-        float distance(std::pair<int16_t, int16_t>& otherPos);
-
 };
 
 

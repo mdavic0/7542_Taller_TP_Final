@@ -15,9 +15,9 @@ class Player;
 class Grenade {
     private:
         TypeGrenade typeGrenade;
-        uint8_t damage;
 
     protected:
+        uint8_t damage;
         bool available;
         double reloadingClock;
         std::pair<int16_t, int16_t> position;
@@ -25,7 +25,12 @@ class Grenade {
         uint8_t velocity;
         std::shared_ptr<Collidable> collidable;
         double elapsedTime;
-        // TODO: ADD EXPLOSION TIME CONFIG
+        double explosionClock;
+        std::pair<int16_t, int16_t> finalPosition;
+        double movementClock;
+        bool moving;
+        bool readyToExplode;
+        bool hasExploded;
 
     public:
         Grenade(TypeGrenade typeGrenade, uint8_t damage, std::pair<int16_t, int16_t> position);
@@ -42,10 +47,14 @@ class Grenade {
         TypeGrenade getTypeGrenade();
         virtual ~Grenade();
 
-    private:
-        void move();
+    protected:
+        void move(double stepTime);
+        virtual void explode(std::map<uint8_t, std::shared_ptr<Player>> &players,
+                             std::map<uint8_t, std::shared_ptr<Infected>> &infecteds,
+                             double stepTime) = 0;
         void setMovementDirection(bool right);
         void stopMovementDirection();
+        void calculateFinalPosition(bool right, double elapsedTime);
 };
 
 

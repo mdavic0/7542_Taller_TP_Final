@@ -19,12 +19,14 @@ void IDFPlayer::setSkillState(Event event) {
         return;
     }
 
-    if (event == Event::event_throw_grenade) {
+    if (event == Event::event_throw_grenade and
+        this->grenade->isAvailable()) {
         grenadeElapsedTime = 0;
         throwingGrenade = true;
     }
 
-    if (event == Event::event_throw_smoke) {
+    if (event == Event::event_throw_smoke and
+        this->smoke->isAvailable()) {
         smokeElapsedTime = 0;
         throwingSmoke = true;
     }
