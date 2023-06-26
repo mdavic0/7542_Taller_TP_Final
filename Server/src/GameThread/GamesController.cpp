@@ -4,7 +4,7 @@
 #include <iostream>
 #include <random>
 
-GamesController::GamesController() : counter(0), games(), mutex() {}
+GamesController::GamesController() : counter(0), games(), mutex(), statsController(STATS_PATH) {}
 
 Queue<std::shared_ptr<EventDTO>>* GamesController::create(std::shared_ptr<EventDTO> eventdto,
                                                           Queue<std::shared_ptr<Snapshot>>* snapshot_queue,

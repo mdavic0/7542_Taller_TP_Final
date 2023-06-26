@@ -144,7 +144,8 @@
 #define FELL_DOWN_LIMIT 3
 #define STEP_TIME 0.05
 
-#define STATS_PATH "Server/Stats/stats.txt"
+#define STATS_PATH "../../Stats/stats.txt"
+#define STATS_TEST_PATH "../Server/Stats/statsTest.txt"
 #define HEADER_KILL "KILL"
 #define HEADER_SHOT "SHOT"
 #define HEADER_DURATION "DURATION"

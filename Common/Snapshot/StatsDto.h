@@ -5,47 +5,46 @@
 
 class StatsDto {
     int8_t playerId; // IF PlayerId < 0 is a player of external game
-    uint16_t kills;
-    uint32_t rankingKills;
-    uint16_t shots;
-    uint32_t rankingShots;
-    uint8_t minutes;
-    uint8_t seconds;
-    uint32_t rankingDuration;
+    int16_t kills;
+    int32_t rankingKills;
+    int16_t shots;
+    int32_t rankingShots;
+    int8_t minutes;
+    int8_t seconds;
+    int32_t rankingDuration;
     
     public:
 
-    explicit StatsDto(const int8_t& playerId, const uint16_t& kills, const uint32_t& rankingKills, const uint16_t shots,
-        const uint32_t& rankingShots, const uint8_t& minutes, const uint8_t& seconds, const uint32_t& rankingDuration);
+    explicit StatsDto(const int8_t& playerId, const int16_t& kills, const int32_t& rankingKills, const int16_t shots,
+        const int32_t& rankingShots, const int8_t& minutes, const int8_t& seconds, const int32_t& rankingDuration);
 
-
-    explicit StatsDto(const int8_t& playerId, const uint16_t& kills, const uint16_t shots);
+    explicit StatsDto(const int8_t& playerId, const int16_t& kills, const int16_t shots);
 
     int8_t getPlayerId() const;
 
-    uint16_t getKills() const;
+    int16_t getKills() const;
     
-    uint16_t getShots() const;
+    int16_t getShots() const;
     
-    uint8_t getMinutes() const;
+    int8_t getMinutes() const;
 
-    uint8_t getSeconds() const;
+    int8_t getSeconds() const;
 
-    uint32_t getRankingKills() const;
+    int32_t getRankingKills() const;
 
-    uint32_t getRankingShots() const;
+    int32_t getRankingShots() const;
 
-    uint32_t getRankingDuration() const;
+    int32_t getRankingDuration() const;
 
-    void setMinutes(const uint8_t& inputMinutes);
+    void setMinutes(const int8_t& inputMinutes);
 
-    void setSeconds(const uint8_t& inputSeconds);
+    void setSeconds(const int8_t& inputSeconds);
 
-    void setRankingKills(const uint32_t& inputRankingKills);
+    void setRankingKills(const int32_t& inputRankingKills);
 
-    void setRankingShots(const uint32_t& inputRankingShots);
+    void setRankingShots(const int32_t& inputRankingShots);
 
-    void setRankingDuration(const uint32_t& inputRankingDuration);
+    void setRankingDuration(const int32_t& inputRankingDuration);
 };
 
 #endif

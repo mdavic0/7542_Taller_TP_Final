@@ -304,32 +304,32 @@ Snapshot getStats(std::shared_ptr<T> skt) {
     std::vector<StatsDto> stats;
 
     for (uint8_t i = 0; i < count; i++) {
-        uint8_t id;
+        int8_t id;
         this->recvAll(&id, 1, skt);
 
-        uint16_t kills;
+        int16_t kills;
         this->recvAll(&kills, 2, skt);
         kills = ntohs(kills);
 
-        uint32_t rankingKills;
+        int32_t rankingKills;
         this->recvAll(&rankingKills, 4, skt);
         rankingKills = ntohl(rankingKills);
 
-        uint16_t shots;
+        int16_t shots;
         this->recvAll(&shots, 2, skt);
         shots = ntohs(shots);
 
-        uint32_t rankingShots;
+        int32_t rankingShots;
         this->recvAll(&rankingShots, 4, skt);
         rankingShots = ntohl(rankingShots);
 
-        uint8_t minutes;
+        int8_t minutes;
         this->recvAll(&minutes, 1, skt);
 
-        uint8_t seconds;
+        int8_t seconds;
         this->recvAll(&seconds, 1, skt);
 
-        uint32_t rankingDuration;
+        int32_t rankingDuration;
         this->recvAll(&rankingDuration, 4, skt);
         rankingDuration = ntohl(rankingDuration);
 

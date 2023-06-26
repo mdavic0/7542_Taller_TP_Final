@@ -3,6 +3,9 @@
 #include "ClientProtocol.h"
 #include "ServerProtocol.h"
 #include "SimulatedSocket.h"
+#include "StatsController.h"
+#include <ostream>
+#include <fstream>
 
 #include <Collidable.h>
 
@@ -417,7 +420,8 @@ TEST(ServerToClient, SendStats) {
   std::vector<StatsDto> stats;
   stats.push_back(StatsDto(1, 22, 80));
 
-  std::shared_ptr<Snapshot> snap = std::make_shared<Snapshot>(stats);
+  StatsController controller(STATS_TEST_PATH);
+  std::shared_ptr<Snapshot> snap(controller.updateStats(stats, 6, 45));
   
   server.sendSnapshot(snap, skt);
   Snapshot recvSnap = client.getSnapshot(skt);
@@ -428,8 +432,8 @@ TEST(ServerToClient, SendStats) {
   EXPECT_EQ(1, stat.getPlayerId());
   EXPECT_EQ(22, stat.getKills());
   EXPECT_EQ(80, stat.getShots());
-  //EXPECT_EQ(40, stat.getMinutes());
-  //EXPECT_EQ(33, stat.getSeconds());
+  EXPECT_EQ(6, stat.getMinutes());
+  EXPECT_EQ(45, stat.getSeconds());
 }
 
 //  COLLIDABLE TESTS
@@ -583,6 +587,61 @@ TEST(Collidable, TrueIsOnRight) {
 }
 
 // isDown(std::shared_ptr<Collidable>& other);
+
+// STATS TESTS
+
+TEST(Stats, StatsAraSavedToFile) {
+  std::ofstream clearFile(STATS_TEST_PATH, std::ios::trunc);
+  clearFile.close();
+
+  std::vector<StatsDto> stats;
+  stats.push_back(StatsDto(3, 22, 80));
+
+  // STATS WILL BE SAVED IN DESTRUCTOR
+  StatsController* controller = new StatsController(STATS_TEST_PATH);
+  std::shared_ptr<Snapshot> snap(controller->updateStats(stats, 6, 45));
+  delete controller;
+
+  std::ifstream file(STATS_TEST_PATH);
+
+  std::string header;
+  file >> header;
+  EXPECT_EQ(HEADER_KILL, header);
+  
+  int16_t value;
+  file >> value;
+  EXPECT_EQ(22, value);
+  file >> value;
+  EXPECT_EQ(-1, value);
+
+  file >> header;
+  EXPECT_EQ(HEADER_SHOT, header);
+  
+  file >> value;
+  EXPECT_EQ(80, value);
+  file >> value;
+  EXPECT_EQ(-1, value);
+
+  file >> header;
+  EXPECT_EQ(HEADER_DURATION, header);
+  
+  int16_t minutes;
+  file >> minutes;
+  EXPECT_EQ(6, minutes);
+  int16_t seconds;
+  file >> seconds;
+  EXPECT_EQ(45, seconds);
+
+  file >> minutes;
+  EXPECT_EQ(-1, minutes);
+  file >> seconds;
+  EXPECT_EQ(-1, seconds);
+
+  file >> header;
+  EXPECT_EQ(HEADER_END, header);
+  
+  file.close();
+}
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
