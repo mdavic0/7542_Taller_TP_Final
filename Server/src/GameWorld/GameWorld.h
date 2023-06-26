@@ -34,7 +34,7 @@ class GameWorld {
         uint8_t players_amount;
         std::map<uint8_t, std::shared_ptr<Player>> players;
         TypeGame type;
-        uint8_t map;
+        uint8_t map; // id of the ui map generated
 
         // All the gameWorld collidables (can be Infecteds, Players, Obstacles...)
         std::map<uint8_t, std::shared_ptr<Collidable>> collidables;
@@ -90,6 +90,7 @@ class GameWorld {
         void simulateInfectedStep(double stepTime);
         void simulateGrenadeStep(double stepTime);
         void simulateBlitzAtackStep(double stepTime);
+        bool allPlayersAreDead();
 };
 
 

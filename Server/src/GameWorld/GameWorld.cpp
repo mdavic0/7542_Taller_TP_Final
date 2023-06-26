@@ -4,6 +4,8 @@
 #include <iterator>
 #include <utility>
 #include <algorithm>
+#include <iostream>
+
 
 GameWorld::GameWorld(const TypeGame& type, TypeDifficulty difficulty) :
     players_amount(INITIAL_PLAYERS_AMOUNT), players(), type(type), map(this->generateMapType()),
@@ -98,6 +100,25 @@ void GameWorld::simulateStep(double stepTime) {
         simulateInfectedStep(stepTime);
         simulateGrenadeStep(stepTime);
         simulateBlitzAtackStep(stepTime);
+        /*if (allPlayersAreDead()) {
+            std::cout << "PLAYERS DIED " << std::endl;
+            ended = true;
+        } else if(infecteds.empty()) {
+            std::cout << "NO MORE INFECTEDS" << std::endl;
+            switch (this->type) {
+                case TypeGame::game_survival:
+                    this->infecteds = infectedFactory.generateInfecteds(TypeDifficulty::difficulty_easy,
+                                                                        infectedId,
+                                                                        collidables,
+                                                                        RC);
+                    break;
+                case TypeGame::game_clear_zone:
+                    this->ended = true;
+                    break;
+                default:
+                    break;
+            }
+        }*/
     }
 }
 
@@ -148,7 +169,14 @@ std::shared_ptr<Snapshot> GameWorld::getSnapshot(bool first) {
 }
 
 std::shared_ptr<Snapshot> GameWorld::getStats() {
-    return std::make_shared<Snapshot>(10000, 1000, infectedId);
+    std::vector<StatsDto> stats;
+    for (auto& player : players) {
+        stats.push_back(StatsDto(player.first,
+                             player.second->getKills(),
+                             player.second->getShots(),
+                             222));
+    }
+    return std::make_shared<Snapshot>(stats);
 }
 
 void GameWorld::generateInfecteds() {
@@ -270,4 +298,13 @@ void GameWorld::simulateBlitzAtackStep(double stepTime) {
     for (auto& blitzAtack : blitzAtacks) {
         blitzAtack->applyStep(this->infecteds, stepTime);
     }
+}
+
+bool GameWorld::allPlayersAreDead() {
+    for (const auto& id : deadPlayersId) {
+        if (players.find(id) == players.end()) {
+            return false;
+        }
+    }
+    return true;
 }

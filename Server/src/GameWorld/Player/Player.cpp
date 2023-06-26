@@ -143,6 +143,13 @@ uint8_t& Player::getMunition() {
     return weapon->getMunition();
 }
 
+uint16_t& Player::getKills() {
+    return weapon->getKills();
+}
+uint16_t& Player::getShots() {
+    return weapon->getShots();
+}
+
 std::shared_ptr<Collidable> &Player::getCollidable() {
     return this->collidable;
 }
