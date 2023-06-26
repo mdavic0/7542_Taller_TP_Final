@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "EventDTO.h"
 #include "Snapshot.h"
+#include "StatsController.h"
 #include <mutex>
 #include <map>
 #include <memory>
@@ -18,6 +19,7 @@ class GamesController {
     uint8_t counter;       // counter
     std::map<uint32_t, Game*> games;
     std::mutex mutex;
+    StatsController statsController;
 
     public:
     /*

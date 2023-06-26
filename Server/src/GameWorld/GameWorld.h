@@ -77,7 +77,7 @@ class GameWorld {
          */
         void simulateStep(double stepTime);
         std::shared_ptr<Snapshot> getSnapshot(bool first);
-        std::shared_ptr<Snapshot> getStats();
+        std::vector<StatsDto> getStats();
         bool isEnded();
 
     private:

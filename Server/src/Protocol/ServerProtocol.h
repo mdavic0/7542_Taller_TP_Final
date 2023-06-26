@@ -369,11 +369,23 @@ void sendStats(const std::vector<StatsDto> &stats, std::shared_ptr<T> skt) {
         uint16_t aux_kills = htons(it->getKills());
         this->sendAll(&aux_kills, 2, skt);
 
+        uint32_t aux_rkg_kills = htonl(it->getRankingKills());
+        this->sendAll(&aux_rkg_kills, 4, skt);
+
         uint16_t aux_shots = htons(it->getShots());
         this->sendAll(&aux_shots, 2, skt);
 
-        float aux_duration = htonl(it->getDuration());
-        this->sendAll(&aux_duration, sizeof(float), skt);
+        uint32_t aux_rkg_shots = htonl(it->getRankingShots());
+        this->sendAll(&aux_rkg_shots, 4, skt);
+
+        uint8_t aux_minutes = it->getMinutes();
+        this->sendAll(&aux_minutes, 1, skt);
+
+        uint8_t aux_seconds = it->getSeconds();
+        this->sendAll(&aux_seconds, 1, skt);
+
+        uint32_t aux_rkg_duration = htonl(it->getRankingDuration());
+        this->sendAll(&aux_rkg_duration, 4, skt);
   }   
 }
 

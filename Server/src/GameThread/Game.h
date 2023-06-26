@@ -4,15 +4,16 @@
 #include <list>
 #include <mutex>
 #include <string>
+#include <atomic>
+#include <memory>
 #include "EventDTO.h"
 #include "Snapshot.h"
 #include "Queue.h"
 #include "Thread.h"
 #include "GameWorld.h"
-#include <atomic>
-#include <memory>
 #include "Command.h"
 #include "CommandFactory.h"
+#include "StatsController.h"
 
 /*
  * TDA Game
@@ -27,11 +28,14 @@ class Game : public Thread {
         std::atomic<bool> talking;
         std::atomic<bool> alive;
         std::atomic<bool> started;
+        std::atomic<bool> sendStats;
         GameWorld gameWorld;
         CommandFactory commandFactory;
+        StatsController& statsController;
 
     public:
-        Game(const uint32_t id, std::string  name, const TypeGame& type, TypeDifficulty difficulty);
+        Game(const uint32_t id, std::string  name, const TypeGame& type,
+                const TypeDifficulty& difficulty, StatsController& statsController);
 
         virtual void run() override;
 

@@ -168,15 +168,14 @@ std::shared_ptr<Snapshot> GameWorld::getSnapshot(bool first) {
     return std::make_shared<Snapshot>(Event::event_end);
 }
 
-std::shared_ptr<Snapshot> GameWorld::getStats() {
+std::vector<StatsDto> GameWorld::getStats() {
     std::vector<StatsDto> stats;
     for (auto& player : players) {
         stats.push_back(StatsDto(player.first,
                              player.second->getKills(),
-                             player.second->getShots(),
-                             222));
+                             player.second->getShots()));
     }
-    return std::make_shared<Snapshot>(stats);
+    return stats;
 }
 
 void GameWorld::generateInfecteds() {

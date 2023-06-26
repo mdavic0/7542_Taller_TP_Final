@@ -311,15 +311,29 @@ Snapshot getStats(std::shared_ptr<T> skt) {
         this->recvAll(&kills, 2, skt);
         kills = ntohs(kills);
 
+        uint32_t rankingKills;
+        this->recvAll(&rankingKills, 4, skt);
+        rankingKills = ntohl(rankingKills);
+
         uint16_t shots;
         this->recvAll(&shots, 2, skt);
         shots = ntohs(shots);
 
-        float duration;
-        this->recvAll(&duration, sizeof(float), skt);
-        duration = ntohl(duration);
+        uint32_t rankingShots;
+        this->recvAll(&rankingShots, 4, skt);
+        rankingShots = ntohl(rankingShots);
 
-        stats.push_back(StatsDto(id, kills, shots, duration));
+        uint8_t minutes;
+        this->recvAll(&minutes, 1, skt);
+
+        uint8_t seconds;
+        this->recvAll(&seconds, 1, skt);
+
+        uint32_t rankingDuration;
+        this->recvAll(&rankingDuration, 4, skt);
+        rankingDuration = ntohl(rankingDuration);
+
+        stats.push_back(StatsDto(id, kills, rankingKills, shots, rankingShots, minutes, seconds, rankingDuration));
     }
 
     return Snapshot(stats);

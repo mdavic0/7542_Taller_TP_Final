@@ -1,8 +1,7 @@
 #ifndef LEFT4DEAD_TYPEGRENADE_H
 #define LEFT4DEAD_TYPEGRENADE_H
 
-#include <cstdint>
-
+#include <stdint.h>
 
 enum class TypeGrenade : int8_t {
     grenade_idle = 0x00,
