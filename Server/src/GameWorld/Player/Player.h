@@ -23,10 +23,12 @@ class Player {
     private:
         TypeOperator typeOperator;
         uint8_t fell_down;
-        uint8_t velocity;
+        double velocity;
         std::shared_ptr<Weapon> weapon;
         std::shared_ptr<Collidable> collidable;
         bool alive;
+        double fellDownCLock;
+        bool infinityLife;
 
     protected:
         int8_t life;
@@ -46,6 +48,7 @@ class Player {
         void setShootingState();
         void stopShootingState();
         void setReloadingState();
+        void reanimate(std::map<uint16_t, std::shared_ptr<Player>>& players);
         virtual void setSkillState(const Event& event) = 0;
         virtual void stopSkillState(const Event& event) = 0;
         void applyStep(std::map<uint16_t, std::shared_ptr<Collidable>> &collidables,
@@ -66,7 +69,8 @@ class Player {
         virtual bool isSmokeAvailable() = 0;
         std::shared_ptr<Collidable>& getCollidable();
         void applyDamage(const int& amount);
-
+        void applySpeed(const double& speed);
+        void makeImmortal();
         bool isAlive();
         bool isFellDown();
 

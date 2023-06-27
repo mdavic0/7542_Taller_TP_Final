@@ -15,6 +15,9 @@ class Configuration {
         /******************************
          * OPERATORS
          ******************************/
+         static double fell_down_death_time;
+         static double super_speed_increment;
+
         // IDF:
         static int idf_damage;
         static int idf_health;

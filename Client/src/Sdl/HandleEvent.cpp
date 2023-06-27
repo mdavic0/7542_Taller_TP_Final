@@ -68,18 +68,18 @@ void EventHandler::handleKeyDownEvent(SDL_Keysym keysym) {
             std::cout << "F1 cheat\n";
             break;
         case SDLK_F2:
-            event = Event::event_cheat_infinite_munition;
+            event = Event::event_cheat_more_velocity;
             std::cout << "F2 cheat\n";
             break;
         case SDLK_F3:
-            event = Event::event_cheat_more_velocity;
+            event = Event::event_cheat_kill_enemies;
             std::cout << "F3 cheat\n";
             break;
         case SDLK_F4:
-            event = Event::event_cheat_kill_enemies;
+            event = Event::event_cheat_infinite_health;
             std::cout << "F4 cheat\n";
             break;
-        case SDLK_F5:
+         case SDLK_F5:
             event = Event::event_cheat_infinite_health;
             std::cout << "F5 cheat\n";
             break;
@@ -128,9 +128,10 @@ void EventHandler::handleKeyUpEvent(SDL_Keysym keysym) {
         case SDLK_e:
             event = Event::event_stop_smoke;
             break;
-        case SDLK_f:
+        /*case SDLK_f:
+            The reanimate not depend on time (possible future feature)
             event = Event::event_stop_reanimate;
-            break;
+            break;*/
         default:
             moveDirection = MoveTo::move_idle;
             break;

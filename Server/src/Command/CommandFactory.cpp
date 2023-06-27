@@ -11,6 +11,11 @@
 #include "SmokeGrenadeCommand.h"
 #include "StopSmokeGrenadeCommand.h"
 #include "BlitzAtackCommand.h"
+#include "ReanimateCommand.h"
+#include "CheatFinishGameCommand.h"
+#include "CheatSuperSpeedCommand.h"
+#include "CheatKillEnemiesCommand.h"
+#include "CheatInfinityLifeCommand.h"
 
 
 CommandFactory::CommandFactory() = default;
@@ -41,6 +46,16 @@ std::unique_ptr <Command> CommandFactory::getCommand(std::shared_ptr <EventDTO> 
             return std::make_unique<ReloadCommand>(event->getIdPlayer());
         case Event::event_leave:
             return std::make_unique<LeaveCommand>(event->getIdPlayer());
+        case Event::event_reanimate:
+            return std::make_unique<ReanimateCommand>(event->getIdPlayer());
+        case Event::event_cheat_finish_game:
+            return std::make_unique<CheatFinishGameCommand>(event->getIdPlayer());
+        case Event::event_cheat_more_velocity:
+            return std::make_unique<CheatSuperSpeedCommand>(event->getIdPlayer());
+        case Event::event_cheat_kill_enemies:
+            return std::make_unique<CheatKillEnemiesCommand>(event->getIdPlayer());
+        case Event::event_cheat_infinite_health:
+            return std::make_unique<CheatInfinityLifeCommand>(event->getIdPlayer());
         default:
             return nullptr;
     }

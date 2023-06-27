@@ -4,7 +4,7 @@
 #include "Command.h"
 
 
-class ExplosiveGrenadeCommand  : public Command {
+class ExplosiveGrenadeCommand : public Command {
     private:
         uint8_t id;
 

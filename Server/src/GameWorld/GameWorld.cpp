@@ -123,6 +123,7 @@ void GameWorld::simulateStep(double stepTime) {
         simulateBlitzAtackStep(stepTime);
         simulatePostExplosionGrenadesStep(stepTime);
         simulateBlitzAtackStep(stepTime);
+        simulatePostExplosionBlitz(stepTime);
     }
 }
 
@@ -379,3 +380,77 @@ void GameWorld::updateRounds() {
     }
 
 }
+
+void GameWorld::reanimatePlayer(Event event, uint8_t id) {
+    bool found = (std::find(deadPlayersId.begin(),
+                            deadPlayersId.end(),
+                            id) != deadPlayersId.end());
+    // Ignore actions from dead players
+    if (found) {
+        return;
+    }
+
+    if (event == Event::event_reanimate) {
+        players.at(id)->reanimate(this->players);
+    }
+}
+
+void GameWorld::finishGame(Event event, uint8_t id) {
+    bool found = (std::find(deadPlayersId.begin(),
+                            deadPlayersId.end(),
+                            id) != deadPlayersId.end());
+    // Ignore actions from dead players
+    if (found) {
+        return;
+    }
+
+    if (event == Event::event_cheat_finish_game) {
+        this->ended = true;
+    }
+}
+
+void GameWorld::applySuperSpeed(Event event, uint8_t id) {
+    bool found = (std::find(deadPlayersId.begin(),
+                            deadPlayersId.end(),
+                            id) != deadPlayersId.end());
+    // Ignore actions from dead players
+    if (found) {
+        return;
+    }
+
+    if (event == Event::event_cheat_more_velocity) {
+        players.at(id)->applySpeed(CF::super_speed_increment);
+    }
+}
+
+void GameWorld::killInfecteds(Event event, uint8_t id) {
+    bool found = (std::find(deadPlayersId.begin(),
+                            deadPlayersId.end(),
+                            id) != deadPlayersId.end());
+    // Ignore actions from dead players
+    if (found) {
+        return;
+    }
+
+    if (event == Event::event_cheat_kill_enemies) {
+        for (auto it = infecteds.cbegin(); it != infecteds.cend(); /* no increment */){
+                collidables.erase(it->first);
+                infecteds.erase(it++);
+        }
+    }
+}
+
+void GameWorld::makeInmortal(Event event, uint8_t id) {
+    bool found = (std::find(deadPlayersId.begin(),
+                            deadPlayersId.end(),
+                            id) != deadPlayersId.end());
+    // Ignore actions from dead players
+    if (found) {
+        return;
+    }
+
+    if (event == Event::event_cheat_infinite_health) {
+        players.at(id)->makeImmortal();
+    }
+}
+

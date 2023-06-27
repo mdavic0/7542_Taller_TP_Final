@@ -48,7 +48,6 @@ class Infected {
         TypeInfected& getTypeInfected();
         State& getState();
         uint16_t& getId();
-
         virtual ~Infected() = default;
 
     private:
