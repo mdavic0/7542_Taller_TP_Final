@@ -11,9 +11,10 @@ GameWorld::GameWorld(const TypeGame& type, const TypeDifficulty& difficulty) :
     players_amount(INITIAL_PLAYERS_AMOUNT), players(), type(type), map(this->generateMapType()),
     collidables(), infectedId(INITIAL_INFECTED_ID), obsacleId(INITIAL_OBSTACLE_ID),
     infectedFactory(), RC(), ended(false), obstacleFactory(), playerFactory(),
-    deadPlayersId(), difficulty(difficulty), rounds(0) {
+    deadPlayersId(), difficulty(difficulty), rounds(0), mapLimitId(INITIAL_MAP_LIMIT_ID) {
     this->generateInfecteds();
     this->generateObstacles();
+    this->generateMapLimits();
 }
 
 uint16_t GameWorld::addPlayer(const TypeOperator& op) {
@@ -215,6 +216,38 @@ void GameWorld::generateObstacles() {
                                                                               collidables,
                                                                               RC);
     this->obstacles.insert({obsacleId++, newObstacle});
+}
+
+void GameWorld::generateMapLimits() {
+    // LEFT LIMIT
+    std::pair<int16_t, int16_t> leftLimitpos = {0, MAP_HEIGTH * 0.8};
+
+    std::shared_ptr<Collidable> leftMapLimit =  std::make_shared<Collidable>(
+            mapLimitId, leftLimitpos, 100, MAP_HEIGTH);
+
+    this->collidables.insert({mapLimitId++, leftMapLimit});
+
+    // RIGHT LIMIT
+    std::pair<int16_t, int16_t> rightLimitpos = {MAP_WIDTH, MAP_HEIGTH * 0.8};
+    std::shared_ptr<Collidable> rightMapLimit =  std::make_shared<Collidable>(
+            mapLimitId, rightLimitpos, 100, MAP_HEIGTH);
+
+    this->collidables.insert({mapLimitId++, rightMapLimit});
+
+    // UPPER LIMIT
+    std::pair<int16_t, int16_t> upperLimitpos = {MAP_WIDTH / 2.0, MAP_HEIGTH * 0.75};
+    std::shared_ptr<Collidable> upperMapLimit =  std::make_shared<Collidable>(
+            mapLimitId, upperLimitpos, MAP_WIDTH, 10);
+
+    this->collidables.insert({mapLimitId++, upperMapLimit});
+
+    // DOWN LIMIT
+    std::pair<int16_t, int16_t> downLimitpos = {MAP_WIDTH / 2.0, MAP_HEIGTH * 0.92};
+
+    std::shared_ptr<Collidable> downMapLimit =  std::make_shared<Collidable>(
+            mapLimitId, downLimitpos, MAP_WIDTH, 10);
+
+    this->collidables.insert({mapLimitId++, downMapLimit});
 }
 
 TypeObstacle GameWorld::generateObstacleType() {
