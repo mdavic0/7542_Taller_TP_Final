@@ -82,6 +82,6 @@ void Idf::shootLeft(std::shared_ptr<Collidable> &player,
 double Idf::calculateDamage(const double& distance) {
     double result = this->damage - (distance*this->scope);
     if (result < 0)
-        result -0;
+        result = 0;
     return result;
 }
