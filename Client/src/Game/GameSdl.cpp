@@ -125,11 +125,12 @@ void GameSdl::update() {
 
 void GameSdl::updateEnemies(std::shared_ptr<Snapshot> snap) {
     int updates = 0;
-    for (auto &enemy : enemies) {
+    auto iterador = enemies.begin();
+    while (iterador != enemies.end()) {
         bool found = false;
         for (const auto& enemyDto : snap->getEnemies()) {
-            if (enemy.first == enemyDto.getId()) {
-                enemy.second->update(enemyDto.getPosition(),
+            if (iterador->first == enemyDto.getId()) {
+                iterador->second->update(enemyDto.getPosition(),
                                         enemyDto.getState());
                 found = true;
                 updates++;
@@ -137,11 +138,14 @@ void GameSdl::updateEnemies(std::shared_ptr<Snapshot> snap) {
             }
         }
         if (!found) {
-            if (enemy.second->isDeadFinish()) {
-                enemies.erase(enemy.first);
+            if (iterador->second->isDeadFinish()) {
+                iterador = enemies.erase(iterador);
             } else {
-                enemy.second->setState(State::dead);
+                iterador->second->setState(State::dead);
+                ++iterador;
             }
+        } else {
+            ++iterador;
         }
     }
     if (updates == 0 && mode == TypeGame::game_survival){
