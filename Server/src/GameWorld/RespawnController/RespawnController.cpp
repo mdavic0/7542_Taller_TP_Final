@@ -66,10 +66,10 @@ void RespawnController::resetRespawns() {
 }
 
 void RespawnController::createPlayerRespawns() {
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 2; j++ ) {
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 3; j++ ) {
             std::pair<int16_t, int16_t> position = {(MAP_WIDTH / 2)  - (SIZE_SPRITE_X) + (SIZE_SPRITE_X * i),
-                                                    (MAP_HEIGTH * 4 / 5) - (SIZE_SPRITE_Y) + ((SIZE_SPRITE_Y / 2) * j)};
+                                                    (MAP_HEIGTH * 0.78) + ((SIZE_SPRITE_Y / 2.0) * j)};
             playerAvailablePositions.push_back(position);
         }
     }
@@ -77,19 +77,19 @@ void RespawnController::createPlayerRespawns() {
 
 void RespawnController::createInfectedRespawns() {
     // LEFT SIDE OF THE SCREEN
-    for (int i = 0; i < 20; i++) {
-        for (int j = 0; j < 4; j++ ) {
-            std::pair<int16_t, int16_t> position = {(MAP_WIDTH / 32) + ((SIZE_SPRITE_X) * i),
-                                                    ((MAP_HEIGTH * 4) / 5) - (SIZE_SPRITE_Y) + ((SIZE_SPRITE_Y / 2) * j)};
+    for (int i = 0; i < 30; i++) {
+        for (int j = 0; j < 3; j++ ) {
+            std::pair<int16_t, int16_t> position = {(MAP_WIDTH / 32.0) + ((SIZE_SPRITE_X / 2.0) * i),
+                                                    (MAP_HEIGTH * 0.78) + ((SIZE_SPRITE_Y / 2.0) * j)};
             infectedAvailablePositions.push_back(position);
         }
     }
 
     // RIGHT SIDE OF THE SCREEN
-    for (int i = 0; i < 20; i++) {
-        for (int j = 0; j < 4; j++ ) {
-            std::pair<int16_t, int16_t> position = {(MAP_WIDTH * 3 / 4) + ((SIZE_SPRITE_X / 2) * i),
-                                                    ((MAP_HEIGTH * 4) / 5) + ((SIZE_SPRITE_Y / 2) * j)};
+    for (int i = 0; i < 30; i++) {
+        for (int j = 0; j < 3; j++ ) {
+            std::pair<int16_t, int16_t> position = {((MAP_WIDTH * 3.0) / 4) + ((SIZE_SPRITE_X / 2.0) * i),
+                                                    (MAP_HEIGTH * 0.78) + ((SIZE_SPRITE_Y / 2.0) * j)};
             infectedAvailablePositions.push_back(position);
         }
     }
@@ -100,7 +100,7 @@ void RespawnController::createObstacleRespawns() {
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < 2; j++ ) {
             std::pair<int16_t, int16_t> position = {(MAP_WIDTH / 4) + ((SIZE_SPRITE_X) * i),
-                                                    ((MAP_HEIGTH * 4) / 5) + ((SIZE_SPRITE_Y) * j)};
+                                                    (MAP_HEIGTH * 0.8) + ((SIZE_SPRITE_Y / 2.0) * j)};
             obstacleAvailablePositions.push_back(position);
         }
     }
@@ -109,7 +109,7 @@ void RespawnController::createObstacleRespawns() {
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < 2; j++ ) {
             std::pair<int16_t, int16_t> position = {(MAP_WIDTH * 3 / 5) + ((SIZE_SPRITE_X / 2) * i),
-                                                    ((MAP_HEIGTH * 4) / 5) + ((SIZE_SPRITE_Y / 2) * j)};
+                                                    (MAP_HEIGTH * 0.8) + ((SIZE_SPRITE_Y / 2.0) * j)};
             obstacleAvailablePositions.push_back(position);
         }
     }

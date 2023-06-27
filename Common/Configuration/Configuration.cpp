@@ -129,8 +129,12 @@ int CF::witch_amount_god = CF::file["witch_amount_god"].as<int>();
 int CF::spear_amount_god = CF::file["spear_amount_god"].as<int>();
 int CF::venom_amount_god = CF::file["venom_amount_god"].as<int>();
 
-Configuration::Configuration() {
-}
+/*********************************
+* Obstacles
+*******************************/
+int CF::obstacle_amount = CF::file["obstacle_amount"].as<int>();
+
+Configuration::Configuration() = default;
 
 void Configuration::loadConfiguration(const std::string& filename) {
     file = YAML::LoadFile(filename);
@@ -253,6 +257,11 @@ void Configuration::loadConfiguration(const std::string& filename) {
     witch_amount_god = file["witch_amount_god"].as<int>();
     spear_amount_god = file["spear_amount_god"].as<int>();
     venom_amount_god = file["venom_amount_god"].as<int>();
+
+    /*********************************
+    * Obstacles
+    *******************************/
+    obstacle_amount = file["obstacle_amount"].as<int>();
 }
 
 Configuration::~Configuration() = default;

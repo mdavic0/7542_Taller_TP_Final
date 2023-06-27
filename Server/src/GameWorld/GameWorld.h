@@ -37,7 +37,7 @@ class GameWorld {
         uint8_t map; // id of the ui map generated
         uint8_t rounds;
 
-        // All the gameWorld collidables (can be Infecteds, Players, Obstacles...)
+        // All the gameWorld collidables (can be Infecteds, Players, Obstacles, Map limits...)
         std::map<uint16_t, std::shared_ptr<Collidable>> collidables;
 
         uint16_t infectedId;
@@ -62,6 +62,8 @@ class GameWorld {
 
         std::list<std::shared_ptr<Grenade>> postExplosionGrenades;
         std::list<std::shared_ptr<BlitzAtack>> postExplosionBlitz;
+
+        uint16_t mapLimitId;
 
     public:
         GameWorld(const TypeGame& type, const TypeDifficulty& difficulty);
@@ -94,6 +96,7 @@ class GameWorld {
     private:
         void generateInfecteds();
         void generateObstacles();
+        void generateMapLimits();
         TypeObstacle generateObstacleType();
         int generateMapType();
 

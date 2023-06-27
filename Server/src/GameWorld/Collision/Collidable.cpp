@@ -76,13 +76,8 @@ bool Collidable::isAlignedRight(const std::shared_ptr<Collidable> &other) const 
 bool Collidable::isAlignedLeft(const std::shared_ptr<Collidable> &other) const {
     return (not this->isOnRight(other) and (this->overlapVerticalAxis(other)));
 }
-#include <iostream>
+
 bool Collidable::isCloseTo(const std::shared_ptr<Collidable> &other, const double& closeDistance) const {
-    /*std::cout << "\nCOLLIDABLE:\nInfected Pos: x:" + std::to_string(this->position.first) + " y: " +
-                 std::to_string(this->position.second) << std::endl;
-    std::cout << "Grenade Pos: x:" + std::to_string(other->position.first) + " y: " +
-                 std::to_string(other->position.second) << std::endl;
-    std::cout << "Distance: " + std::to_string(distance(other->position)) + "\n";*/
     return (this->distance(other->position) < closeDistance);
 }
 
