@@ -5,7 +5,7 @@
 fell_down_death_time: 30
 super_speed_increment: 50
 # 1: # idf
-idf_damage: 5
+idf_damage: 40
 idf_health: 120
 idf_velocity: 20
 idf_rate: 20
@@ -14,10 +14,10 @@ idf_injure: 3
 idf_reload_time: 2
 idf_rate_time: 0.05
 idf_burst_delay: 0.1
-idf_scope: 0.6
+idf_scope: 0.1
 
 # 2: # p90
-p90_damage: 7
+p90_damage: 25
 p90_health: 120
 p90_velocity: 30
 p90_rate: 10
@@ -26,10 +26,10 @@ p90_injure: 3
 p90_reload_time: 1
 p90_rate_time: 0.05
 p90_burst_delay: 0.15
-p90_scope: 0.2
+p90_scope: 0.007
 
 # 3: # scout
-scout_damage: 60
+scout_damage: 80
 scout_health: 120
 scout_velocity: 12
 scout_rate: 1
@@ -38,7 +38,7 @@ scout_injure: 3
 scout_reload_time: 1.5
 scout_rate_time: 0.4
 scout_burst_delay: 0.25
-scout_scope: 0.05
+scout_scope: 0.001
 scout_damage_decrease_by_enemy: 2.5
 
 # skills:

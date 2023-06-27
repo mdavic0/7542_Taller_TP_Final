@@ -1,4 +1,5 @@
 #include "Idf.h"
+#include <iostream>
 
 Idf::Idf() : Weapon(CF::idf_damage,
                     CF::idf_rate,
@@ -79,5 +80,8 @@ void Idf::shootLeft(std::shared_ptr<Collidable> &player,
 }
 
 double Idf::calculateDamage(const double& distance) {
-    return this->damage - (distance*this->scope) ;
+    double result = this->damage - (distance*this->scope);
+    if (result < 0)
+        result -0;
+    return result;
 }
