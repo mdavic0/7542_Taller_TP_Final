@@ -32,6 +32,7 @@ class Launcher : public QWidget {
         std::optional<std::shared_ptr<Socket>> socket;
         ClientProtocol<Socket> clientProtocol;
         PlayerReproductor player;
+        bool endGame;
         void initWidget();
         void initFont();
         void initGame(int menu, uint8_t idPlayer, uint8_t numPlayers,

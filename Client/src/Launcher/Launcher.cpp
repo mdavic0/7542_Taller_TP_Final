@@ -17,7 +17,7 @@
 
 Launcher::Launcher(QWidget* parent) : QWidget(parent),
     initView(), connectView(), menuView(), createView(), joinView(),
-    socket(std::nullopt), clientProtocol(), player() {
+    socket(std::nullopt), clientProtocol(), player(), endGame(false) {
     this->initWidget();
     mainWidget.addWidget(&initView);
     mainWidget.addWidget(&connectView);
@@ -124,6 +124,7 @@ void Launcher::sendCreateMatch(const QString& name, int mode,
             this->initGame(CREATE_MENU, receive.getIdPlayer(), 1, error);
             this->goToConnect();
             this->show();
+            endGame = true;
             this->player.playMusic();
             if (error)
                 QMessageBox::information(this, "Error", 
@@ -155,6 +156,7 @@ void Launcher::sendJoinMatch(int code, int operatorSelect) {
             this->player.stopMusic();
             this->initGame(JOIN_MENU, receive.getIdPlayer(),
                             receive.getSize(), error);
+            endGame = true;
             this->goToConnect();
             this->show();
             this->player.playMusic();
@@ -194,7 +196,7 @@ void Launcher::closeEvent(QCloseEvent *event) {
                                 "Desea salir?", QMessageBox::Yes | QMessageBox::No);
                                 
     if (reply == QMessageBox::Yes) {
-        if (this->socket != nullptr) {
+        if (this->socket != nullptr && !endGame) {
             std::shared_ptr<EventDTO> event =
                     std::make_shared<EventDTO>(Event::event_leave, 0);
             clientProtocol.sendEvent(event, this->socket.value());
