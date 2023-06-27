@@ -58,12 +58,16 @@ EventDTO::EventDTO(EventDTO&& other) {
     this->moveTo = other.moveTo;
     this->typeOperator = other.typeOperator;
     this->typeGame = other.typeGame;
+    this->typeDifficulty = other.typeDifficulty;
     this->str = other.str;
     this->n = other.n;
     this->idPlayer = other.idPlayer;
 
     other.event = Event::event_invalid;
     other.moveTo = MoveTo::move_idle;
+    other.typeOperator = TypeOperator::operator_idle;
+    other.typeGame = TypeGame::game_idle;
+    other.typeDifficulty = TypeDifficulty::difficulty_idle;
     other.str = "";
     other.n = 0;
     other.idPlayer = 0;
@@ -77,12 +81,16 @@ EventDTO& EventDTO::operator=(EventDTO&& other) {
     this->moveTo = other.moveTo;
     this->typeOperator = other.typeOperator;
     this->typeGame = other.typeGame;
+    this->typeDifficulty = other.typeDifficulty;
     this->str = other.str;
     this->n = other.n;
     this->idPlayer = other.idPlayer;
 
     other.event = Event::event_invalid;
     other.moveTo = MoveTo::move_idle;
+    other.typeOperator = TypeOperator::operator_idle;
+    other.typeGame = TypeGame::game_idle;
+    other.typeDifficulty = TypeDifficulty::difficulty_idle;
     other.str = "";
     other.n = 0;
     other.idPlayer = 0;

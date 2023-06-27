@@ -36,7 +36,7 @@ class EventReceiver : public Thread {
         /*
          * Método que devuelve true cuando el hilo termino de ejecutarse.
          */
-        bool ended();
+        bool ended() const;
 
         /*
          * Método de ejecución del hilo, recibe eventos por medio del

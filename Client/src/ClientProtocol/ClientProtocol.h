@@ -226,6 +226,8 @@ void sendDifficulty(const TypeDifficulty & typeDifficulty, std::shared_ptr<T> sk
         diff = DIFFICULTY_HARD;
     } else if (typeDifficulty == TypeDifficulty::difficulty_god) {
         diff = DIFFICULTY_GOD;
+    } else if (typeDifficulty == TypeDifficulty::difficulty_idle) {
+        diff = DIFFICULTY_IDLE;
     }
     this->sendAll(&diff, 1, skt);
 }
@@ -387,21 +389,20 @@ std::vector<StOperator> getPlayers(std::shared_ptr<T> skt) {
             case STATE_ATACK:
                 state = State::atack;
                 break;
-            
             case STATE_INJURE:
                 state = State::injure;
                 break;
-
             case STATE_HABILITY:
                 state = State::hability;
                 break;
-
             case STATE_STOP_HABILITY:
                 state = State::stop_hability;
                 break;
-
             case STATE_RECHARGE:
                 state = State::recharge;
+                break;
+            case STATE_DEAD:
+                state = State::dead;
                 break;
             
             default:
@@ -516,23 +517,26 @@ std::vector<EnemyDto> getEnemies(std::shared_ptr<T> skt) {
             case STATE_ATACK:
                 state = State::atack;
                 break;
-            
             case STATE_INJURE:
                 state = State::injure;
                 break;
-
             case STATE_HABILITY:
                 state = State::hability;
                 break;
-
+            case STATE_STOP_HABILITY:
+                state = State::stop_hability;
+                break;
             case STATE_RECHARGE:
                 state = State::recharge;
+                break;
+            case STATE_DEAD:
+                state = State::dead;
                 break;
             
             default:
                 break;
         }
-        
+
         this->recvAll(&x, 2, skt);
         x = ntohs(x);
         this->recvAll(&y, 2, skt);

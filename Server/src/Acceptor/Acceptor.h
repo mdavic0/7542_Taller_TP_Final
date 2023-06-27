@@ -11,7 +11,7 @@
 class Acceptor : public Thread {
     private:
         Socket skt;
-        std::vector<EventReceiver*> readers;
+        std::vector<std::shared_ptr<EventReceiver>> readers;
         GamesController controller;
         std::atomic<bool> talking;
         std::atomic<bool> alive;

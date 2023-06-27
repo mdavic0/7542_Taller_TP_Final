@@ -63,7 +63,7 @@ void EventReceiver::stop() {
     }
 }
 
-bool EventReceiver::ended() {
+bool EventReceiver::ended() const{
     return !alive;
 }
 

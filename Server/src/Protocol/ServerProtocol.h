@@ -467,6 +467,9 @@ void sendState(const State& state, std::shared_ptr<T> skt) {
     } else if (state == State::recharge) {
         uint8_t aux = STATE_RECHARGE;
         this->sendAll(&aux, 1, skt);       
+    } else if (state == State::dead) {
+        uint8_t aux = STATE_DEAD;
+        this->sendAll(&aux, 1, skt);       
     }
 }
 

@@ -27,7 +27,7 @@ Queue<std::shared_ptr<EventDTO>>* GamesController::create(std::shared_ptr<EventD
 }
 
 Queue<std::shared_ptr<EventDTO>>* GamesController::try_join_game(std::shared_ptr<EventDTO> eventdto,
-                                                 Queue<std::shared_ptr<Snapshot>> *q,
+                                                 Queue<std::shared_ptr<Snapshot>>* q,
                                                  std::shared_ptr<Game>& game) {
     std::lock_guard<std::mutex> locker(mutex);
     uint32_t code = eventdto->getN();
