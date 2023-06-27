@@ -189,5 +189,21 @@ void Launcher::initGame(int menu, uint8_t idPlayer, uint8_t numPlayers,
     gameDrawner.start();
 }
 
+void Launcher::closeEvent(QCloseEvent *event) {
+    QMessageBox::StandardButton reply = QMessageBox::question(this, "Exit",
+                                "Desea salir?", QMessageBox::Yes | QMessageBox::No);
+                                
+    if (reply == QMessageBox::Yes) {
+        if (this->socket != nullptr) {
+            std::shared_ptr<EventDTO> event =
+                    std::make_shared<EventDTO>(Event::event_leave, 0);
+            clientProtocol.sendEvent(event, this->socket.value());
+        }
+        event->accept();
+    } else {
+        event->ignore();
+    }
+}
+
 Launcher::~Launcher() {
 }

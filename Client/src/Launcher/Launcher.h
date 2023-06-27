@@ -52,6 +52,8 @@ class Launcher : public QWidget {
         void sendCreateMatch(const QString& name, int mode, 
                             int operatorSelect, TypeDifficulty difficulty);
         void sendJoinMatch(int code, int operatorSelect);
+    protected:
+        void closeEvent(QCloseEvent* event) override;
 
 };
 
