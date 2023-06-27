@@ -46,13 +46,6 @@ class GamesController {
                                                     Queue<std::shared_ptr<Snapshot>> *q,
                                                     Game **game);
 
-    /*
-     * Iniciar el hilo Game
-     */
-    //void startGame(const uint32_t& code);
-
-    //void clientLeave(Queue<std::shared_ptr<Snapshot>>* snapshot_queue, const uint32_t& code);
-
     ~GamesController();
 };
 

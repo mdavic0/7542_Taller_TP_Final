@@ -175,10 +175,12 @@ std::shared_ptr<Snapshot> GameWorld::getSnapshot(const bool first) {
 
 std::vector<StatsDto> GameWorld::getStats() {
     std::vector<StatsDto> stats;
-    for (auto& player : players) {
-        stats.push_back(StatsDto(player.first,
-                             player.second->getKills(),
-                             player.second->getShots()));
+    if (type == TypeGame::game_survival) {
+        for (auto& player : players) {
+            stats.push_back(StatsDto(player.first,
+                                 player.second->getKills(),
+                                 player.second->getShots()));
+        }
     }
     return stats;
 }

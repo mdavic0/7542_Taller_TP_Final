@@ -44,23 +44,6 @@ Queue<std::shared_ptr<EventDTO>>* GamesController::try_join_game(std::shared_ptr
     return nullptr;
 }
 
-/*
-void GamesController::startGame(const uint32_t& code){
-    std::lock_guard<std::mutex> locker(mutex);
-    auto search = games.find(code);
-    if (search != games.end()) {
-        return search->second->startGame();
-    }
-}
-
-void GamesController::clientLeave(Queue<std::shared_ptr<Snapshot>>* snapshot_queue, const uint32_t& code) {
-    std::lock_guard<std::mutex> locker(mutex);
-    auto search = games.find(code);
-    if (search != games.end()) {
-        return search->second->clientLeave(snapshot_queue);
-    }
-}
-*/
 GamesController::~GamesController() {
     std::cout << "GamesController - delete " << std::endl;
   for (auto it = games.begin(); it != games.end(); ++it) {

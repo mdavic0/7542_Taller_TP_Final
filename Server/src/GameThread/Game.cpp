@@ -54,7 +54,7 @@ bool Game::running() {
 
 Queue<std::shared_ptr<EventDTO>>* Game::createGame(Queue<std::shared_ptr<Snapshot>> *q,
                                                    const TypeOperator& op) {
-    uint8_t idPlayer = gameWorld.addPlayer(op);
+    uint16_t idPlayer = gameWorld.addPlayer(op);
     client_snapshot_queues.insert({idPlayer, q});
     q->push(std::make_shared<Snapshot> (Event::event_create, id, idPlayer));
     return &this->unprocessed_events;
@@ -63,7 +63,7 @@ Queue<std::shared_ptr<EventDTO>>* Game::createGame(Queue<std::shared_ptr<Snapsho
 Queue<std::shared_ptr<EventDTO>>* Game::joinGame(Queue<std::shared_ptr<Snapshot>> *q,
                                                  const TypeOperator& op) {
     if (not started) {                 
-        uint8_t idPlayer = gameWorld.addPlayer(op);
+        uint16_t idPlayer = gameWorld.addPlayer(op);
         client_snapshot_queues.insert({idPlayer, q});
         // Notify all clients that a new player joined
         for (auto &clientQueue : client_snapshot_queues) {
