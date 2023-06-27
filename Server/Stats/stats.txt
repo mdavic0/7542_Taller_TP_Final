@@ -1,0 +1,7 @@
+KILL
+-1
+SHOT
+-1
+DURATION
+-1 -1
+END

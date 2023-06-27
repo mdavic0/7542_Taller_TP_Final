@@ -23,10 +23,10 @@ uint8_t& Weapon::getMunition() {
     return munition;
 }
 
-
 uint16_t& Weapon::getKills() {
     return kills;
 }
+
 uint16_t& Weapon::getShots() {
     return totalFiredBullets;
 }

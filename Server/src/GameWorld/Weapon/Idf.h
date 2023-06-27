@@ -7,9 +7,9 @@
 
 class Idf : public Weapon {
     private:
-        int burstFiredBullets;
+        uint8_t burstFiredBullets;
         bool burstEnded;
-        float scope;
+        double scope;
 
     public:
         Idf();
