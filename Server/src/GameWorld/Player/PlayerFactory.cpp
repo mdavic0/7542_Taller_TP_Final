@@ -1,8 +1,8 @@
 #include "PlayerFactory.h"
 #include "Defines.h"
 
-std::shared_ptr<Player> PlayerFactory::getPlayer(TypeOperator anOperator, uint8_t &playerId,
-                                                 std::map<uint8_t, std::shared_ptr<Collidable>> &collidables,
+std::shared_ptr<Player> PlayerFactory::getPlayer(const TypeOperator& anOperator, const uint16_t &playerId,
+                                                 std::map<uint16_t, std::shared_ptr<Collidable>> &collidables,
                                                  RespawnController &controller) {
     switch (anOperator) {
         case TypeOperator::operator_p90:
@@ -25,9 +25,9 @@ std::shared_ptr<Player> PlayerFactory::getPlayer(TypeOperator anOperator, uint8_
 }
 
 std::shared_ptr<IDFPlayer>
-PlayerFactory::createIDFPlayer(uint8_t &playerId,
-                               std::map<uint8_t, std::shared_ptr<Collidable>> &collidables,
-                               RespawnController &RC) {
+PlayerFactory::createIDFPlayer(const uint16_t &playerId,
+                               std::map<uint16_t, std::shared_ptr<Collidable>> &collidables,
+                               RespawnController& RC) {
     std::pair<int16_t, int16_t> position = RC.getPlayerRespawnPosition();
 
     std::shared_ptr<Collidable> collidable =  std::make_shared<Collidable>(
@@ -39,9 +39,9 @@ PlayerFactory::createIDFPlayer(uint8_t &playerId,
 }
 
 std::shared_ptr<P90Player>
-PlayerFactory::createP90Player(uint8_t &playerId, std::map<uint8_t,
+PlayerFactory::createP90Player(const uint16_t &playerId, std::map<uint16_t,
                                std::shared_ptr<Collidable>> &collidables,
-                               RespawnController &RC) {
+                               RespawnController& RC) {
     std::pair<int16_t, int16_t> position = RC.getPlayerRespawnPosition();
 
     std::shared_ptr<Collidable> collidable =  std::make_shared<Collidable>(
@@ -53,9 +53,9 @@ PlayerFactory::createP90Player(uint8_t &playerId, std::map<uint8_t,
 }
 
 std::shared_ptr<SCOUTPlayer>
-PlayerFactory::createSCOUTPlayer(uint8_t &playerId, std::map<uint8_t,
+PlayerFactory::createSCOUTPlayer(const uint16_t &playerId, std::map<uint16_t,
                                  std::shared_ptr<Collidable>> &collidables,
-                                 RespawnController &RC) {
+                                 RespawnController& RC) {
     std::pair<int16_t, int16_t> position = RC.getPlayerRespawnPosition();
 
     std::shared_ptr<Collidable> collidable =  std::make_shared<Collidable>(

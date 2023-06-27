@@ -25,24 +25,24 @@ class Weapon {
 
     public:
         Weapon();
-        Weapon(uint8_t damage, uint8_t rate, uint8_t capacity);
+        Weapon(const uint8_t& damage, const uint8_t& rate, const uint8_t& capacity);
         void activate();
         void deactivate();
         uint8_t& getMunition();
         uint16_t& getKills();
         uint16_t& getShots();
-        virtual bool shoot(std::shared_ptr<Collidable> &player, bool right,
-                           std::map<uint8_t, std::shared_ptr<Infected>> &infecteds,
-                           double stepTime) = 0;
-        virtual bool reload(double stepTime) = 0;
+        virtual bool shoot(std::shared_ptr<Collidable> &player, const bool& right,
+                           std::map<uint16_t, std::shared_ptr<Infected>> &infecteds,
+                           const double& stepTime) = 0;
+        virtual bool reload(const double& stepTime) = 0;
 
         virtual ~Weapon();
 
     private:
         virtual void shootRight(std::shared_ptr<Collidable> &player,
-                        std::map<uint8_t, std::shared_ptr<Infected>> &infecteds) = 0;
+                        std::map<uint16_t, std::shared_ptr<Infected>> &infecteds) = 0;
         virtual void shootLeft(std::shared_ptr<Collidable> &player,
-                       std::map<uint8_t, std::shared_ptr<Infected>> &infecteds) = 0;
+                       std::map<uint16_t, std::shared_ptr<Infected>> &infecteds) = 0;
 };
 
 

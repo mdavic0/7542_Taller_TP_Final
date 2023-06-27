@@ -3,9 +3,9 @@
 #include "Defines.h"
 
 
-std::shared_ptr<Obstacle> ObstacleFactory::getObstacle(TypeObstacle obstacle, uint8_t& obstacleId,
-                                                       std::map<uint8_t, std::shared_ptr<Collidable>> &collidables,
-                                                       RespawnController &RC) {
+std::shared_ptr<Obstacle> ObstacleFactory::getObstacle(const TypeObstacle& obstacle, const uint16_t& obstacleId,
+                                                       std::map<uint16_t, std::shared_ptr<Collidable>> &collidables,
+                                                        RespawnController &RC) {
     switch (obstacle) {
         case TypeObstacle::obstacle_tire:
             return createTire(obstacleId, collidables, RC);
@@ -17,9 +17,9 @@ std::shared_ptr<Obstacle> ObstacleFactory::getObstacle(TypeObstacle obstacle, ui
 }
 
 std::shared_ptr<Tire>
-ObstacleFactory::createTire(uint8_t &obstacleId, std::map<uint8_t,
+ObstacleFactory::createTire(const uint16_t &obstacleId, std::map<uint16_t,
                             std::shared_ptr<Collidable>> &collidables,
-                            RespawnController &RC) {
+                             RespawnController &RC) {
     std::pair<int16_t, int16_t> position = RC.getObstacleRespawnPosition();
 
     std::shared_ptr<Collidable> collidable =  std::make_shared<Collidable>(
@@ -31,9 +31,9 @@ ObstacleFactory::createTire(uint8_t &obstacleId, std::map<uint8_t,
 }
 
 std::shared_ptr<Crater>
-ObstacleFactory::createCrater(uint8_t &obstacleId, std::map<uint8_t,
+ObstacleFactory::createCrater(const uint16_t &obstacleId, std::map<uint16_t,
                               std::shared_ptr<Collidable>> &collidables,
-                              RespawnController &RC) {
+                               RespawnController &RC) {
     std::pair<int16_t, int16_t> position = RC.getObstacleRespawnPosition();
 
     std::shared_ptr<Collidable> collidable =  std::make_shared<Collidable>(

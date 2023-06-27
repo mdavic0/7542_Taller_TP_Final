@@ -11,24 +11,24 @@
 class PlayerFactory {
     public:
         std::shared_ptr<Player>
-        getPlayer(TypeOperator anOperator, uint8_t& playerId,
-              std::map<uint8_t, std::shared_ptr<Collidable>>& collidables,
+        getPlayer(const TypeOperator& anOperator, const uint16_t& playerId,
+              std::map<uint16_t, std::shared_ptr<Collidable>>& collidables,
               RespawnController& controller);
 
     private:
         std::shared_ptr<IDFPlayer>
-        createIDFPlayer(uint8_t& playerId,
-                        std::map<uint8_t, std::shared_ptr<Collidable>>& collidables,
+        createIDFPlayer(const uint16_t& playerId,
+                        std::map<uint16_t, std::shared_ptr<Collidable>>& collidables,
                         RespawnController& RC);
 
         std::shared_ptr<P90Player>
-        createP90Player(uint8_t& playerId,
-                        std::map<uint8_t, std::shared_ptr<Collidable>>& collidables,
+        createP90Player(const uint16_t& playerId,
+                        std::map<uint16_t, std::shared_ptr<Collidable>>& collidables,
                         RespawnController& RC);
 
         std::shared_ptr<SCOUTPlayer>
-        createSCOUTPlayer(uint8_t& playerId,
-                          std::map<uint8_t, std::shared_ptr<Collidable>>& collidables,
+        createSCOUTPlayer(const uint16_t& playerId,
+                          std::map<uint16_t, std::shared_ptr<Collidable>>& collidables,
                           RespawnController& RC);
 };
 

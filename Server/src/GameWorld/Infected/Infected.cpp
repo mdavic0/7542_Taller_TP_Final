@@ -2,15 +2,15 @@
 #include "Defines.h"
 #include <utility>
 
-Infected::Infected(TypeInfected typeInfected, uint8_t id, uint8_t life, uint8_t velocity, uint8_t damage,
-                   std::pair<int16_t, int16_t> &position,
-                   std::shared_ptr<Collidable> collidable) : typeInfected(typeInfected), id(id), life(life),
-                   velocity(velocity), damage(damage), state(State::idle),
-                   position(position), movement_direction(0,0),
-                   collidable(std::move(collidable)), alive(true), target(nullptr) {
+Infected::Infected(const TypeInfected& typeInfected, const uint16_t& id, const uint8_t& life,
+                    const uint8_t& velocity, const uint8_t& damage, const std::pair<int16_t, int16_t> &position,
+                    std::shared_ptr<Collidable> collidable) : typeInfected(typeInfected), id(id), life(life),
+                    velocity(velocity), damage(damage), state(State::idle),
+                    position(position), movement_direction(0,0),
+                    collidable(std::move(collidable)), alive(true), target(nullptr) {
 }
 
-void Infected::setMovementDirection(MoveTo direction) {
+void Infected::setMovementDirection(const MoveTo& direction) {
     switch (direction) {
         // Por sdl el eje "y" va hacia abajo
         case MoveTo::move_up:
@@ -34,7 +34,7 @@ void Infected::setMovementDirection(MoveTo direction) {
     }
 }
 
-void Infected::stopMovementDirection(MoveTo direction) {
+void Infected::stopMovementDirection(const MoveTo& direction) {
     switch (direction) {
         case MoveTo::move_up:
             movement_direction.second = 0;
@@ -57,7 +57,7 @@ void Infected::stopMovementDirection(MoveTo direction) {
     }
 }
 
-void Infected::move(std::map<uint8_t, std::shared_ptr<Collidable>> &collidables) {
+void Infected::move(const std::map<uint16_t, std::shared_ptr<Collidable>> &collidables) {
     if (not this->collidable->collidesWith(collidables)) {
         this->position.first += movement_direction.first + movement_direction.first * (velocity / 10);
         this->position.second += movement_direction.second + movement_direction.second * (velocity / 10);
@@ -80,8 +80,8 @@ void Infected::atack() {
     }
 }
 
-void Infected::applyStep(std::map<uint8_t, std::shared_ptr<Collidable>> &collidables,
-                         std::map<uint8_t, std::shared_ptr<Player>>& players) {
+void Infected::applyStep(const std::map<uint16_t, std::shared_ptr<Collidable>> &collidables,
+                         const std::map<uint16_t, std::shared_ptr<Player>>& players) {
     this->setTarget(players);
     this->move(collidables);
     this->atack();
@@ -114,11 +114,11 @@ State &Infected::getState() {
     return this->state;
 }
 
-uint8_t &Infected::getId() {
+uint16_t &Infected::getId() {
     return this->id;
 }
 
-bool Infected::isIntoHostilRange(std::shared_ptr<Player> player) {
+bool Infected::isIntoHostilRange(const std::shared_ptr<Player>& player) {
     if (player->getCollidable()->
         isCloseTo(this->collidable, HOSTILE_RANGE)) {
         return true;
@@ -126,7 +126,7 @@ bool Infected::isIntoHostilRange(std::shared_ptr<Player> player) {
     return false;
 }
 
-void Infected::setTarget(std::map<uint8_t, std::shared_ptr<Player>> &players) {
+void Infected::setTarget(const std::map<uint16_t, std::shared_ptr<Player>> &players) {
     if (this->target != nullptr and not this->target->isFellDown()) {
         this->setMovementDirection();
         return;
@@ -168,7 +168,7 @@ void Infected::stopMovementDirection() {
     this->state = State::idle;
 }
 
-void Infected::applySpeedReduction(double speedReduction) {
+void Infected::applySpeedReduction(const double& speedReduction) {
     if(this->velocity >= speedReduction) {
         this->velocity -= speedReduction;
     }

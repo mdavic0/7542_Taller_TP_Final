@@ -1,8 +1,8 @@
 #include "InfectedFactory.h"
 
-std::map<uint8_t, std::shared_ptr<Infected>>
-InfectedFactory::generateInfecteds(TypeDifficulty typeDifficulty, uint8_t &infectedId,
-                                   std::map<uint8_t, std::shared_ptr<Collidable>>& collidables,
+std::map<uint16_t, std::shared_ptr<Infected>>
+InfectedFactory::generateInfecteds(TypeDifficulty typeDifficulty, uint16_t &infectedId,
+                                   std::map<uint16_t, std::shared_ptr<Collidable>>& collidables,
                                    RespawnController& RC) {
     switch (typeDifficulty) {
         case TypeDifficulty::difficulty_easy:
@@ -18,11 +18,11 @@ InfectedFactory::generateInfecteds(TypeDifficulty typeDifficulty, uint8_t &infec
     }
 }
 
-std::map<uint8_t, std::shared_ptr<Infected>>
-InfectedFactory::generateEasyInfecteds(uint8_t &infectedId,
-                                       std::map<uint8_t, std::shared_ptr<Collidable>> &collidables,
+std::map<uint16_t, std::shared_ptr<Infected>>
+InfectedFactory::generateEasyInfecteds(uint16_t &infectedId,
+                                       std::map<uint16_t, std::shared_ptr<Collidable>> &collidables,
                                        RespawnController& RC) {
-    std::map<uint8_t, std::shared_ptr<Infected>> infecteds;
+    std::map<uint16_t, std::shared_ptr<Infected>> infecteds;
 
     // Zombies
     for (int i = 0; i < CF::zombie_amount_easy; i++) {
@@ -57,11 +57,11 @@ InfectedFactory::generateEasyInfecteds(uint8_t &infectedId,
     return infecteds;
 }
 
-std::map<uint8_t, std::shared_ptr<Infected>>
-InfectedFactory::generateNormalInfecteds(uint8_t &infectedId,
-                                         std::map<uint8_t, std::shared_ptr<Collidable>> &collidables,
+std::map<uint16_t, std::shared_ptr<Infected>>
+InfectedFactory::generateNormalInfecteds(uint16_t &infectedId,
+                                         std::map<uint16_t, std::shared_ptr<Collidable>> &collidables,
                                          RespawnController& RC) {
-    std::map<uint8_t, std::shared_ptr<Infected>> infecteds;
+    std::map<uint16_t, std::shared_ptr<Infected>> infecteds;
 
     // Zombies
     for (int i = 0; i < CF::zombie_amount_normal; i++) {
@@ -96,11 +96,11 @@ InfectedFactory::generateNormalInfecteds(uint8_t &infectedId,
     return infecteds;
 }
 
-std::map<uint8_t, std::shared_ptr<Infected>>
-InfectedFactory::generateHardInfecteds(uint8_t &infectedId,
-                                       std::map<uint8_t, std::shared_ptr<Collidable>> &collidables,
+std::map<uint16_t, std::shared_ptr<Infected>>
+InfectedFactory::generateHardInfecteds(uint16_t &infectedId,
+                                       std::map<uint16_t, std::shared_ptr<Collidable>> &collidables,
                                        RespawnController& RC) {
-    std::map<uint8_t, std::shared_ptr<Infected>> infecteds;
+    std::map<uint16_t, std::shared_ptr<Infected>> infecteds;
 
     // Zombies
     for (int i = 0; i < CF::zombie_amount_hard; i++) {
@@ -135,11 +135,11 @@ InfectedFactory::generateHardInfecteds(uint8_t &infectedId,
     return infecteds;
 }
 
-std::map<uint8_t, std::shared_ptr<Infected>>
-InfectedFactory::generateGodInfecteds(uint8_t &infectedId,
-                                      std::map<uint8_t, std::shared_ptr<Collidable>> &collidables,
+std::map<uint16_t, std::shared_ptr<Infected>>
+InfectedFactory::generateGodInfecteds(uint16_t &infectedId,
+                                      std::map<uint16_t, std::shared_ptr<Collidable>> &collidables,
                                       RespawnController& RC) {
-    std::map<uint8_t, std::shared_ptr<Infected>> infecteds;
+    std::map<uint16_t, std::shared_ptr<Infected>> infecteds;
 
     // Zombies
     for (int i = 0; i < CF::zombie_amount_god; i++) {
@@ -175,8 +175,8 @@ InfectedFactory::generateGodInfecteds(uint8_t &infectedId,
 }
 
 std::shared_ptr<Infected>
-InfectedFactory::createZombie(uint8_t &infectedId,
-                              std::map<uint8_t, std::shared_ptr<Collidable>> &collidables,
+InfectedFactory::createZombie(uint16_t &infectedId,
+                              std::map<uint16_t, std::shared_ptr<Collidable>> &collidables,
                               RespawnController& RC) {
     // Zombie:
     std::shared_ptr<Infected> zombie = nullptr;
@@ -194,8 +194,8 @@ InfectedFactory::createZombie(uint8_t &infectedId,
 }
 
 std::shared_ptr<Infected>
-InfectedFactory::createSpear(uint8_t &infectedId,
-                             std::map<uint8_t, std::shared_ptr<Collidable>> &collidables,
+InfectedFactory::createSpear(uint16_t &infectedId,
+                             std::map<uint16_t, std::shared_ptr<Collidable>> &collidables,
                              RespawnController& RC) {
     // Spear:
     std::shared_ptr<Infected> spear = nullptr;
@@ -213,8 +213,8 @@ InfectedFactory::createSpear(uint8_t &infectedId,
 }
 
 std::shared_ptr<Infected>
-InfectedFactory::createJumper(uint8_t &infectedId,
-                              std::map<uint8_t, std::shared_ptr<Collidable>> &collidables,
+InfectedFactory::createJumper(uint16_t &infectedId,
+                              std::map<uint16_t, std::shared_ptr<Collidable>> &collidables,
                               RespawnController& RC) {
     // Jumper:
     std::shared_ptr<Infected> jumper = nullptr;
@@ -232,8 +232,8 @@ InfectedFactory::createJumper(uint8_t &infectedId,
 }
 
 std::shared_ptr<Infected>
-InfectedFactory::createWitch(uint8_t &infectedId,
-                             std::map<uint8_t, std::shared_ptr<Collidable>> &collidables,
+InfectedFactory::createWitch(uint16_t &infectedId,
+                             std::map<uint16_t, std::shared_ptr<Collidable>> &collidables,
                              RespawnController& RC) {
     // Witch
     std::shared_ptr<Infected> witch = nullptr;
@@ -251,8 +251,8 @@ InfectedFactory::createWitch(uint8_t &infectedId,
 }
 
 std::shared_ptr<Infected>
-InfectedFactory::createVenom(uint8_t &infectedId,
-                             std::map<uint8_t, std::shared_ptr<Collidable>> &collidables,
+InfectedFactory::createVenom(uint16_t &infectedId,
+                             std::map<uint16_t, std::shared_ptr<Collidable>> &collidables,
                              RespawnController& RC) {
     // Venom:
     std::shared_ptr<Infected> venom = nullptr;

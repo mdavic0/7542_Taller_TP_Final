@@ -2,17 +2,17 @@
 
 #include <utility>
 
-Obstacle::Obstacle(TypeObstacle typeObstacle, uint8_t id, std::pair<int16_t, int16_t> &position,
+Obstacle::Obstacle(const TypeObstacle& typeObstacle, const uint16_t& id, const std::pair<int16_t, int16_t> &position,
                    std::shared_ptr<Collidable> collidable) : typeObstacle(typeObstacle), id(id),
                    position(position), collidable(std::move(collidable)) {}
 
-void Obstacle::updatePosition(std::pair<int16_t, int16_t> &newPosition,
-                              std::map<uint8_t, std::shared_ptr<Collidable>> &collidables) {
+void Obstacle::updatePosition(const std::pair<int16_t, int16_t> &newPosition,
+                              const std::map<uint16_t, std::shared_ptr<Collidable>> &collidables) {
     this->move(newPosition, collidables);
 }
 
-void Obstacle::move(std::pair<int16_t, int16_t> &newPosition,
-                    std::map<uint8_t, std::shared_ptr<Collidable>> &collidables) {
+void Obstacle::move(const std::pair<int16_t, int16_t> &newPosition,
+                    const std::map<uint16_t, std::shared_ptr<Collidable>> &collidables) {
     auto oldPosition = this->position;
     this->position = newPosition;
     this->collidable->updatePosition(newPosition);

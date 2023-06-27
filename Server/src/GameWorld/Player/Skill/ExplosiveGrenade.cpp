@@ -2,12 +2,12 @@
 #include "Defines.h"
 
 
-ExplosiveGrenade::ExplosiveGrenade(std::pair<int16_t, int16_t> position, uint8_t id) :
+ExplosiveGrenade::ExplosiveGrenade(const std::pair<int16_t, int16_t>& position, const uint16_t& id) :
     Grenade(TypeGrenade::grenade_explosive, id,CF::grenade_damage, position) {}
 
-void ExplosiveGrenade::applyStep(std::map<uint8_t, std::shared_ptr<Player>> &players,
-                                 std::map<uint8_t, std::shared_ptr<Infected>> &infecteds,
-                                 double stepTime) {
+void ExplosiveGrenade::applyStep(std::map<uint16_t, std::shared_ptr<Player>> &players,
+                                 std::map<uint16_t, std::shared_ptr<Infected>> &infecteds,
+                                 const double& stepTime) {
     if (not available) {
         this->move(stepTime);
         this->explode(players, infecteds, stepTime);
@@ -20,8 +20,8 @@ void ExplosiveGrenade::applyStep(std::map<uint8_t, std::shared_ptr<Player>> &pla
 }
 
 
-void ExplosiveGrenade::throwGrenade(std::pair<int16_t, int16_t>& position,
-                                    double elapsedTime, bool right) {
+void ExplosiveGrenade::throwGrenade(const std::pair<int16_t, int16_t>& position,
+                                    const double& elapsedTime, const bool& right) {
     if (this->available) {
         if (right) {
             this->position = {position.first + GRENADE_DAMAGE_RANGE, position.second};
@@ -39,9 +39,9 @@ void ExplosiveGrenade::throwGrenade(std::pair<int16_t, int16_t>& position,
     }
 }
 
-void ExplosiveGrenade::explode(std::map<uint8_t, std::shared_ptr<Player>> &players,
-                               std::map<uint8_t, std::shared_ptr<Infected>> &infecteds,
-                               double stepTime) {
+void ExplosiveGrenade::explode(std::map<uint16_t, std::shared_ptr<Player>> &players,
+                               std::map<uint16_t, std::shared_ptr<Infected>> &infecteds,
+                               const double& stepTime) {
     if (this->readyToExplode) {
         explosionClock += stepTime;
         if (explosionClock >= CF::grenade_explosion_time) {

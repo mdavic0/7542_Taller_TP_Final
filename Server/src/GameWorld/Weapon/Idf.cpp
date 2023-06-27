@@ -5,9 +5,9 @@ Idf::Idf() : Weapon(CF::idf_damage,
                     CF::idf_capacity),
                     burstFiredBullets(0), burstEnded(false), scope(CF::idf_scope) {}
 
-bool Idf::shoot(std::shared_ptr<Collidable> &player, bool right,
-           std::map<uint8_t, std::shared_ptr<Infected>> &infecteds,
-           double stepTime) {
+bool Idf::shoot(std::shared_ptr<Collidable> &player, const bool& right,
+           std::map<uint16_t, std::shared_ptr<Infected>> &infecteds,
+           const double& stepTime) {
     if (not activated) {
         return false;
     }
@@ -44,7 +44,7 @@ bool Idf::shoot(std::shared_ptr<Collidable> &player, bool right,
 }
 
 
-bool Idf::reload(double stepTime) {
+bool Idf::reload(const double& stepTime) {
     this->reloadingClock += stepTime;
     if (reloadingClock >= CF::idf_reload_time) {
         this->munition = CF::idf_capacity;
@@ -55,7 +55,7 @@ bool Idf::reload(double stepTime) {
 }
 
 void Idf::shootRight(std::shared_ptr<Collidable> &player,
-                     std::map<uint8_t, std::shared_ptr<Infected>> &infecteds) {
+                     std::map<uint16_t, std::shared_ptr<Infected>> &infecteds) {
     for (auto &infected : infecteds) {
         if (player->isAlignedRight(infected.second->getCollidable())) {
             infected.second->applyDamage(calculateDamage(player->rightDistance(infected.second->getCollidable())));
@@ -67,7 +67,7 @@ void Idf::shootRight(std::shared_ptr<Collidable> &player,
 }
 
 void Idf::shootLeft(std::shared_ptr<Collidable> &player,
-                    std::map<uint8_t, std::shared_ptr<Infected>> &infecteds) {
+                    std::map<uint16_t, std::shared_ptr<Infected>> &infecteds) {
     for (auto &infected : infecteds) {
         if (player->isAlignedLeft(infected.second->getCollidable())) {
             infected.second->applyDamage(calculateDamage(player->leftDistance(infected.second->getCollidable())));
@@ -78,6 +78,6 @@ void Idf::shootLeft(std::shared_ptr<Collidable> &player,
     }
 }
 
-float Idf::calculateDamage(float distance) {
+float Idf::calculateDamage(const float& distance) {
     return this->damage - (distance*this->scope) ;
 }

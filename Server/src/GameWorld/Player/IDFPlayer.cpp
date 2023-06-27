@@ -2,7 +2,7 @@
 
 #include <utility>
 
-IDFPlayer::IDFPlayer(std::pair<int16_t, int16_t>& position,
+IDFPlayer::IDFPlayer(const std::pair<int16_t, int16_t>& position,
                      std::shared_ptr<Collidable> collidable) :
         Player(TypeOperator::operator_idf, CF::idf_health, CF::idf_velocity,
            std::make_shared<Idf>(), position, std::move(collidable)),
@@ -11,7 +11,7 @@ IDFPlayer::IDFPlayer(std::pair<int16_t, int16_t>& position,
         smoke(std::make_shared<SmokeGrenade>(position, 0)),
         smokeElapsedTime(0), throwingSmoke(false) {}
 
-void IDFPlayer::setSkillState(Event event) {
+void IDFPlayer::setSkillState(const Event& event) {
     if (this->state == State::injure or
         this->state == State::recharge or
         this->state == State::atack or
@@ -37,7 +37,7 @@ void IDFPlayer::setSkillState(Event event) {
     }
 }
 
-void IDFPlayer::stopSkillState(Event event) {
+void IDFPlayer::stopSkillState(const Event& event) {
     if (this->state == State::injure or
         this->state == State::recharge or
         this->state == State::atack or
@@ -53,7 +53,7 @@ void IDFPlayer::stopSkillState(Event event) {
 
 void IDFPlayer::specialAtack(std::list<std::shared_ptr<Grenade>>& grenades,
                              std::list<std::shared_ptr<BlitzAtack>>& blitzAtacks,
-                             double stepTime) {
+                             const double& stepTime) {
     if (this->state == State::stop_hability) {
         this->stopSkillCLock += stepTime;
     }
@@ -81,7 +81,7 @@ bool IDFPlayer::isSmokeAvailable() {
 }
 
 void IDFPlayer::throwGrenade(std::list<std::shared_ptr<Grenade>> &grenades,
-                             double stepTime) {
+                             const double& stepTime) {
     grenadeElapsedTime += stepTime;
     if (this->state == State::stop_hability and stopSkillCLock >= CF::stop_skill_time) {
         this->grenade->setId(grenades.size());
@@ -94,7 +94,7 @@ void IDFPlayer::throwGrenade(std::list<std::shared_ptr<Grenade>> &grenades,
     }
 }
 
-void IDFPlayer::throwSmoke(std::list<std::shared_ptr<Grenade>> &grenades, double stepTime) {
+void IDFPlayer::throwSmoke(std::list<std::shared_ptr<Grenade>> &grenades, const double& stepTime) {
     smokeElapsedTime += stepTime;
     if (this->state == State::stop_hability and stopSkillCLock >= CF::stop_skill_time) {
         this->smoke->setId(grenades.size());

@@ -31,20 +31,20 @@
 
 class GameWorld {
     private:
-        uint8_t players_amount;
-        std::map<uint8_t, std::shared_ptr<Player>> players;
+        uint16_t players_amount;
+        std::map<uint16_t, std::shared_ptr<Player>> players;
         TypeGame type;
         uint8_t map; // id of the ui map generated
         uint8_t rounds;
 
         // All the gameWorld collidables (can be Infecteds, Players, Obstacles...)
-        std::map<uint8_t, std::shared_ptr<Collidable>> collidables;
+        std::map<uint16_t, std::shared_ptr<Collidable>> collidables;
 
-        uint8_t infectedId;
-        std::map<uint8_t, std::shared_ptr<Infected>> infecteds;
+        uint16_t infectedId;
+        std::map<uint16_t, std::shared_ptr<Infected>> infecteds;
 
-        uint8_t obsacleId;
-        std::map<uint8_t, std::shared_ptr<Obstacle>> obstacles;
+        uint16_t obsacleId;
+        std::map<uint16_t, std::shared_ptr<Obstacle>> obstacles;
         bool ended;
 
         InfectedFactory infectedFactory;
@@ -53,7 +53,7 @@ class GameWorld {
         ObstacleFactory obstacleFactory;
 
         PlayerFactory playerFactory;
-        std::list<uint8_t> deadPlayersId;
+        std::list<uint16_t> deadPlayersId;
 
         std::list<std::shared_ptr<Grenade>> grenades;
         std::list<std::shared_ptr<BlitzAtack>> blitzAtacks;
@@ -65,13 +65,13 @@ class GameWorld {
 
     public:
         GameWorld(const TypeGame& type, const TypeDifficulty& difficulty);
-        uint8_t addPlayer(TypeOperator op);
-        void deletePlayer(uint8_t id);
+        uint16_t addPlayer(const TypeOperator& op);
+        void deletePlayer(const uint16_t& id);
 
-        void updateMovementDirection(Event event, uint8_t id, MoveTo direction);
-        void updateShootingState(Event event, uint8_t id);
-        void updateReloadingState(Event event, uint8_t id);
-        void updateSkillState(Event event, uint8_t id);
+        void updateMovementDirection(const Event& event, const uint16_t& id, const MoveTo& direction);
+        void updateShootingState(const Event& event, const uint16_t& id);
+        void updateReloadingState(const Event& event, const uint16_t& id);
+        void updateSkillState(const Event& event, const uint16_t& id);
 
         /*
          * Simula un tiempito en el 'gameworld'.
@@ -80,7 +80,7 @@ class GameWorld {
          * todos los eventos que tienen que ver con el tiempo.
          */
         void simulateStep(double stepTime);
-        std::shared_ptr<Snapshot> getSnapshot(bool first);
+        std::shared_ptr<Snapshot> getSnapshot(const bool first);
         std::vector<StatsDto> getStats();
         bool isEnded();
 
