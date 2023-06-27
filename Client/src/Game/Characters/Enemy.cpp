@@ -85,7 +85,7 @@ void Enemy::renderAnimation(int speed, SDL_Texture* texture, SDL_Rect camera) {
                                 SIZE_FRAME_ENEMY, SIZE_FRAME_ENEMY};
         rectFinal = {   position.first - camera.x,
                         position.second - camera.y,
-                        SIZE_FRAME, SIZE_FRAME};
+                        SIZE_FRAME_ENEMY, SIZE_FRAME_ENEMY};
     } else if (type == TypeInfected::infected_spear ||
                 type == TypeInfected::infected_venom) {
         rectInit = {   (speedAnimation * (SIZE_FRAME)), 0,
@@ -116,7 +116,7 @@ void Enemy::renderDead(int speed, SDL_Texture* texture, SDL_Rect camera) {
                                 SIZE_FRAME_ENEMY, SIZE_FRAME_ENEMY};
         rectFinal = {   position.first - camera.x,
                         position.second - camera.y,
-                        SIZE_FRAME, SIZE_FRAME};
+                        SIZE_FRAME_ENEMY, SIZE_FRAME_ENEMY};
     } else if (type == TypeInfected::infected_spear ||
                 type == TypeInfected::infected_venom) {
         rectInit = {   (speedAnimation * (SIZE_FRAME)), 0,

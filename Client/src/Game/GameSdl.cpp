@@ -170,7 +170,7 @@ void GameSdl::updateGrenades(std::shared_ptr<Snapshot> snap) {
 }
 
 std::pair<int16_t, int16_t> GameSdl::calculateMassCenter() {
-    std::pair<int16_t, int16_t> massCenter;
+    std::pair<int16_t, int16_t> massCenter = {0, 0};
     size_t soldiersLive = 0;
     for (const auto& soldier : soldiers) {
         if (soldier.second->getState() != State::dead) {
@@ -179,8 +179,13 @@ std::pair<int16_t, int16_t> GameSdl::calculateMassCenter() {
             soldiersLive++;
         }
     }
-    massCenter.first = massCenter.first / soldiersLive;
-    massCenter.second = massCenter.second / soldiersLive;
+    if (soldiersLive != 0) {
+        massCenter.first = massCenter.first / soldiersLive;
+        massCenter.second = massCenter.second / soldiersLive;
+    } else {
+        massCenter.first = soldiers[idPlayer]->getPosX();
+        massCenter.second = soldiers[idPlayer]->getPosY();
+    }
     return massCenter;
 }
 
