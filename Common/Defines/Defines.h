@@ -159,7 +159,7 @@
 #define GRENADE_DAMAGE_RANGE 250
 #define BLITZ_ATTACK_IMPACT_RANGE 1000
 
-#define STATS_PATH "../../Stats/stats.txt"
+#define STATS_PATH "../Server/Stats/stats.txt"
 #define STATS_TEST_PATH "../Server/Stats/statsTest.txt"
 #define HEADER_KILL "KILL"
 #define HEADER_SHOT "SHOT"
