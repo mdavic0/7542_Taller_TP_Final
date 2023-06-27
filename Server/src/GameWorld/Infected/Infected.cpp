@@ -173,4 +173,3 @@ void Infected::applySpeedReduction(double speedReduction) {
         this->velocity -= speedReduction;
     }
 }
-

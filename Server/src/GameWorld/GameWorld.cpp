@@ -423,3 +423,20 @@ void GameWorld::applySuperSpeed(Event event, uint8_t id) {
     }
 }
 
+void GameWorld::killInfecteds(Event event, uint8_t id) {
+    bool found = (std::find(deadPlayersId.begin(),
+                            deadPlayersId.end(),
+                            id) != deadPlayersId.end());
+    // Ignore actions from dead players
+    if (found) {
+        return;
+    }
+
+    if (event == Event::event_cheat_kill_enemies) {
+        for (auto it = infecteds.cbegin(); it != infecteds.cend(); /* no increment */){
+                collidables.erase(it->first);
+                infecteds.erase(it++);
+        }
+    }
+}
+
