@@ -27,8 +27,8 @@ void Game::run() {
             auto minutes = std::chrono::duration_cast<std::chrono::minutes>(duration);
             auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration - minutes);
 
-            uint8_t minutesValue = static_cast<uint8_t>(minutes.count());
-            uint8_t secondsValue = static_cast<uint8_t>(seconds.count());
+            uint16_t minutesValue = static_cast<uint16_t>(minutes.count());
+            uint16_t secondsValue = static_cast<uint16_t>(seconds.count());
 
             broadcastSnapshot(statsController.updateStats(gameWorld.getStats(), minutesValue, secondsValue));
         }
