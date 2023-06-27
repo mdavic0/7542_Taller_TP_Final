@@ -135,9 +135,9 @@ void GameSdl::update() {
         } else {
             this->endGame = true;
             if (mode == TypeGame::game_survival) {
-                snap = snapshotQueue.pop();
+                while (!snapshotQueue.try_pop(snap)) {
+                }
                 if (snap->getEvent() == Event::event_stats) {
-                    std::cout << "llego stats\n";
                     endGameSdl.addStats(snap->getStats());
                 }
             }

@@ -66,16 +66,16 @@ void EndGame::renderSurvival() {
 int EndGame::renderStats(int height, StatsDto dto) {
      SDL_Color color = COLOR_WHITE;
     int w, h;
-    std::string text =  std::to_string(dto.getPlayerId()) + " " +
-                        std::to_string(dto.getShots()) + " " +
-                        std::to_string(dto.getKills()) + " " +
+    std::string text =  std::to_string(dto.getPlayerId()) + "  " +
+                        std::to_string(dto.getShots()) + "  " +
+                        std::to_string(dto.getKills()) + "  " +
                         std::to_string(dto.getMinutes()) + ":" +
                         std::to_string(dto.getSeconds());
     font.getSizeFont(text, &w, &h);
     Texture textureFont(renderer, font.RenderText_Solid(text, color));
     SDL_Rect final = {  620, height + h + 10, w, h};
     this->renderer.copyFont(textureFont.getTexture(), final);
-    return h + final.y;
+    return h + final.y - 10;
 }
 
 void EndGame::addStats(std::vector<StatsDto> stats) {
