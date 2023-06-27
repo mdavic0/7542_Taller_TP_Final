@@ -8,17 +8,17 @@
 #include "TypeInfected.h"
 
 class EnemyDto {
-    uint8_t id;
+    uint16_t id;
     TypeInfected type;
     State state;
     std::pair<int16_t, int16_t> position;
     
     public:
 
-    explicit EnemyDto(const uint8_t& id, const TypeInfected& type, const State& state,
+    explicit EnemyDto(const uint16_t& id, const TypeInfected& type, const State& state,
         const std::pair<int16_t, int16_t>& position);
 
-    uint8_t getId() const;
+    uint16_t getId() const;
 
     TypeInfected getTypeInfected() const;
 

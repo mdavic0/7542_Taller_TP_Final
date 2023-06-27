@@ -8,7 +8,7 @@
 #include <string>
 
 class StOperator {
-    uint8_t id;
+    uint16_t id;
     TypeOperator type;
     State state;
     std::pair<int16_t, int16_t> position;
@@ -19,11 +19,11 @@ class StOperator {
     
     public:
 
-    explicit StOperator(const uint8_t& id, const TypeOperator& type, const State& state,
+    explicit StOperator(const uint16_t& id, const TypeOperator& type, const State& state,
         const std::pair<int16_t, int16_t>& position, const int16_t& health, const uint8_t& munition,
         const bool& grenadeAvailable, const bool& smokeAvailable);
 
-    uint8_t getId() const;
+    uint16_t getId() const;
 
     TypeOperator getTypeOperator() const;
 

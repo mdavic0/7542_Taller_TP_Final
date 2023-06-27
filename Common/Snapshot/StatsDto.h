@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 class StatsDto {
-    int8_t playerId; // IF PlayerId < 0 is a player of external game
+    uint16_t playerId;
     int16_t kills;
     int32_t rankingKills;
     int16_t shots;
@@ -15,12 +15,12 @@ class StatsDto {
     
     public:
 
-    explicit StatsDto(const int8_t& playerId, const int16_t& kills, const int32_t& rankingKills, const int16_t shots,
+    explicit StatsDto(const uint16_t& playerId, const int16_t& kills, const int32_t& rankingKills, const int16_t& shots,
         const int32_t& rankingShots, const int16_t& minutes, const int16_t& seconds, const int32_t& rankingDuration);
 
-    explicit StatsDto(const int8_t& playerId, const int16_t& kills, const int16_t shots);
+    explicit StatsDto(const uint16_t& playerId, const int16_t& kills, const int16_t& shots);
 
-    int8_t getPlayerId() const;
+    uint16_t getPlayerId() const;
 
     int16_t getKills() const;
     

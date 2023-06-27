@@ -1,10 +1,10 @@
 #include "EnemyDto.h"
 
-EnemyDto::EnemyDto(const uint8_t& id, const TypeInfected& type, const State& state,
+EnemyDto::EnemyDto(const uint16_t& id, const TypeInfected& type, const State& state,
     const std::pair<int16_t, int16_t>& position) : id(id), type(type),
     state(state), position(position) {}
 
-uint8_t EnemyDto::getId() const {
+uint16_t EnemyDto::getId() const {
     return id;
 }
 
