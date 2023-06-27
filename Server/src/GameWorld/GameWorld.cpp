@@ -123,6 +123,7 @@ void GameWorld::simulateStep(double stepTime) {
         simulateBlitzAtackStep(stepTime);
         simulatePostExplosionGrenadesStep(stepTime);
         simulateBlitzAtackStep(stepTime);
+        simulatePostExplosionBlitz(stepTime);
     }
 }
 
@@ -393,3 +394,18 @@ void GameWorld::reanimatePlayer(Event event, uint8_t id) {
         players.at(id)->reanimate(this->players);
     }
 }
+
+void GameWorld::finishGame(Event event, uint8_t id) {
+    bool found = (std::find(deadPlayersId.begin(),
+                            deadPlayersId.end(),
+                            id) != deadPlayersId.end());
+    // Ignore actions from dead players
+    if (found) {
+        return;
+    }
+
+    if (event == Event::event_cheat_finish_game) {
+        this->ended = true;
+    }
+}
+
