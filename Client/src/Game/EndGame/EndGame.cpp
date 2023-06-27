@@ -46,11 +46,11 @@ void EndGame::renderSurvival() {
     Texture textureFont(renderer, font.RenderText_Solid(TEXT_SURVIVAL, color));
     SDL_Rect final = { 650, 430, w, h};
     SDL_Rect rectInit = { 0, 0, SPRITE_BG_W, SPRITE_BG_H};
-    SDL_Rect rectFinal = { 574, 375, SPRITE_BG_W, SPRITE_BG_H * 2};
+    SDL_Rect rectFinal = { 574, 350, SPRITE_BG_W, SPRITE_BG_H * 2};
     this->renderer.copy(textures.getTexture("healthbg"), rectInit,
                         rectFinal);
     this->renderer.copyFont(textureFont.getTexture(), final);
-    // id // kills // time // shots
+    // id // shots // kills // time 
     font.getSizeFont(TEXT_STATS, &w2, &h2);
     Texture textureFont2(renderer, font.RenderText_Solid(TEXT_STATS, color));
     SDL_Rect final2 = { 600, final.y + h2 + 10, w2, h2};
@@ -66,7 +66,8 @@ void EndGame::renderSurvival() {
 int EndGame::renderStats(int height, StatsDto dto) {
      SDL_Color color = COLOR_WHITE;
     int w, h;
-    std::string text =  std::to_string(dto.getPlayerId()) + "  " +
+    std::string text =  " " + 
+                        std::to_string(dto.getPlayerId()) + " " +
                         std::to_string(dto.getShots()) + "  " +
                         std::to_string(dto.getKills()) + "  " +
                         std::to_string(dto.getMinutes()) + ":" +

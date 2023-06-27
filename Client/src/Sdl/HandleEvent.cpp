@@ -14,8 +14,10 @@ void EventHandler::listen() {
         switch (event.type) {
             case SDL_QUIT:
                 this->running = false;      // do not pop from snap queue
-                this->eventQueue.push(
-                    std::make_shared<EventDTO>(Event::event_leave, idPlayer));
+                if (!endGame) {
+                    this->eventQueue.push(std::make_shared<EventDTO>(
+                            Event::event_leave, idPlayer));
+                }
                 break;
             case SDL_KEYDOWN:
                 handleKeyDownEvent(event.key.keysym);
