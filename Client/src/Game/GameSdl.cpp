@@ -203,6 +203,9 @@ void GameSdl::handleEvents() {
     this->events.listen();
 }
 
+bool& GameSdl::ended() {
+    return this->endGame;
+}
 GameSdl::~GameSdl() {
 }
 
