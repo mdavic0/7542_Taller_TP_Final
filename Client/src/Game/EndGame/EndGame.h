@@ -18,6 +18,9 @@ class EndGame {
         void renderClearZone();
         void renderSurvival();
         int renderStats(int height, StatsDto dto);
+        int renderStatsName(int height);
+        int renderRankings(int height, StatsDto dto);
+        int renderRankingsName(int height);
         std::vector<StatsDto> stats;
     public:
         EndGame(Font& font, Renderer& renderer, TextureManager& textures,

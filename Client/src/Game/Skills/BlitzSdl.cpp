@@ -8,7 +8,7 @@ BlitzSdl::BlitzSdl(Renderer& render, TextureManager& textures,
 }
 
 void BlitzSdl::render(SDL_Rect camera) {
-    int repet = window.getWidth() / SIZE_FRAME;
+    int repet = WIDTH_SCREEN_INIT / SIZE_FRAME;
     for (int i = 0; i < repet; ++i ) {
         this->renderExplotion(i, camera);
     }
