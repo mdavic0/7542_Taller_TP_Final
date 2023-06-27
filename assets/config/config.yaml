@@ -3,6 +3,7 @@
 # Operators
 ####################################################
 fell_down_death_time: 30
+super_speed_increment: 50
 # 1: # idf
 idf_damage: 5
 idf_health: 120

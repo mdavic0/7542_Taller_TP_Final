@@ -13,6 +13,7 @@
 #include "BlitzAtackCommand.h"
 #include "ReanimateCommand.h"
 #include "CheatFinishGameCommand.h"
+#include "CheatSuperSpeedCommand.h"
 
 
 CommandFactory::CommandFactory() = default;
@@ -47,6 +48,8 @@ std::unique_ptr <Command> CommandFactory::getCommand(std::shared_ptr <EventDTO> 
             return std::make_unique<ReanimateCommand>(event->getIdPlayer());
         case Event::event_cheat_finish_game:
             return std::make_unique<CheatFinishGameCommand>(event->getIdPlayer());
+        case Event::event_cheat_more_velocity:
+            return std::make_unique<CheatSuperSpeedCommand>(event->getIdPlayer());
         default:
             return nullptr;
     }

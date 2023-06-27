@@ -4,7 +4,7 @@
 #include "Command.h"
 
 
-class CheatFinishGameCommand: public Command {
+class CheatFinishGameCommand : public Command {
     private:
         uint8_t id;
 

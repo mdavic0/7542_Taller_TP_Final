@@ -23,7 +23,7 @@ class Player {
     private:
         TypeOperator typeOperator;
         uint8_t fell_down;
-        uint8_t velocity;
+        double velocity;
         std::shared_ptr<Weapon> weapon;
         std::shared_ptr<Collidable> collidable;
         bool alive;
@@ -68,6 +68,7 @@ class Player {
         virtual bool isSmokeAvailable() = 0;
         std::shared_ptr<Collidable>& getCollidable();
         void applyDamage(const int& amount);
+        void applySpeed(double speed);
 
         bool isAlive();
         bool isFellDown();

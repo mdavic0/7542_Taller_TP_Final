@@ -238,3 +238,7 @@ void Player::reanimate(std::map<uint8_t, std::shared_ptr<Player>> &players) {
         }
     }
 }
+
+void Player::applySpeed(double speed) {
+    this->velocity += speed;
+}

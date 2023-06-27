@@ -68,21 +68,21 @@ void EventHandler::handleKeyDownEvent(SDL_Keysym keysym) {
             std::cout << "F1 cheat\n";
             break;
         case SDLK_F2:
-            event = Event::event_cheat_infinite_munition;
+            event = Event::event_cheat_more_velocity;
             std::cout << "F2 cheat\n";
             break;
         case SDLK_F3:
-            event = Event::event_cheat_more_velocity;
+            event = Event::event_cheat_kill_enemies;
             std::cout << "F3 cheat\n";
             break;
         case SDLK_F4:
-            event = Event::event_cheat_kill_enemies;
+            event = Event::event_cheat_infinite_health;
             std::cout << "F4 cheat\n";
             break;
-        case SDLK_F5:
-            event = Event::event_cheat_infinite_health;
+        /*case SDLK_F5:
+            event = ;
             std::cout << "F5 cheat\n";
-            break;
+            break;*/
         default:
             moveDirection = MoveTo::move_idle;
             break;

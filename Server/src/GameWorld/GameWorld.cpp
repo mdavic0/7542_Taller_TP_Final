@@ -409,3 +409,17 @@ void GameWorld::finishGame(Event event, uint8_t id) {
     }
 }
 
+void GameWorld::applySuperSpeed(Event event, uint8_t id) {
+    bool found = (std::find(deadPlayersId.begin(),
+                            deadPlayersId.end(),
+                            id) != deadPlayersId.end());
+    // Ignore actions from dead players
+    if (found) {
+        return;
+    }
+
+    if (event == Event::event_cheat_more_velocity) {
+        players.at(id)->applySpeed(CF::super_speed_increment);
+    }
+}
+

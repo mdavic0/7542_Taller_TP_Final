@@ -85,6 +85,8 @@ class GameWorld {
         bool isEnded();
         void reanimatePlayer(Event event, uint8_t id);
         void finishGame(Event event, uint8_t id);
+        void applySuperSpeed(Event event, uint8_t id);
+
     private:
         void generateInfecteds();
         void generateObstacles();
