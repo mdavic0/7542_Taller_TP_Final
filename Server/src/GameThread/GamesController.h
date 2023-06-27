@@ -16,7 +16,6 @@
  */
 class GamesController {
     private:
-    uint8_t counter;       // counter
     std::map<uint32_t, std::shared_ptr<Game>> games;
     std::mutex mutex;
     StatsController statsController;
