@@ -8,6 +8,7 @@ YAML::Node CF::file = YAML::LoadFile(PATH);
 /******************************
 * OPERATORS
 ******************************/
+double CF::fell_down_death_time = CF::file["fell_down_death_time"].as<double>();
 // IDF:
 int CF::idf_damage = CF::file["idf_damage"].as<int>();
 int CF::idf_health = CF::file["idf_health"].as<int>();
@@ -134,6 +135,8 @@ void Configuration::loadConfiguration(const std::string& filename) {
     /******************************
     * OPERATORS
     ******************************/
+    fell_down_death_time = file["fell_down_death_time"].as<double>();
+
     // IDF:
     idf_damage = file["idf_damage"].as<int>();
     idf_health = file["idf_health"].as<int>();

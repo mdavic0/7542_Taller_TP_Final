@@ -119,9 +119,10 @@ void EventHandler::handleKeyUpEvent(SDL_Keysym keysym) {
         case SDLK_e:
             event = Event::event_stop_smoke;
             break;
-        case SDLK_f:
+        /*case SDLK_f:
+            The reanimate not depend on time (possible future feature)
             event = Event::event_stop_reanimate;
-            break;
+            break;*/
         default:
             moveDirection = MoveTo::move_idle;
             break;

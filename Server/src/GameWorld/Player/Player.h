@@ -27,6 +27,7 @@ class Player {
         std::shared_ptr<Weapon> weapon;
         std::shared_ptr<Collidable> collidable;
         bool alive;
+        double fellDownCLock;
 
     protected:
         int8_t life;
@@ -46,6 +47,7 @@ class Player {
         void setShootingState();
         void stopShootingState();
         void setReloadingState();
+        void reanimate(std::map<uint8_t, std::shared_ptr<Player>>& players);
         virtual void setSkillState(Event event) = 0;
         virtual void stopSkillState(Event event) = 0;
         void applyStep(std::map<uint8_t, std::shared_ptr<Collidable>> &collidables,

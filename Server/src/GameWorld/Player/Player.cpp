@@ -2,11 +2,13 @@
 
 #include <utility>
 #include "Defines.h"
+#include "Configuration.h"
+
 
 Player::Player(TypeOperator typeOperator) : typeOperator(typeOperator),
     state(State::idle), life(100), fell_down(0), position(0,0),
     movement_direction(0,0), velocity(1), weapon(), lookingRight(true),
-    alive(true), stopSkillCLock(0) {}
+    alive(true), stopSkillCLock(0), fellDownCLock(0) {}
 
 Player::Player(TypeOperator typeOperator, uint8_t life, uint8_t velocity,
     std::shared_ptr<Weapon> weapon, std::pair<int16_t, int16_t>& position,
@@ -14,7 +16,7 @@ Player::Player(TypeOperator typeOperator, uint8_t life, uint8_t velocity,
     typeOperator(typeOperator), state(State::idle), life(life), fell_down(0),
     position(position), movement_direction(0,0), velocity(velocity),
     weapon(std::move(weapon)), lookingRight(true), collidable(std::move(collidable)),
-    alive(true), stopSkillCLock(0) {}
+    alive(true), stopSkillCLock(0), fellDownCLock(0) {}
 
 void Player::setMovementDirection(MoveTo direction) {
     if (this->state == State::injure or
@@ -117,10 +119,19 @@ void Player::applyStep(std::map<uint8_t, std::shared_ptr<Collidable>> &collidabl
                        std::list<std::shared_ptr<Grenade>> &grenades,
                        std::list<std::shared_ptr<BlitzAtack>>& blitzAtacks,
                        double stepTime) {
+
     this->move(collidables);
     this->shoot(infecteds, stepTime);
     this->reload(stepTime);
     this->specialAtack(grenades, blitzAtacks, stepTime);
+    // Check death
+    if (this->state == State::injure) {
+        fellDownCLock += stepTime;
+        if (fellDownCLock >= CF::fell_down_death_time) {
+            this->state = State::dead;
+            this->alive = false;
+        }
+    }
 }
 
 std::pair<int16_t, int16_t>& Player::getPosition() {
@@ -213,4 +224,17 @@ bool Player::isAlive() {
 
 bool Player::isFellDown() {
     return this->state == State::injure;
+}
+
+void Player::reanimate(std::map<uint8_t, std::shared_ptr<Player>> &players) {
+    for (auto& player : players) {
+        if (player.second->getPosition() != this->position and
+            player.second->isFellDown() and
+            player.second->getCollidable()->isCloseTo(this->collidable,
+                                                 REANIMATE_DISTANCE)) {
+            player.second->revive();
+            //Just reanimate one player a time
+            break;
+        }
+    }
 }

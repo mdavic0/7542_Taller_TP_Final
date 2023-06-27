@@ -11,6 +11,7 @@
 #include "SmokeGrenadeCommand.h"
 #include "StopSmokeGrenadeCommand.h"
 #include "BlitzAtackCommand.h"
+#include "ReanimateCommand.h"
 
 
 CommandFactory::CommandFactory() = default;
@@ -41,6 +42,8 @@ std::unique_ptr <Command> CommandFactory::getCommand(std::shared_ptr <EventDTO> 
             return std::make_unique<ReloadCommand>(event->getIdPlayer());
         case Event::event_leave:
             return std::make_unique<LeaveCommand>(event->getIdPlayer());
+        case Event::event_reanimate:
+            return std::make_unique<ReanimateCommand>(event->getIdPlayer());
         default:
             return nullptr;
     }

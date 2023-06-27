@@ -379,3 +379,17 @@ void GameWorld::updateRounds() {
     }
 
 }
+
+void GameWorld::reanimatePlayer(Event event, uint8_t id) {
+    bool found = (std::find(deadPlayersId.begin(),
+                            deadPlayersId.end(),
+                            id) != deadPlayersId.end());
+    // Ignore actions from dead players
+    if (found) {
+        return;
+    }
+
+    if (event == Event::event_reanimate) {
+        players.at(id)->reanimate(this->players);
+    }
+}

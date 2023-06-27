@@ -83,6 +83,7 @@ class GameWorld {
         std::shared_ptr<Snapshot> getSnapshot(bool first);
         std::vector<StatsDto> getStats();
         bool isEnded();
+        void reanimatePlayer(Event event, uint8_t id);
 
     private:
         void generateInfecteds();
