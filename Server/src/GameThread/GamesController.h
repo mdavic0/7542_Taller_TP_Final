@@ -42,7 +42,7 @@ class GamesController {
      * modificado mientras se lo esta 'iterando'.
      */
     Queue<std::shared_ptr<EventDTO>>* try_join_game(std::shared_ptr<EventDTO> eventdto,
-                                                    Queue<std::shared_ptr<Snapshot>> *q,
+                                                    Queue<std::shared_ptr<Snapshot>>* q,
                                                     std::shared_ptr<Game>& game);
 
     ~GamesController();

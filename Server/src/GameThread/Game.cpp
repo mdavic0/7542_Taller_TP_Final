@@ -92,7 +92,7 @@ void Game::startGame() {
 }
 
 void Game::clientLeave(Queue<std::shared_ptr<Snapshot>> *q) {
-   std::lock_guard<std::mutex> locker(mutex);
+   //std::lock_guard<std::mutex> locker(mutex);
     if (not started) {
         for (auto it = client_snapshot_queues.begin(); it != client_snapshot_queues.end(); ) {
             if (it->second == q) {
@@ -161,7 +161,7 @@ void Game::processEvents() {
 }
 
 void Game::broadcastSnapshot(std::shared_ptr<Snapshot> snapshot) {
-    std::lock_guard<std::mutex> locker(mutex);
+    //std::lock_guard<std::mutex> locker(mutex);
     for (auto it = client_snapshot_queues.begin(); it != client_snapshot_queues.end(); /* increment inside loop */) {
         try {
             if (!it->second->try_push(snapshot)) {

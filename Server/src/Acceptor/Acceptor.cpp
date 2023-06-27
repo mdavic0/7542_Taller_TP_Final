@@ -15,9 +15,9 @@ void Acceptor::endedClients() {
     }
 
     readers.erase(std::remove_if(readers.begin(), readers.end(),
-                                 [](auto* reader){
+                                 [](auto& reader){
                                      if (reader->ended()) {
-                                         delete reader;
+                                         //delete reader;
                                          return true;
                                      } else {
                                          return false;
@@ -26,9 +26,9 @@ void Acceptor::endedClients() {
 }
 
 void Acceptor::waitClients() {
-    for (auto *reader : readers) {
+    for (auto& reader : readers) {
         reader->stop();   // join is inside stop method
-        delete reader;
+        //delete reader;
     }
 }
 
@@ -36,7 +36,7 @@ void Acceptor::run() {
     while (talking) {
         try {
             std::shared_ptr<Socket> peer = std::make_shared<Socket>(skt.accept());
-            EventReceiver *reader = new EventReceiver(peer, controller);
+            std::shared_ptr<EventReceiver> reader = std::make_shared<EventReceiver>(peer, controller);
             reader->start();
             readers.push_back(reader);   //  Agrego cliente
             endedClients();
