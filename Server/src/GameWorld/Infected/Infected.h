@@ -15,7 +15,7 @@ class Player;
 class Infected {
     private:
         TypeInfected typeInfected;
-        uint8_t id;
+        uint16_t id;
 
         int8_t life;
         uint8_t velocity;
@@ -32,33 +32,33 @@ class Infected {
 
         std::shared_ptr<Player> target;
     public:
-        Infected(TypeInfected typeInfected, uint8_t id, uint8_t life,
-                 uint8_t velocity, uint8_t damage,
-                 std::pair<int16_t, int16_t>& position,
+        Infected(const TypeInfected& typeInfected, const uint16_t& id, const uint8_t& life,
+                 const uint8_t& velocity, const uint8_t& damage,
+                 const std::pair<int16_t, int16_t>& position,
                  std::shared_ptr<Collidable> collidable);
 
-        void applyStep(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables,
-                       std::map<uint8_t, std::shared_ptr<Player>>& players);
+        void applyStep(const std::map<uint16_t, std::shared_ptr<Collidable>>& collidables,
+                       const std::map<uint16_t, std::shared_ptr<Player>>& players);
         std::shared_ptr<Collidable>& getCollidable();
         void applyDamage(const int& amount);
-        void applySpeedReduction(double speedReduction);
+        void applySpeedReduction(const double& speedReduction);
         bool isAlive();
 
         std::pair<int16_t, int16_t>& getPosition();
         TypeInfected& getTypeInfected();
         State& getState();
-        uint8_t& getId();
+        uint16_t& getId();
 
         virtual ~Infected() = default;
 
     private:
-        void move(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables);
+        void move(const std::map<uint16_t, std::shared_ptr<Collidable>>& collidables);
         void atack();
-        virtual void specialAtack(Event event) = 0;
-        bool isIntoHostilRange(std::shared_ptr<Player> player);
-        void setTarget(std::map<uint8_t, std::shared_ptr<Player>>& players);
-        void setMovementDirection(MoveTo direction);
-        void stopMovementDirection(MoveTo direction);
+        virtual void specialAtack(const Event& event) = 0;
+        bool isIntoHostilRange(const std::shared_ptr<Player>& player);
+        void setTarget(const std::map<uint16_t, std::shared_ptr<Player>>& players);
+        void setMovementDirection(const MoveTo& direction);
+        void stopMovementDirection(const MoveTo& direction);
         void setMovementDirection();
         void stopMovementDirection();
 };

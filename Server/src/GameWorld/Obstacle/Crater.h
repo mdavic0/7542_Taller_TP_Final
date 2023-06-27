@@ -5,7 +5,7 @@
 
 class Crater : public Obstacle {
 public:
-    Crater(uint8_t id, std::pair<int16_t, int16_t>& position,
+    Crater(const uint16_t& id, const std::pair<int16_t, int16_t>& position,
          std::shared_ptr<Collidable> collidable);
     ~Crater() override;
 };

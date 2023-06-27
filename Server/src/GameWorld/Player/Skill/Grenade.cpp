@@ -2,7 +2,8 @@
 #include "Defines.h"
 #include "Configuration.h"
 
-Grenade::Grenade(TypeGrenade typeGrenade, uint8_t id, uint8_t damage, std::pair<int16_t, int16_t> position) :
+Grenade::Grenade(const TypeGrenade& typeGrenade, const uint16_t& id, const uint8_t& damage, 
+    const std::pair<int16_t, int16_t>& position) :
     typeGrenade(typeGrenade), id(id), damage(damage), available(true), reloadingClock(0),
     position(position), movement_direction({0,0}), velocity(CF::grenade_velocity),
     collidable(std::make_shared<Collidable>(0, position, 5, 5)),
@@ -10,7 +11,7 @@ Grenade::Grenade(TypeGrenade typeGrenade, uint8_t id, uint8_t damage, std::pair<
     moving(false), readyToExplode(false), hasExploded(false) {}
 
 
-void Grenade::move(double stepTime) {
+void Grenade::move(const double& stepTime) {
     if (this->moving and movementClock <= elapsedTime) {
         this->movementClock += stepTime;
         this->position.first += movement_direction.first + movement_direction.first * (velocity * stepTime);
@@ -24,7 +25,7 @@ void Grenade::move(double stepTime) {
     }
 }
 
-void Grenade::setMovementDirection(bool right) {
+void Grenade::setMovementDirection(const bool& right) {
     this->moving = true;
     if (right) {
         this->movement_direction = {1, 0};
@@ -54,7 +55,7 @@ TypeGrenade Grenade::getTypeGrenade() {
     return typeGrenade;
 }
 
-void Grenade::calculateFinalPosition(bool right, double time) {
+void Grenade::calculateFinalPosition(const bool& right, const double& time) {
     // x(t) = xi + v * t;
     if (right) {
         finalPosition = {this->position.first + (this->velocity * time) + GRENADE_DAMAGE_RANGE,
@@ -65,11 +66,11 @@ void Grenade::calculateFinalPosition(bool right, double time) {
     }
 }
 
-void Grenade::setId(uint8_t anId) {
+void Grenade::setId(const uint16_t& anId) {
     this->id = anId;
 }
 
-uint8_t Grenade::getId() {
+uint16_t& Grenade::getId() {
     return this->id;
 }
 

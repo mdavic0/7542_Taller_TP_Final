@@ -14,13 +14,13 @@ class P90Player : public Player {
         bool throwingBlitzAtack;
 
     public:
-        P90Player(std::pair<int16_t, int16_t>& position,
+        P90Player(const std::pair<int16_t, int16_t>& position,
                   std::shared_ptr<Collidable> collidable);
-        void setSkillState(Event event) override;
-        void stopSkillState(Event event) override;
+        void setSkillState(const Event& event) override;
+        void stopSkillState(const Event& event) override;
         void specialAtack(std::list<std::shared_ptr<Grenade>>& grenades,
                           std::list<std::shared_ptr<BlitzAtack>>& blitzAtacks,
-                          double stepTime) override;
+                          const double& stepTime) override;
         bool isGrenadeAvailable() override;
         bool isSmokeAvailable() override;
         void revive() override;

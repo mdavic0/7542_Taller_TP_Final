@@ -8,22 +8,22 @@
 class Obstacle {
     private:
         TypeObstacle typeObstacle;
-        uint8_t id;
+        uint16_t id;
         std::pair<int16_t, int16_t> position;
         std::shared_ptr<Collidable> collidable;
     public:
-        Obstacle(TypeObstacle typeObstacle, uint8_t id,
-                 std::pair<int16_t, int16_t>& position,
+        Obstacle(const TypeObstacle& typeObstacle, const uint16_t& id,
+                 const std::pair<int16_t, int16_t>& position,
                  std::shared_ptr<Collidable> collidable);
-        void updatePosition(std::pair<int16_t, int16_t>& newPosition,
-                            std::map<uint8_t, std::shared_ptr<Collidable>>& collidables);
+        void updatePosition(const std::pair<int16_t, int16_t>& newPosition,
+                            const std::map<uint16_t, std::shared_ptr<Collidable>>& collidables);
         std::pair<int16_t, int16_t>& getPosition();
         TypeObstacle& getTypeObstacle();
         virtual ~Obstacle() = default;
 
     private:
-        void move(std::pair<int16_t, int16_t> &newPosition,
-                  std::map<uint8_t, std::shared_ptr<Collidable>>& collidables);
+        void move(const std::pair<int16_t, int16_t> &newPosition,
+                  const std::map<uint16_t, std::shared_ptr<Collidable>>& collidables);
 };
 
 

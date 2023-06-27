@@ -9,9 +9,9 @@
 
 class Zombie : public Infected {
     public:
-        Zombie(uint8_t id, std::pair<int16_t, int16_t>& position,
+        Zombie(const uint16_t& id, const std::pair<int16_t, int16_t>& position,
             std::shared_ptr<Collidable> collidable);
-        void specialAtack(Event event) override;
+        void specialAtack(const Event& event) override;
         ~Zombie() override;
 
     private:

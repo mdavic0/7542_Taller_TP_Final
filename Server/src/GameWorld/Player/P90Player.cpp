@@ -2,14 +2,14 @@
 
 #include <utility>
 
-P90Player::P90Player(std::pair<int16_t, int16_t>& position,
+P90Player::P90Player(const std::pair<int16_t, int16_t>& position,
                      std::shared_ptr<Collidable> collidable) :
     Player(TypeOperator::operator_p90, CF::p90_health, CF::p90_velocity,
            std::make_shared<P90>(), position, std::move(collidable)),
     blitz(std::make_shared<BlitzAtack>()) ,throwingBlitzAtack(false) {}
 
 
-void P90Player::setSkillState(Event event) {
+void P90Player::setSkillState(const Event& event) {
     if (this->state == State::injure or
         this->state == State::recharge or
         this->state == State::atack or
@@ -25,7 +25,7 @@ void P90Player::setSkillState(Event event) {
     }
 }
 
-void P90Player::stopSkillState(Event event) {
+void P90Player::stopSkillState(const Event& event) {
     if (this->state == State::injure or
         this->state == State::recharge or
         this->state == State::atack or
@@ -41,7 +41,7 @@ void P90Player::stopSkillState(Event event) {
 
 void P90Player::specialAtack(std::list<std::shared_ptr<Grenade>>& grenades,
                              std::list<std::shared_ptr<BlitzAtack>>& blitzAtacks,
-                             double stepTime) {
+                             const double& stepTime) {
     if (this->state == State::stop_hability) {
         this->stopSkillCLock += stepTime;
     }

@@ -16,7 +16,7 @@ GameWorld::GameWorld(const TypeGame& type, const TypeDifficulty& difficulty) :
     this->generateObstacles();
 }
 
-uint8_t GameWorld::addPlayer(TypeOperator op) {
+uint16_t GameWorld::addPlayer(const TypeOperator& op) {
     std::shared_ptr<Player> newPlayer = playerFactory.getPlayer(op,
                                                                 players_amount,
                                                                 collidables,
@@ -25,13 +25,13 @@ uint8_t GameWorld::addPlayer(TypeOperator op) {
     return players_amount++;
 }
 
-void GameWorld::deletePlayer(uint8_t id) {
+void GameWorld::deletePlayer(const uint16_t& id) {
     this->players.erase(id);
     this->collidables.erase(id);
     this->deadPlayersId.push_back(id);
 }
 
-void GameWorld::updateMovementDirection(Event event, uint8_t id, MoveTo direction) {
+void GameWorld::updateMovementDirection(const Event& event, const uint16_t& id, const MoveTo& direction) {
     bool found = (std::find(deadPlayersId.begin(),
                             deadPlayersId.end(),
                             id) != deadPlayersId.end());
@@ -47,7 +47,7 @@ void GameWorld::updateMovementDirection(Event event, uint8_t id, MoveTo directio
     }
 }
 
-void GameWorld::updateShootingState(Event event, uint8_t id) {
+void GameWorld::updateShootingState(const Event& event, const uint16_t& id) {
     bool found = (std::find(deadPlayersId.begin(),
                             deadPlayersId.end(),
                             id) != deadPlayersId.end());
@@ -63,7 +63,7 @@ void GameWorld::updateShootingState(Event event, uint8_t id) {
     }
 }
 
-void GameWorld::updateReloadingState(Event event, uint8_t id) {
+void GameWorld::updateReloadingState(const Event& event, const uint16_t& id) {
     bool found = (std::find(deadPlayersId.begin(),
                             deadPlayersId.end(),
                             id) != deadPlayersId.end());
@@ -77,7 +77,7 @@ void GameWorld::updateReloadingState(Event event, uint8_t id) {
     }
 }
 
-void GameWorld::updateSkillState(Event event, uint8_t id) {
+void GameWorld::updateSkillState(const Event& event, const uint16_t& id) {
     bool found = (std::find(deadPlayersId.begin(),
                             deadPlayersId.end(),
                             id) != deadPlayersId.end());
@@ -126,7 +126,7 @@ void GameWorld::simulateStep(double stepTime) {
     }
 }
 
-std::shared_ptr<Snapshot> GameWorld::getSnapshot(bool first) {
+std::shared_ptr<Snapshot> GameWorld::getSnapshot(const bool first) {
     if(!ended) {
         std::vector<StOperator> playersInfo;
         for (auto& player : players) {

@@ -15,7 +15,7 @@ class Player;
 class Grenade {
     private:
         TypeGrenade typeGrenade;
-        uint8_t id;
+        uint16_t id;
 
     protected:
         uint8_t damage;
@@ -34,31 +34,31 @@ class Grenade {
         bool hasExploded;
 
     public:
-        Grenade(TypeGrenade typeGrenade, uint8_t id, uint8_t damage,
-                std::pair<int16_t, int16_t> position);
+        Grenade(const TypeGrenade& typeGrenade, const uint16_t& id, const uint8_t& damage,
+                const std::pair<int16_t, int16_t>& position);
         // aplica mov, incrementa el explosion clock, una vez que explota aplica danios
-        virtual void applyStep(std::map<uint8_t, std::shared_ptr<Player>>& players,
-                       std::map<uint8_t, std::shared_ptr<Infected>> &infecteds,
-                       double stepTime) = 0;
+        virtual void applyStep(std::map<uint16_t, std::shared_ptr<Player>>& players,
+                       std::map<uint16_t, std::shared_ptr<Infected>> &infecteds,
+                       const double& stepTime) = 0;
         // hace calculo de posicion final y la activa
-        virtual void throwGrenade(std::pair<int16_t, int16_t>& position,
-                                  double elapsedTime, bool right) = 0;
+        virtual void throwGrenade(const std::pair<int16_t, int16_t>& position,
+                                  const double& elapsedTime, const bool& right) = 0;
         std::pair<int16_t, int16_t>& getPosition();
         bool isAvailable();
         bool exploded();
         TypeGrenade getTypeGrenade();
-        void setId(uint8_t id);
-        uint8_t getId();
+        void setId(const uint16_t& id);
+        uint16_t& getId();
         virtual ~Grenade();
 
     protected:
-        void move(double stepTime);
-        virtual void explode(std::map<uint8_t, std::shared_ptr<Player>> &players,
-                             std::map<uint8_t, std::shared_ptr<Infected>> &infecteds,
-                             double stepTime) = 0;
-        void setMovementDirection(bool right);
+        void move(const double& stepTime);
+        virtual void explode(std::map<uint16_t, std::shared_ptr<Player>> &players,
+                             std::map<uint16_t, std::shared_ptr<Infected>> &infecteds,
+                             const double& stepTime) = 0;
+        void setMovementDirection(const bool& right);
         void stopMovementDirection();
-        void calculateFinalPosition(bool right, double elapsedTime);
+        void calculateFinalPosition(const bool& right, const double& elapsedTime);
 };
 
 

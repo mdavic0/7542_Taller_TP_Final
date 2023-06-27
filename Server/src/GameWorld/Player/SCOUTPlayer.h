@@ -20,13 +20,13 @@ class SCOUTPlayer : public Player {
         bool throwingSmoke;
 
     public:
-        SCOUTPlayer(std::pair<int16_t, int16_t>& position,
+        SCOUTPlayer(const std::pair<int16_t, int16_t>& position,
                              std::shared_ptr<Collidable> collidable);
-        void setSkillState(Event event) override;
-        void stopSkillState(Event event) override;
+        void setSkillState(const Event& event) override;
+        void stopSkillState(const Event& event) override;
         void specialAtack(std::list<std::shared_ptr<Grenade>>& grenades,
                           std::list<std::shared_ptr<BlitzAtack>>& blitzAtacks,
-                          double stepTime) override;
+                          const double& stepTime) override;
         bool isGrenadeAvailable() override;
         bool isSmokeAvailable() override;
         void revive() override;
@@ -35,9 +35,9 @@ class SCOUTPlayer : public Player {
 
     private:
         void throwGrenade(std::list<std::shared_ptr<Grenade>>& grenades,
-                          double stepTime);
+                          const double& stepTime);
         void throwSmoke(std::list<std::shared_ptr<Grenade>>& grenades,
-                        double stepTime);
+                        const double& stepTime);
 };
 
 

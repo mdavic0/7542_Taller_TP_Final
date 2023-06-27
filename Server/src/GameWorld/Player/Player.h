@@ -37,22 +37,22 @@ class Player {
         double stopSkillCLock;
 
     public:
-        explicit Player(TypeOperator typeOperator);
-        Player(TypeOperator typeOperator, uint8_t life, uint8_t velocity,
-               std::shared_ptr<Weapon> weapon, std::pair<int16_t,
+        explicit Player(const TypeOperator& typeOperator);
+        Player(const TypeOperator& typeOperator, const uint8_t& life, const uint8_t& velocity,
+               std::shared_ptr<Weapon> weapon, const std::pair<int16_t,
                int16_t>& position, std::shared_ptr<Collidable> collidable);
-        void setMovementDirection(MoveTo direction);
-        void stopMovementDirection(MoveTo direction);
+        void setMovementDirection(const MoveTo& direction);
+        void stopMovementDirection(const MoveTo& direction);
         void setShootingState();
         void stopShootingState();
         void setReloadingState();
-        virtual void setSkillState(Event event) = 0;
-        virtual void stopSkillState(Event event) = 0;
-        void applyStep(std::map<uint8_t, std::shared_ptr<Collidable>> &collidables,
-                       std::map<uint8_t, std::shared_ptr<Infected>> &infecteds,
+        virtual void setSkillState(const Event& event) = 0;
+        virtual void stopSkillState(const Event& event) = 0;
+        void applyStep(std::map<uint16_t, std::shared_ptr<Collidable>> &collidables,
+                       std::map<uint16_t, std::shared_ptr<Infected>> &infecteds,
                        std::list<std::shared_ptr<Grenade>> &grenades,
                        std::list<std::shared_ptr<BlitzAtack>> &blitzAtacks,
-                       double stepTime);
+                       const double& stepTime);
         std::pair<int16_t, int16_t>& getPosition();
         TypeOperator& getTypeOperator();
         State& getState();
@@ -75,12 +75,12 @@ class Player {
         virtual ~Player() = default;
 
     private:
-        void move(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables);
-        void shoot(std::map<uint8_t, std::shared_ptr<Infected>> &infecteds, double stepTime);
-        void reload(double stepTime);
+        void move(std::map<uint16_t, std::shared_ptr<Collidable>>& collidables);
+        void shoot(std::map<uint16_t, std::shared_ptr<Infected>> &infecteds, const double& stepTime);
+        void reload(const double& stepTime);
         virtual void specialAtack(std::list<std::shared_ptr<Grenade>>& grenades,
                                   std::list<std::shared_ptr<BlitzAtack>>& blitzAtacks,
-                                  double stepTime) = 0;
+                                  const double& stepTime) = 0;
 
 };
 

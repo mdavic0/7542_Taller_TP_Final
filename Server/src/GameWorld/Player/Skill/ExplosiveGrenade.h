@@ -9,15 +9,15 @@
 
 class ExplosiveGrenade : public Grenade {
     public:
-        explicit ExplosiveGrenade(std::pair<int16_t, int16_t> position, uint8_t id);
-        void applyStep(std::map<uint8_t, std::shared_ptr<Player>> &players,
-                       std::map<uint8_t, std::shared_ptr<Infected>> &infecteds,
-                       double stepTime) override;
-        void throwGrenade(std::pair<int16_t, int16_t>& position,
-                          double elapsedTime, bool right) override;
-        void explode(std::map<uint8_t, std::shared_ptr<Player>> &players,
-                     std::map<uint8_t, std::shared_ptr<Infected>> &infecteds,
-                     double stepTime) override;
+        explicit ExplosiveGrenade(const std::pair<int16_t, int16_t>& position, const uint16_t& id);
+        void applyStep(std::map<uint16_t, std::shared_ptr<Player>> &players,
+                       std::map<uint16_t, std::shared_ptr<Infected>> &infecteds,
+                       const double& stepTime) override;
+        void throwGrenade(const std::pair<int16_t, int16_t>& position,
+                          const double& elapsedTime, const bool& right) override;
+        void explode(std::map<uint16_t, std::shared_ptr<Player>> &players,
+                     std::map<uint16_t, std::shared_ptr<Infected>> &infecteds,
+                     const double& stepTime) override;
         ~ExplosiveGrenade() override;
 };
 

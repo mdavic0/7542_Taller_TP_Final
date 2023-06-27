@@ -6,32 +6,32 @@
 
 class Collidable {
     private:
-        uint8_t id;
+        uint16_t id;
         std::pair<int, int> topLeftCorner;
         int width;
         int height;
         std::pair<int16_t, int16_t> position;
 
     public:
-        Collidable(uint8_t id, std::pair<int16_t, int16_t>& position, int width, int height);
-        bool collidesWith(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables);
-        void updatePosition(std::pair<int16_t, int16_t>& position);
-        bool isAlignedRight(std::shared_ptr<Collidable>& other);
-        bool isAlignedLeft(std::shared_ptr<Collidable>& other);
+        Collidable(const uint16_t& id, const std::pair<int16_t, int16_t>& position, const int& width, const int& height);
+        bool collidesWith(const std::map<uint16_t, std::shared_ptr<Collidable>>& collidables) const;
+        void updatePosition(const std::pair<int16_t, int16_t>& position);
+        bool isAlignedRight(const std::shared_ptr<Collidable>& other) const;
+        bool isAlignedLeft(const std::shared_ptr<Collidable>& other) const;
 
-        bool isCloseTo(std::shared_ptr<Collidable> &other, float closeDistance);
-        bool isOnRight(std::shared_ptr<Collidable>& other);
-        bool isDown(std::shared_ptr<Collidable>& other);
-        double distance(std::pair<int16_t, int16_t>& otherPos);
+        bool isCloseTo(const std::shared_ptr<Collidable> &other, const float& closeDistance) const;
+        bool isOnRight(const std::shared_ptr<Collidable>& other) const;
+        bool isDown(const std::shared_ptr<Collidable>& other) const;
+        double distance(const std::pair<int16_t, int16_t>& otherPos) const;
 
-        int leftDistance(std::shared_ptr<Collidable>& other);
-        int rightDistance(std::shared_ptr<Collidable>& other);
+        int leftDistance(const std::shared_ptr<Collidable>& other) const;
+        int rightDistance(const std::shared_ptr<Collidable>& other) const;
         int getLeftCorner() const;
 
     private:
-        bool collidesWith(std::shared_ptr<Collidable>& other);
-        bool overlapVerticalAxis(std::shared_ptr<Collidable>& other);
-        bool ovelapHorizontalAxis(std::shared_ptr<Collidable>& other);
+        bool collidesWith(const std::shared_ptr<Collidable>& other) const;
+        bool overlapVerticalAxis(const std::shared_ptr<Collidable>& other) const;
+        bool ovelapHorizontalAxis(const std::shared_ptr<Collidable>& other) const;
 };
 
 

@@ -8,9 +8,9 @@
 
 class Venom : public Infected {
     public:
-        Venom(uint8_t id, std::pair<int16_t, int16_t>& position,
+        Venom(const uint8_t& id, const std::pair<int16_t, int16_t>& position,
             std::shared_ptr<Collidable> collidable);
-        void specialAtack(Event event) override;
+        void specialAtack(const Event& event) override;
         ~Venom() override;
 
     private:

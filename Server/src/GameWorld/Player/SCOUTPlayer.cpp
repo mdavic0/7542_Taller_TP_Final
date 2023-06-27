@@ -2,7 +2,7 @@
 
 #include <utility>
 
-SCOUTPlayer::SCOUTPlayer(std::pair<int16_t, int16_t>& position,
+SCOUTPlayer::SCOUTPlayer(const std::pair<int16_t, int16_t>& position,
                          std::shared_ptr<Collidable> collidable) :
         Player(TypeOperator::operator_scout, CF::scout_health,
                CF::scout_velocity,std::make_shared<Scout>(),
@@ -13,7 +13,7 @@ SCOUTPlayer::SCOUTPlayer(std::pair<int16_t, int16_t>& position,
         smokeElapsedTime(0), throwingSmoke(false) {}
 
 
-void SCOUTPlayer::setSkillState(Event event) {
+void SCOUTPlayer::setSkillState(const Event& event) {
     if (this->state == State::injure or
         this->state == State::recharge or
         this->state == State::atack or
@@ -39,7 +39,7 @@ void SCOUTPlayer::setSkillState(Event event) {
     }
 }
 
-void SCOUTPlayer::stopSkillState(Event event) {
+void SCOUTPlayer::stopSkillState(const Event& event) {
     if (this->state == State::injure or
         this->state == State::recharge or
         this->state == State::atack or
@@ -55,7 +55,7 @@ void SCOUTPlayer::stopSkillState(Event event) {
 
 void SCOUTPlayer::specialAtack(std::list<std::shared_ptr<Grenade>>& grenades,
                                std::list<std::shared_ptr<BlitzAtack>>& blitzAtacks,
-                               double stepTime) {
+                               const double& stepTime) {
     if (this->state == State::stop_hability) {
         this->stopSkillCLock += stepTime;
     }
@@ -83,7 +83,7 @@ bool SCOUTPlayer::isSmokeAvailable() {
 }
 
 void SCOUTPlayer::throwGrenade(std::list<std::shared_ptr<Grenade>>& grenades,
-                               double stepTime) {
+                               const double& stepTime) {
     grenadeElapsedTime += stepTime;
     if (this->state == State::stop_hability and stopSkillCLock >= CF::stop_skill_time) {
         this->grenade->setId(grenades.size());
@@ -97,7 +97,7 @@ void SCOUTPlayer::throwGrenade(std::list<std::shared_ptr<Grenade>>& grenades,
 }
 
 void SCOUTPlayer::throwSmoke(std::list<std::shared_ptr<Grenade>>& grenades,
-                             double stepTime) {
+                             const double& stepTime) {
     smokeElapsedTime += stepTime;
     if (this->state == State::stop_hability and stopSkillCLock >= CF::stop_skill_time) {
         this->smoke->setId(grenades.size());

@@ -3,20 +3,20 @@
 #include <utility>
 #include "Defines.h"
 
-Player::Player(TypeOperator typeOperator) : typeOperator(typeOperator),
+Player::Player(const TypeOperator& typeOperator) : typeOperator(typeOperator),
     state(State::idle), life(100), fell_down(0), position(0,0),
     movement_direction(0,0), velocity(1), weapon(), lookingRight(true),
     alive(true), stopSkillCLock(0) {}
 
-Player::Player(TypeOperator typeOperator, uint8_t life, uint8_t velocity,
-    std::shared_ptr<Weapon> weapon, std::pair<int16_t, int16_t>& position,
+Player::Player(const TypeOperator& typeOperator, const uint8_t& life, const uint8_t& velocity,
+    std::shared_ptr<Weapon> weapon, const std::pair<int16_t, int16_t>& position,
     std::shared_ptr<Collidable> collidable) :
     typeOperator(typeOperator), state(State::idle), life(life), fell_down(0),
     position(position), movement_direction(0,0), velocity(velocity),
     weapon(std::move(weapon)), lookingRight(true), collidable(std::move(collidable)),
     alive(true), stopSkillCLock(0) {}
 
-void Player::setMovementDirection(MoveTo direction) {
+void Player::setMovementDirection(const MoveTo& direction) {
     if (this->state == State::injure or
         this->state == State::recharge or
         this->state == State::hability or
@@ -49,7 +49,7 @@ void Player::setMovementDirection(MoveTo direction) {
     }
 }
 
-void Player::stopMovementDirection(MoveTo direction) {
+void Player::stopMovementDirection(const MoveTo& direction) {
     switch (direction) {
         case MoveTo::move_up:
             movement_direction.second = 0;
@@ -112,11 +112,11 @@ void Player::setReloadingState() {
     this->state = State::recharge;
 }
 
-void Player::applyStep(std::map<uint8_t, std::shared_ptr<Collidable>> &collidables,
-                       std::map<uint8_t, std::shared_ptr<Infected>> &infecteds,
+void Player::applyStep(std::map<uint16_t, std::shared_ptr<Collidable>> &collidables,
+                       std::map<uint16_t, std::shared_ptr<Infected>> &infecteds,
                        std::list<std::shared_ptr<Grenade>> &grenades,
                        std::list<std::shared_ptr<BlitzAtack>>& blitzAtacks,
-                       double stepTime) {
+                       const double& stepTime) {
     this->move(collidables);
     this->shoot(infecteds, stepTime);
     this->reload(stepTime);
@@ -154,7 +154,7 @@ std::shared_ptr<Collidable> &Player::getCollidable() {
     return this->collidable;
 }
 
-void Player::move(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables) {
+void Player::move(std::map<uint16_t, std::shared_ptr<Collidable>>& collidables) {
     if (this->state == State::moving) {
         if (not this->collidable->collidesWith(collidables)) {
             this->position.first += movement_direction.first + movement_direction.first * (velocity / 10);
@@ -169,7 +169,7 @@ void Player::move(std::map<uint8_t, std::shared_ptr<Collidable>>& collidables) {
     }
 }
 
-void Player::shoot(std::map<uint8_t, std::shared_ptr<Infected>> &infecteds, double stepTime) {
+void Player::shoot(std::map<uint16_t, std::shared_ptr<Infected>> &infecteds, const double& stepTime) {
     if (this->state == State::atack) {
         if (not weapon->shoot(this->collidable,
                                     this->lookingRight,
@@ -184,7 +184,7 @@ void Player::shoot(std::map<uint8_t, std::shared_ptr<Infected>> &infecteds, doub
     }
 }
 
-void Player::reload(double stepTime) {
+void Player::reload(const double& stepTime) {
     if (this->state == State::recharge) {
         if (this->weapon->reload(stepTime)) {
             this->state = State::idle;

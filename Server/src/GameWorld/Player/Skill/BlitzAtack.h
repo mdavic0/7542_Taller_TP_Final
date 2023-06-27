@@ -29,16 +29,16 @@ class BlitzAtack {
 
     public:
         BlitzAtack();
-        void applyStep(std::map<uint8_t, std::shared_ptr<Infected>> &infecteds,
-                       double stepTime);
+        void applyStep(std::map<uint16_t, std::shared_ptr<Infected>> &infecteds,
+                       const double& stepTime);
         // Hace calculo de la zona de ataque y lo activa
-        void throwBlitz(std::pair<int16_t, int16_t>& position);
+        void throwBlitz(const std::pair<int16_t, int16_t>& position);
         bool isAvailable();
         bool ended();
 
     private:
-        void blitz(std::map<uint8_t, std::shared_ptr<Infected>> &infecteds,
-                   double stepTime);
+        void blitz(std::map<uint16_t, std::shared_ptr<Infected>> &infecteds,
+                   const double& stepTime);
 };
 
 

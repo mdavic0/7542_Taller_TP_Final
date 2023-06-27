@@ -10,20 +10,20 @@ class ObstacleFactory {
 
     public:
         std::shared_ptr<Obstacle>
-        getObstacle(TypeObstacle obstacle, uint8_t& obstacleId,
-                std::map<uint8_t, std::shared_ptr<Collidable>>& collidables,
-                RespawnController& RC);
+        getObstacle(const TypeObstacle& obstacle, const uint16_t& obstacleId,
+                std::map<uint16_t, std::shared_ptr<Collidable>>& collidables,
+                 RespawnController& RC);
 
     private:
         std::shared_ptr<Tire>
-        createTire(uint8_t& obstacleId,
-                     std::map<uint8_t, std::shared_ptr<Collidable>>& collidables,
-                     RespawnController& RC);
+        createTire(const uint16_t& obstacleId,
+                     std::map<uint16_t, std::shared_ptr<Collidable>>& collidables,
+                      RespawnController& RC);
 
         std::shared_ptr<Crater>
-        createCrater(uint8_t& obstacleId,
-                    std::map<uint8_t, std::shared_ptr<Collidable>>& collidables,
-                    RespawnController& RC);
+        createCrater(const uint16_t& obstacleId,
+                    std::map<uint16_t, std::shared_ptr<Collidable>>& collidables,
+                     RespawnController& RC);
 };
 
 

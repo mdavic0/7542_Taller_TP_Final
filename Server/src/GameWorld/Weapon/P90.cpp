@@ -5,9 +5,9 @@ P90::P90() : Weapon(CF::p90_damage,
                     CF::p90_capacity),
                     burstFiredBullets(0), burstEnded(false), scope(CF::p90_scope) {}
 
-bool P90::shoot(std::shared_ptr<Collidable> &player, bool right,
-                std::map<uint8_t, std::shared_ptr<Infected>> &infecteds,
-                double stepTime) {
+bool P90::shoot(std::shared_ptr<Collidable> &player, const bool& right,
+                std::map<uint16_t, std::shared_ptr<Infected>> &infecteds,
+                const double& stepTime) {
     if (not activated) {
         return false;
     }
@@ -43,7 +43,7 @@ bool P90::shoot(std::shared_ptr<Collidable> &player, bool right,
     return true;
 }
 
-bool P90::reload(double stepTime) {
+bool P90::reload(const double& stepTime) {
     this->reloadingClock += stepTime;
     if (reloadingClock >= CF::p90_reload_time) {
         this->munition = CF::p90_capacity;
@@ -54,7 +54,7 @@ bool P90::reload(double stepTime) {
 }
 
 void P90::shootRight(std::shared_ptr<Collidable> &player,
-                     std::map<uint8_t, std::shared_ptr<Infected>> &infecteds) {
+                     std::map<uint16_t, std::shared_ptr<Infected>> &infecteds) {
     for (auto &infected : infecteds) {
         if (player->isAlignedRight(infected.second->getCollidable())) {
             infected.second->applyDamage(calculateDamage(player->rightDistance(infected.second->getCollidable())));
@@ -65,7 +65,7 @@ void P90::shootRight(std::shared_ptr<Collidable> &player,
     }
 }
 void P90::shootLeft(std::shared_ptr<Collidable> &player,
-                    std::map<uint8_t, std::shared_ptr<Infected>> &infecteds) {
+                    std::map<uint16_t, std::shared_ptr<Infected>> &infecteds) {
     for (auto &infected : infecteds) {
         if (player->isAlignedLeft(infected.second->getCollidable())) {
             infected.second->applyDamage(calculateDamage(player->leftDistance(infected.second->getCollidable())));
@@ -76,6 +76,6 @@ void P90::shootLeft(std::shared_ptr<Collidable> &player,
     }
 }
 
-float P90::calculateDamage(float distance) {
+float P90::calculateDamage(const float& distance) {
     return this->damage - (distance*this->scope) ;
 }

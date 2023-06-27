@@ -5,7 +5,7 @@
 
 class Tire : public Obstacle {
     public:
-        Tire(uint8_t id, std::pair<int16_t, int16_t>& position,
+        Tire(const uint16_t& id, const std::pair<int16_t, int16_t>& position,
              std::shared_ptr<Collidable> collidable);
         ~Tire() override;
 };

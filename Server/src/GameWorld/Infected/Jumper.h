@@ -8,9 +8,9 @@
 
 class Jumper : public Infected {
     public:
-        Jumper(uint8_t id, std::pair<int16_t, int16_t>& position,
+        Jumper(const uint16_t& id, const std::pair<int16_t, int16_t>& position,
             std::shared_ptr<Collidable> collidable);
-        void specialAtack(Event event) override;
+        void specialAtack(const Event& event) override;
         ~Jumper() override;
 
     private:

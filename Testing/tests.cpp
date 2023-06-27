@@ -500,7 +500,7 @@ TEST(Collidable, FalseCollidesWith) {
   std::pair<int16_t, int16_t> postSecond(30, 30);
   std::shared_ptr<Collidable> second = std::make_shared<Collidable>(2, postSecond, 6, 6);
 
-  std::map<uint8_t, std::shared_ptr<Collidable>> collidables;
+  std::map<uint16_t, std::shared_ptr<Collidable>> collidables;
   collidables.insert(std::make_pair(2, second));
   
   EXPECT_EQ(false, first.collidesWith(collidables));
@@ -513,7 +513,7 @@ TEST(Collidable, TrueCollidesWith) {
   std::pair<int16_t, int16_t> postSecond(10, 10);
   std::shared_ptr<Collidable> second = std::make_shared<Collidable>(2, postSecond, 6, 6);
 
-  std::map<uint8_t, std::shared_ptr<Collidable>> collidables;
+  std::map<uint16_t, std::shared_ptr<Collidable>> collidables;
   collidables.insert(std::make_pair(2, second));
   
   EXPECT_EQ(true, first.collidesWith(collidables));
@@ -525,7 +525,7 @@ TEST(Collidable, TrueLeftCollidesWith) {
   std::pair<int16_t, int16_t> postSecond(10, 10);
   std::shared_ptr<Collidable> second = std::make_shared<Collidable>(2, postSecond, 6, 6);
 
-  std::map<uint8_t, std::shared_ptr<Collidable>> collidables;
+  std::map<uint16_t, std::shared_ptr<Collidable>> collidables;
   collidables.insert(std::make_pair(2, second));
   
   EXPECT_EQ(true, first.collidesWith(collidables));
@@ -537,7 +537,7 @@ TEST(Collidable, TrueRightCollidesWith) {
   std::pair<int16_t, int16_t> postSecond(15, 10);
   std::shared_ptr<Collidable> second = std::make_shared<Collidable>(2, postSecond, 6, 6);
 
-  std::map<uint8_t, std::shared_ptr<Collidable>> collidables;
+  std::map<uint16_t, std::shared_ptr<Collidable>> collidables;
   collidables.insert(std::make_pair(2, second));
   
   EXPECT_EQ(true, first.collidesWith(collidables));
@@ -549,7 +549,7 @@ TEST(Collidable, TrueUpCollidesWith) {
   std::pair<int16_t, int16_t> postSecond(10, 15);
   std::shared_ptr<Collidable> second = std::make_shared<Collidable>(2, postSecond, 6, 6);
 
-  std::map<uint8_t, std::shared_ptr<Collidable>> collidables;
+  std::map<uint16_t, std::shared_ptr<Collidable>> collidables;
   collidables.insert(std::make_pair(2, second));
   
   EXPECT_EQ(true, first.collidesWith(collidables));
@@ -561,7 +561,7 @@ TEST(Collidable, TrueDownCollidesWith) {
   std::pair<int16_t, int16_t> postSecond(10, 5);
   std::shared_ptr<Collidable> second = std::make_shared<Collidable>(2, postSecond, 6, 6);
 
-  std::map<uint8_t, std::shared_ptr<Collidable>> collidables;
+  std::map<uint16_t, std::shared_ptr<Collidable>> collidables;
   collidables.insert(std::make_pair(2, second));
   
   EXPECT_EQ(true, first.collidesWith(collidables));
