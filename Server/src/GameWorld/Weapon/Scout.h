@@ -9,8 +9,8 @@ class Scout : public Weapon {
     private:
         int burstFiredBullets;
         bool burstEnded;
-        float scope;
-        float damageDecreaseByEnemy;
+        double scope;
+        double damageDecreaseByEnemy;
 
     public:
         Scout();
@@ -25,7 +25,7 @@ class Scout : public Weapon {
         void shootLeft(std::shared_ptr<Collidable> &player,
                    std::map<uint16_t, std::shared_ptr<Infected>> &infecteds) override;
 
-        float calculateDamage(const float& distance, int& counter);
+        double calculateDamage(const double& distance, int& counter);
 
         std::vector<std::shared_ptr<Infected>> sortEnemiesRight(const std::map<uint16_t, std::shared_ptr<Infected>> &infecteds);
         std::vector<std::shared_ptr<Infected>> sortEnemiesLeft(const std::map<uint16_t, std::shared_ptr<Infected>> &infecteds);

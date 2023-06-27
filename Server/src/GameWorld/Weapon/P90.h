@@ -9,7 +9,7 @@ class P90 : public Weapon {
     private:
         int burstFiredBullets;
         bool burstEnded;
-        float scope;
+        double scope;
 
     public:
         P90();
@@ -24,7 +24,7 @@ class P90 : public Weapon {
         void shootLeft(std::shared_ptr<Collidable> &player,
                    std::map<uint16_t, std::shared_ptr<Infected>> &infecteds) override;
 
-        float calculateDamage(const float& distance);
+        double calculateDamage(const double& distance);
 };
 
 
