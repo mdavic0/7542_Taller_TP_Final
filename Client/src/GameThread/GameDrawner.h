@@ -18,6 +18,7 @@ class GameDrawner : public Thread {
         int menu;
         int numPlayers;
         int16_t idPlayer;
+        bool gameEnded;
     
     public:
         GameDrawner(Queue<std::shared_ptr<Snapshot>>& snapshot_queue,

@@ -33,6 +33,14 @@ void Game::run() {
             std::vector<StatsDto> stats = gameWorld.getStats();
             if (!stats.empty())
                 broadcastSnapshot(statsController.updateStats(stats, minutesValue, secondsValue));
+
+            for (auto it = client_snapshot_queues.begin(); it != client_snapshot_queues.end(); it++) {
+                try {
+                    it->second->close();
+                } catch(ClosedQueue& e) {
+                    //
+                }
+            }
         }
 
     } catch (const std::exception& exc) {

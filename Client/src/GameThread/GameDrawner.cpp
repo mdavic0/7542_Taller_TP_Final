@@ -17,7 +17,7 @@ GameDrawner::GameDrawner(Queue<std::shared_ptr<Snapshot>> &snapshot_queue,
     Queue<std::shared_ptr<EventDTO>> &client_events, bool& error, int menu,
     uint16_t idPlayer, uint8_t numPlayers) : client_events(client_events),
     snapshot_queue(snapshot_queue), error(error), menu(menu),
-    numPlayers(numPlayers), idPlayer(idPlayer) {
+    numPlayers(numPlayers), idPlayer(idPlayer), gameEnded(false) {
 }
 
 void GameDrawner::run() {
@@ -71,14 +71,18 @@ void GameDrawner::run() {
                 if (1000 / 40 > processTime)
                     SDL_Delay(1000 / 40 - processTime);
             }
+
+            gameEnded = gameSdl.ended();
         }
         client_events.close();      // cause close socket
     } catch (const SdlException &exc) {
         std::cerr << "Launcher: " << exc.what() << std::endl;
     } catch (const ClosedQueue& exc){
         std::cout << "Client sanp Queue closed, then events Queue is closed in GameDrawner " << std::endl;
-        client_events.close();
-        this->error = true;
+        if (!gameEnded) {
+            client_events.close();
+            this->error = true;
+        }
     }
     std::cout << "id " << idPlayer << " GameDrawner ended " << std::endl;
 }

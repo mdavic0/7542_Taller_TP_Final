@@ -61,6 +61,7 @@ class GameSdl {
         void render();
         bool isRunning();
         void handleEvents();
+        bool& ended();
 };
 
 #endif
