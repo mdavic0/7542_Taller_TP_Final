@@ -133,3 +133,11 @@ target_link_libraries(
 
 include(GoogleTest)
 gtest_discover_tests(tests)
+
+set_target_properties(server PROPERTIES OUTPUT_NAME "left4dead-server")
+set_target_properties(client PROPERTIES OUTPUT_NAME "left4dead-client")
+
+# Instaladores
+install(TARGETS server DESTINATION bin RENAME left4dead-server)
+install(TARGETS client DESTINATION bin RENAME left4dead-client)
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/assets DESTINATION bin)

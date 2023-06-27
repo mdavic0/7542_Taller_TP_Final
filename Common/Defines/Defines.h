@@ -20,7 +20,7 @@
 #define PATH_GRENADES_BLITZ "assets/images/sdl/grenades/Blitz.png"
 #define PATH_HUD "assets/images/sdl/hud/"
 // Path Music
-#define PATH_MUSIC_LAUNCHER "../assets/music/launcher/"
+#define PATH_MUSIC_LAUNCHER "assets/music/launcher/"
 #define PATH_MUSIC_LOBBY "assets/music/sdl/sound/lobby.wav"
 #define PATH_MUSIC_GAME "assets/music/sdl/sound/game.wav"
 #define PATH_MUSIC_OPERATOR "assets/music/sdl/units/"

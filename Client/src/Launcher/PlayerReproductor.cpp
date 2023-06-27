@@ -3,8 +3,7 @@
 
 PlayerReproductor::PlayerReproductor(QWidget* parent) : QWidget(parent),
     playlist(this), player() {
-    QDir directorio(QDir::currentPath());
-    directorio.cd(PATH_MUSIC_LAUNCHER);
+    QDir directorio(QDir::currentPath() + "/"+ PATH_MUSIC_LAUNCHER);
     directorio.setNameFilters(QStringList({"*.wav"}));
     QStringList lista = directorio.entryList();
     for(QString file: lista)
