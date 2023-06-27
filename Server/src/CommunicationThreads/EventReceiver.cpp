@@ -48,10 +48,8 @@ void EventReceiver::run() {
 
 
         } catch (const LibError& exc) {     // client slow, quit sdl, server ends whit q input
-            std::cout << "EventReceiver - socket closed " << std::endl;
             break;
         }  catch (const std::exception& exc) {
-            std::cout << "EventReceiver - Exception occurred test log: " << exc.what() << std::endl;
             break;
         }
     }
@@ -59,13 +57,10 @@ void EventReceiver::run() {
 }
 
 void EventReceiver::stop() {
-    std::cout << "EventReceiver - stop " << std::endl;
     talking = false;
     if (!sender.ended()) {      // server ended with q
-        std::cout << "EventReceiver - stop close sanp q " << std::endl;
         snapshot_queue.close();
     }
-    std::cout << "EventReceiver - end stop " << std::endl;
 }
 
 bool EventReceiver::ended() {
@@ -73,6 +68,5 @@ bool EventReceiver::ended() {
 }
 
 EventReceiver::~EventReceiver() {
-    std::cout << "EventReceiver - delete " << std::endl;
     join();
 }

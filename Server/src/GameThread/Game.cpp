@@ -45,7 +45,6 @@ void Game::run() {
 
 void Game::stop() {
     talking = false;
-    std::cout << "Game - stop " << std::endl;
 }
 
 bool Game::ended() {
@@ -192,5 +191,4 @@ void Game::closeAllQueue() {
 Game::~Game() {
     if (started)
         join();
-    std::cout << "Game - end delete " << std::endl;
 }

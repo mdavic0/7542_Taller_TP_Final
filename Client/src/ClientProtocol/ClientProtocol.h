@@ -280,7 +280,6 @@ Snapshot getStart (std::shared_ptr<T> skt) {
     uint8_t idMap;
     this->recvAll(&idMap, 1, skt);
 
-    // std::cout << "map " << (int)idMap << std::endl;
     return Snapshot(players, enemies, obstacles, game, idMap);
 }
 
@@ -538,7 +537,6 @@ std::vector<EnemyDto> getEnemies(std::shared_ptr<T> skt) {
         x = ntohs(x);
         this->recvAll(&y, 2, skt);
         y = ntohs(y);
-        // std::cout << "x: " << x << " y: " << y << std::endl;
 
         vector.push_back(EnemyDto(id, type, state, {x, y}));
     }
@@ -734,33 +732,26 @@ Snapshot getSnapshot(std::shared_ptr<T> skt) {
 
     switch (event) {
     case CREATE_CODE:
-            //std::cout << "SnapshotReceiver CREATE_CODE" << std::endl;
         return getCreate(skt);
         break;
 
     case JOIN_CODE:
-           // std::cout << "SnapshotReceiver JOIN_CODE" << std::endl;
         return getJoin(skt);
         break;
 
     case START_CODE:
-            //std::cout << "SnapshotReceiver START_CODE" << std::endl;
         return getStart(skt);
         break;
 
     case PLAYING_CODE:
-            //std::cout << "SnapshotReceiver PLAYING_CODE" << std::endl;
         return getPlaying(skt);
         break;
 
     case END_CODE:
-            //std::cout << "SnapshotReceiver END_CODE" << std::endl;
-         std::cout << "end recieved " << std::endl;
         return getEnd(skt);
         break;
 
     case STATS_CODE:
-            //std::cout << "SnapshotReceiver STATS_CODE" << std::endl;
         return getStats(skt);
         break;
 

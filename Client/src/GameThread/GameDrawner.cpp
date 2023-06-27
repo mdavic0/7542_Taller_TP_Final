@@ -78,13 +78,11 @@ void GameDrawner::run() {
     } catch (const SdlException &exc) {
         std::cerr << "Launcher: " << exc.what() << std::endl;
     } catch (const ClosedQueue& exc){
-        std::cout << "Client sanp Queue closed, then events Queue is closed in GameDrawner " << std::endl;
         if (!gameEnded) {
             client_events.close();
             this->error = true;
         }
     }
-    std::cout << "id " << idPlayer << " GameDrawner ended " << std::endl;
 }
 
 void GameDrawner::stop() {

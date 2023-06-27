@@ -13,16 +13,13 @@ void EventSender::run() {
             std::shared_ptr<EventDTO> response = sdl_events.pop();
             protocol.sendEvent(response, skt);
         } catch (const ClosedQueue &exc) {      // sql quit 1, server ends q and slow client 2
-            std::cout << "Client event Queue closed" << std::endl;
             skt->shutdown(2);
             skt->close();
             break;
         } catch (const LibError &exc) {
             sdl_events.close();
-            std::cout << "Client event sender closed" << std::endl;
             break;
         } catch (const std::exception& exc) {
-            std::cout << "EventSender - Exception occurred test log: " << exc.what() << std::endl;
         }
     }
     alive = false;
@@ -30,7 +27,6 @@ void EventSender::run() {
 
 void EventSender::stop() {
     talking = false;
-    std::cout << "EventSender - stop " << std::endl;
 }
 
 bool EventSender::ended() {
@@ -38,6 +34,5 @@ bool EventSender::ended() {
 }
 
 EventSender::~EventSender() {    
-    std::cout << "EventSender - delete " << std::endl;
     join();
 }

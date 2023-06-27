@@ -41,9 +41,7 @@ Queue<std::shared_ptr<EventDTO>>* GamesController::try_join_game(std::shared_ptr
 }
 
 GamesController::~GamesController() {
-    std::cout << "GamesController - delete " << std::endl;
-  for (auto it = games.begin(); it != games.end(); ++it) {
-    it->second->stop();
-  }
-    std::cout << "GamesController - end delete " << std::endl;
+    for (auto it = games.begin(); it != games.end(); ++it) {
+        it->second->stop();
+    }
 }
