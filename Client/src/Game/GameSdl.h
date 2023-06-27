@@ -56,7 +56,7 @@ class GameSdl {
         GameSdl(WindowSdl& window, Renderer& renderer,
                 Queue<std::shared_ptr<Snapshot>>& snapshotQueue,
                 Queue<std::shared_ptr<EventDTO>>& eventQueue,
-                uint8_t idPlayer, Font& font, ConfigGame& config);
+                uint16_t idPlayer, Font& font, ConfigGame& config);
         ~GameSdl();
         void update();
         void render();

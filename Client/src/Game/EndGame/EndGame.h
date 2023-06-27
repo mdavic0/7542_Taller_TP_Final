@@ -15,6 +15,7 @@ class EndGame {
         TextureManager& textures;
         TypeGame type;
         WindowSdl& window;
+        uint16_t idPlayer;
         void renderClearZone();
         void renderSurvival();
         int renderStats(int height, StatsDto dto);
@@ -24,7 +25,7 @@ class EndGame {
         std::vector<StatsDto> stats;
     public:
         EndGame(Font& font, Renderer& renderer, TextureManager& textures,
-                TypeGame type, WindowSdl& window);
+                TypeGame type, WindowSdl& window, uint16_t idPlayer);
         ~EndGame();
         void render();
         void addStats(std::vector<StatsDto> stats);

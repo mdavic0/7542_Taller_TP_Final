@@ -35,7 +35,7 @@ class Launcher : public QWidget {
         bool endGame;
         void initWidget();
         void initFont();
-        void initGame(int menu, uint8_t idPlayer, uint8_t numPlayers,
+        void initGame(int menu, uint16_t idPlayer, uint8_t numPlayers,
                         bool& error);
     
     public:

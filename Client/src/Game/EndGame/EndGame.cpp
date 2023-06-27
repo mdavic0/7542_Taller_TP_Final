@@ -1,10 +1,12 @@
 #include "EndGame.h"
 #include "Defines.h"
 #include <SDL2/SDL.h>
+#include <algorithm>
 
 EndGame::EndGame(Font& font, Renderer& renderer, TextureManager& textures,
-    TypeGame type, WindowSdl& window) : font(font), renderer(renderer), 
-    textures(textures), type(type), window(window), stats() {
+    TypeGame type, WindowSdl& window, uint16_t idPlayer) : font(font),
+    renderer(renderer), textures(textures), type(type), window(window),
+    stats(), idPlayer(idPlayer) {
 }
 
 EndGame::~EndGame() {
@@ -80,20 +82,19 @@ int EndGame::renderRankingsName(int height) {
     window.adjustedRect(final2);
     this->renderer.copyFont(textureFont.getTexture(), final);
     this->renderer.copyFont(textureFont2.getTexture(), final2);
-    int n;
-    for  (size_t i = 0; i < stats.size(); i++) {
-        n = this->renderRankings(hf2, stats[i]);
-        hf2 = n;
-    }
+    int id = idPlayer;
+    auto it = std::find_if(stats.begin(), stats.end(),
+        [id](const StatsDto& dto) {
+            return dto.getPlayerId() == id;
+    });
+    int n = this->renderRankings(hf2, *it);
     return n;
 }
 
 int EndGame::renderRankings(int height, StatsDto dto) {
     SDL_Color color = COLOR_WHITE;
     int w, h, ret;
-    std::string text =  " " + 
-                        std::to_string(dto.getPlayerId()) + " " +
-                        std::to_string(dto.getRankingShots()) + "  " +
+    std::string text =  std::to_string(dto.getRankingShots()) + "  " +
                         std::to_string(dto.getRankingKills()) + "  " +
                         std::to_string(dto.getRankingDuration());
     font.getSizeFont(text, &w, &h);
@@ -108,9 +109,7 @@ int EndGame::renderRankings(int height, StatsDto dto) {
 int EndGame::renderStats(int height, StatsDto dto) {
     SDL_Color color = COLOR_WHITE;
     int w, h, ret;
-    std::string text =  " " + 
-                        std::to_string(dto.getPlayerId()) + " " +
-                        std::to_string(dto.getShots()) + "  " +
+    std::string text =  std::to_string(dto.getShots()) + "  " +
                         std::to_string(dto.getKills()) + "  " +
                         std::to_string(dto.getMinutes()) + ":" +
                         std::to_string(dto.getSeconds());
@@ -134,11 +133,12 @@ int EndGame::renderStatsName(int height) {
     int hf = final.y - 10;
     window.adjustedRect(final);
     this->renderer.copyFont(textureFont.getTexture(), final);
-    int n;
-    for  (size_t i = 0; i < stats.size(); i++) {
-        n = this->renderStats(hf, stats[i]);
-        hf = n;
-    }
+    int id = idPlayer;
+    auto it = std::find_if(stats.begin(), stats.end(),
+        [id](const StatsDto& dto) {
+            return dto.getPlayerId() == id;
+    });
+    int n = this->renderStats(hf, *it);
     return n;
 }
 

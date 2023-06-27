@@ -177,7 +177,7 @@ void Launcher::sendJoinMatch(int code, int operatorSelect) {
     }
 }
 
-void Launcher::initGame(int menu, uint8_t idPlayer, uint8_t numPlayers,
+void Launcher::initGame(int menu, uint16_t idPlayer, uint8_t numPlayers,
                         bool& error) {
     Queue<std::shared_ptr<Snapshot>> snapshotQueue(SIZE_QUEUE);
     Queue<std::shared_ptr<EventDTO>> eventQueue(SIZE_QUEUE);

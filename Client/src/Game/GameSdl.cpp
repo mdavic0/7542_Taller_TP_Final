@@ -11,7 +11,7 @@
 GameSdl::GameSdl(WindowSdl& window, Renderer& renderer,
     Queue<std::shared_ptr<Snapshot>>& snapshotQueue,
     Queue<std::shared_ptr<EventDTO>>& eventQueue,
-    uint8_t idPlayer, Font& font, ConfigGame& config) :
+    uint16_t idPlayer, Font& font, ConfigGame& config) :
     window(window), renderer(renderer), snapshotQueue(snapshotQueue),
     eventQueue(eventQueue), endGame(false), events(eventQueue, idPlayer, endGame),
     map(config.getTextureManager(), renderer, window),
@@ -22,7 +22,7 @@ GameSdl::GameSdl(WindowSdl& window, Renderer& renderer,
     obstacles(config.getObstacles()), grenades(),
     textures(config.getTextureManager()), music(config.getManagerMusic()),
     blitzAttack(false), endGameSdl(font, renderer, config.getTextureManager(),
-    config.getMode(), window) {
+    config.getMode(), window, idPlayer) {
 }
 
 bool GameSdl::isRunning() {

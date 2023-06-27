@@ -56,9 +56,9 @@
 #define TIME_SLEEP_SCOUT 400
 // End Game
 #define TEXT_CLEAR_ZONE "End Game"
-#define TEXT_SURVIVAL "Your Die"
+#define TEXT_SURVIVAL "You Died!"
 #define TEXT_END_GAME "Press enter for exit"
-#define TEXT_STATS "ID SHOTS KILLS TIME"
+#define TEXT_STATS "SHOTS KILLS TIME"
 #define TEXT_RANKINGS "RANKINGS"
 
 // Protocol Code
