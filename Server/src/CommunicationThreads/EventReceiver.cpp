@@ -49,14 +49,14 @@ void EventReceiver::run() {
                 event_queue->push(eventDto);
             }
 
-            while (true) {
+            /*while (true) {
                 std::shared_ptr<EventDTO> eventDto = std::make_shared<EventDTO>(protocol.getEvent(skt));
                 Event event = eventDto->getEvent();
                 if (event == Event::event_leave) {
                     snapshot_queue.close();
                     break;
                 }
-            }
+            }*/
 
         } catch (const LibError& exc) {     // client slow, quit sdl, server ends whit q input
             std::cout << "EventReceiver - socket closed " << std::endl;
