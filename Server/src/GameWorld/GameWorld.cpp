@@ -440,3 +440,17 @@ void GameWorld::killInfecteds(Event event, uint8_t id) {
     }
 }
 
+void GameWorld::makeInmortal(Event event, uint8_t id) {
+    bool found = (std::find(deadPlayersId.begin(),
+                            deadPlayersId.end(),
+                            id) != deadPlayersId.end());
+    // Ignore actions from dead players
+    if (found) {
+        return;
+    }
+
+    if (event == Event::event_cheat_infinite_health) {
+        players.at(id)->makeImmortal();
+    }
+}
+

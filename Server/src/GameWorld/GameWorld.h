@@ -84,9 +84,12 @@ class GameWorld {
         std::vector<StatsDto> getStats();
         bool isEnded();
         void reanimatePlayer(Event event, uint8_t id);
+
+        // Cheats
         void finishGame(Event event, uint8_t id);
         void applySuperSpeed(Event event, uint8_t id);
         void killInfecteds(Event event, uint8_t id);
+        void makeInmortal(Event event, uint8_t id);
 
     private:
         void generateInfecteds();

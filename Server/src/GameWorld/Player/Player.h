@@ -28,6 +28,7 @@ class Player {
         std::shared_ptr<Collidable> collidable;
         bool alive;
         double fellDownCLock;
+        bool infinityLife;
 
     protected:
         int8_t life;
@@ -69,7 +70,7 @@ class Player {
         std::shared_ptr<Collidable>& getCollidable();
         void applyDamage(const int& amount);
         void applySpeed(double speed);
-
+        void makeImmortal();
         bool isAlive();
         bool isFellDown();
 

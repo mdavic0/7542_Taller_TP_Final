@@ -15,6 +15,7 @@
 #include "CheatFinishGameCommand.h"
 #include "CheatSuperSpeedCommand.h"
 #include "CheatKillEnemiesCommand.h"
+#include "CheatInfinityLifeCommand.h"
 
 
 CommandFactory::CommandFactory() = default;
@@ -53,6 +54,8 @@ std::unique_ptr <Command> CommandFactory::getCommand(std::shared_ptr <EventDTO> 
             return std::make_unique<CheatSuperSpeedCommand>(event->getIdPlayer());
         case Event::event_cheat_kill_enemies:
             return std::make_unique<CheatKillEnemiesCommand>(event->getIdPlayer());
+        case Event::event_cheat_infinite_health:
+            return std::make_unique<CheatInfinityLifeCommand>(event->getIdPlayer());
         default:
             return nullptr;
     }
