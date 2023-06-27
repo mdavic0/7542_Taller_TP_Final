@@ -7,7 +7,7 @@
 
 class P90 : public Weapon {
     private:
-        int burstFiredBullets;
+        uint8_t burstFiredBullets;
         bool burstEnded;
         double scope;
 

@@ -7,7 +7,7 @@
 
 class Scout : public Weapon {
     private:
-        int burstFiredBullets;
+        uint8_t burstFiredBullets;
         bool burstEnded;
         double scope;
         double damageDecreaseByEnemy;
