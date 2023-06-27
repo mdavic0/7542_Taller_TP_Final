@@ -17,12 +17,12 @@ class GameDrawner : public Thread {
         bool& error;
         int menu;
         int numPlayers;
-        int idPlayer;
+        int16_t idPlayer;
     
     public:
         GameDrawner(Queue<std::shared_ptr<Snapshot>>& snapshot_queue,
             Queue<std::shared_ptr<EventDTO>>& client_events,
-            bool& error, int menu, uint8_t idPlayer, uint8_t numPlayers);
+            bool& error, int menu, uint16_t idPlayer, uint8_t numPlayers);
         virtual ~GameDrawner();
         virtual void run() override;
         virtual void stop() override;

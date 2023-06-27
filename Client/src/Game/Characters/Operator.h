@@ -18,7 +18,7 @@
 
 class Operator : public Object {
     private:
-        uint8_t id;
+        uint16_t id;
         TypeOperator operatorId;
         std::pair<int16_t, int16_t> position;
         std::map<std::string, std::unique_ptr<Texture>> textures;
@@ -26,7 +26,7 @@ class Operator : public Object {
         Renderer& renderPlayer;
         SDL_RendererFlip flipType;
         int numFrames;
-        int health;
+        int16_t health;
         bool animationDeadFinish;
         uint8_t munition;
         WindowSdl& window;
@@ -45,7 +45,7 @@ class Operator : public Object {
         bool verifyRender(SDL_Rect camera, SDL_Rect final);
         
     public:
-        Operator(uint8_t id, TypeOperator op, Renderer& renderer,
+        Operator(uint16_t id, TypeOperator op, Renderer& renderer,
                 WindowSdl& window, ManagerMusic& music);
         ~Operator();     
         void updateMove(MoveTo direction);
@@ -54,8 +54,8 @@ class Operator : public Object {
         void update(StOperator snap);
         TypeOperator getType();
         void setState(State state);
-        uint8_t getId();
-        uint8_t getHealth();
+        uint16_t getId();
+        uint16_t getHealth();
         int16_t getPosX();
         int16_t getPosY() override;
         uint8_t getMunition();

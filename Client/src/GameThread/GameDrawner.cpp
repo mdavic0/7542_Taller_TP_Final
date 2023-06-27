@@ -15,7 +15,7 @@
 
 GameDrawner::GameDrawner(Queue<std::shared_ptr<Snapshot>> &snapshot_queue,
     Queue<std::shared_ptr<EventDTO>> &client_events, bool& error, int menu,
-    uint8_t idPlayer, uint8_t numPlayers) : client_events(client_events),
+    uint16_t idPlayer, uint8_t numPlayers) : client_events(client_events),
     snapshot_queue(snapshot_queue), error(error), menu(menu),
     numPlayers(numPlayers), idPlayer(idPlayer) {
 }

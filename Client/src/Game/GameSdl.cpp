@@ -43,8 +43,12 @@ void GameSdl::render() {
     for (const auto &obstacle: obstacles)
         vecObjects.push_back(obstacle.second);
     for (const auto &enemy : enemies) {
-        if (endGame)
-            enemy.second->setState(State::idle);
+        if (endGame) {
+            if (mode == TypeGame::game_clear_zone)
+                enemy.second->setState(State::dead);
+            else if (mode == TypeGame::game_survival)
+                enemy.second->setState(State::idle);
+        }
         vecObjects.push_back(enemy.second);
     }
     for (const auto &soldier : soldiers) {

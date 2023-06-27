@@ -34,12 +34,12 @@ class GameSdl {
         Queue<std::shared_ptr<EventDTO>>& eventQueue;
         MapSdl map;
         bool endGame;
-        std::map<uint8_t, std::shared_ptr<Operator>>& soldiers;
-        std::map<uint8_t, std::shared_ptr<Enemy>>& enemies;
-        std::map<uint8_t, std::shared_ptr<Obstacles>>& obstacles;
+        std::map<uint16_t, std::shared_ptr<Operator>>& soldiers;
+        std::map<uint16_t, std::shared_ptr<Enemy>>& enemies;
+        std::map<uint16_t, std::shared_ptr<Obstacles>>& obstacles;
         std::list<std::shared_ptr<GrenadeSdl>> grenades;
         Hud hud;
-        uint8_t idPlayer;
+        uint16_t idPlayer;
         TypeGame mode;
         Font& font;
         Camera camera;
