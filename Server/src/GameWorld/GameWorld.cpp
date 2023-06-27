@@ -189,13 +189,13 @@ void GameWorld::generateInfecteds() {
         case TypeGame::game_idle:
             break;
         case TypeGame::game_survival:
-            this->infecteds = infectedFactory.generateInfecteds(TypeDifficulty::difficulty_easy,
+            this->infecteds = infectedFactory.generateInfecteds(difficulty,
                                                                 infectedId,
                                                                 collidables,
                                                                 RC);
             break;
         case TypeGame::game_clear_zone:
-            this->infecteds = infectedFactory.generateInfecteds(TypeDifficulty::difficulty_easy,
+            this->infecteds = infectedFactory.generateInfecteds(difficulty,
                                                                 infectedId,
                                                                 collidables,
                                                                 RC);

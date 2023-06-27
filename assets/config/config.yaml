@@ -92,32 +92,32 @@ venom_velocity: 20
 # Game Difficulty
 ####################################################
 # Easy
-zombie_amount_easy: 0
-jumper_amount_easy: 0
-witch_amount_easy: 0
-spear_amount_easy: 3
-venom_amount_easy: 0
+zombie_amount_easy: 1
+jumper_amount_easy: 1
+witch_amount_easy: 1
+spear_amount_easy: 1
+venom_amount_easy: 1
 
 # Normal
 zombie_amount_normal: 2
-jumper_amount_normal: 0
-witch_amount_normal: 0
-spear_amount_normal: 0
-venom_amount_normal: 0
+jumper_amount_normal: 3
+witch_amount_normal: 2
+spear_amount_normal: 5
+venom_amount_normal: 2
 
 # Hard
-zombie_amount_hard: 30
-jumper_amount_hard: 10
-witch_amount_hard: 6
-spear_amount_hard: 11
-venom_amount_hard: 9
+zombie_amount_hard: 5
+jumper_amount_hard: 5
+witch_amount_hard: 5
+spear_amount_hard: 5
+venom_amount_hard: 5
 
 # God
-zombie_amount_god: 50
-jumper_amount_god: 20
-witch_amount_god: 10
-spear_amount_god: 15
-venom_amount_god: 15
+zombie_amount_god: 6
+jumper_amount_god: 6
+witch_amount_god: 6
+spear_amount_god: 6
+venom_amount_god: 6
 
 ####################################################
 # Obstacles
