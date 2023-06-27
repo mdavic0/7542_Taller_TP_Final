@@ -30,7 +30,9 @@ void Game::run() {
             uint16_t minutesValue = static_cast<uint16_t>(minutes.count());
             uint16_t secondsValue = static_cast<uint16_t>(seconds.count());
 
-            broadcastSnapshot(statsController.updateStats(gameWorld.getStats(), minutesValue, secondsValue));
+            std::vector<StatsDto> stats = gameWorld.getStats();
+            if (!stats.empty())
+                broadcastSnapshot(statsController.updateStats(stats, minutesValue, secondsValue));
         }
 
     } catch (const std::exception& exc) {

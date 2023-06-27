@@ -81,7 +81,7 @@ uint32_t StatsController::getDurationIndex(const std::pair<int16_t, int16_t>& du
     return -1;
 }
 
-std::shared_ptr<Snapshot> StatsController::updateStats(std::vector<StatsDto> statsFromGame,
+std::shared_ptr<Snapshot> StatsController::updateStats(std::vector<StatsDto>& statsFromGame,
     const int16_t& minutes, const int16_t& seconds) {
     std::lock_guard<std::mutex> locker(mutex);
 
