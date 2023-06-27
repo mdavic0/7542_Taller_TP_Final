@@ -2,7 +2,7 @@
 #include "Defines.h"
 #include <utility>
 
-Infected::Infected(const TypeInfected& typeInfected, const uint16_t& id, const uint8_t& life,
+Infected::Infected(const TypeInfected& typeInfected, const uint16_t& id, const int16_t& life,
                     const uint8_t& velocity, const uint8_t& damage, const std::pair<int16_t, int16_t> &position,
                     std::shared_ptr<Collidable> collidable) : typeInfected(typeInfected), id(id), life(life),
                     velocity(velocity), damage(damage), state(State::idle),

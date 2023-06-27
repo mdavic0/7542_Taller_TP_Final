@@ -12,7 +12,7 @@ class StOperator {
     TypeOperator type;
     State state;
     std::pair<int16_t, int16_t> position;
-    uint8_t health;
+    int16_t health;
     uint8_t munition;
     bool grenadeAvailable;
     bool smokeAvailable;
@@ -20,7 +20,7 @@ class StOperator {
     public:
 
     explicit StOperator(const uint8_t& id, const TypeOperator& type, const State& state,
-        const std::pair<int16_t, int16_t>& position, const uint8_t& health, const uint8_t& munition,
+        const std::pair<int16_t, int16_t>& position, const int16_t& health, const uint8_t& munition,
         const bool& grenadeAvailable, const bool& smokeAvailable);
 
     uint8_t getId() const;
@@ -31,7 +31,7 @@ class StOperator {
 
     std::pair<int16_t, int16_t> getPosition() const;
 
-    uint8_t getHealth() const;
+    int16_t getHealth() const;
 
     uint8_t getMunition() const;
 

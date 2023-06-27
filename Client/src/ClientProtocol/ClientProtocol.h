@@ -415,8 +415,9 @@ std::vector<StOperator> getPlayers(std::shared_ptr<T> skt) {
         this->recvAll(&y, 2, skt);
         y = ntohs(y);
 
-        uint8_t health;
-        this->recvAll(&health, 1, skt);
+        uint16_t health;
+        this->recvAll(&health, 2, skt);
+        health = ntohs(health);
 
         uint8_t munition;
         this->recvAll(&munition, 1, skt);

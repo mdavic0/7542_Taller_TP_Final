@@ -17,7 +17,7 @@ class Infected {
         TypeInfected typeInfected;
         uint16_t id;
 
-        int8_t life;
+        int16_t life;
         uint8_t velocity;
         uint8_t damage;
 
@@ -32,7 +32,7 @@ class Infected {
 
         std::shared_ptr<Player> target;
     public:
-        Infected(const TypeInfected& typeInfected, const uint16_t& id, const uint8_t& life,
+        Infected(const TypeInfected& typeInfected, const uint16_t& id, const int16_t& life,
                  const uint8_t& velocity, const uint8_t& damage,
                  const std::pair<int16_t, int16_t>& position,
                  std::shared_ptr<Collidable> collidable);
@@ -40,7 +40,7 @@ class Infected {
         void applyStep(const std::map<uint16_t, std::shared_ptr<Collidable>>& collidables,
                        const std::map<uint16_t, std::shared_ptr<Player>>& players);
         std::shared_ptr<Collidable>& getCollidable();
-        void applyDamage(const int& amount);
+        void applyDamage(const int& amount);        // INT??
         void applySpeedReduction(const double& speedReduction);
         bool isAlive();
 

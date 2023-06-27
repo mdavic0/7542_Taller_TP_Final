@@ -494,8 +494,8 @@ void sendPlayersInfo(const std::vector<StOperator> &playersInfo, std::shared_ptr
         sendTypeOperator(it->getTypeOperator(), skt);
         sendState(it->getState(), skt);
         sendPosition(it->getPosition().first, it->getPosition().second, skt); // x = it->second.first, y = it->second.second
-        uint8_t health = it->getHealth();
-        this->sendAll(&health, 1, skt);
+        uint16_t health = htons(it->getHealth());
+        this->sendAll(&health, 2, skt);
         uint8_t munition = it->getMunition();
         this->sendAll(&munition, 1, skt);
         sendBoolean(it->isGrenadeAvailable(), skt);

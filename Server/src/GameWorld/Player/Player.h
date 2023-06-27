@@ -31,7 +31,7 @@ class Player {
         bool infinityLife;
 
     protected:
-        int8_t life;
+        int16_t life;
         State state;
         std::pair<int16_t, int16_t> movement_direction;
         bool lookingRight;
@@ -40,7 +40,7 @@ class Player {
 
     public:
         explicit Player(const TypeOperator& typeOperator);
-        Player(const TypeOperator& typeOperator, const uint8_t& life, const uint8_t& velocity,
+        Player(const TypeOperator& typeOperator, const int16_t& life, const uint8_t& velocity,
                std::shared_ptr<Weapon> weapon, const std::pair<int16_t,
                int16_t>& position, std::shared_ptr<Collidable> collidable);
         void setMovementDirection(const MoveTo& direction);
@@ -60,7 +60,7 @@ class Player {
         TypeOperator& getTypeOperator();
         State& getState();
 
-        int8_t& getHealth();
+        int16_t& getHealth();
         uint8_t& getMunition();
         uint16_t& getKills();
         uint16_t& getShots();
