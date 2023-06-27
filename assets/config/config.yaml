@@ -93,9 +93,9 @@ venom_velocity: 20
 ####################################################
 # Easy
 zombie_amount_easy: 0
-jumper_amount_easy: 3
-witch_amount_easy: 3
-spear_amount_easy: 0
+jumper_amount_easy: 0
+witch_amount_easy: 0
+spear_amount_easy: 3
 venom_amount_easy: 0
 
 # Normal

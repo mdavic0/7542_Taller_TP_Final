@@ -55,9 +55,10 @@
 #define TIME_SLEEP 4000
 #define TIME_SLEEP_SCOUT 400
 // End Game
-#define TEXT_CLEAR_ZONE "Mission Complete"
+#define TEXT_CLEAR_ZONE "End Game"
 #define TEXT_SURVIVAL "Your Die"
 #define TEXT_END_GAME "Press enter for exit"
+#define TEXT_STATS "ID SHOTS KILLS TIME"
 
 // Protocol Code
 #define CREATE_CODE 0x01
