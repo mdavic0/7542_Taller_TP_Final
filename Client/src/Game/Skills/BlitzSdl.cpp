@@ -9,7 +9,7 @@ BlitzSdl::BlitzSdl(Renderer& render, TextureManager& textures,
 
 void BlitzSdl::render(SDL_Rect camera) {
     int repet = WIDTH_SCREEN_INIT / SIZE_FRAME;
-    for (int i = 0; i < repet; ++i ) {
+    for (int i = 1; i < repet - 1; ++i ) {
         this->renderExplotion(i, camera);
     }
     music.playEffectGrenade("explotion");
@@ -20,10 +20,9 @@ void BlitzSdl::renderExplotion(int i, SDL_Rect camera) {
     if (speedAnimation != numFrames - 1) {
         SDL_Rect rectInit =  {  SIZE_FRAME * speedAnimation, 0,
                                 SIZE_FRAME, SIZE_FRAME};
-        SDL_Rect rectFinal = {  1 + i * (SIZE_FRAME + 1),
-                                700,
+        SDL_Rect rectFinal = {  i * (SIZE_FRAME),
+                                800,
                                 SIZE_FRAME, SIZE_FRAME};
-        window.adjustedRect(rectFinal);
         this->renderer.copy(textures.getTexture("blitz"), rectInit, rectFinal);
     }
 }

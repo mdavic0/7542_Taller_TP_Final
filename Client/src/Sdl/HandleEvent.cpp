@@ -77,9 +77,10 @@ void EventHandler::handleKeyDownEvent(SDL_Keysym keysym) {
             event = Event::event_cheat_infinite_health;
             break;
         case SDLK_RETURN:
-            if (endGame) {
+            if (endGame)
                 this->running = false;
-            }
+            else 
+                moveDirection = MoveTo::move_idle;
             break;
         default:
             moveDirection = MoveTo::move_idle;

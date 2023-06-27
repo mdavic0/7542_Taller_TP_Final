@@ -22,7 +22,6 @@ void GrenadeSdl::render(SDL_Rect camera) {
     if (!explotion) {
         renderMovement(camera);
     } else {
-        std::cout << "exploto\n";
         renderExplotion(camera);
     }
 }
