@@ -34,15 +34,15 @@ TextureManager& ConfigGame::getTextureManager() {
     return this->textures;
 }
 
-std::map<uint8_t, std::shared_ptr<Operator>>& ConfigGame::getPlayers() {
+std::map<uint16_t, std::shared_ptr<Operator>>& ConfigGame::getPlayers() {
     return this->players;
 }
 
-std::map<uint8_t, std::shared_ptr<Enemy>>& ConfigGame::getEnemies() {
+std::map<uint16_t, std::shared_ptr<Enemy>>& ConfigGame::getEnemies() {
     return this->enemies;
 }
 
-std::map<uint8_t, std::shared_ptr<Obstacles>>& ConfigGame::getObstacles() {
+std::map<uint16_t, std::shared_ptr<Obstacles>>& ConfigGame::getObstacles() {
     return this->obstacles;
 }
 

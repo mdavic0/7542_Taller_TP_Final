@@ -36,7 +36,7 @@
 #define SPEED_IDLE 150
 #define SPEED_RUN 120
 #define SPEED_ATACK 200
-#define SPEED_INJURE 110
+#define SPEED_INJURE 150
 #define SPEED_RECHARGE 290
 #define SPEED_SKILL 190
 #define SPEED_DEAD 200
@@ -55,9 +55,10 @@
 #define TIME_SLEEP 4000
 #define TIME_SLEEP_SCOUT 400
 // End Game
-#define TEXT_CLEAR_ZONE "Mission Complete"
+#define TEXT_CLEAR_ZONE "End Game"
 #define TEXT_SURVIVAL "Your Die"
 #define TEXT_END_GAME "Press enter for exit"
+#define TEXT_STATS "ID SHOTS KILLS TIME"
 
 // Protocol Code
 #define CREATE_CODE 0x01

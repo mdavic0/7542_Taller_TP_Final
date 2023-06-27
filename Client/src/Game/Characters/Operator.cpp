@@ -2,7 +2,7 @@
 #include "Defines.h"
 #include <iostream>
 
-Operator::Operator(uint8_t id, TypeOperator op, Renderer& renderer,
+Operator::Operator(uint16_t id, TypeOperator op, Renderer& renderer,
     WindowSdl& window, ManagerMusic& music) :
     Object(), id(id), operatorId(op), position({0, 0}),
     renderPlayer(renderer), stateOperator(State::idle), numFrames(0),
@@ -72,11 +72,11 @@ TypeOperator Operator::getType() {
     return this->operatorId;
 }
 
-uint8_t Operator::getId() {
+uint16_t Operator::getId() {
     return this->id;
 }
 
-uint8_t Operator::getHealth() {
+uint16_t Operator::getHealth() {
     return this->health;
 }
 
