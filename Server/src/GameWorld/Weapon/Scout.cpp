@@ -84,7 +84,10 @@ void Scout::shootLeft(std::shared_ptr<Collidable> &player,
 }
 
 double Scout::calculateDamage(const double& distance, int& counter) {
-    return this->damage - (distance*this->scope) - (counter*this->damageDecreaseByEnemy);
+    double result = this->damage - (distance*this->scope) - (counter*this->damageDecreaseByEnemy);
+    if (result < 0)
+        result = 0;
+    return result;
 }
 
 std::vector<std::shared_ptr<Infected>> Scout::sortEnemiesRight(const std::map<uint16_t, std::shared_ptr<Infected>> &infecteds) {

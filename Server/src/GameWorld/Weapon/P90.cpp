@@ -77,5 +77,8 @@ void P90::shootLeft(std::shared_ptr<Collidable> &player,
 }
 
 double P90::calculateDamage(const double& distance) {
-    return this->damage - (distance*this->scope) ;
+    double result = this->damage - (distance*this->scope);
+    if (result < 0)
+        result = 0;
+    return result;
 }
