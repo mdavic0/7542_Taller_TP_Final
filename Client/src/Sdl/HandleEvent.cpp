@@ -3,9 +3,9 @@
 #include <iostream>
 
 EventHandler::EventHandler(Queue<std::shared_ptr<EventDTO>>& eventQueue,
-    uint8_t idPlayer) : moveDirection(MoveTo::move_idle),
+    uint8_t idPlayer, bool& endGame) : moveDirection(MoveTo::move_idle),
     running(true), eventQueue(eventQueue) , idPlayer(idPlayer),
-    previousEvent(Event::event_playing){
+    previousEvent(Event::event_playing), endGame(endGame) {
 }
 
 void EventHandler::listen() {
@@ -83,15 +83,24 @@ void EventHandler::handleKeyDownEvent(SDL_Keysym keysym) {
             event = Event::event_cheat_infinite_health;
             std::cout << "F5 cheat\n";
             break;
+        case SDLK_RETURN:
+            if (endGame) {
+                this->eventQueue.push(
+                    std::make_shared<EventDTO>(Event::event_leave, idPlayer));
+                this->running = false;
+            }
+            break;
         default:
             moveDirection = MoveTo::move_idle;
             break;
     }
-    if ((event != previousEvent and moveDirection != MoveTo::move_idle) or
-        (event == previousEvent and event == Event::event_move and moveDirection != MoveTo::move_idle) or
-        (event == previousEvent and event == Event::event_shoot and moveDirection != MoveTo::move_idle)) {
-        this->previousEvent = event;
-        this->eventQueue.push(std::make_shared<EventDTO>(event, moveDirection, idPlayer));
+    if (!endGame) {
+        if ((event != previousEvent and moveDirection != MoveTo::move_idle) or
+            (event == previousEvent and event == Event::event_move and moveDirection != MoveTo::move_idle) or
+            (event == previousEvent and event == Event::event_shoot and moveDirection != MoveTo::move_idle)) {
+            this->previousEvent = event;
+            this->eventQueue.push(std::make_shared<EventDTO>(event, moveDirection, idPlayer));
+        }
     }
 }
 
@@ -126,9 +135,11 @@ void EventHandler::handleKeyUpEvent(SDL_Keysym keysym) {
             moveDirection = MoveTo::move_idle;
             break;
     }
-    if (moveDirection != MoveTo::move_idle) {
-        this->previousEvent = event;
-        this->eventQueue.push(std::make_shared<EventDTO>(event, moveDirection, idPlayer));
+    if (!endGame) {
+        if (moveDirection != MoveTo::move_idle) {
+            this->previousEvent = event;
+            this->eventQueue.push(std::make_shared<EventDTO>(event, moveDirection, idPlayer));
+        }
     }
 }
 

@@ -16,9 +16,11 @@ class EventHandler {
         void handleKeyUpEvent(SDL_Keysym keysym);
         uint8_t idPlayer;
         Event previousEvent;
+        bool& endGame;
 
     public:
-        EventHandler(Queue<std::shared_ptr<EventDTO>>& eventQueue, uint8_t idPlayer);
+        EventHandler(Queue<std::shared_ptr<EventDTO>>& eventQueue,
+                    uint8_t idPlayer, bool& endGame);
         ~EventHandler();
         MoveTo getMoveDirection() const;
         bool isRunning();

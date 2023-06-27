@@ -19,20 +19,28 @@ void EndGame::render() {
 
 void EndGame::renderClearZone() {
     SDL_Color color = COLOR_WHITE;
-    int w, h;
+    int w, h, w2, h2;
     font.getSizeFont(TEXT_CLEAR_ZONE, &w, &h);
+    font.getSizeFont(TEXT_END_GAME, &w2, &h2);
     Texture textureFont(renderer, font.RenderText_Solid(TEXT_CLEAR_ZONE,
+                                                        color));
+    Texture textureFont2(renderer, font.RenderText_Solid(TEXT_END_GAME,
                                                         color));
     SDL_Rect final = {  (window.getWidth() - w) / 2,
                         (window.getHeight() - h) / 2,
                         w, h};
+    SDL_Rect final2 = { ((window.getWidth() - w2) / 2),
+                        ((window.getHeight() - h) / 2) + h2 + 10,
+                        w2, h2};
     SDL_Rect rectInit = { 0, 0, SPRITE_BG_W, SPRITE_BG_H};
-    SDL_Rect rectFinal = { (window.getWidth() - rectFinal.w) / 2, 
-                            (window.getHeight() - rectFinal.h) / 2,
-                            SPRITE_BG_W * 15 / 10, SPRITE_BG_H};
+    SDL_Rect rectFinal = { 574, 375, SPRITE_BG_W, SPRITE_BG_H};
+    window.adjustedRect(final);
+    window.adjustedRect(final2);
+    window.adjustedRect(rectFinal);
     this->renderer.copy(textures.getTexture("healthbg"), rectInit,
                         rectFinal);
     this->renderer.copyFont(textureFont.getTexture(), final);
+    this->renderer.copyFont(textureFont2.getTexture(), final2);
 }
 
 void EndGame::renderSurvival() {

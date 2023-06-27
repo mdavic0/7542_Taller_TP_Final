@@ -13,7 +13,7 @@ GameSdl::GameSdl(WindowSdl& window, Renderer& renderer,
     Queue<std::shared_ptr<EventDTO>>& eventQueue,
     uint8_t idPlayer, Font& font, ConfigGame& config) :
     window(window), renderer(renderer), snapshotQueue(snapshotQueue),
-    eventQueue(eventQueue), endGame(false), events(eventQueue, idPlayer),
+    eventQueue(eventQueue), endGame(false), events(eventQueue, idPlayer, endGame),
     map(config.getTextureManager(), renderer, window),
     soldiers(config.getPlayers()),
     hud(soldiers[idPlayer]->getType(), config.getMode(), renderer, font,
@@ -34,7 +34,7 @@ void GameSdl::render() {
    
     this->hud.render(soldiers[idPlayer]->getHealth(),
                     soldiers[idPlayer]->getMunition(),
-                    enemies.size(),
+                    endGame ? 0 : enemies.size(),
                     soldiers[idPlayer]->getGrenadeAvailable(),
                     soldiers[idPlayer]->getSmokeAvailable());
     
@@ -44,8 +44,11 @@ void GameSdl::render() {
         vecObjects.push_back(obstacle.second);
     for (const auto &enemy : enemies)
         vecObjects.push_back(enemy.second);
-    for (const auto &soldier : soldiers)
+    for (const auto &soldier : soldiers) {
+        if (endGame)
+            soldier.second->setState(State::idle);
         vecObjects.push_back(soldier.second);
+    }
         
     std::sort(vecObjects.begin(), vecObjects.end(),
         [](const auto& a, const auto&b) {
@@ -74,50 +77,52 @@ void GameSdl::renderBlitz() {
 
 void GameSdl::update() {
     std::shared_ptr<Snapshot> snap = nullptr;
-    while (!snapshotQueue.try_pop(snap)) {
-    }
-    if (snap->getEvent() != Event::event_end) {
-        if (soldiers.size() >= snap->getInfo().size()) {
-            for (auto &player : soldiers) {
-                bool found = false;
-                for (const auto& stOperator : snap->getInfo())
-                    if (player.first == stOperator.getId()) {
-                        player.second->update(stOperator);
-                        found = true;
-                        break;
-                    }
-                if (!found)
-                    player.second->setState(State::dead);
+    if (!endGame) {
+        while (!snapshotQueue.try_pop(snap)) {
+        }
+        if (snap->getEvent() != Event::event_end) {
+            if (soldiers.size() >= snap->getInfo().size()) {
+                for (auto &player : soldiers) {
+                    bool found = false;
+                    for (const auto& stOperator : snap->getInfo())
+                        if (player.first == stOperator.getId()) {
+                            player.second->update(stOperator);
+                            found = true;
+                            break;
+                        }
+                    if (!found)
+                        player.second->setState(State::dead);
+                }
             }
-        }
+            
+            camera.update(calculateMassCenter());
 
-        camera.update(calculateMassCenter());
+            std::unordered_set<uint8_t> mapIds;
+            for (auto &infected : snap->getEnemies()) {
+                mapIds.insert(infected.getId());
+                enemies[infected.getId()]->update(infected.getPosition(),
+                                                    infected.getState());
+            }
 
-        std::unordered_set<uint8_t> mapIds;
-        for (auto &infected : snap->getEnemies()) {
-            mapIds.insert(infected.getId());
-            enemies[infected.getId()]->update(infected.getPosition(),
-                                                infected.getState());
-        }
-
-        // Eliminio enemigo muerto
-        auto iterator = enemies.begin();
-        while (iterator != enemies.end()) {
-            if (mapIds.find(iterator->first) == mapIds.end()) {
-                if (iterator->second->isDeadFinish()) {
-                    iterator = enemies.erase(iterator);
+            // Eliminio enemigo muerto
+            auto iterator = enemies.begin();
+            while (iterator != enemies.end()) {
+                if (mapIds.find(iterator->first) == mapIds.end()) {
+                    if (iterator->second->isDeadFinish()) {
+                        iterator = enemies.erase(iterator);
+                    } else {
+                        iterator->second->setState(State::dead);
+                        ++iterator;
+                    }
                 } else {
-                    iterator->second->setState(State::dead);
                     ++iterator;
                 }
-            } else {
-                ++iterator;
             }
+            this->updateGrenades(snap);
+            this->blitzAttack = snap->getBlitzAttacking(); 
+        } else {
+            this->endGame = true;
         }
-        this->updateGrenades(snap);
-        this->blitzAttack = snap->getBlitzAttacking(); 
-    } else {
-        this->endGame = true;
     }
 }
 
@@ -152,7 +157,6 @@ void GameSdl::updateGrenades(std::shared_ptr<Snapshot> snap) {
             }
         }
         grenades = std::move(updatedGrenades);
-        std::cout << "grenades: " << grenades.size() << std::endl;
     }
 }
 

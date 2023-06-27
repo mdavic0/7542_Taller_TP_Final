@@ -57,6 +57,7 @@
 // End Game
 #define TEXT_CLEAR_ZONE "Mission Complete"
 #define TEXT_SURVIVAL "Your Die"
+#define TEXT_END_GAME "Press enter for exit"
 
 // Protocol Code
 #define CREATE_CODE 0x01
