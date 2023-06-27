@@ -85,8 +85,8 @@ void EventHandler::handleKeyDownEvent(SDL_Keysym keysym) {
             break;
         case SDLK_RETURN:
             if (endGame) {
-                this->eventQueue.push(
-                    std::make_shared<EventDTO>(Event::event_leave, idPlayer));
+                //this->eventQueue.push(
+                  //  std::make_shared<EventDTO>(Event::event_leave, idPlayer));
                 this->running = false;
             }
             break;
