@@ -107,29 +107,7 @@ void GameSdl::update() {
             }
             
             camera.update(calculateMassCenter());
-
-            std::unordered_set<uint8_t> mapIds;
-            for (auto &infected : snap->getEnemies()) {
-                mapIds.insert(infected.getId());
-                enemies[infected.getId()]->update(infected.getPosition(),
-                                                    infected.getState());
-            }
-
-            // Eliminio enemigo muerto
-            auto iterator = enemies.begin();
-            while (iterator != enemies.end()) {
-                if (mapIds.find(iterator->first) == mapIds.end()) {
-                    if (iterator->second->isDeadFinish()) {
-                        iterator = enemies.erase(iterator);
-                    } else {
-                        iterator->second->setState(State::dead);
-                        if (mode == TypeGame::game_clear_zone)
-                        ++iterator;
-                    }
-                } else {
-                    ++iterator;
-                }
-            }
+            this->updateEnemies(snap);
             this->updateGrenades(snap);
             this->blitzAttack = snap->getBlitzAttacking(); 
         } else {
@@ -141,6 +119,40 @@ void GameSdl::update() {
                     endGameSdl.addStats(snap->getStats());
                 }
             }
+        }
+    }
+}
+
+void GameSdl::updateEnemies(std::shared_ptr<Snapshot> snap) {
+    int updates = 0;
+    for (auto &enemy : enemies) {
+        bool found = false;
+        for (const auto& enemyDto : snap->getEnemies()) {
+            if (enemy.first == enemyDto.getId()) {
+                enemy.second->update(enemyDto.getPosition(),
+                                        enemyDto.getState());
+                found = true;
+                updates++;
+                break;
+            }
+        }
+        if (!found) {
+            if (enemy.second->isDeadFinish()) {
+                enemies.erase(enemy.first);
+            } else {
+                enemy.second->setState(State::dead);
+            }
+        }
+    }
+    if (updates == 0 && mode == TypeGame::game_survival){
+        enemies.clear();
+        for (const auto& enemyDto : snap->getEnemies()) {
+            enemies.insert({enemyDto.getId(),
+                std::make_shared<Enemy>(textures, renderer,
+                                enemyDto.getTypeInfected(),
+                                window, music)});
+            enemies[enemyDto.getId()]->update(enemyDto.getPosition(),
+                                                enemyDto.getState());
         }
     }
 }
@@ -208,4 +220,3 @@ bool& GameSdl::ended() {
 }
 GameSdl::~GameSdl() {
 }
-

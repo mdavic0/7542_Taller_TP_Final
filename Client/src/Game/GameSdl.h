@@ -49,6 +49,7 @@ class GameSdl {
         EndGame endGameSdl;
         std::pair<int16_t, int16_t> calculateMassCenter();
         void updateGrenades(std::shared_ptr<Snapshot> snap);
+        void updateEnemies(std::shared_ptr<Snapshot> snap);
         void renderBlitz();
 
     public:

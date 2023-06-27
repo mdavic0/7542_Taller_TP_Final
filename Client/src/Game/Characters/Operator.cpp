@@ -274,7 +274,6 @@ void Operator::renderGrenade(int speed, SDL_Texture* texture,
 void Operator::renderStopGrenade(int speed, SDL_Texture* texture,
     SDL_Rect camera) {
     stopGrenade = false;
-    std::cout << "solte granada\n";
     int speedAnimation = static_cast<int>((SDL_GetTicks()/speed) % 4) + (numFrames - 4);
     SDL_Rect rectInit = {   speedAnimation * SIZE_FRAME, 0,
                             SIZE_FRAME, SIZE_FRAME};

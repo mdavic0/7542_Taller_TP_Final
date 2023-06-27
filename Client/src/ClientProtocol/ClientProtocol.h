@@ -482,6 +482,9 @@ std::vector<EnemyDto> getEnemies(std::shared_ptr<T> skt) {
 
         this->recvAll(&idType, 1, skt);
         switch (idType) {
+        case INFECTED_ZOMBIE:
+            type = TypeInfected::infected_zombie;
+            break;
 
         case INFECTED_JUMPER:
             type = TypeInfected::infected_jumper;

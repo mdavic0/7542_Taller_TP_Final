@@ -99,11 +99,11 @@ spear_amount_easy: 3
 venom_amount_easy: 0
 
 # Normal
-zombie_amount_normal: 20
-jumper_amount_normal: 6
-witch_amount_normal: 4
-spear_amount_normal: 7
-venom_amount_normal: 5
+zombie_amount_normal: 2
+jumper_amount_normal: 0
+witch_amount_normal: 0
+spear_amount_normal: 0
+venom_amount_normal: 0
 
 # Hard
 zombie_amount_hard: 30
