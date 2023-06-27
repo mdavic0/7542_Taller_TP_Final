@@ -118,3 +118,8 @@ jumper_amount_god: 20
 witch_amount_god: 10
 spear_amount_god: 15
 venom_amount_god: 15
+
+####################################################
+# Obstacles
+####################################################
+obstacle_amount: 5

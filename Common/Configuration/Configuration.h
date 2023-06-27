@@ -136,6 +136,10 @@ class Configuration {
         static int spear_amount_god;
         static int venom_amount_god;
 
+        /*********************************
+        * Obstacles
+        *******************************/
+        static int obstacle_amount;
 
         Configuration();
         ~Configuration();

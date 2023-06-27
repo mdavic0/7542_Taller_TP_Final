@@ -210,12 +210,14 @@ void GameWorld::generateInfecteds() {
 }
 
 void GameWorld::generateObstacles() {
-    // Random obstacle (can be Tire or Crater):
-    std::shared_ptr<Obstacle> newObstacle = this->obstacleFactory.getObstacle(generateObstacleType(),
-                                                                              obsacleId,
-                                                                              collidables,
-                                                                              RC);
-    this->obstacles.insert({obsacleId++, newObstacle});
+    // Random obstacles (can be Tire or Crater):
+    for (int i = 0; i < CF::obstacle_amount; i++) {
+        std::shared_ptr<Obstacle> newObstacle = this->obstacleFactory.getObstacle(generateObstacleType(),
+                                                                                  obsacleId,
+                                                                                  collidables,
+                                                                                  RC);
+        this->obstacles.insert({obsacleId++, newObstacle});
+    }
 }
 
 void GameWorld::generateMapLimits() {
