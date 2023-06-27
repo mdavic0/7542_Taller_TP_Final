@@ -1,12 +1,12 @@
 #include "OperatorDto.h"
 
-StOperator::StOperator(const uint8_t& id, const TypeOperator& type, const State& state,
-        const std::pair<int16_t, int16_t>& position, const uint8_t& health, const uint8_t& munition,
+StOperator::StOperator(const uint16_t& id, const TypeOperator& type, const State& state,
+        const std::pair<int16_t, int16_t>& position, const int16_t& health, const uint8_t& munition,
         const bool& grenadeAvailable, const bool& smokeAvailable) :
         id(id), type(type), state(state), position(position), health(health), munition(munition),
         grenadeAvailable(grenadeAvailable), smokeAvailable(smokeAvailable) {}
 
-uint8_t StOperator::getId() const {
+uint16_t StOperator::getId() const {
     return id;
 }
 
@@ -22,7 +22,7 @@ std::pair<int16_t, int16_t> StOperator::getPosition() const {
     return position;
 }
 
-uint8_t StOperator::getHealth() const {
+int16_t StOperator::getHealth() const {
     return health;
 }
 

@@ -8,7 +8,7 @@ GamesController::GamesController() : counter(0), games(), mutex(), statsControll
 
 Queue<std::shared_ptr<EventDTO>>* GamesController::create(std::shared_ptr<EventDTO> eventdto,
                                                           Queue<std::shared_ptr<Snapshot>>* snapshot_queue,
-                                                          Game **game) {
+                                                          std::shared_ptr<Game>& game) {
     std::lock_guard<std::mutex> locker(mutex);
 
     std::random_device rd;
@@ -20,10 +20,10 @@ Queue<std::shared_ptr<EventDTO>>* GamesController::create(std::shared_ptr<EventD
         while (games.count(key) > 0) {
             key = distribution(generator);
         }
-        Game *newGame = new Game(key, eventdto->getStr(), eventdto->getTypeGame(),
+        std::shared_ptr<Game> newGame = std::make_shared<Game>(key, eventdto->getStr(), eventdto->getTypeGame(),
             eventdto->getTypeDifficulty(), statsController);
         games.insert(std::pair{key, newGame});
-        *game = newGame;
+        game = newGame;
         counter++;
         return newGame->createGame(snapshot_queue, eventdto->getTypeOperator());
     }
@@ -32,40 +32,22 @@ Queue<std::shared_ptr<EventDTO>>* GamesController::create(std::shared_ptr<EventD
 
 Queue<std::shared_ptr<EventDTO>>* GamesController::try_join_game(std::shared_ptr<EventDTO> eventdto,
                                                  Queue<std::shared_ptr<Snapshot>> *q,
-                                                 Game **game) {
+                                                 std::shared_ptr<Game>& game) {
     std::lock_guard<std::mutex> locker(mutex);
     uint32_t code = eventdto->getN();
     auto search = games.find(code);
     if (search != games.end()) {
-        *game = search->second;
+        game = search->second;
         return search->second->joinGame(q, eventdto->getTypeOperator());
     }
     q->push(std::make_shared<Snapshot>(Event::event_join, JOIN_FAILED, 0, 0));
     return nullptr;
 }
 
-/*
-void GamesController::startGame(const uint32_t& code){
-    std::lock_guard<std::mutex> locker(mutex);
-    auto search = games.find(code);
-    if (search != games.end()) {
-        return search->second->startGame();
-    }
-}
-
-void GamesController::clientLeave(Queue<std::shared_ptr<Snapshot>>* snapshot_queue, const uint32_t& code) {
-    std::lock_guard<std::mutex> locker(mutex);
-    auto search = games.find(code);
-    if (search != games.end()) {
-        return search->second->clientLeave(snapshot_queue);
-    }
-}
-*/
 GamesController::~GamesController() {
     std::cout << "GamesController - delete " << std::endl;
   for (auto it = games.begin(); it != games.end(); ++it) {
     it->second->stop();
-    delete it->second;
   }
     std::cout << "GamesController - end delete " << std::endl;
 }

@@ -27,10 +27,12 @@ void Game::run() {
             auto minutes = std::chrono::duration_cast<std::chrono::minutes>(duration);
             auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration - minutes);
 
-            uint8_t minutesValue = static_cast<uint8_t>(minutes.count());
-            uint8_t secondsValue = static_cast<uint8_t>(seconds.count());
+            uint16_t minutesValue = static_cast<uint16_t>(minutes.count());
+            uint16_t secondsValue = static_cast<uint16_t>(seconds.count());
 
-            broadcastSnapshot(statsController.updateStats(gameWorld.getStats(), minutesValue, secondsValue));
+            std::vector<StatsDto> stats = gameWorld.getStats();
+            if (!stats.empty())
+                broadcastSnapshot(statsController.updateStats(stats, minutesValue, secondsValue));
         }
 
     } catch (const std::exception& exc) {
@@ -54,7 +56,7 @@ bool Game::running() {
 
 Queue<std::shared_ptr<EventDTO>>* Game::createGame(Queue<std::shared_ptr<Snapshot>> *q,
                                                    const TypeOperator& op) {
-    uint8_t idPlayer = gameWorld.addPlayer(op);
+    uint16_t idPlayer = gameWorld.addPlayer(op);
     client_snapshot_queues.insert({idPlayer, q});
     q->push(std::make_shared<Snapshot> (Event::event_create, id, idPlayer));
     return &this->unprocessed_events;
@@ -63,7 +65,7 @@ Queue<std::shared_ptr<EventDTO>>* Game::createGame(Queue<std::shared_ptr<Snapsho
 Queue<std::shared_ptr<EventDTO>>* Game::joinGame(Queue<std::shared_ptr<Snapshot>> *q,
                                                  const TypeOperator& op) {
     if (not started) {                 
-        uint8_t idPlayer = gameWorld.addPlayer(op);
+        uint16_t idPlayer = gameWorld.addPlayer(op);
         client_snapshot_queues.insert({idPlayer, q});
         // Notify all clients that a new player joined
         for (auto &clientQueue : client_snapshot_queues) {

@@ -10,7 +10,7 @@ Player::Player(const TypeOperator& typeOperator) : typeOperator(typeOperator),
     movement_direction(0,0), velocity(1), weapon(), lookingRight(true),
     alive(true), stopSkillCLock(0), fellDownCLock(0), infinityLife(false) {}
 
-Player::Player(const TypeOperator& typeOperator, const uint8_t& life, const uint8_t& velocity,
+Player::Player(const TypeOperator& typeOperator, const int16_t& life, const uint8_t& velocity,
     std::shared_ptr<Weapon> weapon, const std::pair<int16_t, int16_t>& position,
     std::shared_ptr<Collidable> collidable) :
     typeOperator(typeOperator), state(State::idle), life(life), fell_down(0),
@@ -146,7 +146,7 @@ State& Player::getState() {
     return this->state;
 }
 
-int8_t& Player::getHealth() {
+int16_t& Player::getHealth() {
     return this->life;
 }
 

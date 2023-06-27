@@ -79,17 +79,17 @@ class GameWorld {
          * para poder lanzar una grandada, que los jugadores se muevan,
          * todos los eventos que tienen que ver con el tiempo.
          */
-        void simulateStep(double stepTime);
-        std::shared_ptr<Snapshot> getSnapshot(const bool first);
+        void simulateStep(const double& stepTime);
+        std::shared_ptr<Snapshot> getSnapshot(const bool& first);
         std::vector<StatsDto> getStats();
         bool isEnded();
-        void reanimatePlayer(Event event, uint8_t id);
+        void reanimatePlayer(const Event& event, const uint16_t& id);
 
         // Cheats
-        void finishGame(Event event, uint8_t id);
-        void applySuperSpeed(Event event, uint8_t id);
-        void killInfecteds(Event event, uint8_t id);
-        void makeInmortal(Event event, uint8_t id);
+        void finishGame(const Event& event, const uint16_t& id);
+        void applySuperSpeed(const Event& event, const uint16_t& id);
+        void killInfecteds(const Event& event, const uint16_t& id);
+        void makeInmortal(const Event& event, const uint16_t& id);
 
     private:
         void generateInfecteds();
@@ -97,13 +97,13 @@ class GameWorld {
         TypeObstacle generateObstacleType();
         int generateMapType();
 
-        void simulatePlayersStep(double stepTime);
-        void simulateInfectedStep(double stepTime);
-        void simulateGrenadeStep(double stepTime);
-        void simulateBlitzAtackStep(double stepTime);
-        void simulatePostExplosionGrenadesStep(double stepTime);
+        void simulatePlayersStep(const double& stepTime);
+        void simulateInfectedStep(const double& stepTime);
+        void simulateGrenadeStep(const double& stepTime);
+        void simulateBlitzAtackStep(const double& stepTime);
+        void simulatePostExplosionGrenadesStep(const double& stepTime);
         bool allPlayersAreDead();
-        void simulatePostExplosionBlitz(double stepTime);
+        void simulatePostExplosionBlitz(const double& stepTime);
         void updateRounds();
 };
 

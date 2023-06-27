@@ -33,7 +33,7 @@ class StatsController {
      */
     StatsController(const std::string& path);
 
-    std::shared_ptr<Snapshot> updateStats(std::vector<StatsDto> statsFromGame, const int16_t& minutes, const int16_t& seconds);
+    std::shared_ptr<Snapshot> updateStats(std::vector<StatsDto>& statsFromGame, const int16_t& minutes, const int16_t& seconds);
 
     ~StatsController();
 };

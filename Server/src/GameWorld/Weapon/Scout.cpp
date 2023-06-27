@@ -83,7 +83,7 @@ void Scout::shootLeft(std::shared_ptr<Collidable> &player,
     }
 }
 
-float Scout::calculateDamage(const float& distance, int& counter) {
+double Scout::calculateDamage(const double& distance, int& counter) {
     return this->damage - (distance*this->scope) - (counter*this->damageDecreaseByEnemy);
 }
 

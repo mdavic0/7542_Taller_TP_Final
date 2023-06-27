@@ -55,7 +55,7 @@ void sendStart(std::shared_ptr<T> skt) {
     this->sendAll(&command, 1, skt);
 }
 
-void sendMove(const MoveTo& moveTo, const uint8_t& idPlayer, std::shared_ptr<T> skt) {
+void sendMove(const MoveTo& moveTo, const uint16_t& idPlayer, std::shared_ptr<T> skt) {
     uint8_t command = MOVE_CODE;
     this->sendAll(&command, 1, skt);
 
@@ -64,7 +64,7 @@ void sendMove(const MoveTo& moveTo, const uint8_t& idPlayer, std::shared_ptr<T> 
     sendMoveTo(moveTo, skt);
 }
 
-void sendStopMove(const MoveTo& moveTo, const uint8_t& idPlayer, std::shared_ptr<T> skt) {
+void sendStopMove(const MoveTo& moveTo, const uint16_t& idPlayer, std::shared_ptr<T> skt) {
     uint8_t command = STOP_MOVE_CODE;
     this->sendAll(&command, 1, skt);
 
@@ -73,112 +73,112 @@ void sendStopMove(const MoveTo& moveTo, const uint8_t& idPlayer, std::shared_ptr
     sendMoveTo(moveTo, skt);
 }
 
-void sendSmoke(const uint8_t& idPlayer, std::shared_ptr<T> skt) {
+void sendSmoke(const uint16_t& idPlayer, std::shared_ptr<T> skt) {
     uint8_t command = THROW_SMOKE_CODE;
     this->sendAll(&command, 1, skt);
 
     sendId(idPlayer, skt);
 }
 
-void sendStopSmoke(const uint8_t& idPlayer, std::shared_ptr<T> skt) {
+void sendStopSmoke(const uint16_t& idPlayer, std::shared_ptr<T> skt) {
     uint8_t command = STOP_SMOKE_CODE;
     this->sendAll(&command, 1, skt);
 
     sendId(idPlayer, skt);
 }
 
-void sendGrenade(const uint8_t& idPlayer, std::shared_ptr<T> skt) {
+void sendGrenade(const uint16_t& idPlayer, std::shared_ptr<T> skt) {
     uint8_t command = THROW_GRENADE_CODE;
     this->sendAll(&command, 1, skt);
 
     sendId(idPlayer, skt);
 }
 
-void sendStopGrenade(const uint8_t& idPlayer, std::shared_ptr<T> skt) {
+void sendStopGrenade(const uint16_t& idPlayer, std::shared_ptr<T> skt) {
     uint8_t command = STOP_GRENADE_CODE;
     this->sendAll(&command, 1, skt);
 
     sendId(idPlayer, skt);
 }
 
-void sendBlitz(const uint8_t& idPlayer, std::shared_ptr<T> skt) {
+void sendBlitz(const uint16_t& idPlayer, std::shared_ptr<T> skt) {
     uint8_t command = BLITZ_ATACK_CODE;
     this->sendAll(&command, 1, skt);
 
     sendId(idPlayer, skt);
 }
 
-void sendShoot(const uint8_t& idPlayer, std::shared_ptr<T> skt) {
+void sendShoot(const uint16_t& idPlayer, std::shared_ptr<T> skt) {
     uint8_t command = SHOOT_CODE;
     this->sendAll(&command, 1, skt);
 
     sendId(idPlayer, skt);
 }
 
-void sendStopShoot(const uint8_t& idPlayer, std::shared_ptr<T> skt) {
+void sendStopShoot(const uint16_t& idPlayer, std::shared_ptr<T> skt) {
     uint8_t command = STOP_SHOOT_CODE;
     this->sendAll(&command, 1, skt);
 
     sendId(idPlayer, skt);
 }
 
-void sendLeave(const uint8_t& idPlayer, std::shared_ptr<T> skt) {
+void sendLeave(const uint16_t& idPlayer, std::shared_ptr<T> skt) {
     uint8_t command = LEAVE_CODE;
     this->sendAll(&command, 1, skt);
 
     sendId(idPlayer, skt);
 }
 
-void sendRecharge(const uint8_t& idPlayer, std::shared_ptr<T> skt) {
+void sendRecharge(const uint16_t& idPlayer, std::shared_ptr<T> skt) {
     uint8_t command = RECHARGE_CODE;
     this->sendAll(&command, 1, skt);
 
     sendId(idPlayer, skt);
 }
 
-void sendReanimate(const uint8_t& idPlayer, std::shared_ptr<T> skt) {
+void sendReanimate(const uint16_t& idPlayer, std::shared_ptr<T> skt) {
     uint8_t command = REANIMATE_CODE;
     this->sendAll(&command, 1, skt);
 
     sendId(idPlayer, skt);
 }
 
-void sendStopReanimate(const uint8_t& idPlayer, std::shared_ptr<T> skt) {
+void sendStopReanimate(const uint16_t& idPlayer, std::shared_ptr<T> skt) {
     uint8_t command = STOP_REANIMATE_CODE;
     this->sendAll(&command, 1, skt);
 
     sendId(idPlayer, skt);
 }
 
-void sendCheatFinish(const uint8_t& idPlayer, std::shared_ptr<T> skt){
+void sendCheatFinish(const uint16_t& idPlayer, std::shared_ptr<T> skt){
     uint8_t command = CHEAT_FINISH_GAME_CODE;
     this->sendAll(&command, 1, skt);
 
     sendId(idPlayer, skt);
 }
 
-void sendCheatMunition(const uint8_t& idPlayer, std::shared_ptr<T> skt){
+void sendCheatMunition(const uint16_t& idPlayer, std::shared_ptr<T> skt){
     uint8_t command = CHEAT_INFINITE_MUNITION_CODE;
     this->sendAll(&command, 1, skt);
 
     sendId(idPlayer, skt);
 }
 
-void sendCheatVelocity(const uint8_t& idPlayer, std::shared_ptr<T> skt) {
+void sendCheatVelocity(const uint16_t& idPlayer, std::shared_ptr<T> skt) {
     uint8_t command = CHEAT_MORE_VELOCITY_CODE;
     this->sendAll(&command, 1, skt);
 
     sendId(idPlayer, skt);
 }
 
-void sendCheatKills(const uint8_t& idPlayer, std::shared_ptr<T> skt) {
+void sendCheatKills(const uint16_t& idPlayer, std::shared_ptr<T> skt) {
     uint8_t command = CHEAT_KILL_ENEMIES_CODE;
     this->sendAll(&command, 1, skt);
 
     sendId(idPlayer, skt);
 }
 
-void sendCheatHealth(const uint8_t& idPlayer, std::shared_ptr<T> skt) {
+void sendCheatHealth(const uint16_t& idPlayer, std::shared_ptr<T> skt) {
     uint8_t command = CHEAT_INFINITE_HEALTH_CODE;
     this->sendAll(&command, 1, skt);
 
@@ -211,8 +211,9 @@ void sendMoveTo(const MoveTo& moveTo, std::shared_ptr<T> skt) {
     this->sendAll(&idDirection, 1, skt);
 }
 
-void sendId(const uint8_t& idPlayer, std::shared_ptr<T> skt) {
-    this->sendAll(&idPlayer, 1, skt);    
+void sendId(const uint16_t& idPlayer, std::shared_ptr<T> skt) {
+    uint16_t aux = htons(idPlayer);
+    this->sendAll(&aux, 2, skt);    
 }
 
 void sendDifficulty(const TypeDifficulty & typeDifficulty, std::shared_ptr<T> skt) {
@@ -234,8 +235,7 @@ Snapshot getCreate (std::shared_ptr<T> skt) {
     this->recvAll(&code, 4, skt);
     code = ntohl(code);
 
-    uint8_t idPlayer;
-    this->recvAll(&idPlayer, 1, skt);
+    uint16_t idPlayer = getId(skt);
 
     return Snapshot(Event::event_create, code, idPlayer);
 }
@@ -244,11 +244,11 @@ Snapshot getJoin (std::shared_ptr<T> skt) {
     uint8_t ok;
     this->recvAll(&ok, 1, skt);
 
-    uint8_t idPlayer = 0;
+    uint16_t idPlayer = 0;
     uint8_t size = 0;
 
     if (ok == 0) {
-        this->recvAll(&idPlayer, 1, skt);
+        idPlayer = getId(skt);
         this->recvAll(&size, 1, skt);
     }
 
@@ -304,8 +304,7 @@ Snapshot getStats(std::shared_ptr<T> skt) {
     std::vector<StatsDto> stats;
 
     for (uint8_t i = 0; i < count; i++) {
-        int8_t id;
-        this->recvAll(&id, 1, skt);
+        int16_t id = getId(skt);
 
         int16_t kills;
         this->recvAll(&kills, 2, skt);
@@ -346,7 +345,7 @@ std::vector<StOperator> getPlayers(std::shared_ptr<T> skt) {
     this->recvAll(&playersCount, 1, skt);
 
     std::vector<StOperator> vector;
-    uint8_t idPlayer;
+    uint16_t idPlayer;
 
     uint8_t idOperator;
     TypeOperator type = TypeOperator::operator_idle;
@@ -358,7 +357,7 @@ std::vector<StOperator> getPlayers(std::shared_ptr<T> skt) {
     int16_t y;
 
     for (uint8_t i = 0; i < playersCount; i++) {
-        this->recvAll(&idPlayer, 1, skt);
+        idPlayer = getId(skt);
 
         this->recvAll(&idOperator, 1, skt);
         switch (idOperator) {
@@ -415,8 +414,9 @@ std::vector<StOperator> getPlayers(std::shared_ptr<T> skt) {
         this->recvAll(&y, 2, skt);
         y = ntohs(y);
 
-        uint8_t health;
-        this->recvAll(&health, 1, skt);
+        uint16_t health;
+        this->recvAll(&health, 2, skt);
+        health = ntohs(health);
 
         uint8_t munition;
         this->recvAll(&munition, 1, skt);
@@ -466,7 +466,7 @@ std::vector<EnemyDto> getEnemies(std::shared_ptr<T> skt) {
     this->recvAll(&count, 1, skt);
 
     std::vector<EnemyDto> vector;
-    uint8_t id;
+    uint16_t id;
 
     uint8_t idType;
     TypeInfected type = TypeInfected::infected_zombie;
@@ -478,7 +478,7 @@ std::vector<EnemyDto> getEnemies(std::shared_ptr<T> skt) {
     int16_t y;
 
     for (uint8_t i = 0; i < count; i++) {
-        this->recvAll(&id, 1, skt);
+        id = getId(skt);
 
         this->recvAll(&idType, 1, skt);
         switch (idType) {
@@ -548,7 +548,7 @@ std::vector<ObstacleDto> getObstacles(std::shared_ptr<T> skt) {
     this->recvAll(&count, 1, skt);
 
     std::vector<ObstacleDto> vector;
-    uint8_t id;
+    uint16_t id;
 
     uint8_t idType;
     TypeObstacle type = TypeObstacle::obstacle_tire;
@@ -557,7 +557,7 @@ std::vector<ObstacleDto> getObstacles(std::shared_ptr<T> skt) {
     int16_t y;
 
     for (uint8_t i = 0; i < count; i++) {
-        this->recvAll(&id, 1, skt);
+        id = getId(skt);
 
         this->recvAll(&idType, 1, skt);
         switch (idType) {
@@ -665,7 +665,11 @@ bool getBlitz(std::shared_ptr<T> skt) {
     return attacking;
 }
 
-
+uint16_t getId(std::shared_ptr<T> skt) {
+    uint16_t id;
+    this->recvAll(&id, 2, skt);
+    return ntohs(id);
+}
     public:
         /*
         * Constructor que llama al constructor del padre

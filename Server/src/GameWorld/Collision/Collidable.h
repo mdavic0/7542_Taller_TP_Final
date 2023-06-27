@@ -19,7 +19,7 @@ class Collidable {
         bool isAlignedRight(const std::shared_ptr<Collidable>& other) const;
         bool isAlignedLeft(const std::shared_ptr<Collidable>& other) const;
 
-        bool isCloseTo(const std::shared_ptr<Collidable> &other, const float& closeDistance) const;
+        bool isCloseTo(const std::shared_ptr<Collidable> &other, const double& closeDistance) const;
         bool isOnRight(const std::shared_ptr<Collidable>& other) const;
         bool isDown(const std::shared_ptr<Collidable>& other) const;
         double distance(const std::pair<int16_t, int16_t>& otherPos) const;

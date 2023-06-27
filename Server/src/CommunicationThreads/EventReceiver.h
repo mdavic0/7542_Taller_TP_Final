@@ -22,7 +22,7 @@ class EventReceiver : public Thread {
         Queue<std::shared_ptr<Snapshot>> snapshot_queue;
         SnapshotSender sender;
         GamesController& controller;
-        Game *game;
+        std::shared_ptr<Game> game;
         std::atomic<bool> talking;
         std::atomic<bool> alive;
 

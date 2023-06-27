@@ -94,7 +94,7 @@ void GameWorld::updateSkillState(const Event& event, const uint16_t& id) {
     }
 }
 
-void GameWorld::simulateStep(double stepTime) {
+void GameWorld::simulateStep(const double& stepTime) {
     if(!ended) {
         simulatePlayersStep(stepTime);
         if(infecteds.empty()) {
@@ -127,7 +127,7 @@ void GameWorld::simulateStep(double stepTime) {
     }
 }
 
-std::shared_ptr<Snapshot> GameWorld::getSnapshot(const bool first) {
+std::shared_ptr<Snapshot> GameWorld::getSnapshot(const bool& first) {
     if(!ended) {
         std::vector<StOperator> playersInfo;
         for (auto& player : players) {
@@ -175,10 +175,12 @@ std::shared_ptr<Snapshot> GameWorld::getSnapshot(const bool first) {
 
 std::vector<StatsDto> GameWorld::getStats() {
     std::vector<StatsDto> stats;
-    for (auto& player : players) {
-        stats.push_back(StatsDto(player.first,
-                             player.second->getKills(),
-                             player.second->getShots()));
+    if (type == TypeGame::game_survival) {
+        for (auto& player : players) {
+            stats.push_back(StatsDto(player.first,
+                                 player.second->getKills(),
+                                 player.second->getShots()));
+        }
     }
     return stats;
 }
@@ -229,11 +231,11 @@ bool GameWorld::isEnded() {
 int GameWorld::generateMapType() {
     std::random_device rand_dev;
     std::mt19937 generator(rand_dev());
-    std::uniform_int_distribution<int> distr(1, 3);
+    std::uniform_int_distribution<short> distr(1, 3);
     return distr(generator);
 }
 
-void GameWorld::simulatePlayersStep(double stepTime) {
+void GameWorld::simulatePlayersStep(const double& stepTime) {
     // Erase dead players
     for (auto it = players.cbegin(); it != players.cend(); /*no increment*/ ){
         if (not it->second->isAlive()) {
@@ -256,7 +258,7 @@ void GameWorld::simulatePlayersStep(double stepTime) {
     }
 }
 
-void GameWorld::simulateInfectedStep(double stepTime) {
+void GameWorld::simulateInfectedStep(const double& stepTime) {
     if (not ended) {
         // Erase dead infecteds
         for (auto it = infecteds.cbegin(); it != infecteds.cend(); /* no increment */){
@@ -275,7 +277,7 @@ void GameWorld::simulateInfectedStep(double stepTime) {
     }
 }
 
-void GameWorld::simulateGrenadeStep(double stepTime) {
+void GameWorld::simulateGrenadeStep(const double& stepTime) {
     if (not ended) {
         // Erase exploded grenades
         for (auto it = grenades.cbegin(); it != grenades.cend(); /* no increment */){
@@ -296,7 +298,7 @@ void GameWorld::simulateGrenadeStep(double stepTime) {
     }
 }
 
-void GameWorld::simulateBlitzAtackStep(double stepTime) {
+void GameWorld::simulateBlitzAtackStep(const double& stepTime) {
     if (not ended) {
         // Erase ended blitz atack
         for (auto it = blitzAtacks.cbegin(); it != blitzAtacks.cend(); /* no increment */){
@@ -317,7 +319,7 @@ void GameWorld::simulateBlitzAtackStep(double stepTime) {
     }
 }
 
-void GameWorld::simulatePostExplosionGrenadesStep(double stepTime) {
+void GameWorld::simulatePostExplosionGrenadesStep(const double& stepTime) {
     if (not ended) {
         // Erase availables grenades
         for (auto it = postExplosionGrenades.cbegin(); it != postExplosionGrenades.cend(); /* no increment */){
@@ -347,7 +349,7 @@ bool GameWorld::allPlayersAreDead() {
     return true;
 }
 
-void GameWorld::simulatePostExplosionBlitz(double stepTime) {
+void GameWorld::simulatePostExplosionBlitz(const double& stepTime) {
     if (not ended) {
         // Erase availables blitz
         for (auto it = postExplosionBlitz.cbegin(); it != postExplosionBlitz.cend(); /* no increment */){
@@ -382,7 +384,7 @@ void GameWorld::updateRounds() {
 
 }
 
-void GameWorld::reanimatePlayer(Event event, uint8_t id) {
+void GameWorld::reanimatePlayer(const Event& event, const uint16_t& id) {
     bool found = (std::find(deadPlayersId.begin(),
                             deadPlayersId.end(),
                             id) != deadPlayersId.end());
@@ -396,7 +398,7 @@ void GameWorld::reanimatePlayer(Event event, uint8_t id) {
     }
 }
 
-void GameWorld::finishGame(Event event, uint8_t id) {
+void GameWorld::finishGame(const Event& event, const uint16_t& id) {
     bool found = (std::find(deadPlayersId.begin(),
                             deadPlayersId.end(),
                             id) != deadPlayersId.end());
@@ -410,7 +412,7 @@ void GameWorld::finishGame(Event event, uint8_t id) {
     }
 }
 
-void GameWorld::applySuperSpeed(Event event, uint8_t id) {
+void GameWorld::applySuperSpeed(const Event& event, const uint16_t& id) {
     bool found = (std::find(deadPlayersId.begin(),
                             deadPlayersId.end(),
                             id) != deadPlayersId.end());
@@ -424,7 +426,7 @@ void GameWorld::applySuperSpeed(Event event, uint8_t id) {
     }
 }
 
-void GameWorld::killInfecteds(Event event, uint8_t id) {
+void GameWorld::killInfecteds(const Event& event, const uint16_t& id) {
     bool found = (std::find(deadPlayersId.begin(),
                             deadPlayersId.end(),
                             id) != deadPlayersId.end());
@@ -441,7 +443,7 @@ void GameWorld::killInfecteds(Event event, uint8_t id) {
     }
 }
 
-void GameWorld::makeInmortal(Event event, uint8_t id) {
+void GameWorld::makeInmortal(const Event& event, const uint16_t& id) {
     bool found = (std::find(deadPlayersId.begin(),
                             deadPlayersId.end(),
                             id) != deadPlayersId.end());

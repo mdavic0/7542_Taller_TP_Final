@@ -19,12 +19,12 @@ void EventReceiver::run() {
                 if (event == Event::event_create) {
                     this->event_queue = controller.create(eventDto,
                                                           &snapshot_queue,
-                                                          &game);
+                                                          game);
 
                 } else if (event == Event::event_join) {
                     this->event_queue = controller.try_join_game(eventDto,
                                                                 &snapshot_queue,
-                                                                &game);
+                                                                game);
                 } else if (event == Event::event_leave) {
                     snapshot_queue.close();
                 }
