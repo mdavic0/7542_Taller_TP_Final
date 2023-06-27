@@ -1,7 +1,6 @@
 #include "Collidable.h"
 #include <iostream>
 #include <cmath>
-#include <iostream>
 
 Collidable::Collidable(const uint16_t& id, const std::pair<int16_t, int16_t>& position,
                        const int& width, const int& height) : id(id),

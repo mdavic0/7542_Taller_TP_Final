@@ -99,7 +99,6 @@ void GameWorld::simulateStep(const double& stepTime) {
     if(!ended) {
         simulatePlayersStep(stepTime);
         if(infecteds.empty()) {
-            std::cout << "NO MORE INFECTEDS" << std::endl;
             switch (this->type) {
                 case TypeGame::game_survival:
                     updateRounds();
@@ -117,7 +116,6 @@ void GameWorld::simulateStep(const double& stepTime) {
         }
         simulateInfectedStep(stepTime);
         if (allPlayersAreDead()) {
-            std::cout << "PLAYERS DIED " << std::endl;
             ended = true;
         } 
         simulateGrenadeStep(stepTime);
@@ -191,8 +189,6 @@ void GameWorld::generateInfecteds() {
         case TypeGame::game_idle:
             break;
         case TypeGame::game_survival:
-            // TODO: implement survival mode logic (ex: when all the infecteds are dead, respawn
-            //  new infecteds and increment difficulty)
             this->infecteds = infectedFactory.generateInfecteds(TypeDifficulty::difficulty_easy,
                                                                 infectedId,
                                                                 collidables,
@@ -403,17 +399,22 @@ void GameWorld::simulatePostExplosionBlitz(const double& stepTime) {
 }
 
 void GameWorld::updateRounds() {
+    RC.resetRespawns(); // to ensure that there are available respawn positions
     rounds++;
     if (rounds < 21 && rounds % 5 == 0) {
         switch (difficulty) {
         case TypeDifficulty::difficulty_easy:
             difficulty = TypeDifficulty::difficulty_normal;
+                break;
         case TypeDifficulty::difficulty_normal:
             difficulty = TypeDifficulty::difficulty_hard;
+                break;
         case TypeDifficulty::difficulty_hard:
             difficulty = TypeDifficulty::difficulty_god;
+                break;
         default:
             difficulty = TypeDifficulty::difficulty_god;
+                break;
         }
     }
 

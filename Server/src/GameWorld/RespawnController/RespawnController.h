@@ -17,11 +17,11 @@ class RespawnController {
         std::pair<int16_t, int16_t> getInfectedRespawnPosition();
         std::pair<int16_t, int16_t> getObstacleRespawnPosition();
 
-    private:
         // POST: Reload the respawn positions (usefull when trying to
         //      reset a round or spawning new infecteds)
         void resetRespawns();
 
+    private:
         // POST: Load / create the respanw positions
         void createPlayerRespawns();
         void createInfectedRespawns();
