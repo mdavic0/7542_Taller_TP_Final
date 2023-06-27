@@ -17,6 +17,7 @@ class EndGame {
         WindowSdl& window;
         void renderClearZone();
         void renderSurvival();
+        int renderStats(int height, StatsDto dto);
         std::vector<StatsDto> stats;
     public:
         EndGame(Font& font, Renderer& renderer, TextureManager& textures,

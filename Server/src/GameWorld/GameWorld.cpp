@@ -239,7 +239,8 @@ void GameWorld::simulatePlayersStep(double stepTime) {
         if (not it->second->isAlive()) {
             deadPlayersId.push_back(it->first);
             collidables.erase(it->first);
-            players.erase(it++);
+            //players.erase(
+                it++;//);
         } else {
             ++it;
         }

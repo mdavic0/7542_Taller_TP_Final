@@ -42,11 +42,18 @@ void GameSdl::render() {
     std::vector<std::shared_ptr<Object>> vecObjects;
     for (const auto &obstacle: obstacles)
         vecObjects.push_back(obstacle.second);
-    for (const auto &enemy : enemies)
-        vecObjects.push_back(enemy.second);
-    for (const auto &soldier : soldiers) {
+    for (const auto &enemy : enemies) {
         if (endGame)
-            soldier.second->setState(State::idle);
+            enemy.second->setState(State::idle);
+        vecObjects.push_back(enemy.second);
+    }
+    for (const auto &soldier : soldiers) {
+        if (endGame) {
+            if (mode == TypeGame::game_clear_zone)
+                soldier.second->setState(State::idle);
+            else if (mode == TypeGame::game_survival)
+                soldier.second->setState(State::dead);
+        }
         vecObjects.push_back(soldier.second);
     }
         
@@ -124,11 +131,10 @@ void GameSdl::update() {
         } else {
             this->endGame = true;
             if (mode == TypeGame::game_survival) {
-                if (snapshotQueue.try_pop(snap)) {
-                    if (snap->getEvent() == Event::event_stats) {
-                        std::cout << "llego stats\n";
-                        endGameSdl.addStats(snap->getStats());
-                    }
+                snap = snapshotQueue.pop();
+                if (snap->getEvent() == Event::event_stats) {
+                    std::cout << "llego stats\n";
+                    endGameSdl.addStats(snap->getStats());
                 }
             }
         }
