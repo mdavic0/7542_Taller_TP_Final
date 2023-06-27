@@ -94,6 +94,8 @@ private:
          * Un snapshot por gameloop
          */
         void broadcastSnapshot(std::shared_ptr<Snapshot> snapshot);
+
+        void closeAllQueue();
 };
 
 #endif  // SERVER_GAME_H_
