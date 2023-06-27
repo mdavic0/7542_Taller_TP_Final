@@ -34,13 +34,7 @@ void Game::run() {
             if (!stats.empty())
                 broadcastSnapshot(statsController.updateStats(stats, minutesValue, secondsValue));
 
-            for (auto it = client_snapshot_queues.begin(); it != client_snapshot_queues.end(); it++) {
-                try {
-                    it->second->close();
-                } catch(ClosedQueue& e) {
-                    //
-                }
-            }
+            closeAllQueue();
         }
 
     } catch (const std::exception& exc) {
@@ -172,7 +166,6 @@ void Game::broadcastSnapshot(std::shared_ptr<Snapshot> snapshot) {
     for (auto it = client_snapshot_queues.begin(); it != client_snapshot_queues.end(); /* increment inside loop */) {
         try {
             if (!it->second->try_push(snapshot)) {
-                std::cout << "Push failed, need to remove client " << it->first << std::endl;
                 gameWorld.deletePlayer(it->first);
                 it->second->close();
                 it = client_snapshot_queues.erase(it);
@@ -182,6 +175,16 @@ void Game::broadcastSnapshot(std::shared_ptr<Snapshot> snapshot) {
         } catch(ClosedQueue& e) {
             gameWorld.deletePlayer(it->first);
             it = client_snapshot_queues.erase(it);
+        }
+    }
+}
+
+void Game::closeAllQueue() {
+    for (auto it = client_snapshot_queues.begin(); it != client_snapshot_queues.end(); it++) {
+        try {
+            it->second->close();
+        } catch(ClosedQueue& e) {
+            //
         }
     }
 }
