@@ -112,6 +112,7 @@ void GameSdl::update() {
                         iterator = enemies.erase(iterator);
                     } else {
                         iterator->second->setState(State::dead);
+                        if (mode == TypeGame::game_clear_zone)
                         ++iterator;
                     }
                 } else {
@@ -122,6 +123,14 @@ void GameSdl::update() {
             this->blitzAttack = snap->getBlitzAttacking(); 
         } else {
             this->endGame = true;
+            if (mode == TypeGame::game_survival) {
+                if (snapshotQueue.try_pop(snap)) {
+                    if (snap->getEvent() == Event::event_stats) {
+                        std::cout << "llego stats\n";
+                        endGameSdl.addStats(snap->getStats());
+                    }
+                }
+            }
         }
     }
 }

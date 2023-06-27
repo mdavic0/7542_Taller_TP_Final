@@ -198,7 +198,8 @@ void Hud::renderTextMode(size_t size) {
     if (gameType == TypeGame::game_clear_zone)
         text = "Remaining enemies: " + text2;
     else if (gameType == TypeGame::game_survival)
-        text = "Enemies eliminated";
+        text = "Remaining enemies: " + text2;
+        // text = "Enemies eliminated";
     this->fontHud.getSizeFont(text, &w, &h);
     Texture textureFont(renderHud, fontHud.RenderText_Solid(text, color));
     SDL_Rect rectFinal = {1120, 80 + h, w, h};

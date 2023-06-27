@@ -4,7 +4,7 @@
 
 EndGame::EndGame(Font& font, Renderer& renderer, TextureManager& textures,
     TypeGame type, WindowSdl& window) : font(font), renderer(renderer), 
-    textures(textures), type(type), window(window) {
+    textures(textures), type(type), window(window), stats() {
 }
 
 EndGame::~EndGame() {
@@ -59,4 +59,8 @@ void EndGame::renderSurvival() {
     this->renderer.copy(textures.getTexture("healthbg"), rectInit,
                         rectFinal);
     this->renderer.copyFont(textureFont.getTexture(), final);
+}
+
+void EndGame::addStats(std::vector<StatsDto> stats) {
+    this->stats = std::move(stats);
 }
