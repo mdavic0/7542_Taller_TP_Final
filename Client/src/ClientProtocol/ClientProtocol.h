@@ -342,8 +342,9 @@ Snapshot getStats(std::shared_ptr<T> skt) {
 }
 
 std::vector<StOperator> getPlayers(std::shared_ptr<T> skt) {
-    uint8_t playersCount;
-    this->recvAll(&playersCount, 1, skt);
+    uint16_t playersCount;
+    this->recvAll(&playersCount, 2, skt);
+    playersCount = ntohs(playersCount);
 
     std::vector<StOperator> vector;
     uint16_t idPlayer;
@@ -357,7 +358,7 @@ std::vector<StOperator> getPlayers(std::shared_ptr<T> skt) {
     int16_t x;
     int16_t y;
 
-    for (uint8_t i = 0; i < playersCount; i++) {
+    for (uint16_t i = 0; i < playersCount; i++) {
         idPlayer = getId(skt);
 
         this->recvAll(&idOperator, 1, skt);
@@ -462,8 +463,9 @@ std::vector<StOperator> getPlayers(std::shared_ptr<T> skt) {
 }
 
 std::vector<EnemyDto> getEnemies(std::shared_ptr<T> skt) {
-    uint8_t count;
-    this->recvAll(&count, 1, skt);
+    uint16_t count;
+    this->recvAll(&count, 2, skt);
+    count = ntohs(count);
 
     std::vector<EnemyDto> vector;
     uint16_t id;
@@ -477,7 +479,7 @@ std::vector<EnemyDto> getEnemies(std::shared_ptr<T> skt) {
     int16_t x;
     int16_t y;
 
-    for (uint8_t i = 0; i < count; i++) {
+    for (uint16_t i = 0; i < count; i++) {
         id = getId(skt);
 
         this->recvAll(&idType, 1, skt);

@@ -474,8 +474,8 @@ void sendState(const State& state, std::shared_ptr<T> skt) {
 }
 
 void sendPlayersInfo(const std::vector<StOperator> &playersInfo, std::shared_ptr<T> skt) {
-    uint8_t playersCount = playersInfo.size();
-    this->sendAll(&playersCount, 1, skt);
+    uint16_t playersCount = htons(playersInfo.size());
+    this->sendAll(&playersCount, 2, skt);
     for (auto it = playersInfo.begin(); it != playersInfo.end(); ++it) {
         sendId(it->getId(), skt);
         sendTypeOperator(it->getTypeOperator(), skt);
@@ -491,8 +491,8 @@ void sendPlayersInfo(const std::vector<StOperator> &playersInfo, std::shared_ptr
 }
 
 void sendEnemiesInfo(const std::vector<EnemyDto> &enemiesInfo, std::shared_ptr<T> skt) {
-    uint8_t count = enemiesInfo.size();
-    this->sendAll(&count, 1, skt);
+    uint16_t count = htons(enemiesInfo.size());
+    this->sendAll(&count, 2, skt);
     for (auto it = enemiesInfo.begin(); it != enemiesInfo.end(); ++it) {
         sendId(it->getId(), skt);
         sendTypeInfected(it->getTypeInfected(), skt);
