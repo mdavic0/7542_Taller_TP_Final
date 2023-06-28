@@ -7,6 +7,7 @@ ManagerMusic::ManagerMusic() :
     mixer(MIX_DEFAULT_FREQUENCY, AUDIO_S16, MIX_DEFAULT_CHANNELS, 512),
     lastSoundTime(0) {
     this->loadMusic();
+
 }
 
 void ManagerMusic::loadMusic() {
@@ -134,10 +135,12 @@ void ManagerMusic::playInfectedMusic(TypeInfected type, const std::string& actio
 
 
 void ManagerMusic::playEffectOperator(Mix_Chunk* chunk) {
+    this->mixer.setVolume(1, 20);
     this->mixer.playChannel(1, chunk, 0);
 }
 
 void ManagerMusic::playEffectEnemy(Mix_Chunk* chunk) {
+    this->mixer.setVolume(2, 20);
     this->mixer.playChannel(2, chunk, 0);
 }
 
