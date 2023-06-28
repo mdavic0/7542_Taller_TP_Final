@@ -63,7 +63,7 @@ void GameSdl::render() {
         
     std::sort(vecObjects.begin(), vecObjects.end(),
         [](const auto& a, const auto&b) {
-            return a->getPosY() <= b->getPosY();
+            return a->getPosY() < b->getPosY();
     });
     for (const auto &object : vecObjects)
         object->render(camera.getRect());
