@@ -6,14 +6,14 @@ Zombie::Zombie(const uint16_t& id, const std::pair<int16_t, int16_t> &position,
                  CF::zombie_velocity, CF::zombie_damage, position,
                  std::move(collidable)) {}
 
-void Zombie::specialAtack(const Event& event) {
-
+void Zombie::specialAtack(const std::map<uint16_t, std::shared_ptr<Infected>> &infecteds) {
+    if (this->specialAtackActivated) {
+        this->biteSomeone();
+    }
 }
 
 void Zombie::biteSomeone() {
-
+    this->angry = true;
 }
 
-Zombie::~Zombie() {
-
-}
+Zombie::~Zombie() = default;

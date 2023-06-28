@@ -7,7 +7,8 @@ Infected::Infected(const TypeInfected& typeInfected, const uint16_t& id, const i
                     std::shared_ptr<Collidable> collidable) : typeInfected(typeInfected), id(id), life(life),
                     velocity(velocity), damage(damage), state(State::idle),
                     position(position), movement_direction(0,0),
-                    collidable(std::move(collidable)), alive(true), target(nullptr) {
+                    collidable(std::move(collidable)), alive(true), target(nullptr),
+                    specialAtackActivated(false), angry(false) {
 }
 
 void Infected::setMovementDirection(const MoveTo& direction) {
@@ -81,9 +82,11 @@ void Infected::atack() {
 }
 
 void Infected::applyStep(const std::map<uint16_t, std::shared_ptr<Collidable>> &collidables,
-                         const std::map<uint16_t, std::shared_ptr<Player>>& players) {
+                         const std::map<uint16_t, std::shared_ptr<Player>>& players,
+                         const std::map<uint16_t, std::shared_ptr<Infected>>& infecteds) {
     this->setTarget(players);
     this->move(collidables);
+    this->specialAtack(infecteds);
     this->atack();
 }
 
@@ -92,6 +95,9 @@ std::shared_ptr<Collidable> &Infected::getCollidable() {
 }
 
 void Infected::applyDamage(const int &amount) {
+    if (! specialAtackActivated) {
+        specialAtackActivated = true;
+    }
     this->life -= amount;
     if (this->life <= 0) {
         this->alive = false;
@@ -172,4 +178,8 @@ void Infected::applySpeedReduction(const double& speedReduction) {
     if(this->velocity >= speedReduction) {
         this->velocity -= speedReduction;
     }
+}
+
+void Infected::setTarget(const std::shared_ptr<Player> &newTarget) {
+    this->target = newTarget;
 }

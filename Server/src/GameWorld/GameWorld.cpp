@@ -303,7 +303,7 @@ void GameWorld::simulateInfectedStep(const double& stepTime) {
 
         // Apply infecteds step
         for (auto& infected : infecteds) {
-            infecteds.at(infected.first)->applyStep(this->collidables, this->players);
+            infecteds.at(infected.first)->applyStep(this->collidables, this->players, infecteds);
         }
     }
 }

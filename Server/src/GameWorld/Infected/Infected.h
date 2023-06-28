@@ -18,10 +18,6 @@ class Infected {
         uint16_t id;
 
         int16_t life;
-        uint8_t velocity;
-        uint8_t damage;
-
-        State state;
 
         std::pair<int16_t, int16_t> position;
         std::pair<int16_t, int16_t> movement_direction;
@@ -30,7 +26,17 @@ class Infected {
 
         bool alive;
 
+    protected:
+        uint8_t velocity;
+        uint8_t damage;
+
+        State state;
+
         std::shared_ptr<Player> target;
+
+        bool specialAtackActivated;
+        bool angry;
+
     public:
         Infected(const TypeInfected& typeInfected, const uint16_t& id, const int16_t& life,
                  const uint8_t& velocity, const uint8_t& damage,
@@ -38,7 +44,8 @@ class Infected {
                  std::shared_ptr<Collidable> collidable);
 
         void applyStep(const std::map<uint16_t, std::shared_ptr<Collidable>>& collidables,
-                       const std::map<uint16_t, std::shared_ptr<Player>>& players);
+                       const std::map<uint16_t, std::shared_ptr<Player>>& players,
+                       const std::map<uint16_t, std::shared_ptr<Infected>>& infecteds);
         std::shared_ptr<Collidable>& getCollidable();
         void applyDamage(const int& amount);        // INT??
         void applySpeedReduction(const double& speedReduction);
@@ -48,12 +55,14 @@ class Infected {
         TypeInfected& getTypeInfected();
         State& getState();
         uint16_t& getId();
+
+        void setTarget(const std::shared_ptr<Player>& newTarget);
         virtual ~Infected() = default;
 
     private:
         void move(const std::map<uint16_t, std::shared_ptr<Collidable>>& collidables);
         void atack();
-        virtual void specialAtack(const Event& event) = 0;
+        virtual void specialAtack(const std::map<uint16_t, std::shared_ptr<Infected>> &infecteds) = 0;
         bool isIntoHostilRange(const std::shared_ptr<Player>& player);
         void setTarget(const std::map<uint16_t, std::shared_ptr<Player>>& players);
         void setMovementDirection(const MoveTo& direction);
