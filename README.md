@@ -26,6 +26,7 @@
     - [Unirse a Partida](#unirse-a-partida)
 - [Juego](#flujo-de-juego)
     - [Sala de espera](#sala-de-espera)
+    - [Jugar](#jugar)
 
 
 # Guía de instalación
@@ -145,7 +146,7 @@ Sala de espera para el que se unió a la partida
 
 ![espera-unirse](Documentation/Readme/sala-de-espera-unirse.png)
 
-### Juego
+### Jugar
 Una vez terminado la espera solo queda disfrutar el juego en compañia de amigos. 
 
 ![habilidad-blitz](Documentation/Readme/blitz.jpeg)
