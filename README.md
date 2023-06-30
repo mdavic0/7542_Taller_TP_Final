@@ -22,10 +22,11 @@
         - [Cliente](#cliente)
 - [Cómo jugar](#cómo-jugar)
     - [Movimientos](#movimientos)
+    - [Crear Partida](#crear-partida)
     - [Unirse a Partida](#unirse-a-partida)
-- [Features](#features)
-    - [Completados](#completados)
-    - [Faltantes](#faltantes)
+- [Juego](#flujo-de-juego)
+    - [Sala de espera](#sala-de-espera)
+
 
 # Guía de instalación
 
@@ -37,7 +38,7 @@ Además se debe contar tanto con git, CMake y Make, para la descarga del juego a
 
 ## Instalación de Dependecias
 
-Los paquetes que usa el juego para ejecutarse, son SDL, Qt5 y YAML-cpp, dependiendo del gestor de paquetes del sistema operativo que se use, los paquetes a instalar son los mismos.
+Los paquetes que usa el juego para ejecutarse, son SDL, Qt5, YAML-cpp y GoogleTest, dependiendo del gestor de paquetes del sistema operativo que se use, los paquetes a instalar son los mismos.
 
 ### Ubuntu: 
 
@@ -60,18 +61,23 @@ Después de eso se debe ingresar a la carpeta donde se clonó el repositorio, do
     mkdir build
     cd build
     cmake ..
-    make
+    make -j4
 ```
 
-* tests
+* Tests: una vez terminada la compilación basta con ingresar el siguiente comando para ejecutar los tests que se elaboraron para el proyecto.
 
-```
-    mkdir build  
-    cd build  
-    cmake ..  
-    make  
+``` 
     ctest
 ```
+
+* Instalación: terminada la construcción del proyecto, basta con ingresar el siguiente comando que instalará el juego y el servidor en la carpeta /usr/local/bin, 
+
+```
+    sudo make install
+```
+
+Aclaración para la correcta ejecución del programa debe ir a la carpeta donde se instalo el juego.
+
 # Guía de Usuario
 
 ## Formas de ejecucción
@@ -81,16 +87,19 @@ Después de eso se debe ingresar a la carpeta donde se clonó el repositorio, do
 Localizarse dentro de la carpeta build, y ejecutar por consola el siguiente comando:
 
 ```
-    ./server [PORT]
+    ./left4dead-server [PORT]
 ```
+
+Si quiere ejecutar el servidor del juego bastará con ejecutar el mismo comando, pero sin escribir "./", dentro de la carpeta de instalación.
 
 ### Cliente
 
 Localizarse dentro de la carpeta build, y ejecutar por consola el siguiente comando:
 
 ```
-    ./client
+    ./left4dead-client
 ```
+Si quiere ejecutar el servidor del juego bastará con ejecutar el mismo comando, pero sin escribir "./", dentro de la carpeta de instalación.
 
 ## Cómo Jugar
 
@@ -100,41 +109,48 @@ Los movimientos para ontrolar al Operador son los siguiente:
 
 * Teclas A - W - S - D: Movimiento en las cuatro direcciones.
 * Tecla SPACE: Disparo.
+* Tecla Q: Habilidad especial (Granadas).
+* Tecla E: Granada de humo.
+* Tecla R: Recargar.
+* Tecla F: Reanimar.
 
-## Features
+### Conectarse al servidor
 
-### Completados:
+Desde el inicio de la aplicación, al oprimir el botón Iniciar, automáticamente se pasará a la ventana de conexión con el Servidor, donde se necesitará la Ip y el puerto donde esta alojado el Servidor.
 
-Cliente:
-* Renderizado correcto del infectados, jugadores, mapa y Hud.
-* Camara solo sigue al cliente
-* Render de estado de cada jugador al presionar una acción.
-* Sala de espera de jugadores.
-* Si hay más de un jugador en partida y uno de ellos se desconecta., se activa el estado de muerto para dicho jugador.
+![Inicio](Documentation/Readme/conexion-al-servidor.gif)
 
-Server:
-* Movimiento desde el server de los jugadores.
-* Spawn de enemigos aleatorios.
-* Ataque de los jugadores hacia los infectados.
-* El juego solo iniciar al recibir el evento start_game
-* Si un cliente se desconecta, se elimina su queue correspondiente del juego.
-* Envío del estado actual del jugador para un determinado evento.
+### Crear Partida
 
+Una vez conectado al servidor se podra crear una partida, ingresando el nombre de la partida seleccionando el modo de juego y la dificultad, así como también al personaje con el jugar.
 
-### Faltantes:
+![crear](Documentation/Readme/crear-partida.gif)
 
-Cliente:
-- Hud no renderiza de acuerdo a la pantalla.
-- No renderiza obstaculos, solo chocas con los obstaculos
-- Falta renderizado de habilidades
-- Cámara depende de la resolución de la pantalla, probado en una resolución 1440x900px
+### Unirse a Partida
 
-Server:
-- Falta agregar ataque de zombies
-- Falta End Game
-- Falta Habilidades
-- Acciones que dependan del tiempo.
-- Falta definir tamaño del mapa y sus bordes, eso ocasiona que el spawn no se vea bien en el cliente.
+Conectado al servidor, otra opción es la de poder unirse a la partida, para lo cual se necesitara un código de único que se le dará al creador de la partida. Con ese código podrá unirse a la partida sin ningún inconveniente.
 
-Test:
-- Faltan completar
+![unirse](Documentation/Readme/unirse-partida.gif)
+
+## Flujo de Juego
+
+### Sala de espera
+
+Antes de cada inicio de partida se deberá esperar a que el creador de la partida le de inicio a la misma. En este instante se mostrará dos salas de espera, dependiendo de si fuiste el creador o el que se unió a la partida.
+
+Sala de espera para el creador de la partida
+![espera-crear](Documentation/Readme/Sala%20de%20espera%20crear.png)
+
+Sala de espera para el que se unió a la partida
+
+![espera-unirse](Documentation/Readme/sala-de-espera-unirse.png)
+
+### Juego
+Una vez terminado la espera solo queda disfrutar el juego en compañia de amigos. 
+
+![habilidad-blitz](Documentation/Readme/blitz.jpeg)
+![habilidad-grenade](Documentation/Readme/grenade.jpeg)
+![habilidad-explosion](Documentation/Readme/explosion.jpeg)
+![habilidad-smoke](Documentation/Readme/smoke.jpeg)
+![enemigos-1](Documentation/Readme/enemigos-obstaculos.jpeg)
+![enemigos-2](Documentation/Readme/enemigos2.jpeg)
