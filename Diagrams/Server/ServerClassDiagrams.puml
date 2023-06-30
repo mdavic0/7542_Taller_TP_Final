@@ -1,0 +1,581 @@
+@startuml
+
+class Collidable {
+  - id : uint16_t
+  - topLeftCorner : std::pair<int, int>
+  - width : int
+  - height : int
+  - position : std::pair<int16_t, int16_t>
+
+  + collidesWith(const std::map<uint16_t, std::shared_ptr<Collidable>>& collidables) const : bool
+  + updatePosition(const std::pair<int16_t, int16_t>& position) : void
+  + isAlignedRight(const std::shared_ptr<Collidable>& other) const : bool
+  + isAlignedLeft(const std::shared_ptr<Collidable>& other) const : bool
+  + isCloseTo(const std::shared_ptr<Collidable>& other, const double& closeDistance) const : bool
+  + distance(const std::pair<int16_t, int16_t>& otherPos) const : double
+  + leftDistance(const std::shared_ptr<Collidable>& other) const : int
+  + rightDistance(const std::shared_ptr<Collidable>& other) const : int
+
+  - collidesWith(const std::shared_ptr<Collidable>& other) const : bool
+  - overlapVerticalAxis(const std::shared_ptr<Collidable>& other) const : bool
+  - ovelapHorizontalAxis(const std::shared_ptr<Collidable>& other) const : bool
+}
+
+@enduml
+
+@startuml
+class Acceptor {
+  - talking: std::atomic<bool>
+  - alive: std::atomic<bool>
+
+  + bool ended()
+  + virtual void run() override
+  + virtual void stop() override
+  - endedClients()
+  - waitClients()
+}
+
+class Thread {
+  - thread: std::thread
+  + start()
+  + join()
+  + main()
+  + run(): virtual
+  + stop(): virtual
+}
+
+class Socket {
+  - skt: int
+  - closed: bool
+  + Socket(int skt)
+  + Socket(const char* hostname, const char* servname)
+  + explicit Socket(const char* servname)
+  + bool sendsome(const void* data, unsigned int sz, bool* was_closed)
+  + bool recvsome(void* data, unsigned int sz, bool* was_closed)
+  + bool sendall(const void* data, unsigned int sz, bool* was_closed)
+  + bool recvall(void* data, unsigned int sz, bool* was_closed)
+  + Socket accept()
+  + void shutdown(int how)
+  + int close()
+}
+
+class EventReceiver {
+  - protocol: ServerProtocol<Socket>
+  - event_queue: Queue<std::shared_ptr<EventDTO>>*
+  - snapshot_queue: Queue<std::shared_ptr<Snapshot>>
+  - sender: SnapshotSender
+  - game: std::shared_ptr<Game>
+  - talking: std::atomic<bool>
+  - alive: std::atomic<bool>
+  + EventReceiver(std::shared_ptr<Socket> skt, GamesController& controller)
+  + bool ended() const
+  + void run() override
+  + void stop() override
+}
+
+class Server {
+  + Server(servicename: const char*)
+  + run()
+}
+
+class GamesController {
+  - games: std::map<uint32_t, std::shared_ptr<Game>>
+  - mutex: std::mutex
+  - statsController: StatsController
+  + create(std::shared_ptr<EventDTO> eventdto, Queue<std::shared_ptr<Snapshot>>* snapshot_queue,
+  std::shared_ptr<Game>& game) : Queue<std::shared_ptr<EventDTO>>* 
+  + try_join_game(std::shared_ptr<EventDTO> eventdto, Queue<std::shared_ptr<Snapshot>>* q,
+  std::shared_ptr<Game>& game) : Queue<std::shared_ptr<EventDTO>>* 
+}
+
+Server "1"*--down"1" Acceptor
+Acceptor "1"*--down"0..*" EventReceiver
+Acceptor "use"--left Socket
+Thread <|-- Acceptor
+Acceptor "1"*--"1" GamesController
+Thread <|-- EventReceiver
+EventReceiver "use"-- GamesController
+@enduml
+
+@startuml
+
+class GamesController {
+  - games: std::map<uint32_t, std::shared_ptr<Game>>
+  - mutex: std::mutex
+  - statsController: StatsController
+  + create(std::shared_ptr<EventDTO> eventdto, Queue<std::shared_ptr<Snapshot>>* snapshot_queue,
+  std::shared_ptr<Game>& game) : Queue<std::shared_ptr<EventDTO>>* 
+  + try_join_game(std::shared_ptr<EventDTO> eventdto, Queue<std::shared_ptr<Snapshot>>* q,
+  std::shared_ptr<Game>& game) : Queue<std::shared_ptr<EventDTO>>* 
+}
+
+
+class Game {
+  - id: const uint32_t
+  - name: const std::string
+  - mutex: std::mutex
+  - talking: std::atomic<bool>
+  - alive: std::atomic<bool>
+  - started: std::atomic<bool>
+  + run()
+  + stop()
+  + ended()
+  + createGame(q: Queue<std::shared_ptr<Snapshot>>*, op: const TypeOperator&) : Queue<std::shared_ptr<EventDTO>>*
+  + joinGame(q: Queue<std::shared_ptr<Snapshot>>*, op: const TypeOperator&) : Queue<std::shared_ptr<EventDTO>>*
+  + startGame()
+  + clientLeave(q: Queue<std::shared_ptr<Snapshot>>)
+  + running()
+  + gameLoop()
+  + processEvents()
+  + broadcastSnapshot(snapshot: std::shared_ptr<Snapshot>)
+  + closeAllQueue()
+}
+
+note right
+    - Each Game has an unprocessed
+      EventDTO queue.
+    - Each Game has one or multiple
+      client Snapshot queues.
+end note
+
+class Queue<T, C> {
+  - q: std::queue<T, C>
+  - max_size: const unsigned int
+  - closed: bool
+  - mtx: std::mutex
+  - is_not_full: std::condition_variable
+  - is_not_empty: std::condition_variable
+  + try_push(val: T const&) : bool
+  + try_pop(val: T&) : bool
+  + push(val: T const&)
+  + pop() : T
+  + close()
+}
+
+class CommandFactory {
+  + getCommand(event: std::shared_ptr<EventDTO>): std::unique_ptr<Command>
+}
+
+class Command {
+  + Command()
+  + execute(gameWorld: GameWorld): void
+  + ~Command()
+}
+
+
+Game "1"*--"1..*" Queue
+Game "1"*--"1" Queue
+GamesController "<<create>>"-- Game
+Game "1"*--"1" GameWorld
+Game "use"-- CommandFactory
+CommandFactory "<<create>>"-- Command
+@enduml
+
+@startuml
+
+class GameWorld {
+  - type: TypeGame
+  - difficulty: TypeDifficulty
+  
+  - collidables: std::map<uint16_t, std::shared_ptr<Collidable>>
+  
+  - players: std::map<uint16_t, std::shared_ptr<Player>>
+  - infecteds: std::map<uint16_t, std::shared_ptr<Infected>>
+  - obstacles: std::map<uint16_t, std::shared_ptr<Obstacle>>
+
+  - grenades: std::list<std::shared_ptr<Grenade>>
+  - blitzAtacks: std::list<std::shared_ptr<BlitzAtack>>
+
+  + addPlayer(op: TypeOperator): uint16_t
+  + deletePlayer(id: uint16_t): void
+
+  + updateMovementDirection(event: Event, id: uint16_t, direction: MoveTo): void
+  + updateShootingState(event: Event, id: uint16_t): void
+  + updateReloadingState(event: Event, id: uint16_t): void
+  + updateSkillState(event: Event, id: uint16_t): void
+  + reanimatePlayer(event: Event, id: uint16_t): void
+  
+  + finishGame(event: Event, id: uint16_t): void
+  + applySuperSpeed(event: Event, id: uint16_t): void
+  + killInfecteds(event: Event, id: uint16_t): void
+  + makeInmortal(event: Event, id: uint16_t): void
+
+  + simulateStep(stepTime: double): void
+
+  + getSnapshot(first: bool): std::shared_ptr<Snapshot>
+  + getStats(): std::vector<StatsDto>
+  + isEnded(): bool
+
+  - generateInfecteds(): void
+  - generateObstacles(): void
+  - generateMapLimits(): void
+  - generateMapType(): int
+  
+  - simulatePlayersStep(stepTime: double): void
+  - simulateInfectedStep(stepTime: double): void
+  - simulateGrenadeStep(stepTime: double): void
+  - simulateBlitzAtackStep(stepTime: double): void
+
+  - updateRounds(): void
+}
+
+note right of GameWorld::updateMovementDirection
+  Updates are made previous of
+  simulating a step
+end note
+
+note right of GameWorld::finishGame
+  Cheats
+end note
+
+note right of GameWorld::simulateStep
+  Effectively apply the step to players,
+  infecteds, grenades and blitz attacks.
+end note
+
+note right of GameWorld::getSnapshot
+  Returns the current state of the game.
+end note
+
+class RespawnController {
+  + getPlayerRespawnPosition(): std::pair<int16_t, int16_t>
+  + getInfectedRespawnPosition(): std::pair<int16_t, int16_t>
+  + getObstacleRespawnPosition(): std::pair<int16_t, int16_t>
+  + resetRespawns()
+  - createPlayerRespawns()
+  - createInfectedRespawns()
+  - createObstacleRespawns()
+}
+
+
+GameWorld "use"-- InfectedFactory
+InfectedFactory "<<create>>"-- Infected
+GameWorld "use"-- ObstacleFactory
+ObstacleFactory "<<create>>"-- Obstacle
+GameWorld "use"-- PlayerFactory
+PlayerFactory "<<create>>"-- Player
+GameWorld "use"-- RespawnController
+
+@enduml
+
+@startuml
+
+class Infected {
+  - life: int16_t
+  - velocity: uint8_t
+  - damage: uint8_t
+  - state: State
+
+  - collidable: std::shared_ptr<Collidable>
+  - alive: bool
+  
+  + applyStep(collidables, players)
+
+  + applyDamage(amount: const int&)
+  + applySpeedReduction(speedReduction: const double&)
+
+  - move(collidables)
+  - atack()
+  - specialAtack(event: const Event&)
+  - isIntoHostilRange(player: const std::shared_ptr<Player>&): bool
+  
+  - setTarget(players)
+  - setMovementDirection(direction: const MoveTo&)
+}
+
+note right of Infected::applyDamage
+  Used when hit by either a shot,
+  ExplosiveGrenade or BlitzAttack
+end note
+
+note right of Infected::applySpeedReduction
+  Used when hit by a smoke grenade
+end note
+
+class Player{}
+
+note right
+  When a player isIntoHostilRange
+  then it becames the target of the
+  infected.
+end note
+
+class Jumper {
+  + specialAtack(event: const Event&)
+  - jumpOnSomeone()
+}
+
+class Spear {
+  + specialAtack(event: const Event&)
+  - throwSpear()
+}
+
+class Venom {
+  + specialAtack(event: const Event&)
+  - throwVenom()
+}
+
+class Witch {
+  + specialAtack(event: const Event&)
+  - scream()
+}
+
+class Zombie {
+  + specialAtack(event: const Event&)
+  - biteSomeone()
+}
+
+Infected "1"*--up"1" Collidable
+Infected "use"--up Collidable
+Infected <|-- Zombie
+Infected <|-- Witch
+Infected <|-- Venom
+Infected <|-- Spear
+Infected <|-- Jumper
+Infected "1"*--left "0..1" Player
+@enduml
+
+@startuml
+
+class Obstacle {
+  - id: uint16_t
+  - position: std::pair<int16_t, int16_t>
+
+  + updatePosition(newPosition: const std::pair<int16_t, int16_t>&,
+                   collidables: const std::map<uint16_t, std::shared_ptr<Collidable>>&)
+  - move(newPosition: const std::pair<int16_t, int16_t>&,
+         collidables: const std::map<uint16_t, std::shared_ptr<Collidable>>&)
+}
+
+class Crater {
+}
+
+class Tire {
+}
+
+class ObstacleFactory {
+  + getObstacle(obstacle: const TypeObstacle&, obstacleId: const uint16_t&,
+                collidables, RC: RespawnController&)
+                
+  - createTire(obstacleId: const uint16_t&, collidables,
+               RC: RespawnController&): std::shared_ptr<Tire>
+               
+  - createCrater(obstacleId: const uint16_t&, collidables
+                 RC: RespawnController&): std::shared_ptr<Crater>
+}
+
+ObstacleFactory ..> Tire : creates
+ObstacleFactory ..> Crater : creates
+
+Obstacle "1"*--up"1" Collidable
+Obstacle <|-- Crater
+Obstacle <|-- Tire
+@enduml
+
+@startuml
+
+abstract class Weapon {
+  + shoot(infecteds)
+  + reload()
+}
+
+class Player {
+    - fell_down: uint8_t
+    - velocity: double
+
+    # life: int16_t
+    # state: State
+    # movement_direction: std::pair<int16_t, int16_t>
+    # lookingRight: bool
+    # position: std::pair<int16_t, int16_t>
+
+    + setMovementDirection(direction: const MoveTo&): void
+    + setShootingState(): void
+    + setReloadingState(): void
+    + abstract setSkillState(event: const Event&): void    
+    + reanimate(players): void
+
+    + applyStep(collidables, infecteds, grenades, blitzAtacks, stepTime)
+    + applyDamage(amount: const int&): void
+    
+    + applySpeed(speed: const double&): void
+    + makeImmortal(): void
+    
+    + abstract revive(): void
+    + abstract specialAtack(grenades, blitzAtacks, stepTime)
+    
+    - move(collidables): void
+    - shoot(infecteds, stepTime: const double&): void
+    - reload(stepTime: const double&): void
+}
+
+note left of Player::applySpeed
+  Cheats
+end note
+
+class IDFPlayer {
+    - grenade: std::shared_ptr<ExplosiveGrenade>
+    - smoke: std::shared_ptr<SmokeGrenade>
+
+    + specialAtack(grenades, blitzAtacks)
+    
+    - throwGrenade(grenades, stepTime: double): void
+    - throwSmoke(grenades, stepTime: double): void
+}
+
+class P90Player {
+    - blitz: std::shared_ptr<BlitzAtack>
+
+    + specialAtack(grenades, blitzAtacks, stepTime)
+
+    - throwBlitzAtack(blitzAtacks): void
+}
+
+class SCOUTPlayer {
+    - grenade: std::shared_ptr<ExplosiveGrenade>
+    - smoke: std::shared_ptr<SmokeGrenade>
+
+    + specialAtack(grenades, blitzAtacks, stepTime)
+  
+    - throwGrenade(grenades, stepTime: double): void
+    - throwSmoke(grenades, stepTime: double): void
+}
+
+Player <|-- SCOUTPlayer
+Player <|-- P90Player
+Player <|-- IDFPlayer
+
+Player "1"*--up"1" Weapon
+Player "1"*--up"Collidable"
+@enduml
+
+@startuml
+
+abstract class Weapon {
+    - capacity: uint8_t
+    # activated: bool
+    # damage: uint8_t
+    # munition: uint8_t
+    # rate: uint8_t
+
+
+    + activate(): void
+    + deactivate(): void
+
+    + {abstract} shoot(playerCollidable, right: bool, infecteds, stepTime): bool
+    + {abstract} reload(stepTime: double): bool
+
+    - {abstract} shootRight(playerCollidable, infecteds)
+    - {abstract} shootLeft(playerCollidable, infecteds)
+}
+
+class P90 {
+    - burstFiredBullets: uint8_t
+    - burstEnded: bool
+    - scope: double
+
+    + shoot(playerCollidable, right: bool, infecteds, stepTime): bool
+    + reload(stepTime: double): bool
+
+    - shootRight(playerCollidable, infecteds): void
+    - shootLeft(playerCollidable, infecteds): void
+    - calculateDamage(distance: double): double
+}
+
+class Scout {
+    - burstFiredBullets: uint8_t
+    - burstEnded: bool
+    - scope: double
+    - damageDecreaseByEnemy: double
+
+    + shoot(playerCollidable, right: bool, infecteds, stepTime): bool
+    + reload(stepTime: double): bool
+
+    - shootRight(playerCollidable, infecteds): void
+    - shootLeft(playerCollidable, infecteds): void
+    - calculateDamage(distance: double): double
+    
+    - sortEnemiesRight(infecteds): std::vector<std::shared_ptr<Infected>>
+    - sortEnemiesLeft(infecteds): std::vector<std::shared_ptr<Infected>>
+}
+
+class Idf {
+    - burstFiredBullets: uint8_t
+    - burstEnded: bool
+    - scope: double
+    
+    + shoot(playerCollidable, right: bool, infecteds, stepTime): bool
+    + reload(stepTime: double): bool
+
+    - shootRight(playerCollidable, infecteds): void
+    - shootLeft(playerCollidable, infecteds): void
+    - calculateDamage(distance: double): double
+}
+Weapon "use"--right Collidable
+Weapon <|-- Idf
+Weapon <|-- Scout
+Weapon <|-- P90
+
+@enduml
+
+@startuml
+
+abstract class Grenade {
+    - damage: uint8_t
+    - position: std::pair<int16_t, int16_t>
+    - velocity: uint8_t
+    - finalPosition: std::pair<int16_t, int16_t>
+
+
+    + {abstract}applyStep(players, infecteds, stepTime): void
+    + {abstract}throwGrenade(position: const std::pair<int16_t, int16_t>&,
+                   elapsedTime: const double&, right: const bool&): void
+    
+    - move(stepTime: const double&): void
+    - {abstract}explode(players, infecteds, stepTime): void
+    - setMovementDirection(right: const bool&): void
+    - calculateFinalPosition(right: const bool&, elapsedTime): void
+}
+
+note left of Grenade::move
+  Both grenades have the same
+  movement logic.
+end note
+
+class SmokeGrenade {
+   + applyStep(players, infecteds, stepTime): void
+     + throwGrenade(position: const std::pair<int16_t, int16_t>&,
+                   elapsedTime: const double&, right: const bool&): void
+    - explode(players, infecteds, stepTime): void
+}
+
+class ExplosiveGrenade {
+    + applyStep(players, infecteds, stepTime): void
+     + throwGrenade(position: const std::pair<int16_t, int16_t>&,
+                   elapsedTime: const double&, right: const bool&): void
+    - explode(players, infecteds, stepTime): void
+}
+
+Grenade <|-- ExplosiveGrenade
+Grenade <|-- SmokeGrenade
+Grenade "use"--up Collidable
+
+@enduml
+
+@startuml
+
+class BlitzAtack {
+    - damage: uint8_t
+    - position: std::pair<int16_t, int16_t>
+
+    + applyStep(infecteds: std::map<uint16_t, std::shared_ptr<Infected>>, stepTime: const double&): void
+    + throwBlitz(position: const std::pair<int16_t, int16_t>&): void
+    + isAvailable(): bool
+    + ended(): bool
+
+    - blitz(infecteds: std::map<uint16_t, std::shared_ptr<Infected>>, stepTime: const double&): void
+}
+
+BlitzAtack "use"--right Collidable
+@enduml
+
