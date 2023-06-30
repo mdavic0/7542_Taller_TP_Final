@@ -27,6 +27,8 @@
 - [Juego](#flujo-de-juego)
     - [Sala de espera](#sala-de-espera)
     - [Jugar](#jugar)
+    - [Cheats](#cheats)
+    - [Configuración](#configuración)
 
 
 # Guía de instalación
@@ -155,3 +157,13 @@ Una vez terminado la espera solo queda disfrutar el juego en compañia de amigos
 ![habilidad-smoke](Documentation/Readme/smoke.jpeg)
 ![enemigos-1](Documentation/Readme/enemigos-obstaculos.jpeg)
 ![enemigos-2](Documentation/Readme/enemigos2.jpeg)
+
+### Cheats
+También podrás usar cheats para tener más ventajas:
+* Tecla F1: Fin de partida.
+* Tecla F2: Más velocidad.
+* Tecla F3: Matar enemigos.
+* Tecla F4: Vida infinita.
+
+### Configuración
+Otra de las opciones para disfrutar el juego es cambiar el archivo de config.yaml, ya sea desde la carpeta assets/config que se encuentra en la carpeta build al construir el proyecto o en la carpeta de instalación /usr/local/bin
